@@ -1,3 +1,10 @@
+from django.http import HttpRequest
 from django.shortcuts import render
 
-# Create your views here.
+
+def order_create_view(request: HttpRequest):
+    return render(request, "order/order-create.html")
+
+
+def order_detail_view(request: HttpRequest):
+    return render(request, "order/order-detail.html")
