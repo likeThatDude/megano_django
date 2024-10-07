@@ -19,23 +19,23 @@
 <!--[if gt IE 11]><!-->
 <html lang="ru">
 <!--<![endif]-->
-
+{% load static %}
 <head>
     <title>Megano</title>
     <meta name="description" content="Описание страницы">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <link href="favicon.ico" rel="shortcut icon">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Regular.woff" as="font">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Italic.woff" as="font">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Bold.woff" as="font">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Bold_Italic.woff" as="font">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Light.woff" as="font">
-    <link rel="preload" href="assets/fonts/Roboto/Roboto-Light_Italic.woff" as="font">
-    <link rel="stylesheet" href="assets/css/fonts.css">
-    <link rel="stylesheet" href="assets/css/basic.css">
-    <link rel="stylesheet" href="assets/css/extra.css">
-    <script src="assets/plg/CountDown/countdown.js"></script>
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
     <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 </head>
@@ -58,13 +58,13 @@
                         <div class="row ControlPanel-rowSplit">
                             <div class="row-block hide_700">
                                 <ul class="menu menu_img menu_smallImg ControlPanel-menu">
-                                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialHeader/tw.svg" alt="tw.svg" /></a>
+                                    <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialHeader/tw.svg' %}" alt="tw.svg" /></a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialHeader/in.svg" alt="in.svg" /></a>
+                                    <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialHeader/in.svg' %}" alt="in.svg" /></a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialHeader/pt.svg" alt="pt.svg" /></a>
+                                    <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialHeader/pt.svg' %}" alt="pt.svg" /></a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialHeader/mail.svg" alt="mail.svg" /></a>
+                                    <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialHeader/mail.svg' %}" alt="mail.svg" /></a>
                                     </li>
                                 </ul>
                             </div>
@@ -92,7 +92,7 @@
         </div>
         <div class="wrap">
             <div class="row Header-rowMain">
-                <div class="row-block Header-logo"><a class="logo" href="index.html"><img class="logo-image" src="assets/img/logo.png" alt="logo.png" /></a>
+                <div class="row-block Header-logo"><a class="logo" href="index.html"><img class="logo-image" src="{% static 'assets/img/logo.png' %}" alt="logo.png" /></a>
                 </div>
                 <nav class="row-block row-block_right Header-menu">
                     <div class="menuModal" id="navigate">
@@ -110,14 +110,14 @@
 
                     <div class="CartBlock">
                         <div class="dropdown">
-                            <button class="dropbtn"><img class="CartBlock-img" src="assets/img/icons/loon-icon.svg" alt="loon-icon.svg" /></button>
+                            <button class="dropbtn"><img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg" /></button>
                             <div class="dropdown-content">
                                 <a class="dropdown-content-a" href="account.html">Личный кабинет</a>
                                 <a class="dropdown-content-a" href="account.html">Административный раздел</a>
                                 <a class="dropdown-content-a" href="account.html">Выход</a>
                             </div>
                         </div>
-                        <a class="CartBlock-block" href="cart.html"><img class="CartBlock-img" src="assets/img/icons/cart.svg" alt="cart.svg" /><span class="CartBlock-amount">0</span></a>
+                        <a class="CartBlock-block" href="cart.html"><img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}" alt="cart.svg" /><span class="CartBlock-amount">0</span></a>
                         <div class="CartBlock-block"><span class="CartBlock-price">0.00$</span>
 
 
@@ -136,87 +136,87 @@
                 <div class="Header-categories">
                     <div class="CategoriesButton">
                         <div class="CategoriesButton-title">
-                            <div class="CategoriesButton-icon"><img src="assets/img/icons/allDep.svg" alt="allDep.svg" />
+                            <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg" />
                             </div><span class="CategoriesButton-text">Все категории</span>
                             <div class="CategoriesButton-arrow">
                             </div>
                         </div>
                         <div class="CategoriesButton-content">
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/1.svg" alt="1.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg" />
                                     </div><span class="CategoriesButton-text">Телевизоры</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/2.svg" alt="2.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/2.svg' %}" alt="2.svg" />
                                     </div><span class="CategoriesButton-text">Наушники</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/3.svg" alt="3.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/3.svg' %}" alt="3.svg" />
                                     </div><span class="CategoriesButton-text">Стиральные машины</span>
                                 </a><a class="CategoriesButton-arrow" href="#"></a>
                                 <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/1.svg" alt="1.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg" />
                                         </div><span class="CategoriesButton-text">Аксессуары</span>
                                     </a><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/2.svg" alt="2.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/2.svg' %}" alt="2.svg" />
                                         </div><span class="CategoriesButton-text">Чехлы</span>
                                     </a>
                                 </div>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/4.svg" alt="4.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/4.svg' %}" alt="4.svg" />
                                     </div><span class="CategoriesButton-text">Скидки!</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/5.svg" alt="5.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/5.svg' %}" alt="5.svg" />
                                     </div><span class="CategoriesButton-text">Электроника</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/6.svg" alt="6.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/6.svg' %}" alt="6.svg" />
                                     </div><span class="CategoriesButton-text">Фотоаппараты</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/7.svg" alt="7.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/7.svg' %}" alt="7.svg" />
                                     </div><span class="CategoriesButton-text">Фурнитура</span>
                                 </a><a class="CategoriesButton-arrow" href="#"></a>
                                 <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/1.svg" alt="1.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg" />
                                         </div><span class="CategoriesButton-text">Мобильные телефоны</span>
                                     </a><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/2.svg" alt="2.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/2.svg' %}" alt="2.svg" />
                                         </div><span class="CategoriesButton-text">Сумки</span>
                                     </a>
                                 </div>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/8.svg" alt="8.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/8.svg' %}" alt="8.svg" />
                                     </div><span class="CategoriesButton-text">Мобильные телефоны</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/9.svg" alt="9.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/9.svg' %}" alt="9.svg" />
                                     </div><span class="CategoriesButton-text">Микроволновые печи</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/10.svg" alt="10.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/10.svg' %}" alt="10.svg" />
                                     </div><span class="CategoriesButton-text">Кухонная техника</span>
                                 </a>
                             </div>
                             <div class="CategoriesButton-link"><a href="#">
-                                    <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/11.svg" alt="11.svg" />
+                                    <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/11.svg' %}" alt="11.svg" />
                                     </div><span class="CategoriesButton-text">Торшеры</span>
                                 </a><a class="CategoriesButton-arrow" href="#"></a>
                                 <div class="CategoriesButton-submenu"><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/1.svg" alt="1.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/1.svg' %}" alt="1.svg" />
                                         </div><span class="CategoriesButton-text">Аксессуары</span>
                                     </a><a class="CategoriesButton-link" href="#">
-                                        <div class="CategoriesButton-icon"><img src="assets/img/icons/departments/2.svg" alt="2.svg" />
+                                        <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/departments/2.svg' %}" alt="2.svg" />
                                         </div><span class="CategoriesButton-text">Сумки</span>
                                     </a>
                                 </div>
@@ -224,13 +224,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="Header-searchLink"><img src="assets/img/icons/search.svg" alt="search.svg" />
+                <div class="Header-searchLink"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg" />
                 </div>
                 <div class="Header-search">
                     <div class="search">
                         <form class="form form_search" action="#" method="post">
                             <input class="search-input" id="query" name="query" type="text" placeholder="NVIDIA GeForce RTX 3060" />
-                            <button class="search-button" type="submit" name="search" id="search"><img src="assets/img/icons/search.svg" alt="search.svg" />Поиск
+                            <button class="search-button" type="submit" name="search" id="search"><img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg" />Поиск
                             </button>
                         </form>
                     </div>
@@ -300,7 +300,7 @@
                         </div>
                     </div>
                     <div class="Cards">
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
                                 </strong>
@@ -309,12 +309,12 @@
                                     </div>
                                     <div class="Card-category">Игры / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Barand New Phone Smart Business</a>
                                 </strong>
@@ -323,12 +323,12 @@
                                     </div>
                                     <div class="Card-category">Игры / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
                                 </strong>
@@ -337,12 +337,12 @@
                                     </div>
                                     <div class="Card-category">Разработка / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
                                 </strong>
@@ -351,12 +351,12 @@
                                     </div>
                                     <div class="Card-category">Медиа / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
                                 </strong>
@@ -365,12 +365,12 @@
                                     </div>
                                     <div class="Card-category">Игры / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card hide_md"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Barand New Phone Smart Business</a>
                                 </strong>
@@ -379,12 +379,12 @@
                                     </div>
                                     <div class="Card-category">Игры / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
                                 </strong>
@@ -393,12 +393,12 @@
                                     </div>
                                     <div class="Card-category">Дизайн / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg" /></a>
+                        <div class="Card hide_md hide_1450"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg" /></a>
                             <div class="Card-content">
                                 <strong class="Card-title"><a href="product.html">Corsair Carbide Series Arctic White Steel</a>
                                 </strong>
@@ -407,14 +407,14 @@
                                     </div>
                                     <div class="Card-category">Игры / xbox
                                     </div>
-                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg" /></a>
+                                    <div class="Card-hover"><a class="Card-btn" href="#"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg" /></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="Pagination">
-                        <div class="Pagination-ins"><a class="Pagination-element Pagination-element_prev" href="#"><img src="assets/img/icons/prevPagination.svg" alt="prevPagination.svg" /></a><a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">1</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">2</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">3</span></a><a class="Pagination-element Pagination-element_prev" href="#"><img src="assets/img/icons/nextPagination.svg" alt="nextPagination.svg" /></a>
+                        <div class="Pagination-ins"><a class="Pagination-element Pagination-element_prev" href="#"><img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg" /></a><a class="Pagination-element Pagination-element_current" href="#"><span class="Pagination-text">1</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">2</span></a><a class="Pagination-element" href="#"><span class="Pagination-text">3</span></a><a class="Pagination-element Pagination-element_prev" href="#"><img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg" /></a>
                         </div>
                     </div>
                 </div>
@@ -424,7 +424,7 @@
     <footer class="Footer">
         <div class="wrap">
             <div class="row Footer-main">
-                <div class="row-block"><a class="logo Footer-logo" href="index.html"><img class="logo-image" src="assets/img/logo_footer.png" alt="logo_footer.png" /></a>
+                <div class="row-block"><a class="logo Footer-logo" href="index.html"><img class="logo-image" src="{% static 'assets/img/logo_footer.png' %}" alt="logo_footer.png" /></a>
                 </div>
                 <div class="row-block">
                     <strong class="Footer-title">Навигация
@@ -447,15 +447,15 @@
                     <p>Phone: 8.800.200.600<br>Email: xxx@meg.com<br>
                     </p>
                     <ul class="menu menu_img menu_smallImg Footer-menuSoc">
-                        <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/fb.svg" alt="fb.svg" /></a>
+                        <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialFooter/fb.svg' %}" alt="fb.svg" /></a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/tw.svg" alt="tw.svg" /></a>
+                        <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialFooter/tw.svg' %}" alt="tw.svg" /></a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/in.svg" alt="in.svg" /></a>
+                        <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialFooter/in.svg' %}" alt="in.svg" /></a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/pt.svg" alt="pt.svg" /></a>
+                        <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialFooter/pt.svg' %}" alt="pt.svg" /></a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="#"><img src="assets/img/icons/socialFooter/mail.svg" alt="mail.svg" /></a>
+                        <li class="menu-item"><a class="menu-link" href="#"><img src="{% static 'assets/img/icons/socialFooter/mail.svg' %}" alt="mail.svg" /></a>
                         </li>
                     </ul>
                 </div>
@@ -467,12 +467,12 @@
     <!--        +breadcrumbs('Главная','Портфолио')-->
     <!--    +Article('portfolio')-->
     <!---->
-    <script src="assets/plg/jQuery/jquery-3.5.0.slim.min.js"></script>
-    <script src="assets/plg/form/jquery.form.js"></script>
-    <script src="assets/plg/form/jquery.maskedinput.min.js"></script>
-    <script src="assets/plg/range/ion.rangeSlider.min.js"></script>
-    <script src="assets/plg/Slider/slick.min.js"></script>
-    <script src="assets/js/scripts.js"></script>
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
 </body>
 
 </html>
