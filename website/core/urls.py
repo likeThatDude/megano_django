@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import index, about_view
+from .views import about_view, index
 
 app_name = "core"
 
