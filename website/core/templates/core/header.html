@@ -1,0 +1,16 @@
+<header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Главная</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'profile' %}">Профиль</a></li>
+                <li><a href="{% url 'logout' %}">Выйти</a></li>
+            {% else %}
+                <li><a href="{% url 'login' %}">Войти</a></li>
+                <li><a href="{% url 'register' %}">Регистрация</a></li>
+            {% endif %}
+            <li><a href="{% url 'about' %}">О нас</a></li>
+            <li><a href="{% url 'contact' %}">Контакты</a></li>
+        </ul>
+    </nav>
+</header>
