@@ -1,6 +1,9 @@
 from django.urls import path
 from . import views
 
+from .views import about_view, index
+
+app_name = "core"
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -10,4 +13,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
+    path("", index, name="index"),
+    path("about/", about_view, name="about"),
 ]

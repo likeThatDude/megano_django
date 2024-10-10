@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpRequest
 from django.shortcuts import render
 
 def home(request):
@@ -21,3 +22,10 @@ def about(request):
 
 def contact(request):
     return render(request, 'core/base.html')
+
+def index(request):
+    return render(request, "core/index.html")
+
+
+def about_view(request: HttpRequest):
+    return render(request, "core/about.html")
