@@ -16,11 +16,11 @@ class Category(models.Model):
     icon = models.ImageField(upload_to=category_icon_directory_path)
     archived = models.BooleanField(default=False)
     parent_category = models.ForeignKey(
-        'self',
+        "self",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='sub_category'
+        related_name="sub_category",
     )
 
     if TYPE_CHECKING:
@@ -56,5 +56,3 @@ class ProductImage(models.Model):
 
     if TYPE_CHECKING:
         objects: Manager
-
-
