@@ -29,3 +29,6 @@ def index(request):
 
 def about_view(request: HttpRequest):
     return render(request, "core/about.html")
+
+def catalog(request: HttpRequest):
+    return render(request, "static/catalog.html")

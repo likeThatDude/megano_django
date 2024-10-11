@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-from .views import about_view, index
+from .views import about_view, index, catalog
 
 app_name = "core"
 
@@ -15,4 +15,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path("", index, name="index"),
     path("about/", about_view, name="about"),
+    path("catalog/", catalog, name="catalog")
 ]
