@@ -33,9 +33,6 @@ class Category(models.Model):
         verbose_name=_('PK category')
     )
 
-    if TYPE_CHECKING:
-        objects: Manager
-
 
 class Product(models.Model):
     """
@@ -59,9 +56,6 @@ class Product(models.Model):
     limited_edition = models.BooleanField(default=False, verbose_name=_('Limited edition'))
     view = models.BooleanField(default=False, verbose_name=_('View'))
 
-    if TYPE_CHECKING:
-        objects: Manager
-
 
 def product_images_directory_path(instance: "ProductImage", filename: str) -> str:
     """Путь для сохранения изображений товаров"""
@@ -79,6 +73,3 @@ class ProductImage(models.Model):
     """
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('PK product'))
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_('Image product'))
-
-    if TYPE_CHECKING:
-        objects: Manager
