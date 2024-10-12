@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
 import os
 from pathlib import Path
 
@@ -37,12 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
-    'account.apps.AccountConfig',
-    'cart.apps.CartConfig',
-    'catalog.apps.CatalogConfig',
-    'core.apps.CoreConfig',
-    'order.apps.OrderConfig',
+    "account.apps.AccountConfig",
+    "cart.apps.CartConfig",
+    "catalog.apps.CatalogConfig",
+    "core.apps.CoreConfig",
+    "order.apps.OrderConfig",
 ]
 
 MIDDLEWARE = [
@@ -86,6 +86,13 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": "/var/tmp/django_cache",
+    }
+}
+CATEGORY_CASHING_TIME = 60 * 60 * 24
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -125,6 +132,7 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+MEDIA_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
