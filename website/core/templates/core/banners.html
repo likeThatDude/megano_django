@@ -1,11 +1,12 @@
 {% load static %}
+{% load cache %}
 
   <div class="Header-slider">
       <div class="Slider Slider_main">
 
         <div class="Slider-box">
+          {% cache 600 programmers %}
           {% for banner in random_banner %}
-
             <div class="Slider-item">
               <div class="Slider-content">
                 <div class="row">
@@ -25,6 +26,7 @@
               </div>
             </div>
           {% endfor %}
+          {% endcache %}
 
         </div>
 
