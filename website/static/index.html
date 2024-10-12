@@ -164,7 +164,7 @@ p.error-browser
                     <div class="CategoriesButton-content">
                         {% if categories %}
                             {% for category in categories %}
-                                {% if category.parent is None %}
+                                {% if category.parent_category is None %}
                                     <div class="CategoriesButton-link">
                                         <a href="{% url 'catalog:category_detail' pk=category.pk %}">
                                             <div class="CategoriesButton-icon">
@@ -173,17 +173,17 @@ p.error-browser
                                             </div>
                                             <span class="CategoriesButton-text">{{ category.name }}</span>
                                         </a>
-                                        {% with children=category.children.all %}
-                                            {% if children %}
+                                        {% with sub_categories=category.sub_categories.all %}
+                                            {% if sub_categories %}
                                                 <a class="CategoriesButton-arrow" href="#"></a>
                                                 <div class="CategoriesButton-submenu">
-                                                    {% for child in children %}
-                                                        <a class="CategoriesButton-link" href="{% url 'catalog:category_detail' pk=child.pk %}">
+                                                    {% for sub_category in sub_categories %}
+                                                        <a class="CategoriesButton-link" href="{% url 'catalog:category_detail' pk=sub_category.pk %}">
                                                             <div class="CategoriesButton-icon">
-                                                                <img src="{% static child.icon %}"
-                                                                     alt={{ category.icon|get_filename:"" }}/>
+                                                                <img src="{% static sub_category.icon %}"
+                                                                     alt={{ sub_category.icon|get_filename:"" }}/>
                                                             </div>
-                                                            <span class="CategoriesButton-text">{{ child.name }}</span>
+                                                            <span class="CategoriesButton-text">{{ sub_category.name }}</span>
                                                         </a>
                                                     {% endfor %}
                                                 </div>

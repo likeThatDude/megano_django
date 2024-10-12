@@ -1,13 +1,24 @@
-from catalog.models import Category
-from website.settings import CATEGORY_CASHING_TIME
+from django.core.cache import cache
+from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.views.decorators.cache import cache_page
+
+from catalog.models import Category
+from website.settings import CATEGORY_CASHING_TIME, CATEGORY_KEY
 
 
-@cache_page(CATEGORY_CASHING_TIME)
 def index(request: HttpRequest) -> HttpResponse:
-    categories = Category.objects.filter(archived=False)
+    categories = cache.get(CATEGORY_KEY)
+    if categories is None:
+        categories = (
+            Category.objects.filter(archived=False)
+            .annotate(
+                products_count=Count("products", filter=Q(products__archived=False))
+            )
+            .filter(products_count__gt=0)
+        )
+
+    cache.set(CATEGORY_KEY, categories, timeout=CATEGORY_CASHING_TIME)
     return render(request, "core/index.html", context={"categories": categories})
 
 
