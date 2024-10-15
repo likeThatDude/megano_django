@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
