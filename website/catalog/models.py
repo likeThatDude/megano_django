@@ -91,3 +91,37 @@ class ProductImage(models.Model):
     image = models.ImageField(
         upload_to=product_images_directory_path, verbose_name=_("Image product")
     )
+
+
+class Seller(models.Model):
+    """
+    Модель продавца
+    name: название продавца
+    description: описание продавца
+    image: изображение (если есть) продавца
+    phone: телефон продавца
+    address: адрес продавца
+    email: адрес электронной почты продавца
+    created_at: когда создан продавец
+    archived: статус архива продавца
+
+    """
+
+    name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
+    description = models.TextField(
+        null=True, blank=True, db_index=True, verbose_name=_("Description")
+    )
+    image = models.FileField(
+            upload_to="assets/img/icons/departments", null=True, blank=True, verbose_name=_("Image"))
+    phone = models.CharField(
+        max_length=100, db_index=True, verbose_name=_("Phone")
+    )
+    address = models.TextField(null=True, blank=True, verbose_name=_("Address"))
+    email = models.CharField(
+        max_length=100, db_index=True, verbose_name=_("Email")
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
+
+    def __str__(self) -> str:
+        return f"Seller(pk={self.pk}, name={self.name!r})"
