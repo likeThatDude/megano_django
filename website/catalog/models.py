@@ -1,8 +1,13 @@
-from typing import TYPE_CHECKING
-
-from django.db import models
-from django.db.models import Manager
 from django.utils.translation import gettext_lazy as _
+from django.db import models
+
+
+def category_icon_directory_path(instance: "Category", filename: str) -> str:
+    """Путь для сохранения иконки категории"""
+    return "products/category_{name}/images/{filename}".format(
+        name=instance.name,
+        filename=filename,
+    )
 
 
 class Category(models.Model):
