@@ -1,13 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-
-def category_icon_directory_path(instance: "Category", filename: str) -> str:
-    """Путь для сохранения иконки категории"""
-    return "products/category_{name}/images/{filename}".format(
-        name=instance.name,
-        filename=filename,
-    )
+from catalog.utils import product_images_directory_path
 
 
 class Category(models.Model):
@@ -73,14 +67,6 @@ class Product(models.Model):
         default=False, verbose_name=_("Limited edition")
     )
     view = models.BooleanField(default=False, verbose_name=_("View"))
-
-
-def product_images_directory_path(instance: "ProductImage", filename: str) -> str:
-    """Путь для сохранения изображений товаров"""
-    return "products/product_{pk}/images/{filename}".format(
-        pk=instance.product,
-        filename=filename,
-    )
 
 
 class ProductImage(models.Model):
