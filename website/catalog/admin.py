@@ -5,7 +5,7 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-from .models import Category, Product, Review
+from .models import Category, Product, Review, Specification
 
 
 @admin.action(description="Delete cache")
@@ -60,5 +60,19 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display_links = (
         'id',
         'text',
+    )
+    ordering = ('id',)
+
+
+@admin.register(Specification)
+class SpecificationAdmin(admin.ModelAdmin):
+    list_display = (
+        'value',
+        'name',
+        'product',
+    )
+    list_display_links = (
+        'specification',
+        'name',
     )
     ordering = ('id',)
