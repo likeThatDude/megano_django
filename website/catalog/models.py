@@ -1,6 +1,6 @@
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from catalog.utils import product_images_directory_path
 
@@ -107,7 +107,10 @@ class NameSpecification(models.Model):
     Модель названия характеристики
     name: название характеристики
     """
-    name = models.CharField(max_length=100, db_index=True, verbose_name=_('Name specification'))
+
+    name = models.CharField(
+        max_length=100, db_index=True, verbose_name=_("Name specification")
+    )
 
 
 class Specification(models.Model):
@@ -117,11 +120,18 @@ class Specification(models.Model):
     specification: название характеристики
     product: товар к которому относится данная характеристика
     """
+
     value = models.DecimalField(
-        default=0, max_digits=2, decimal_places=2, verbose_name=_("Value specification"),
+        default=0,
+        max_digits=2,
+        decimal_places=2,
+        verbose_name=_("Value specification"),
     )
     name = models.ForeignKey(
-        NameSpecification, on_delete=models.CASCADE, verbose_name=_('Name specification')
+        NameSpecification,
+        on_delete=models.CASCADE,
+        verbose_name=_("Name specification"),
     )
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('PK Product'))
-
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, verbose_name=_("PK Product")
+    )
