@@ -101,3 +101,27 @@ class Review(models.Model):
     text = models.TextField(verbose_name=_("Text"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
 
+
+class NameSpecification(models.Model):
+    """
+    Модель названия характеристики
+    name: название характеристики
+    """
+    name = models.CharField(max_length=100, db_index=True, verbose_name=_('Name specification'))
+
+
+class Specification(models.Model):
+    """
+    Модуль характеристики
+    value: значение характеристики
+    specification: название характеристики
+    product: товар к которому относится данная характеристика
+    """
+    value = models.DecimalField(
+        default=0, max_digits=2, decimal_places=2, verbose_name=_("Value specification"),
+    )
+    name = models.ForeignKey(
+        NameSpecification, on_delete=models.CASCADE, verbose_name=_('Name specification')
+    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('PK Product'))
+
