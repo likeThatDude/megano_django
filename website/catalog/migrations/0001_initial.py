@@ -4,6 +4,8 @@ import catalog.models
 import django.db.models.deletion
 from django.db import migrations, models
 
+import catalog.utils
+
 
 class Migration(migrations.Migration):
 
@@ -127,7 +129,7 @@ class Migration(migrations.Migration):
                 (
                     "image",
                     models.ImageField(
-                        upload_to=catalog.models.product_images_directory_path,
+                        upload_to=catalog.utils.product_images_directory_path,
                         verbose_name="Image product",
                     ),
                 ),
