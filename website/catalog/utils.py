@@ -9,7 +9,7 @@ def category_icon_directory_path(instance: Category, filename: str) -> str:
     )
 
 
-def product_images_directory_path(instance: "ProductImage", filename: str) -> str:
+def product_images_directory_path(instance: ProductImage, filename: str) -> str:
     """Путь для сохранения изображений товаров"""
     return "products/product_{pk}/images/{filename}".format(
         pk=instance.product,
