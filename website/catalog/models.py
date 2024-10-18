@@ -1,8 +1,8 @@
-from typing import TYPE_CHECKING
-
+from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Manager
 from django.utils.translation import gettext_lazy as _
+
+from catalog.utils import product_images_directory_path
 
 
 class Category(models.Model):
@@ -70,14 +70,6 @@ class Product(models.Model):
     view = models.BooleanField(default=False, verbose_name=_("View"))
 
 
-def product_images_directory_path(instance: "ProductImage", filename: str) -> str:
-    """Путь для сохранения изображений товаров"""
-    return "products/product_{pk}/images/{filename}".format(
-        pk=instance.product,
-        filename=filename,
-    )
-
-
 class ProductImage(models.Model):
     """
     Модель изображения товара
@@ -91,6 +83,7 @@ class ProductImage(models.Model):
     image = models.ImageField(
         upload_to=product_images_directory_path, verbose_name=_("Image product")
     )
+
 
 
 class Seller(models.Model):
@@ -125,3 +118,56 @@ class Seller(models.Model):
 
     def __str__(self) -> str:
         return f"Seller(pk={self.pk}, name={self.name!r})"
+
+
+class Review(models.Model):
+    """
+    Модель отзыва
+    product: товар к которому относится данный отзыв
+    user: пользователь, который оставил отзыв #TODO после создания модели CustomUser заменить связанную
+    text: текст отзыва
+    created_at: время создания отзыва (создается автоматически)
+    """
+
+    product = models.OneToOneField(
+        Product, on_delete=models.CASCADE, verbose_name=_("Product")
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    text = models.TextField(verbose_name=_("Text"))
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+
+
+class NameSpecification(models.Model):
+    """
+    Модель названия характеристики
+    name: название характеристики
+    """
+
+    name = models.CharField(
+        max_length=100, db_index=True, verbose_name=_("Name specification")
+    )
+
+
+class Specification(models.Model):
+    """
+    Модуль характеристики
+    value: значение характеристики
+    specification: название характеристики
+    product: товар к которому относится данная характеристика
+    """
+
+    value = models.DecimalField(
+        default=0,
+        max_digits=2,
+        decimal_places=2,
+        verbose_name=_("Value specification"),
+    )
+    name = models.ForeignKey(
+        NameSpecification,
+        on_delete=models.CASCADE,
+        verbose_name=_("Name specification"),
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, verbose_name=_("PK Product")
+    )
+
