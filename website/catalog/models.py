@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from catalog.utils import product_images_directory_path
+from .utils import product_images_directory_path, seller_image_directory_path
 
 
 class Category(models.Model):
@@ -50,9 +50,7 @@ class Product(models.Model):
     description = models.TextField(
         null=True, blank=True, db_index=True, verbose_name=_("Description")
     )
-    price = models.DecimalField(
-        default=0, max_digits=8, decimal_places=2, verbose_name=_("Price")
-    )
+
     manufacture = models.CharField(
         max_length=100, db_index=True, verbose_name=_("Manufacture")
     )
@@ -68,6 +66,9 @@ class Product(models.Model):
         default=False, verbose_name=_("Limited edition")
     )
     view = models.BooleanField(default=False, verbose_name=_("View"))
+
+    def __str__(self) -> str:
+        return f"Product(id={self.pk}, name={self.name!r})"
 
 
 class ProductImage(models.Model):
@@ -85,7 +86,6 @@ class ProductImage(models.Model):
     )
 
 
-
 class Seller(models.Model):
     """
     Модель продавца
@@ -101,23 +101,43 @@ class Seller(models.Model):
     """
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
-    description = models.TextField(
-        null=True, blank=True, db_index=True, verbose_name=_("Description")
-    )
-    image = models.FileField(
-            upload_to="assets/img/icons/departments", null=True, blank=True, verbose_name=_("Image"))
-    phone = models.CharField(
-        max_length=100, db_index=True, verbose_name=_("Phone")
-    )
+    description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
+    image = models.ImageField(upload_to=seller_image_directory_path, null=True, blank=True, verbose_name=_("Image"))
+    phone = models.CharField(max_length=15, null=False, verbose_name=_("Phone"))
     address = models.TextField(null=True, blank=True, verbose_name=_("Address"))
-    email = models.CharField(
-        max_length=100, db_index=True, verbose_name=_("Email")
+    email = models.EmailField(max_length=100, verbose_name=_("Email"))
+    products = models.ManyToManyField(
+        "Product",
+        blank=True,
+        through="Storage",
+        related_name="sellers",
+        verbose_name=_("Products")
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
     def __str__(self) -> str:
-        return f"Seller(pk={self.pk}, name={self.name!r})"
+        return f"Seller(id={self.pk}, name={self.name!r})"
+
+
+class Storage(models.Model):
+    """
+        Модель склада
+        seller: название продавца
+        product: название продукта
+        quantity: доступное количество
+        price: цена
+        created_at: дата создания записи
+
+        """
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name="storage", verbose_name=_("Seller"))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="storage", verbose_name=_("Product"))
+    quantity = models.PositiveIntegerField(default=0, verbose_name=_("Quantity"))
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
+    created_at = models.DateField(auto_now_add=True, verbose_name=_("Created at"), null=True)
+
+    def __str__(self):
+        return f"Storage(product={self.product}, seller={self.seller})"
 
 
 class Review(models.Model):
