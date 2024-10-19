@@ -103,7 +103,7 @@ CACHES = {
 }
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
-BANNERS_KEY = 'banners'
+BANNERS_KEY = "banners"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -150,5 +150,6 @@ MEDIA_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "account.CustomUser"
 
-LOGIN_URL = reverse_lazy('core:login')
+LOGIN_URL = reverse_lazy("core:login")
