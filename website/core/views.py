@@ -38,26 +38,26 @@ def index(request: HttpRequest) -> HttpResponse:
         "categories": categories,
         "banners": random_banners,
     }
-    return render(request, "core/index.html", context=context)
+    return render(request, "core/main_page.html", context=context)
 
-def about_view(request: HttpRequest):
-    return render(request, "core/about.html")
-
-def catalog(request: HttpRequest):
-    return render(request, "core/catalog.html")
-
-def comparison(request: HttpRequest):
-    return render(request, "core/comparison.html")
-
-@login_required
-def account(request):
-    return render(request, 'core/account.html')
-
-def cart(request):
-    return render(request, 'core/cart.html')
-
-def login(request):
-    return render(request, 'core/login.html')
-
-def registr(request):
-    return render(request, 'core/registr.html')
+# def about_view(request: HttpRequest):
+#     return render(request, "core_1/about.html")
+#
+# def catalog(request: HttpRequest):
+#     return render(request, "core_1/catalog.html")
+#
+# def comparison(request: HttpRequest):
+#     return render(request, "core_1/comparison.html")
+#
+# @login_required
+# def account(request):
+#     return render(request, 'core_1/account.html')
+#
+# def cart(request):
+#     return render(request, 'core_1/cart.html')
+#
+# def login(request):
+#     return render(request, 'core_1/login.html')
+#
+# def registr(request):
+#     return render(request, 'core_1/registr.html')

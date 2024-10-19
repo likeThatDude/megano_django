@@ -1,18 +1,51 @@
 <!DOCTYPE html>
+<!--[if IE 7]>
+<html class="ie7" lang="ru">
+<![endif]-->
+<!--[if IE 8]>
+<html class="ie8" lang="ru">
+<![endif]-->
+<!--[if IE 9]>
+<html class="ie9" lang="ru">
+<![endif]-->
+<!--[if IE 10]>
+<html class="ie10" lang="ru">
+<![endif]-->
+<!--[if IE 11]>
+<html class="ie11" lang="ru">
+<![endif]-->
+<!--[if gt IE 11]><!-->
 <html lang="ru">
+<!--<![endif]-->
 <head>
+    {% block description %}
+
+    {% endblock %}
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мой сайт{% endblock %}</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+    {% block links %}
+
+    {% endblock %}
+    <title>
+        {% block title %}
+
+        {% endblock %}
+    </title>
 </head>
-<body>
+
+<body class="Site">
     {% include 'core/header.html' %}
+    {% block body %}
 
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
+    {% endblock %}
 
+    {% block script %}
+
+    {% endblock %}
     {% include 'core/footer.html' %}
 </body>
 </html>
