@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
+from website import settings
 from .utils import product_images_directory_path, seller_image_directory_path, product_image_directory_path
 
 
@@ -173,7 +174,7 @@ class Review(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, verbose_name=_("Product"), related_name='review'
     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("User"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"))
     text = models.TextField(verbose_name=_("Text"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
 
