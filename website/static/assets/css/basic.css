@@ -2080,6 +2080,8 @@ label.toggle {
     float: left;
     margin: 10px 32px 10px 0;
     max-width: 40%;
+    max-height: 300px;
+
 }
 
 .pict_right img,

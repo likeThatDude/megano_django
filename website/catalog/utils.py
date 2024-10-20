@@ -13,6 +13,13 @@ def product_images_directory_path(instance: "ProductImage", filename: str) -> st
         filename=filename,
     )
 
+def product_image_directory_path(instance: "Product", filename: str) -> str:
+    """Путь для сохранения главного изображения товаров"""
+    return "products/product_{pk}/images/{filename}".format(
+        pk=instance.pk,
+        filename=filename,
+    )
+
 
 def seller_image_directory_path(instance: "Seller", filename: str) -> str:
     """Путь для сохранения изображений продавца"""

@@ -19,7 +19,7 @@
 <!--[if gt IE 11]><!-->
 <html lang="ru">
 <!--<![endif]-->
-{% extends 'core/base.html' %}
+{% extends 'core_1/base.html' %}
 {% load static %}
 {% block content %}
 <head>
@@ -105,24 +105,28 @@
 
             <div class="wrapper">
                 <div class="header">
-                    <h3 class="sign-in">Вход</h3>
+                    <h3 class="sign-in">Регистрация</h3>
+
                 </div>
                 <div class="clear"></div>
                 <form action="#">
                     <div>
-                        <input class="user-input" type="text" name="name" id="name" placeholder="E-mail" />
+                        <input class="user-input" type="text" name="name" id="name" placeholder="Имя" />
+                    </div>
+                    <div>
+                        <input class="user-input" type="email" name="login" id="name" placeholder="E-mail" />
                     </div>
                     <div>
 
-                        <input type="password" name="pass" id="name" placeholder="*********" />
+                        <input type="password" name="pass" id="name" placeholder="Пароль" />
                     </div>
-                    <div>
-                        <input type="submit" value="Войти" />
-                    </div>
-                    <a class="forgot-label" href="e-mail.html">Забыли пароль?</a>
-                    <a class="registr" href="registr.html">
-                        Регистрация
+                    <input type="submit" value="Зарегистрироваться" />
+
+
+                    <a class="registr" href="login.html">
+                        Вход
                     </a>
+                    <div class="clear"></div>
                 </form>
             </div>
 
@@ -143,4 +147,5 @@
 </body>
 
 </html>
+
 {% endblock %}

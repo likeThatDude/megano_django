@@ -4028,9 +4028,14 @@ a.Cart-title {
     top: 0;
     left: -92px;
     display: block;
-    width: 73px;
+    width: 100px;
+    max-height: 500px;
+    overflow: scroll;
 }
 
+.ProductCard-picts::-webkit-scrollbar {
+    display: none;
+}
 @media screen and (max-width: 700px) {
     .ProductCard-picts {
         width: 100%;
@@ -4137,6 +4142,8 @@ a.Cart-title {
 
 .ProductCard-photo {
     width: 100%;
+    max-width: 262px;
+    max-height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;

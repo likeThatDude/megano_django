@@ -27,4 +27,8 @@ urlpatterns = [
     path("order/", include("order.urls")),
     path("catalog/", include("catalog.urls")),
 
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+    urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
