@@ -198,7 +198,7 @@ class NameSpecification(models.Model):
 
 class Specification(models.Model):
     """
-    Модуль характеристики
+    Модель характеристики
     value: значение характеристики
     specification: название характеристики
     product: товар к которому относится данная характеристика
