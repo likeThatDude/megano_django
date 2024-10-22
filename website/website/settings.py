@@ -144,7 +144,7 @@ MEDIA_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "account.CustomUser"
+AUTH_USER_MODEL = "auth.CustomUser"
 
 LOGIN_URL = reverse_lazy("account:login")
 LOGOUT_URL = reverse_lazy("account:logout")
