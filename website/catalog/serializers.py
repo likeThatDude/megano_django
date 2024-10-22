@@ -14,4 +14,4 @@ class ReviewSerializer(serializers.ModelSerializer):
 class ReviewFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ['text']
+        fields = ['user', 'text', 'created_at']
