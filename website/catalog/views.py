@@ -5,6 +5,12 @@ from django.views.generic import DetailView, TemplateView
 from . import models
 from .models import Product, Seller, Storage, Review, Category, Specification
 from .forms import ReviewForm
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .models import Product, Review
+from .serializers import ProductSerializer, ReviewSerializer, ReviewFormSerializer
 
 
 def catalog_view(request: HttpRequest):
@@ -15,80 +21,39 @@ class CategoryDetailView(DetailView):
     pass
 
 
-class ProductDetailView(DetailView):
-    template_name = 'catalog/product_detail.html'
-    model = Product
-    context_object_name = 'product'
+class ProductDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        pk = self.kwargs.get('pk')
+    def get(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+            product_serializer = ProductSerializer(product)
 
-        return (Product.objects
-                .select_related('category')
-                .prefetch_related(
-            Prefetch(
-                'images',
-            ),
-            Prefetch(
-                'review',
-                queryset=Review.objects.only('user', 'text', 'created_at').order_by('-created_at'),
-            ),
-            Prefetch(
-                'storage',
-                queryset=Storage.objects.select_related('seller').only('seller', 'price')
-                .order_by('price')
-            ),
-            Prefetch(
-                'specifications',
-                queryset=Specification.objects.select_related('name').only('value', 'name__name')
-                .order_by('name__name')
-            )
-        ).filter(pk=pk))
+            reviews = Review.objects.filter(product=product)
+            review_serializer = ReviewSerializer(reviews, many=True)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['storages'] = self.object.storage.all()
-        context['reviews_data'] = self.object.review.all()
-        return context
+            return Response({
+                'product': product_serializer.data,
+                'reviews': review_serializer.data
+            }, status=status.HTTP_200_OK)
 
-    def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
-        product = self.get_product(pk)
-        reviews = Review.objects.filter(product=product)
-        form = ReviewForm()
-        context = {
-            'product': product,
-            'reviews': reviews,
-            'form': form,
-        }
-        return render(request, self.template_name, context)
+        except Product.DoesNotExist:
+            return Response({'error': 'Продукт не найден'}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, product_id):
+    def post(self, request, pk):
+        try:
+            product = Product.objects.get(pk=pk)
+        except Product.DoesNotExist:
+            return Response({'error': 'Продукт не найден'}, status=status.HTTP_404_NOT_FOUND)
+
         if request.user.is_authenticated:
-            form = ReviewForm(request.POST)
-            if form.is_valid():
-                review = form.save(commit=False)
-                review.product = self.get_product(product_id)
-                review.user = request.user
-                review.save()
-                return redirect('product_detail', product_id=product_id)
+            serializer = ReviewFormSerializer(data=request.data)
+            if serializer.is_valid():
+                review = serializer.save(product=product, user=request.user)
+                return Response(ReviewSerializer(review).data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        else:
-            form = ReviewForm()
-            form.add_error(None, "Вы должны быть авторизованы для добавления отзыва.")
-
-        product = self.get_product(product_id)
-        reviews = Review.objects.filter(product=product)
-        context = {
-            'product': product,
-            'reviews': reviews,
-            'form': form,
-        }
-        return render(request, self.template_name, context)
-
-    def get_product(self, product_id):
-        from .models import Product
-        return Product.objects.get(id=product_id)
+        return Response({'error': 'Чтобы добавить отзыв, вам необходимо войти в систему.'}, status=status.HTTP_403_FORBIDDEN)
 
     # class ProductDetailView(TemplateView):
     #     template_name = 'catalog/product_detail.html'

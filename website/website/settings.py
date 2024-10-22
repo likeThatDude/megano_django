@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
