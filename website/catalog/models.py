@@ -98,7 +98,7 @@ class Price(models.Model):
     price: цена
     """
     seller = models.ForeignKey('Seller', on_delete=models.CASCADE, verbose_name=_("Seller price"))
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, verbose_name=_('Product price'))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Product price'))
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
     available_quantity = models.IntegerField(default=0, verbose_name=_('Available quantity from seller'))
 
