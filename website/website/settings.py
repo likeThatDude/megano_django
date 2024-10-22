@@ -142,3 +142,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "account.CustomUser"
 
 LOGIN_URL = reverse_lazy("core:login")
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+CART_SESSION_ID = 'cart'
