@@ -90,6 +90,19 @@ class Product(models.Model):
         return f"Product(id={self.pk}, name={self.name!r})"
 
 
+class Price(models.Model):
+    """
+    Модель цены товара
+    seller: продавец с которым связана цена
+    product: продукт к которому относится цена
+    price: цена
+    """
+    seller = models.ForeignKey('Seller', on_delete=models.CASCADE, verbose_name=_("Seller price"))
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, verbose_name=_('Product price'))
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
+    available_quantity = models.IntegerField(default=0, verbose_name=_('Available quantity from seller'))
+
+
 class ProductImage(models.Model):
     """
     Модель изображения товара
