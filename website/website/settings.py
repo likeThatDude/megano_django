@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from django.urls import reverse_lazy
 
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -139,10 +144,16 @@ MEDIA_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "account.CustomUser"
+AUTH_USER_MODEL = "auth.CustomUser"
 
-LOGIN_URL = reverse_lazy("core:login")
+LOGIN_URL = reverse_lazy("account:login")
+LOGOUT_URL = reverse_lazy("account:logout")
+LOGIN_REDIRECT_URL = reverse_lazy("core:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-
-CART_SESSION_ID = 'cart'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
+EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))

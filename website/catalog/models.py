@@ -1,9 +1,8 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
-from website import settings
 from .utils import product_images_directory_path, seller_image_directory_path, product_image_directory_path
 
 
@@ -17,7 +16,8 @@ class Category(models.Model):
     """
 
     class Meta:
-        verbose_name_plural = "categories"
+        verbose_name = _("Category")
+        verbose_name_plural = _("Сategories")
         ordering = ("name",)
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
