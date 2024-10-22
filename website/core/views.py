@@ -31,7 +31,6 @@ def index(request: HttpRequest) -> HttpResponse:
             .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
             .order_by('?')[:3]
         )
-        print(random_banners)
         cache.set(BANNERS_KEY, random_banners, timeout=3)
 
     context = {

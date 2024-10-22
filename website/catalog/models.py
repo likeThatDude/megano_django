@@ -17,7 +17,8 @@ class Category(models.Model):
     """
 
     class Meta:
-        verbose_name_plural = "categories"
+        verbose_name = _("Category")
+        verbose_name_plural = _("Сategories")
         ordering = ("name",)
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
