@@ -3,7 +3,8 @@ from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
-from .utils import product_images_directory_path, seller_image_directory_path, product_image_directory_path
+from .utils import (product_image_directory_path,
+                    product_images_directory_path, seller_image_directory_path)
 
 
 class Category(models.Model):
@@ -37,8 +38,16 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class Tag(models.Model):
-    name = models.CharField(max_length=100, verbose_name=_("Name"), unique=True, db_index=True, null=False, blank=False)
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Name"),
+        unique=True,
+        db_index=True,
+        null=False,
+        blank=False,
+    )
 
     class Meta:
         verbose_name_plural = "tags"
@@ -65,8 +74,13 @@ class Product(models.Model):
     description = models.TextField(
         null=True, blank=True, db_index=True, verbose_name=_("Description")
     )
-    product_type = models.CharField(max_length=100, db_index=True, verbose_name=_("Product Type"), null=False,
-                                    blank=False)
+    product_type = models.CharField(
+        max_length=100,
+        db_index=True,
+        verbose_name=_("Product Type"),
+        null=False,
+        blank=False,
+    )
     manufacture = models.CharField(
         max_length=100, db_index=True, verbose_name=_("Manufacture")
     )
@@ -82,25 +96,16 @@ class Product(models.Model):
         default=False, verbose_name=_("Limited edition")
     )
     view = models.BooleanField(default=False, verbose_name=_("View"))
-    preview = models.ImageField(null=True, blank=True, upload_to=product_image_directory_path,
-                                verbose_name=_("Preview"))
-    tags = ManyToManyField(Tag, related_name='products', verbose_name=_("Tags"))
+    preview = models.ImageField(
+        null=True,
+        blank=True,
+        upload_to=product_image_directory_path,
+        verbose_name=_("Preview"),
+    )
+    tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
 
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name!r})"
-
-
-class Price(models.Model):
-    """
-    Модель цены товара
-    seller: продавец с которым связана цена
-    product: продукт к которому относится цена
-    price: цена
-    """
-    seller = models.ForeignKey('Seller', on_delete=models.CASCADE, verbose_name=_("Seller price"))
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_('Product price'))
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
-    available_quantity = models.IntegerField(default=0, verbose_name=_('Available quantity from seller'))
 
 
 class ProductImage(models.Model):
@@ -111,7 +116,10 @@ class ProductImage(models.Model):
     """
 
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name=_("PK product"), related_name="images"
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_("PK product"),
+        related_name="images",
     )
     image = models.ImageField(
         upload_to=product_images_directory_path, verbose_name=_("Image product")
@@ -134,7 +142,12 @@ class Seller(models.Model):
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
-    image = models.ImageField(upload_to=seller_image_directory_path, null=True, blank=True, verbose_name=_("Image"))
+    image = models.ImageField(
+        upload_to=seller_image_directory_path,
+        null=True,
+        blank=True,
+        verbose_name=_("Image"),
+    )
     phone = models.CharField(max_length=15, null=False, verbose_name=_("Phone"))
     address = models.TextField(null=True, blank=True, verbose_name=_("Address"))
     email = models.EmailField(max_length=100, verbose_name=_("Email"))
@@ -154,22 +167,39 @@ class Seller(models.Model):
 
 class Storage(models.Model):
     """
-        Модель склада
-        seller: название продавца
-        product: название продукта
-        quantity: доступное количество
-        price: цена
-        created_at: дата создания записи
+    Модель склада
+    seller: название продавца
+    product: название продукта
+    quantity: доступное количество
+    price: цена
+    created_at: дата создания записи
 
-        """
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name="storage", verbose_name=_("Seller"), db_index=True,)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="storage", verbose_name=_("Product"), db_index=True,)
+    """
+
+    seller = models.ForeignKey(
+        Seller,
+        on_delete=models.CASCADE,
+        related_name="storage",
+        verbose_name=_("Seller"),
+        db_index=True,
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="storage",
+        verbose_name=_("Product"),
+        db_index=True,
+    )
     quantity = models.PositiveIntegerField(default=0, verbose_name=_("Quantity"))
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
-    created_at = models.DateField(auto_now_add=True, verbose_name=_("Created at"), null=True)
+    price = models.DecimalField(
+        default=0, max_digits=10, decimal_places=2, verbose_name=_("Price")
+    )
+    created_at = models.DateField(
+        auto_now_add=True, verbose_name=_("Created at"), null=True
+    )
 
     class Meta:
-        unique_together = ('product', 'seller')
+        unique_together = ("product", "seller")
 
     def __str__(self):
         return f"Storage(product={self.product}, seller={self.seller})"
@@ -185,9 +215,14 @@ class Review(models.Model):
     """
 
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name=_("Product"), related_name='review'
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_("Product"),
+        related_name="review",
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"))
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User")
+    )
     text = models.TextField(verbose_name=_("Text"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
 
@@ -219,7 +254,7 @@ class Specification(models.Model):
 
     value = models.CharField(
         max_length=100,
-        default='',
+        default="",
         null=False,
         blank=False,
         verbose_name=_("Value specification"),
@@ -231,8 +266,33 @@ class Specification(models.Model):
         db_index=True,
     )
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name=_("PK Product"), related_name="specifications"
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_("PK Product"),
+        related_name="specifications",
     )
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
+
+
+class Price(models.Model):
+    """
+    Модель цены товара
+    seller: продавец с которым связана цена
+    product: продукт к которому относится цена
+    price: цена
+    """
+
+    seller = models.ForeignKey(
+        Seller, on_delete=models.CASCADE, verbose_name=_("Seller price")
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, verbose_name=_("Product price")
+    )
+    price = models.DecimalField(
+        default=0, max_digits=10, decimal_places=2, verbose_name=_("Price")
+    )
+    available_quantity = models.IntegerField(
+        default=0, verbose_name=_("Available quantity from seller")
+    )
