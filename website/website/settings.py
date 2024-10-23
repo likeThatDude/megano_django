@@ -45,11 +45,17 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # other lib
+    # "debug_toolbar",
+
+    # apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
+    "comparison.apps.ComparisonConfig",
 ]
 
 MIDDLEWARE = [
@@ -60,6 +66,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    # Debug Toolbar Middleware
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -142,3 +151,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "account.CustomUser"
 
 LOGIN_URL = reverse_lazy("core:login")
+
+# INTERNAL_IPS = ['127.0.0.1', 'localhost']

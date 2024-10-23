@@ -84,7 +84,7 @@ class Product(models.Model):
     view = models.BooleanField(default=False, verbose_name=_("View"))
     preview = models.ImageField(null=True, blank=True, upload_to=product_image_directory_path,
                                 verbose_name=_("Preview"))
-    tags = ManyToManyField(Tag, related_name='products', verbose_name=_("Tags"))
+    tags = ManyToManyField(Tag, related_name='products', verbose_name=_("Tags"), blank=True)
 
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name!r})"

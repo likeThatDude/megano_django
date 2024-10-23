@@ -38,6 +38,7 @@ def index(request: HttpRequest) -> HttpResponse:
         "categories": categories,
         "banners": random_banners,
     }
+    print(context)
     return render(request, "core/main_page.html", context=context)
 
 # def about_view(request: HttpRequest):

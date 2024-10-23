@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+
+{% block description %}
+    <meta name="description" content="Описание страницы">
+{% endblock %}
+
+{% block title %}
+    Сравнение товаров
+{% endblock %}
+
+{% block body %}
+    <div class="Middle">
+        <div class="wrap">
+            <div class="Product">
+                <div class="ProductCard">
+                    {% if comparison_products %}
+                        {% for category, comparisons in comparison_products.items %}
+                            <h1>Сравниваемая категория: {{ category.name }}</h1>
+                            <div class="CategoryComparison">
+                                {% for comparison in comparisons %}
+                                    <div class="ProductCard-desc">
+                                        <div class="ProductCard-header">
+                                            <h2 class="ProductCard-title">{{ comparison.product.name|truncatechars:40 }}
+                                            </h2>
+                                            <div class="ProductCard-look">
+                                                <div class="ProductCard-photo">
+                                                    <img src="{{ comparison.product.preview.url }}"
+                                                         alt="bigGoods.png"/>
+                                                    <div class="DeleteButton">
+                                                        <form method="post"
+                                                              action="{% url 'comparison:comparison_delete' pk=comparison.pk %}">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="DeleteLink"></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="Tabs Tabs_default">
+                                                <div class="Tabs-wrap">
+                                                    <div class="Tabs-block" id="description">
+                                                        <div class="table">
+                                                            <table>
+                                                                <tr>
+                                                                    <th class="hed">Характеристика</th>
+                                                                    <th class="hed">Значение</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><b>Общие параметры</b></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="comparis">Тип</td>
+                                                                    <td class="comparis">{{ comparison.product.product_type }}</td>
+                                                                </tr>
+                                                                {% for foo in correct_spec|get_item:category.name %}
+                                                                    <tr>
+                                                                        <td>{{ foo }}</td>
+                                                                        <td>{{ comparison.product.specifications|get_spec:foo }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </table>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="ProductCard-info">
+                                            <div class="ProductCard-cost">
+                                                <div class="ProductCard-price">
+                                                    {% if comparison.min_price %}
+                                                    	$ {{ comparison.min_price }}
+                                                    {% else %}
+                                                    	Нету в продаже
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ProductCard-cart">
+
+                                            <div class="ProductCard-cartElement"><a class="btn btn_primary"
+                                                                                    href="../../../static/cart.html"><img
+                                                    class="btn-icon"
+                                                    src="../../../static/assets/img/icons/card/cart_white.svg"
+                                                    alt="cart_white.svg"/><span
+                                                    class="btn-content">Добавить в корзину</span></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Нет товаров для сравнения.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

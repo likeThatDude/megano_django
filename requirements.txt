@@ -2,6 +2,7 @@ asgiref==3.8.1
 black==24.8.0
 click==8.1.7
 Django==5.1.1
+django-debug-toolbar==4.4.6
 isort==5.13.2
 mypy-extensions==1.0.0
 packaging==24.1
