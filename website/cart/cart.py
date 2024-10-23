@@ -1,15 +1,16 @@
-from website import settings
+from decimal import Decimal
+
 from django.http import HttpRequest
 
-from catalog.models import Product, Price
-
-from decimal import Decimal
+from catalog.models import Price, Product
+from website import settings
 
 
 class Cart:
     """
     Модель корзины, которая хранит в себе информацию о товарах в сессии
     """
+
     def __init__(self, request: HttpRequest):
         """
         Создание корзины
@@ -32,20 +33,26 @@ class Cart:
         # Отметить, что сессия изменена
         self.session.modified = True
 
-    def add(self, product: Product, price_product: Price, quantity: int = 1, update_quantity=False):
+    def add(
+        self,
+        product: Product,
+        price_product: Price,
+        quantity: int = 1,
+        update_quantity=False,
+    ):
         """
         Добавление товара и цены в сессию
         """
         product_id = str(product.pk)
         if product_id not in self.cart:
             self.cart[product_id] = {
-                'quantity': 0,
-                'price': price_product.price,
+                "quantity": 0,
+                "price": price_product.price,
             }
         if update_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            self.cart[product_id]["quantity"] = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
+            self.cart[product_id]["quantity"] += quantity
         self.save()
 
     def remove(self, product: Product):
@@ -65,24 +72,25 @@ class Cart:
         # получение объектов product и добавление их в корзину
         products = Product.objects.filter(id__in=product_ids)
         for product in products:
-            self.cart[str(product.id)]['product'] = product
+            self.cart[str(product.id)]["product"] = product
 
         for item in self.cart.values():
-            item['total_price'] = item['price'] * item['quantity']
+            item["total_price"] = item["price"] * item["quantity"]
             yield item
 
     def __len__(self):
         """
         Подсчет всех товаров в корзине
         """
-        return sum(item['quantity'] for item in self.cart.values())
+        return sum(item["quantity"] for item in self.cart.values())
 
     def get_total_price(self):
         """
         Подсчет стоимости товаров в корзине
         """
-        return sum(Decimal(item['price']) * item['quantity']
-                   for item in self.cart.values())
+        return sum(
+            Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
+        )
 
     def clear(self):
         """
@@ -90,5 +98,3 @@ class Cart:
         """
         del self.session[settings.CART_SESSION_ID]
         self.session.modified = True
-
-
