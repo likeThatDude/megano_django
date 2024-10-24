@@ -179,14 +179,14 @@ class Price(models.Model):
     seller = models.ForeignKey(
         Seller,
         on_delete=models.CASCADE,
-        related_name="storage",
+        related_name="price",
         verbose_name=_("Seller"),
         db_index=True,
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name="storage",
+        related_name="price",
         verbose_name=_("Product"),
         db_index=True,
     )
@@ -202,7 +202,7 @@ class Price(models.Model):
         unique_together = ("product", "seller")
 
     def __str__(self):
-        return f"Storage(product={self.product}, seller={self.seller})"
+        return f"Price(product={self.product}, seller={self.seller})"
 
 
 class Review(models.Model):
