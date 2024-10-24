@@ -4,7 +4,12 @@ from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
-from .utils import product_images_directory_path, seller_image_directory_path, product_image_directory_path
+from .utils import (
+    product_images_directory_path,
+    seller_image_directory_path,
+    product_image_directory_path,
+    category_icon_directory_path,
+)
 
 
 class Category(models.Model):
@@ -22,7 +27,8 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
     icon = models.FileField(
-        upload_to="assets/img/icons/departments", verbose_name=_("Icon")
+        upload_to=category_icon_directory_path,
+        verbose_name=_("Icon"),
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     parent_category = models.ForeignKey(
@@ -36,6 +42,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, verbose_name=_("Name"), unique=True, db_index=True, null=False, blank=False)
