@@ -66,9 +66,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
-    # Debug Toolbar Middleware
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -152,4 +149,7 @@ AUTH_USER_MODEL = "account.CustomUser"
 
 LOGIN_URL = reverse_lazy("core:login")
 
-# INTERNAL_IPS = ['127.0.0.1', 'localhost']
+# Время жизни сессии (2 недели)
+SESSION_COOKIE_AGE = 1209600
+# Обновляем таймер каждый заход пользователя на сайт
+SESSION_SAVE_EVERY_REQUEST = True

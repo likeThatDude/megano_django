@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+from itertools import product
+
+from django.http import HttpResponseRedirect, HttpRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
@@ -23,21 +25,27 @@ class ComparisonView(TemplateView):
             context['correct_spec'] = comparison_products[0]
         else:
             comparison_products = utils.get_products_with_unauth_user(self.request)
-            data = create_categorization(comparison_products[1])
+            data = create_categorization(comparison_products[1], False)
             context['comparison_products'] = data
             context['correct_spec'] = comparison_products[0]
         return context
-
 
 
 class ComparisonDeleteView(DeleteView):
     model = Comparison
     success_url = reverse_lazy('comparison:comparison_page')
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.delete()
-        return HttpResponseRedirect(self.get_success_url())
+    def post(self, request: HttpRequest, *args, **kwargs):
+        if request.user.is_authenticated:
+            self.object = self.get_object()
+            self.object.delete()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            product_session_id = request.session.get('products_ids', [])
+            if product_session_id:
+                product_session_id.remove(str(kwargs['pk']))
+            request.session['products_ids'] = product_session_id
+        return HttpResponseRedirect(reverse_lazy('comparison:comparison_page'))
 
 
 class ComparisonAddView(View):
@@ -50,4 +58,11 @@ class ComparisonAddView(View):
 
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         else:
-            pass
+            product_id = request.POST.get('product')
+            product_session_id = request.session.get('products_ids', [])
+
+            if product_id not in product_session_id:
+                product_session_id.append(product_id)
+
+            request.session['products_ids'] = product_session_id
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

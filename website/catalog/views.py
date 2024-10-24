@@ -49,6 +49,3 @@ class ProductDetailView(DetailView):
         context['storages'] = self.object.storage.all()
         context['reviews_data'] = self.object.review.all()
         return context
-
-    # class ProductDetailView(TemplateView):
-    #     template_name = 'catalog/product_detail.html'

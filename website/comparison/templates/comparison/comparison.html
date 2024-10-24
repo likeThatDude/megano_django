@@ -23,12 +23,23 @@
                                 {% for comparison in comparisons %}
                                     <div class="ProductCard-desc">
                                         <div class="ProductCard-header">
-                                            <h2 class="ProductCard-title">{{ comparison.product.name|truncatechars:40 }}
-                                            </h2>
+                                            {% if comparison.product.name %}
+                                                <h2 class="ProductCard-title">{{ comparison.product.name|truncatechars:40 }}
+                                                </h2>
+                                            {% else %}
+                                                <h2 class="ProductCard-title">{{ comparison.name|truncatechars:40 }}
+                                                </h2>
+                                            {% endif %}
                                             <div class="ProductCard-look">
                                                 <div class="ProductCard-photo">
-                                                    <img src="{{ comparison.product.preview.url }}"
-                                                         alt="bigGoods.png"/>
+                                                    {% if comparison.product.name %}
+                                                        <img src="{{ comparison.product.preview.url }}"
+                                                             alt="bigGoods.png"/>
+                                                    {% else %}
+                                                        <img src="{{ comparison.preview.url }}"
+                                                             alt="bigGoods.png"/>
+                                                    {% endif %}
+
                                                     <div class="DeleteButton">
                                                         <form method="post"
                                                               action="{% url 'comparison:comparison_delete' pk=comparison.pk %}">
@@ -54,12 +65,20 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <td class="comparis">Тип</td>
-                                                                    <td class="comparis">{{ comparison.product.product_type }}</td>
+                                                                    {% if comparison.product.product_type %}
+                                                                        <td class="comparis">{{ comparison.product.product_type }}</td>
+                                                                    {% else %}
+                                                                        <td class="comparis">{{ comparison.product_type }}</td>
+                                                                    {% endif %}
                                                                 </tr>
                                                                 {% for foo in correct_spec|get_item:category.name %}
                                                                     <tr>
                                                                         <td>{{ foo }}</td>
-                                                                        <td>{{ comparison.product.specifications|get_spec:foo }}</td>
+                                                                        {% if comparison.product.specifications %}
+                                                                            <td>{{ comparison.product.specifications|get_spec:foo }}</td>
+                                                                        {% else %}
+                                                                            <td>{{ comparison.specifications|get_spec:foo }}</td>
+                                                                        {% endif %}
                                                                     </tr>
                                                                 {% endfor %}
                                                             </table>
@@ -74,9 +93,9 @@
                                             <div class="ProductCard-cost">
                                                 <div class="ProductCard-price">
                                                     {% if comparison.min_price %}
-                                                    	$ {{ comparison.min_price }}
+                                                        $ {{ comparison.min_price }}
                                                     {% else %}
-                                                    	Нету в продаже
+                                                        Нету в продаже
                                                     {% endif %}
                                                 </div>
                                             </div>
