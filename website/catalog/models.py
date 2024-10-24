@@ -154,7 +154,7 @@ class Seller(models.Model):
     products = models.ManyToManyField(
         "Product",
         blank=True,
-        through="Storage",
+        through="Price",
         related_name="sellers",
         verbose_name=_("Products"),
     )

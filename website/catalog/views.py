@@ -3,7 +3,7 @@ from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.views.generic import DetailView, TemplateView
 from . import models
-from .models import Product, Seller, Storage, Review, Category, Specification
+from .models import Product, Seller, Price, Review, Category, Specification
 from .forms import ReviewForm
 from rest_framework.views import APIView
 from rest_framework.response import Response
