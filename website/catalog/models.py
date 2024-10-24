@@ -165,9 +165,9 @@ class Seller(models.Model):
         return f"Seller(id={self.pk}, name={self.name!r})"
 
 
-class Storage(models.Model):
+class Price(models.Model):
     """
-    Модель склада
+    Модель цены
     seller: название продавца
     product: название продукта
     quantity: доступное количество
@@ -274,25 +274,3 @@ class Specification(models.Model):
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
-
-
-class Price(models.Model):
-    """
-    Модель цены товара
-    seller: продавец с которым связана цена
-    product: продукт к которому относится цена
-    price: цена
-    """
-
-    seller = models.ForeignKey(
-        Seller, on_delete=models.CASCADE, verbose_name=_("Seller price")
-    )
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name=_("Product price")
-    )
-    price = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, verbose_name=_("Price")
-    )
-    available_quantity = models.IntegerField(
-        default=0, verbose_name=_("Available quantity from seller")
-    )
