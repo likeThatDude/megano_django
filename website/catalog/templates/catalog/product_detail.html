@@ -274,6 +274,7 @@
                                     <div class="Tabs-addComment">
                                         <form class="form" action="#" method="post">
                                             {% csrf_token %}
+                                            {{ form.as_p }}
                                             <div class="form-group">
                                         <textarea class="form-textarea" name="review" id="review"
                                                   placeholder="Отзыв"></textarea>

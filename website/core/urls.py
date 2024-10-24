@@ -16,6 +16,4 @@ urlpatterns = [
     # path("comparison/", comparison, name="comparison"),
     # path("account/", account, name="account"),
     # path("cart/", cart, name="cart"),
-    # path("login/", login, name="login"),
-    # path("registr", registr, name="registr")
 ]
