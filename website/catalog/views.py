@@ -4,13 +4,13 @@ from django.shortcuts import render, redirect
 from django.views.generic import DetailView, TemplateView
 from . import models
 from .models import Product, Seller, Storage, Review, Category, Specification
-from .forms import ReviewForm
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from .models import Product, Review
-from .serializers import ProductSerializer, ReviewSerializer, ReviewFormSerializer
+# from .forms import ReviewForm
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+# from rest_framework import status
+# from rest_framework.permissions import IsAuthenticated
+# from .models import Product, Review
+# from .serializers import ProductSerializer, ReviewSerializer, ReviewFormSerializer
 
 
 def catalog_view(request: HttpRequest):

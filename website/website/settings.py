@@ -51,6 +51,7 @@ INSTALLED_APPS = [
 
     # other lib
     # "debug_toolbar",
+    'rest_framework',
 
     # apps
     "account.apps.AccountConfig",
@@ -59,8 +60,6 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
     "comparison.apps.ComparisonConfig",
-
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
