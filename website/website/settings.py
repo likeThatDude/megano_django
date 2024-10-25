@@ -53,6 +53,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # other lib
+    # "debug_toolbar",
+    'rest_framework',
+
+    # apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
@@ -170,3 +176,8 @@ EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 CART_SESSION_ID = 'cart'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+# Время жизни сессии (2 недели)
+SESSION_COOKIE_AGE = 1209600
+# Обновляем таймер каждый заход пользователя на сайт
+SESSION_SAVE_EVERY_REQUEST = True
