@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -31,6 +32,10 @@ SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 CACHES = {
     "default": {
@@ -59,7 +64,11 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
-    "comparison.apps.ComparisonConfig",
+    "viewed.apps.ViewedConfig",
+
+    "rest_framework",
+    "debug_toolbar",
+
 ]
 
 MIDDLEWARE = [
@@ -70,6 +79,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "website.urls"
