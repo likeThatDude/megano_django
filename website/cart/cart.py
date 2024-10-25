@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.http import HttpRequest
 
-from catalog.models import Price, Product
+from catalog.models import Price, Product, Seller
 from website import settings
 
 
@@ -48,6 +48,7 @@ class Cart:
             self.cart[product_id] = {
                 "quantity": 0,
                 "price": price_product.price,
+                "seller": price_product.seller,
             }
         if update_quantity:
             self.cart[product_id]["quantity"] = quantity
