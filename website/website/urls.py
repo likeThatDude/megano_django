@@ -16,22 +16,31 @@ Including another URLconf
 """
 from itertools import product
 
+from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
+
+    # Standard URL
     path("", include("core.urls")),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("order/", include("order.urls")),
     path("catalog/", include("catalog.urls")),
     path("views/", include("viewed.urls")),
-]
+    path('comparison/', include("comparison.urls")),
 
+    # API
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path("api/v1/", include('review.urls')),
+] + debug_toolbar_urls()
 
 if settings.DEBUG:
     urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
     urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
-    urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
+    # urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))

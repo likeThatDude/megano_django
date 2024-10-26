@@ -1082,7 +1082,7 @@
 }
 
 .Card-btn-comp {
-     position: relative;
+    position: relative;
     display: flex;
     width: 41px;
     height: 41px;
@@ -2364,15 +2364,99 @@ a.Cart-title {
     display: block;
 }
 
+.Comments:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.update-container {
+    display: flex;
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+    font-size: .7em;
+}
+
+.update-container > p:not(:last-child) {
+    margin-right: 10px;
+}
+
+.non-auth-block {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.non-auth-block-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 400px;
+    height: auto;
+    padding: 20px;
+}
+
+.non-auth-block-button {
+    width: auto;
+    height: 40px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 0 15px;
+    text-decoration: none;
+    color: white;
+    background-color: #0063d1;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.non-auth-block-button:hover {
+    text-decoration: none;
+    background-color: #00137c;
+}
+
+.non-auth-block-button:active {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.non-auth-block-buttons > a:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .update-container {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 20px;
+        bottom: -20px;
+        font-size: .7em;
+
+    }
+
+    .update-container > p:not(:last-child) {
+        margin: 0;
+        padding: 0;
+    }
+}
+
 .Comment {
     padding: 45px;
     background-color: #f3f4f9;
     position: relative;
     display: flex;
+    outline: 1px solid rgba(128, 128, 128, 0.8);
+    border-radius: 20px;
+    min-height: 200px;
 }
 
 .Comment-column + .Comment-column {
     margin-left: 23px;
+    width: 80%;
 }
 
 @media screen and (max-width: 480px) {
@@ -2433,6 +2517,75 @@ a.Cart-title {
     font-size: 14px;
     font-weight: 400;
     line-height: 1.5em;
+    margin-bottom: 20px;
+    outline: 1px solid gray;
+    padding: 10px 30px 10px 30px;
+    border-radius: 20px;
+}
+
+.User-control {
+    position: absolute;
+    bottom: 20px;
+}
+
+.save-review-button {
+    width: auto;
+    height: 25px;
+    font-size: .8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: none;
+    background-color: #0063d1;
+    color: white;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.save-review-button:hover {
+    background-color: #003883;
+}
+
+.cancel-review-button {
+    width: auto;
+    height: 25px;
+    font-size: .8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: none;
+    background-color: #0063d1;
+    color: white;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cancel-review-button:hover {
+    background-color: #003883;
+}
+
+.UpdateDeleteReviewButton {
+    width: auto;
+    height: 25px;
+    font-size: .8em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: none;
+    background-color: #0063d1;
+    color: white;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 0 10px;
+}
+
+.UpdateDeleteReviewButton:hover {
+    background-color: #003883;
+}
+
+.UpdateDeleteReviewButton:active {
+    background-color: #003883;
+    box-shadow: inset 0 0 0 2px black;
 }
 
 .Comment-avatar {
@@ -5225,6 +5378,25 @@ input[type="submit"] {
     top: 0;
     bottom: 0;
     height: auto;
+}
+
+.update-area-text {
+    width: auto;
+    max-width: 100%;
+    min-height: 40px; /* Минимальная высота для видимости */
+    max-height: 600px; /* Максимальная высота */
+    margin-bottom: 10px;
+    border-radius: 20px;
+    resize: both; /* Позволяет изменять размер */
+    padding: 10px; /* Отступы для удобства ввода текста */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Тень для выделения поля */
+    border: 1px solid #ccc; /* Обводка для четкости */
+    overflow: hidden; /* Скрывает скролл */
+}
+
+/* Убираем стандартный скроллбар */
+.update-area-text::-webkit-scrollbar {
+    display: none; /* Убираем скролл */
 }
 
 .Section-title {
