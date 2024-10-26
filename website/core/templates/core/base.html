@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <!--[if IE 7]>
 <html class="ie7" lang="ru">
@@ -26,7 +27,19 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     {% block links %}
 
     {% endblock %}
@@ -38,14 +51,25 @@
 </head>
 
 <body class="Site">
-    {% include 'core/header.html' %}
-    {% block body %}
+{% include 'core/header.html' %}
+{% block body %}
 
-    {% endblock %}
+{% endblock %}
 
-    {% block script %}
+<!--+Middle-->
+<!--    +div.-top-->
+<!--        +breadcrumbs('Главная','Портфолио')-->
+<!--    +Article('portfolio')-->
+<!---->
+<script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+<script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+<script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+<script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+<script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+<script src="{% static 'assets/js/scripts.js' %}"></script>
+{% block script %}
 
-    {% endblock %}
-    {% include 'core/footer.html' %}
+{% endblock %}
+{% include 'core/footer.html' %}
 </body>
 </html>

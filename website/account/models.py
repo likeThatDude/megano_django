@@ -22,7 +22,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     class Meta:
-        app_label = "auth"
+        app_label = 'auth'
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ("login",)
@@ -66,7 +66,7 @@ class Profile(models.Model):
     """
 
     class Meta:
-        app_label = "auth"
+        app_label = 'auth'
         verbose_name = _("Profile")
         verbose_name_plural = _("Profiles")
         ordering = (

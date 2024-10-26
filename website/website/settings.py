@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,6 +33,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -48,13 +53,22 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # other lib
+    # "debug_toolbar",
+    'rest_framework',
+
+    # apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
+    "viewed.apps.ViewedConfig",
 
-    'rest_framework',
+    "rest_framework",
+    "debug_toolbar",
+
 ]
 
 MIDDLEWARE = [
@@ -65,6 +79,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -161,3 +176,8 @@ EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 CART_SESSION_ID = 'cart'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+# Время жизни сессии (2 недели)
+SESSION_COOKIE_AGE = 1209600
+# Обновляем таймер каждый заход пользователя на сайт
+SESSION_SAVE_EVERY_REQUEST = True
