@@ -76,7 +76,7 @@ class SellerAdmin(admin.ModelAdmin):
 
 
 @admin.register(Price)
-class StorageAdmin(admin.ModelAdmin):
+class PriceAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "seller",

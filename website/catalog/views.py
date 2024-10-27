@@ -2,7 +2,7 @@ from django.core.cache import cache
 from django.db.models import (
     Q,
     Prefetch,
-    Min,
+    Min, Count,
 )
 from django.http import HttpRequest
 from django.views.generic import DetailView, TemplateView, ListView
@@ -11,7 +11,7 @@ from website.settings import PRODUCTS_KEY
 from django.shortcuts import render, redirect
 
 from . import models
-from .models import Product, Seller, Storage, Review, Category, Specification
+from .models import Product, Seller, Price, Review, Category, Specification
 
 
 # from .forms import ReviewForm
@@ -42,7 +42,7 @@ class CatalogListView(ListView):
                 .get_queryset()
                 .filter(category__id=category_id)
                 .annotate(
-                    price=Min("storage__price"),
+                    price=Min("price__price"),
                 )
             )
         cache.set(cache_key, queryset, timeout=60)
@@ -66,8 +66,8 @@ class ProductDetailView(DetailView):
                 .prefetch_related(
             Prefetch('images', ),
             Prefetch('review', queryset=Review.objects.select_related('user').all().order_by('-created_at'), ),
-            Prefetch('storage',
-                     queryset=Storage.objects.select_related('seller').only('seller', 'price').order_by('price')),
+            Prefetch('price',
+                     queryset=Price.objects.select_related('seller').only('seller', 'price').order_by('price')),
             Prefetch('specifications',
                      queryset=Specification.objects.select_related('name', ).order_by(
                          'name__name'))
@@ -75,7 +75,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storages'] = self.object.storage.all()
+        context['storages'] = self.object.price.all()
         return context
 
     # class ProductDetailView(TemplateView):

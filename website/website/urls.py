@@ -33,7 +33,7 @@ urlpatterns = [
     path("catalog/", include("catalog.urls")),
     path("views/", include("viewed.urls")),
     path("cart/", include("cart.urls")),
-]
+    path("comparison/", include("comparison.urls")),
 
     # API
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

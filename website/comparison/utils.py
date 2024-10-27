@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models import Prefetch, QuerySet, Min
 from django.http import HttpRequest
 
-from catalog.models import Product, Specification, Storage
+from catalog.models import Product, Specification, Price
 from comparison.models import Comparison
 
 
@@ -18,12 +18,12 @@ def get_products_with_auth_user(user) -> tuple:
             queryset=Specification.objects.select_related('name'),
         ),
         Prefetch(
-            'product__storage',
-            queryset=Storage.objects.only('price')
+            'product__price',
+            queryset=Price.objects.only('price')
         )
     )
                 .filter(user=user)
-                .annotate(min_price=Min('product__storage__price')))
+                .annotate(min_price=Min('product__price__price')))
     correct_spec = get_category_spec(products)
     products_data = list(products)
     return correct_spec, products_data
@@ -39,12 +39,12 @@ def get_products_with_unauth_user(request: HttpRequest) -> tuple:
             queryset=Specification.objects.select_related('name')
         ),
         Prefetch(
-            'storage',
-            queryset=Storage.objects.only('price')
+            'price',
+            queryset=Price.objects.only('price')
         )
     )
                 .filter(id__in=products_ids)
-                .annotate(min_price=Min('storage__price')))
+                .annotate(min_price=Min('price__price')))
     correct_spec = get_category_spec(products, False)
     products_data = list(products)
     return correct_spec, products_data
