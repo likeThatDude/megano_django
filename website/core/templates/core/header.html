@@ -1,5 +1,6 @@
 {% load core_tags %}
 {% load static %}
+{% load catalog_extras %}
 
 <header class="Header">
     <div class="ControlPanel">
@@ -27,8 +28,8 @@
                 </div>
                 <nav class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="">Вход</a>
-                            <a class="ControlPanel-title" href="">Регистрация</a>
+                        <div class="row-block"><a class="ControlPanel-title" href="{% url 'account:login' %}">Вход</a>
+                            <a class="ControlPanel-title" href="{% url 'account:register' %}">Регистрация</a>
                         </div>
                     </div>
                 </nav>
@@ -48,18 +49,18 @@
     <div class="wrap">
         <div class="row Header-rowMain">
             <div class="row-block Header-logo"><a class="logo" href="{% url 'core:index' %}"><img class="logo-image"
-                                                                            src="{% static 'assets/img/logo.png' %}"
-                                                                            alt="logo.png"/></a>
+                                                                                                  src="{% static 'assets/img/logo.png' %}"
+                                                                                                  alt="logo.png"/></a>
             </div>
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="">Главная</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'core:index' %}">Главная</a>
                         </li>
                         <li class="menu-item"><span class="menu-label menu-label_success">Скидки</span><a
                                 class="menu-link" href="{% url 'catalog:catalog' %}">Каталог</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="">Сравнение</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'comparison:comparison_page' %}">Сравнение</a>
                         </li>
                     </ul>
                 </div>
@@ -75,7 +76,12 @@
                             <a class="dropdown-content-a" href="">Личный кабинет</a>
                             <a class="dropdown-content-a" href="{% static 'account.html' %}">Административный
                                 раздел</a>
-                            <a class="dropdown-content-a" href="{% static 'account.html' %}">Выход</a>
+                            <form id="logout-form" method="post" action="{% url 'account:logout' %}" style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Выход
+                            </a>
                         </div>
                     </div>
                     <a class="CartBlock-block" href=""><img class="CartBlock-img"

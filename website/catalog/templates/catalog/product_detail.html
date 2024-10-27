@@ -64,16 +64,16 @@
                                     </div>
                                 </div>
                             </div>
-{#                            <div class="ProductCard-text">#}
-{#                                <ul>#}
-{#                                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod#}
-{#                                    </li>#}
-{#                                    <li>tempor incididunt ut labore et dolore magna aliqua. Lorem#}
-{#                                    </li>#}
-{#                                    <li>ipsum dolor sit ameabore et dolore magna aliqua. Lorem ipsum#}
-{#                                    </li>#}
-{#                                </ul>#}
-{#                            </div>#}
+                            {#                            <div class="ProductCard-text">#}
+                            {#                                <ul>#}
+                            {#                                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, eiusmod#}
+                            {#                                    </li>#}
+                            {#                                    <li>tempor incididunt ut labore et dolore magna aliqua. Lorem#}
+                            {#                                    </li>#}
+                            {#                                    <li>ipsum dolor sit ameabore et dolore magna aliqua. Lorem ipsum#}
+                            {#                                    </li>#}
+                            {#                                </ul>#}
+                            {#                            </div>#}
                             <div class="ProductCard-cart">
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                                     <div class="Amount Amount_product">
@@ -251,7 +251,7 @@
                                                     <header class="Comment-header">
                                                         <div>
                                                             <strong class="Comment-title">
-                                                                {{ review.user.username }}
+                                                                {{ review.user.login }}
                                                             </strong>
                                                             <span class="Comment-date">
                                                                     {{ review.created_at|date:"F d" }}&nbsp;/&nbsp;
@@ -267,30 +267,32 @@
                                             </div>
                                         </div>
                                     {% endfor %}
-                                    <header class="Section-header Section-header_product">
-                                        <h3 class="Section-title">Добавить отзыв
-                                        </h3>
-                                    </header>
-                                    <div class="Tabs-addComment">
-                                        <form class="form" action="#" method="post">
-                                            {% csrf_token %}
-                                            <div class="form-group">
-                                        <textarea class="form-textarea" name="review" id="review"
-                                                  placeholder="Отзыв"></textarea>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <button class="btn btn_muted" type="submit">Отправить отзыв
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
                                 {% else %}
                                     <h3 class="Section-title">
                                         0 отзыв
                                         {{ product.review.text }}
                                     </h3>
                                 {% endif %}
+
+                                <header class="Section-header Section-header_product">
+                                    <h3 class="Section-title">Добавить отзыв
+                                    </h3>
+                                </header>
+                                <div class="Tabs-addComment">
+                                    <form class="form" action="#" method="post">
+                                        {% csrf_token %}
+                                        {{ form.as_p }}
+                                        <div class="form-group">
+                                        <textarea class="form-textarea" name="review" id="review"
+                                                  placeholder="Отзыв"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button class="btn btn_muted" type="submit">Отправить отзыв
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>

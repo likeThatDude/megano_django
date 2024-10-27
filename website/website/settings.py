@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +32,10 @@ SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 CACHES = {
     "default": {
@@ -45,11 +53,22 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    # other lib
+    # "debug_toolbar",
+    'rest_framework',
+
+    # apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
+    "viewed.apps.ViewedConfig",
+
+    "rest_framework",
+    "debug_toolbar",
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +79,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -140,6 +160,25 @@ MEDIA_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "account.CustomUser"
+AUTH_USER_MODEL = "auth.CustomUser"
 
-LOGIN_URL = reverse_lazy("core:login")
+LOGIN_URL = reverse_lazy("account:login")
+LOGOUT_URL = reverse_lazy("account:logout")
+LOGIN_REDIRECT_URL = reverse_lazy("core:index")
+LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
+EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
+
+CART_SESSION_ID = 'cart'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
+# Время жизни сессии (2 недели)
+SESSION_COOKIE_AGE = 1209600
+# Обновляем таймер каждый заход пользователя на сайт
+SESSION_SAVE_EVERY_REQUEST = True
