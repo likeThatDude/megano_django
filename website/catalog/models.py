@@ -229,6 +229,8 @@ class Review(models.Model):
     )
     text = models.TextField(verbose_name=_("Text"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+    update_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+    updating = models.BooleanField(default=False, verbose_name=_("Updating"))
 
     class Meta:
         ordering = ("-created_at",)

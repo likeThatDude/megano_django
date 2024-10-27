@@ -47,6 +47,7 @@ CACHES = {
 # Application definition
 
 INSTALLED_APPS = [
+    # Standard apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -55,19 +56,21 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # other lib
-    # "debug_toolbar",
-    'rest_framework',
+    "rest_framework",
+    "debug_toolbar",
+    "drf_spectacular",
 
-    # apps
+    # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
     "viewed.apps.ViewedConfig",
+    "comparison.apps.ComparisonConfig",
 
-    "rest_framework",
-    "debug_toolbar",
+    # DRF API
+    "review.apps.ReviewConfig"
 
 ]
 
@@ -176,9 +179,24 @@ EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 
 CART_SESSION_ID = 'cart'
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# С этой настройкой вылетает каждый раз при перезагрузке страницы
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 # Время жизни сессии (2 недели)
 SESSION_COOKIE_AGE = 1209600
 # Обновляем таймер каждый заход пользователя на сайт
 SESSION_SAVE_EVERY_REQUEST = True
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
