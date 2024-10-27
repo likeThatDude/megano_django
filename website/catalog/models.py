@@ -3,8 +3,13 @@ from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
-from .utils import (product_image_directory_path,
-                    product_images_directory_path, seller_image_directory_path)
+from website import settings
+from .utils import (
+    product_images_directory_path,
+    seller_image_directory_path,
+    product_image_directory_path,
+    category_icon_directory_path,
+)
 
 
 class Category(models.Model):
@@ -17,13 +22,12 @@ class Category(models.Model):
     """
 
     class Meta:
-        verbose_name = _("Category")
-        verbose_name_plural = _("Сategories")
+        verbose_name_plural = "categories"
         ordering = ("name",)
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
     icon = models.FileField(
-        upload_to="assets/img/icons/departments", verbose_name=_("Icon")
+        upload_to=category_icon_directory_path, verbose_name=_("Icon")
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     parent_category = models.ForeignKey(

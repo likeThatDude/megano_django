@@ -1,7 +1,15 @@
-from django.db.models import Q, Prefetch
+from django.core.cache import cache
+from django.db.models import (
+    Q,
+    Prefetch,
+    Min,
+)
 from django.http import HttpRequest
+from django.views.generic import DetailView, TemplateView, ListView
+
+from website.settings import PRODUCTS_KEY
 from django.shortcuts import render, redirect
-from django.views.generic import DetailView, TemplateView
+
 from . import models
 from .models import Product, Seller, Storage, Review, Category, Specification
 # from .forms import ReviewForm
@@ -15,6 +23,28 @@ from .models import Product, Seller, Storage, Review, Category, Specification
 
 def catalog_view(request: HttpRequest):
     return render(request, "catalog/catalog.html")
+
+
+class CatalogListView(ListView):
+    template_name = "catalog/catalog.html"
+    model = Product
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("pk")
+        cache_key = PRODUCTS_KEY.format(category_id=category_id)
+        queryset = cache.get(cache_key)
+        if not queryset:
+            queryset = (
+                super(CatalogListView, self)
+                .get_queryset()
+                .filter(category__id=category_id)
+                .annotate(
+                    price=Min("storage__price"),
+                )
+            )
+        cache.set(cache_key, queryset, timeout=60)
+        return queryset
 
 
 class CategoryDetailView(DetailView):
@@ -56,3 +86,6 @@ class ProductDetailView(DetailView):
         context['storages'] = self.object.storage.all()
         context['reviews_data'] = self.object.review.all()
         return context
+
+    # class ProductDetailView(TemplateView):
+    #     template_name = 'catalog/product_detail.html'
