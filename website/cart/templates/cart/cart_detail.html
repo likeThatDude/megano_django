@@ -1,0 +1,130 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block description %}
+    <meta name="description" content="Описание страницы">
+{% endblock %}
+
+{% block links %}
+    <!--    <title>Megano</title>-->
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+{% endblock %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
+{% block body %}
+    <div class="Middle Middle_top">
+        <div class="Section">
+            <div class="wrap">
+                <div class="Product">
+                    {% if info_cart %}
+                    {% for info_product in info_cart %}
+                    <div class="ProductCard">
+                        <div class="ProductCard-look">
+                            <div class="ProductCard-photo">
+                                <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
+                            </div>
+                            <div class="ProductCard-picts">
+                                {% with images=info_product.product.images.all %}
+                                    {% if images %}
+                                        {% for img in images %}
+                                            <a class="ProductCard-pict ProductCard-pict_ACTIVE"
+                                               href="{% static 'assets/img/content/home/bigGoods.png' %}">
+                                                <img src="{% static 'assets/img/content/home/bigGoods.png' %}"
+                                                     alt="bigGoods.png"/>
+                                            </a>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <div class="ProductCard-desc">
+                            <div class="ProductCard-header">
+                                <h2 class="ProductCard-title"> {{ info_product.product.name }}
+                                </h2>
+                                <div class="ProductCard-info">
+                                    <div class="ProductCard-cost">
+                                        <div class="ProductCard-price">
+                                            ${{ info_product.total_price }} $
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ProductCard-cart">
+                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                                    <div class="Amount Amount_product">
+                                        <button class="Amount-remove" type="button">
+                                        </button>
+                                        <input class="Amount-input form-input" name="amount" type="text" value="{{ info_product.quantity }}"/>
+                                        <button class="Amount-add" type="button">
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="ProductCard-cartElement">
+                                    <a class="btn btn_primary" href="#modal_open">
+                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                             alt="cart_white.svg"/>
+                                        <span class="btn-content">Купить</span>
+                                    </a>
+                                </div>
+                                <div id="modal_open" class="my_modal">
+                                    <div class="my_modal-dialog">
+                                        <div class="my_modal-content">
+                                            <div class="my_modal-header">
+                                                <p class="my_modal-title">Поздравляем!</p>
+                                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                                            </div>
+                                            <div class="my_modal-body">
+                                                <p>Тут происходит передаресация на сервис оплаты с тем количеством товара,
+                                                    которое указано в корзине</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ProductCard-footer">
+                                <div class="ProductCard-tags">
+                                    <strong class="ProductCard-tagsTitle">Тэги:
+                                    </strong>
+                                    {% for tag in info_product.product.tags.all %}
+                                        <a href="#">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="ProductCard-look">
+                        <h2 class="ProductCard-title"> В корзине пока что пусто </h2>
+                        <a href="{% url 'catalog:catalog' %}">Вернуться к выбору товаров</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
+{% endblock %}

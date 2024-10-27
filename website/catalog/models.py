@@ -3,8 +3,13 @@ from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
-from .utils import (product_image_directory_path,
-                    product_images_directory_path, seller_image_directory_path)
+from website import settings
+from .utils import (
+    product_images_directory_path,
+    seller_image_directory_path,
+    product_image_directory_path,
+    category_icon_directory_path,
+)
 
 
 class Category(models.Model):
@@ -17,13 +22,12 @@ class Category(models.Model):
     """
 
     class Meta:
-        verbose_name = _("Category")
-        verbose_name_plural = _("Сategories")
+        verbose_name_plural = "categories"
         ordering = ("name",)
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
     icon = models.FileField(
-        upload_to="assets/img/icons/departments", verbose_name=_("Icon")
+        upload_to=category_icon_directory_path, verbose_name=_("Icon")
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     parent_category = models.ForeignKey(
@@ -154,7 +158,7 @@ class Seller(models.Model):
     products = models.ManyToManyField(
         "Product",
         blank=True,
-        through="Storage",
+        through="Price",
         related_name="sellers",
         verbose_name=_("Products"),
     )
@@ -165,9 +169,9 @@ class Seller(models.Model):
         return f"Seller(id={self.pk}, name={self.name!r})"
 
 
-class Storage(models.Model):
+class Price(models.Model):
     """
-    Модель склада
+    Модель цены
     seller: название продавца
     product: название продукта
     quantity: доступное количество
@@ -179,14 +183,14 @@ class Storage(models.Model):
     seller = models.ForeignKey(
         Seller,
         on_delete=models.CASCADE,
-        related_name="storage",
+        related_name="price",
         verbose_name=_("Seller"),
         db_index=True,
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name="storage",
+        related_name="price",
         verbose_name=_("Product"),
         db_index=True,
     )
@@ -202,7 +206,7 @@ class Storage(models.Model):
         unique_together = ("product", "seller")
 
     def __str__(self):
-        return f"Storage(product={self.product}, seller={self.seller})"
+        return f"Price(product={self.product}, seller={self.seller})"
 
 
 class Review(models.Model):
@@ -276,25 +280,3 @@ class Specification(models.Model):
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
-
-
-class Price(models.Model):
-    """
-    Модель цены товара
-    seller: продавец с которым связана цена
-    product: продукт к которому относится цена
-    price: цена
-    """
-
-    seller = models.ForeignKey(
-        Seller, on_delete=models.CASCADE, verbose_name=_("Seller price")
-    )
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name=_("Product price")
-    )
-    price = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, verbose_name=_("Price")
-    )
-    available_quantity = models.IntegerField(
-        default=0, verbose_name=_("Available quantity from seller")
-    )
