@@ -12,6 +12,26 @@ class ProfileInline(admin.StackedInline):
     verbose_name_plural = _("Profile")
 
 
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "pk",
+        "first_name",
+        "last_name",
+        "address",
+        "phone",
+        "photo",
+    )
+    ordering = ("pk",)
+    list_editable = [
+        "first_name",
+        "last_name",
+        "address",
+        "phone",
+        "photo",
+    ]
+
+
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
