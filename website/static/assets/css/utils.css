@@ -1,0 +1,17 @@
+.Profile-avatar {
+    width: 300px; /* ширина рамки */
+    height: 300px; /* высота рамки */
+    border-radius: 50%; /* округление рамки для создания круга */
+    overflow: hidden; /* обрезка изображения внутри рамки */
+    position: relative;
+    background-color: #f0f0f0; /* цвет фона рамки */
+}
+
+.Profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* заполнение рамки изображением */
+    position: absolute;
+    top: 0;
+    left: 0;
+}

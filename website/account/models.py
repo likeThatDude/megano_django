@@ -3,8 +3,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from catalog.models import Product
-
 from .managers import CustomUserManager
 from .utils import profile_photo_directory_path, validate_avatar_size
 
@@ -28,7 +26,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ordering = ("login",)
 
     login = models.CharField(max_length=50, unique=True, verbose_name=_("Login"))
-    email = models.EmailField(unique=True, verbose_name=_("Email"))
+    email = models.EmailField(unique=True, verbose_name=_("Email"), db_index=True)
+    username = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(
         default=timezone.now, verbose_name=_("Created at")
     )
@@ -50,7 +49,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.login
+        """ Возвращаем никнейм пользователя, если он имеется """
+        return self.username if self.username else "Anonymous"
 
 
 class Profile(models.Model):
@@ -60,6 +60,7 @@ class Profile(models.Model):
     user: связь к пользователю по типу связи один-к-одному
     first_name: имя пользователя;
     last_name: фамилия пользователя;
+    patronymic: отчество (при наличии)
     address: адрес пользователя;
     phone: номер телефона пользователя;
     photo: фото/аватар пользователя.
@@ -86,6 +87,9 @@ class Profile(models.Model):
     last_name = models.CharField(
         max_length=50, null=True, blank=True, verbose_name=_("Lastname")
     )
+    patronymic = models.CharField(
+        max_length=50, null=True, blank=True, verbose_name=_("Patronymic")
+    )
     address = models.CharField(
         max_length=200, null=True, blank=True, verbose_name=_("Address")
     )
@@ -99,4 +103,5 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return self.user.login
+        """ Возвращаем имя профиля, если оно имеется """
+        return self.first_name if self.first_name else f"Имя профиля №{self.pk}"

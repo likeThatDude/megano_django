@@ -1,2 +1,111 @@
-{% extends 'profile.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
+
+{% block links %}
+    <!--    <title>Megano</title>-->
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utils.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+{% endblock %}
+
+
+{% block body %}
+    <div class="Section-content">
+        <div class="Profile">
+            <form class="form Profile-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="row-block">
+                        <div class="form-group">
+                            <label class="form-label" for="photo">
+                                Аватар
+                            </label>
+                            <div class="Profile-avatar Profile-avatar_noimg">
+                                <div class="Profile-avatar">
+                                    {% if profile.photo %}
+                                        <img src="{{ profile.photo.url }}" alt="#.png"/>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            <div>
+                                <input id="photo" name="photo" type="file" data-validate="onlyImgAvatar"/>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="last_name">
+                                Фамилия
+                            </label>
+                            <input id="last_name" type="text" name="last_name" value="{{ profile.last_name }}">
+                            <label class="form-label" for="first_name">
+                                Имя
+                            </label>
+                            <input id="first_name" type="text" name="first_name" value="{{ profile.first_name }}">
+                            <label class="form-label" for="patronymic">
+                                Отчество
+                            </label>
+                            <input id="patronymic" type="text" name="patronymic" value="{{ profile.patronymic }}">
+                        </div>
+
+                    </div>
+                    <div class="row-block">
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Телефон
+                            </label>
+                            <input class="form-input" id="phone" name="phone" type="text" value="{{ profile.phone }}" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">E-mail
+                            </label>
+                            <input class="form-input" id="email" name="email" type="email" value="{{ profile.user.email }}" data-validate="require" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="password">Пароль
+                            </label>
+                            <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="passwordReply">Подтверждение пароля
+                            </label>
+                            <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
+                        </div>
+                        <div class="form-group">
+                            <div class="Profile-btn">
+                                <button class="btn btn_success" type="submit">Сохранить
+                                </button>
+                            </div>
+                            <div class="Profile-success">Профиль успешно сохранен
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% block script %}
+            <!--+Middle-->
+        <!--    +div.-top-->
+        <!--        +breadcrumbs('Главная','Портфолио')-->
+        <!--    +Article('portfolio')-->
+        <!---->
+        <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+        <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+        <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+        <script src="{% static 'assets/js/scripts.js' %}"></script>
+    {% endblock %}
+
+{% endblock %}
