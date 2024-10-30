@@ -47,8 +47,9 @@ class Cart:
         if product_id not in self.cart:
             self.cart[product_id] = {
                 "quantity": 0,
-                "price": price_product.price,
-                "seller": price_product.seller,
+                "product_id": product.pk,
+                "price": str(price_product.price),
+                "seller_id": price_product.seller.pk,
             }
         if update_quantity:
             self.cart[product_id]["quantity"] = quantity
@@ -69,15 +70,15 @@ class Cart:
         """
         Перебор элементов в корзине и получение продуктов из базы данных
         """
-        product_ids = self.cart.keys()
-        # получение объектов product и добавление их в корзину
-        products = Product.objects.filter(id__in=product_ids)
-        for product in products:
-            self.cart[str(product.id)]["product"] = product
-
         for item in self.cart.values():
-            item["total_price"] = item["price"] * item["quantity"]
-            yield item
+            info_item = {
+                'price': item['price'],
+                'product': Product.objects.get(pk=item['product_id']),
+                'quantity': item['quantity'],
+                'seller': Seller.objects.get(pk=item['seller_id']),
+                'total_price': str(Decimal(item["price"]) * item["quantity"]),
+            }
+            yield info_item
 
     def __len__(self):
         """
