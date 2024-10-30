@@ -21,78 +21,106 @@
 
 
 {% block body %}
-    <div class="Section-content">
-        <div class="Profile">
-            <form class="form Profile-form" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="row-block">
-                        <div class="form-group">
-                            <label class="form-label" for="photo">
-                                Аватар
-                            </label>
-                            <div class="Profile-avatar Profile-avatar_noimg">
-                                <div class="Profile-avatar">
-                                    {% if profile.photo %}
-                                        <img src="{{ profile.photo.url }}" alt="#.png"/>
-                                    {% endif %}
-                                </div>
+<div class="Middle Middle_top">
+    <div class="Section Section_column Section_columnLeft">
+        <div class="wrap">
+            <div class="Section-column">
+                <div class="Section-columnSection">
+                    <header class="Section-header">
+                        <strong class="Section-title">Навигация
+                        </strong>
+                    </header>
+                <div class="Section-columnContent">
+                    <div class="NavigateProfile">
+                        <ul class="menu menu_vt">
+                            <li class="menu-item"><a class="menu-link" href="account.html">Личный кабинет</a>
+                            </li>
+                            <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="profile.html">Профиль</a>
+                            </li>
+                            <li class="menu-item"><a class="menu-link" href="historyorder.html">История заказов</a>
+                            </li>
 
-                            </div>
-                            <div>
-                                <input id="photo" name="photo" type="file" data-validate="onlyImgAvatar"/>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="form-label" for="last_name">
-                                Фамилия
-                            </label>
-                            <input id="last_name" type="text" name="last_name" value="{{ profile.last_name }}">
-                            <label class="form-label" for="first_name">
-                                Имя
-                            </label>
-                            <input id="first_name" type="text" name="first_name" value="{{ profile.first_name }}">
-                            <label class="form-label" for="patronymic">
-                                Отчество
-                            </label>
-                            <input id="patronymic" type="text" name="patronymic" value="{{ profile.patronymic }}">
-                        </div>
-
-                    </div>
-                    <div class="row-block">
-                        <div class="form-group">
-                            <label class="form-label" for="phone">Телефон
-                            </label>
-                            <input class="form-input" id="phone" name="phone" type="text" value="{{ profile.phone }}" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="email">E-mail
-                            </label>
-                            <input class="form-input" id="email" name="email" type="email" value="{{ profile.user.email }}" data-validate="require" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="password">Пароль
-                            </label>
-                            <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="passwordReply">Подтверждение пароля
-                            </label>
-                            <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
-                        </div>
-                        <div class="form-group">
-                            <div class="Profile-btn">
-                                <button class="btn btn_success" type="submit">Сохранить
-                                </button>
-                            </div>
-                            <div class="Profile-success">Профиль успешно сохранен
-                            </div>
-                        </div>
+                        </ul>
                     </div>
                 </div>
-            </form>
+            </div>
+        </div>
+            <div class="Section-content">
+                <div class="Profile">
+                    <form class="form Profile-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="row-block">
+                                <div class="form-group">
+                                    <label class="form-label" for="photo">Аватар</label>
+                                    <div class="Profile-avatar Profile-avatar_noimg">
+                                        {% if profile.photo %}
+                                            <img src="{{ profile.photo.url }}" alt="#.png"/>
+
+                                        {% else %}
+                                            <label class="Profile-fileLabel" for="photo">
+                                                <img src="{% static 'assets/img/icons/upload.png' %}" alt="#.png" />
+                                                Загрузить фото
+                                            </label>
+
+                                        {% endif %}
+                                        <input class="Profile-file form-input" id="photo" name="photo" type="file" data-validate="onlyImgAvatar" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="last_name">Фамилия
+                                    </label>
+                                    <input id="last_name" type="text" name="last_name" value="{{ profile.last_name }}">
+
+                                    <label class="form-label" for="first_name">Имя
+                                    </label>
+                                    <input id="first_name" type="text" name="first_name" value="{{ profile.first_name }}">
+
+                                    <label class="form-label" for="patronymic">Отчество
+                                    </label>
+                                    <input id="patronymic" type="text" name="patronymic" value="{{ profile.patronymic }}">
+
+                                </div>
+                            </div>
+
+                            <div class="row-block">
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Телефон
+                                    </label>
+                                    <input class="form-input" id="phone" name="phone" type="text" value="{{ profile.phone }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">E-mail
+                                    </label>
+                                    <input class="form-input" id="email" name="email" type="email" value="{{ profile.user.email }}" data-validate="require" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="password">Пароль
+                                    </label>
+                                    <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="passwordReply">Подтверждение пароля
+                                    </label>
+                                    <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="Profile-btn">
+                                        <button class="btn btn_success" type="submit">Сохранить
+                                        </button>
+                                    </div>
+                                    <div class="Profile-success">Профиль успешно сохранен
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
     {% block script %}
             <!--+Middle-->
