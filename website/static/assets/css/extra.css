@@ -2388,6 +2388,16 @@ a.Cart-title {
     flex-direction: column;
 }
 
+.non-auth-block p  {
+    text-align: center;
+    width: 100%;
+    font-size: 1.4em;
+}
+
+.non-auth-block>p:not(:last-child) {
+    margin-bottom: 0;
+}
+
 .non-auth-block-buttons {
     display: flex;
     flex-direction: column;

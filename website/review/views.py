@@ -2,9 +2,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import status, viewsets
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import DestroyAPIView, UpdateAPIView, CreateAPIView, ListAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from catalog.models import Review
 from . import serializers
@@ -12,8 +11,10 @@ from . import serializers
 
 class ReviewListSet(ListAPIView):
     serializer_class = serializers.ReviewListSerializer
+    permission_classes = (AllowAny,)
 
     def get_queryset(self):
+        print('Я ТУТ')
         product_id = self.kwargs['product_id']
         reviews = Review.objects.select_related('product', 'user').filter(product__pk=product_id)
         return reviews
@@ -22,7 +23,7 @@ class ReviewListSet(ListAPIView):
 class ReviewCreateView(CreateAPIView):
     queryset = Review.objects.all()
     serializer_class = serializers.ReviewCreateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated, )
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
