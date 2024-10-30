@@ -54,11 +54,25 @@ class CategoryDetailView(DetailView):
 
 
 class ProductDetailView(DetailView):
+    """
+    Представление для отображения детальной информации о товаре.
+
+    Атрибуты:
+        template_name (str): Путь к шаблону, который будет использоваться для отображения страницы продукта.
+        model (Product): Модель, используемая для получения информации о товаре.
+        context_object_name (str): Имя объекта контекста для передачи в шаблон.
+    """
     template_name = 'catalog/product_detail.html'
     model = Product
     context_object_name = 'product'
 
     def get_queryset(self):
+        """
+        Получает набор запросов для конкретного товара по его первичному ключу.
+
+        Возвращает:
+            QuerySet: Набор запросов, содержащий выбранный товар с его категориями, изображениями, ценами и спецификациями.
+        """
         pk = self.kwargs.get('pk')
 
         return (Product.objects
@@ -75,9 +89,15 @@ class ProductDetailView(DetailView):
         # ).annotate(reviews_count=Count('review')).filter(pk=pk))
 
     def get_context_data(self, **kwargs):
+        """
+        Получает контекст для рендеринга шаблона.
+
+        Параметры:
+            **kwargs: Дополнительные параметры, передаваемые в контекст.
+
+        Возвращает:
+            dict: Контекст, содержащий информацию о товаре и доступные цены.
+        """
         context = super().get_context_data(**kwargs)
         context['storages'] = self.object.price.all()
         return context
-
-    # class ProductDetailView(TemplateView):
-    #     template_name = 'catalog/product_detail.html'

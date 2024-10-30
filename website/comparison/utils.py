@@ -10,6 +10,17 @@ from comparison.models import Comparison
 
 
 def get_products_with_auth_user(user) -> tuple:
+    """
+    Получает товары, связанные с аутентифицированным пользователем.
+
+    Параметры:
+        user (User): Объект пользователя, для которого необходимо получить товары.
+
+    Возвращает:
+        tuple: Кортеж, содержащий:
+            - dict: Спецификации категорий товаров.
+            - list: Список объектов товаров, связанных с пользователем.
+    """
     products = (Comparison.objects
                 .select_related('user', 'product__category')
                 .prefetch_related(
@@ -30,6 +41,17 @@ def get_products_with_auth_user(user) -> tuple:
 
 
 def get_products_with_unauth_user(request: HttpRequest) -> tuple:
+    """
+    Получает товары для неаутентифицированного пользователя на основе идентификаторов в сессии.
+
+    Параметры:
+        request (HttpRequest): Объект HTTP-запроса, содержащий информацию о сессии.
+
+    Возвращает:
+        tuple: Кортеж, содержащий:
+            - dict: Спецификации категорий товаров.
+            - list: Список объектов товаров, идентификаторы которых находятся в сессии.
+    """
     products_ids = request.session.get('products_ids', [])
     products = (Product.objects
                 .select_related('category')
@@ -51,6 +73,16 @@ def get_products_with_unauth_user(request: HttpRequest) -> tuple:
 
 
 def create_categorization(products: list, auth_flag: bool = True) -> dict:
+    """
+    Создает категоризацию списка товаров по категориям.
+
+    Параметры:
+        products (list): Список объектов товаров, которые необходимо категоризировать.
+        auth_flag (bool): Флаг, указывающий, является ли пользователь аутентифицированным.
+
+    Возвращает:
+        dict: Словарь, где ключами являются названия категорий, а значениями — списки товаров, относящихся к каждой категории.
+    """
     products_list = dict()
     for product in products:
         if auth_flag:
@@ -62,6 +94,16 @@ def create_categorization(products: list, auth_flag: bool = True) -> dict:
 
 
 def get_category_spec(products: QuerySet, auth_flag: bool = True) -> dict:
+    """
+    Получает спецификации товаров, сгруппированные по категориям.
+
+    Параметры:
+        products (QuerySet): Запрос, содержащий объекты товаров.
+        auth_flag (bool): Флаг, указывающий, является ли пользователь аутентифицированным.
+
+    Возвращает:
+        dict: Словарь, где ключами являются названия категорий, а значениями — списки названий спецификаций для каждой категории.
+    """
     category_spec = dict()
     for comparison in products:
         if auth_flag:
