@@ -1,26 +1,12 @@
 from django.core.cache import cache
-from django.db.models import (
-    Q,
-    Prefetch,
-    Min, Count,
-)
+from django.db.models import Count, Min, Prefetch, Q
 from django.http import HttpRequest
-from django.views.generic import DetailView, TemplateView, ListView
+from django.shortcuts import redirect, render
+from django.views.generic import DetailView, ListView, TemplateView
 
 from website.settings import PRODUCTS_KEY
-from django.shortcuts import render, redirect
 
-from . import models
-from .models import Product, Seller, Price, Review, Category, Specification
-
-
-# from .forms import ReviewForm
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework import status
-# from rest_framework.permissions import IsAuthenticated
-# from .models import Product, Review
-# from .serializers import ProductSerializer, ReviewSerializer, ReviewFormSerializer
+from .models import Price, Product, Review, Specification
 
 
 def catalog_view(request: HttpRequest):

@@ -5,8 +5,8 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-
-from .models import Category, NameSpecification, Product, Review, Specification, Seller, Price, Tag
+from .models import (Category, NameSpecification, Price, Product, Review,
+                     Seller, Specification, Tag)
 
 
 @admin.action(description="Delete cache")

@@ -1,8 +1,6 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import redirect
+from catalog.models import Price, Product
 from django.views.generic import FormView, TemplateView
 
-from catalog.models import Product, Price
 from .cart import Cart
 
 
