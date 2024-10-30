@@ -5416,6 +5416,30 @@ input[type="submit"] {
     padding-left: 17px;
 }
 
+
+.download-reviews {
+    width: 130px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #0063d1;
+    color: white;
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: -50px;
+    transform: translateX(-50%);
+}
+
+.download-reviews:hover {
+    background-color: #003883;
+}
+
+.download-reviews:active {
+    background-color: #003883;
+    box-shadow: inset 0 0 0 2px black;
+}
+
+
 .Section-desc {
     color: #e98338;
     font-size: 22px;

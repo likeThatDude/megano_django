@@ -234,67 +234,10 @@
                             </div>
                             <div class="Tabs-block" id="reviews">
                                 <header class="Section-header">
-                                    <h3 class="Section-title"> Отзывов: {{ product.reviews_count }} шт.
-                                    </h3>
+                                    <h3 class="Section-title" id="small-count"></h3>
                                 </header>
-                                {% if product.reviews_count > 0 %}
-                                    {% for review in product.review.all %}
-                                        <div class="Comments">
-                                            <div class="Comment">
-                                                {% if review.updating %}
-                                                    <div class="update-container">
-                                                        <p>Комментарий обновлён: </p>
-                                                        <p>{{ review.update_at }}</p>
-                                                    </div>
-                                                {% endif %}
-                                                <div class="Comment-column Comment-column_pict">
-                                                    <div class="Comment-avatar">
-                                                    </div>
-                                                </div>
-                                                <div class="Comment-column">
-                                                    <header class="Comment-header">
-                                                        <div>
-                                                            <strong class="Comment-title">
-                                                                {{ review.user.login }}
-                                                            </strong>
-                                                            <span class="Comment-date">
-                                                                    {{ review.created_at|date:"F d" }}&nbsp;/&nbsp;
-                                                                    {{ review.created_at|date:"Y" }}&nbsp;/&nbsp;
-                                                                    {{ review.created_at|date:"H:i" }}
-                                                            </span>
-                                                        </div>
-                                                    </header>
-                                                    <div class="Comment-content">
-                                                        {{ review.text }}
-                                                    </div>
-                                                </div>
-                                                {% if review.user.pk == user.pk %}
-                                                    <div class="User-control">
-                                                        <button class="UpdateDeleteReviewButton"
-                                                                data-review-id="{{ review.pk }}"
-                                                                data-update-url="{% url 'review:review_update' pk=review.pk %}">
-                                                            редактировать
-                                                        </button>
-                                                        <button class="UpdateDeleteReviewButton edit-review-button"
-                                                                data-review-id="{{ review.pk }}"
-                                                                data-delete-url="{% url 'review:review_delete' pk=review.pk %}">
-                                                            удалить
-                                                        </button>
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <h3 class="Section-title" id="no_review">
-                                        <p>Пока отзывов нет</p>
-                                        <p>Вы можете быть первым !</p>
-                                        {{ product.review.text }}
-                                    </h3>
-                                {% endif %}
-
                                 {% if user.is_authenticated %}
-                                    <header class="Section-header Section-header_product">
+                                    <header class="Section-header Section-header_product" id="create-get-review">
                                         <h3 class="Section-title">Добавить отзыв</h3>
                                     </header>
                                     <div class="Tabs-addComment">
@@ -329,11 +272,13 @@
 {% endblock %}
 
 {% block script %}
+    <script>const getReviews = "{% url 'review:get_product_reviews' product_id=product.pk %}";</script>
     <script>const CREATE_REVIEW = "{% url 'review:review_create' %}";</script>
     <script>const deleteReviewUrl = "{% url 'review:review_delete' pk=0 %}";</script>
     <script>const updateReviewUrl = "{% url 'review:review_update' pk=0 %}";</script>
     <script>let product_id = "{{ product.pk }}";</script>
     <script>let current_user = "{{ user.login }}";</script>
+    <script>let current_user_id = "{{ user.pk }}";</script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

@@ -65,13 +65,14 @@ class ProductDetailView(DetailView):
                 .select_related('category')
                 .prefetch_related(
             Prefetch('images', ),
-            Prefetch('review', queryset=Review.objects.select_related('user').all().order_by('-created_at'), ),
+            # Prefetch('review', queryset=Review.objects.select_related('user').all().order_by('-created_at'), ),
             Prefetch('price',
                      queryset=Price.objects.select_related('seller').only('seller', 'price').order_by('price')),
             Prefetch('specifications',
                      queryset=Specification.objects.select_related('name', ).order_by(
                          'name__name'))
-        ).annotate(reviews_count=Count('review')).filter(pk=pk))
+        ).filter(pk=pk))
+        # ).annotate(reviews_count=Count('review')).filter(pk=pk))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

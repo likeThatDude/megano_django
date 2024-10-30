@@ -202,4 +202,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '50/m',  # 50 запросов за 30 секунд для зарегистрированных
+        'anon': '5/m'  # 5 запросов за 30 секунд для анонимных пользователей
+    },
 }

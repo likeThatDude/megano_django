@@ -1,6 +1,9 @@
 from django.db.models import Q
 from rest_framework import serializers
+
+from account.models import CustomUser
 from catalog.models import Review
+from website import settings
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):
@@ -26,19 +29,16 @@ class ReviewDeleteSerializer(serializers.ModelSerializer):
         model = Review
         fields = ('pk',)
 
+class UserReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['pk', 'login',]
 
-class ReviewGoodResponseSerializer(serializers.Serializer):
-    operation_status = serializers.BooleanField(default=True)
-    update_data = serializers.DateTimeField(default=None)
+class ReviewListSerializer(serializers.ModelSerializer):
+    user = UserReviewSerializer(read_only=True)
 
+    class Meta:
+        model = Review
+        fields = ['pk', 'user', 'text', 'created_at', 'update_at', 'updating',]
+        ordering = ('-created_at',)
 
-class ReviewBadResponseSerializer(serializers.Serializer):
-    operation_status = serializers.BooleanField(default=False)
-
-
-class ReviewDeleteGoodResponseSerializer(serializers.Serializer):
-    operation_status = serializers.BooleanField(default=True)
-
-
-class ReviewDeleteBadResponseSerializer(serializers.Serializer):
-    operation_status = serializers.BooleanField(default=True)
