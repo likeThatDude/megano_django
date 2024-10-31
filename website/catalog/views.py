@@ -36,10 +36,12 @@ class CatalogListView(ListView):
         category_id = self.kwargs.get("pk")
         cache_key = PRODUCTS_KEY.format(category_id=category_id)
         queryset = cache.get(cache_key)
+        cache.delete(cache_key)
         if not queryset:
             queryset = (
                 Product.objects
                 .filter(category__id=category_id)
+                .select_related('category')
                 .annotate(
                     price=Min("prices__price"),
                 )
