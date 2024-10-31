@@ -190,7 +190,7 @@ class Price(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name="price",
+        related_name="prices",
         verbose_name=_("Product"),
         db_index=True,
     )
