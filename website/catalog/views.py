@@ -38,11 +38,10 @@ class CatalogListView(ListView):
         queryset = cache.get(cache_key)
         if not queryset:
             queryset = (
-                super(CatalogListView, self)
-                .get_queryset()
+                Product.objects
                 .filter(category__id=category_id)
                 .annotate(
-                    price=Min("price__price"),
+                    price=Min("prices__price"),
                 )
             )
         cache.set(cache_key, queryset, timeout=60)
