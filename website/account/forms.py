@@ -36,6 +36,15 @@ class ProfileChangeForm(forms.ModelForm):
         model = Profile
         fields = ["first_name", "last_name", "patronymic", 'phone', 'photo',]
 
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone:
+            # Удаляем все символы, кроме цифр
+            phone = ''.join(filter(str.isdigit, phone))
+            if len(phone) != 10:
+                raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
+        return phone
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)  # Получаем пользователя из аргументов
         super().__init__(*args, **kwargs)

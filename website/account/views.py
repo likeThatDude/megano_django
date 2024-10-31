@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -78,9 +79,10 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         profile = form.save(commit=False)  # Не сохраняем профиль сразу
         user = self.request.user
         user.email = form.cleaned_data["email"]  # Обновляем email пользователя
-        user.save()  # Сохраняем изменения в пользователе
-        profile.save()  # Теперь сохраняем профиль
-        return redirect("account:profile")
+        user.save()
+        profile.save()
+        messages.success(self.request, "Профиль успешно сохранен!")
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse_lazy("account:profile")
