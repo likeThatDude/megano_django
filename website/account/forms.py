@@ -30,6 +30,14 @@ class ProfileChangeForm(forms.ModelForm):
     photo - фотография профиля
     """
 
+    email = forms.EmailField(required=True, label='Email')  # Добавляем поле email
+
     class Meta:
         model = Profile
-        fields = ["first_name", "last_name", "patronymic", 'phone', 'photo']
+        fields = ["first_name", "last_name", "patronymic", 'phone', 'photo',]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Получаем пользователя из аргументов
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['email'].initial = user.email  # Устанавливаем начальное значение email

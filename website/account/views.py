@@ -8,7 +8,11 @@ from django.urls import reverse_lazy
 from django.db import transaction
 from django.views.generic import CreateView, DetailView, UpdateView
 
-from .forms import CustomUserCreationForm, ProfileChangeForm
+from .forms import (
+    CustomUserCreationForm,
+    ProfileChangeForm,
+    CustomUserChangeForm,
+)
 from .models import Profile
 
 
@@ -66,17 +70,17 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         Передаем в форму в качестве инстанса профиль пользователя
         """
         context = super().get_context_data(**kwargs)
-        context["profile_form"] = ProfileChangeForm(instance=self.request.user.profile)
+        context["profile_form"] = self.get_form(self.form_class)  # Получаем форму
+        context["profile_form"].user = self.request.user  # Передаем пользователя в форму
         return context
 
     def form_valid(self, form):
-        if form.is_valid():
-            profile = form.save()
-            user = profile.user
-            user.email = form.cleaned_data["email"]
-            user.save()
-            return redirect("account:profile")
-        return redirect(self.request.path)
+        profile = form.save(commit=False)  # Не сохраняем профиль сразу
+        user = self.request.user
+        user.email = form.cleaned_data["email"]  # Обновляем email пользователя
+        user.save()  # Сохраняем изменения в пользователе
+        profile.save()  # Теперь сохраняем профиль
+        return redirect("account:profile")
 
     def get_success_url(self):
         return reverse_lazy("account:profile")
