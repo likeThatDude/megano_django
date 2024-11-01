@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.core.validators import RegexValidator
 
 from .models import CustomUser, Profile
 
@@ -39,8 +40,8 @@ class ProfileChangeForm(forms.ModelForm):
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if phone:
-            # Удаляем все символы, кроме цифр
-            phone = ''.join(filter(str.isdigit, phone))
+            # Удаляем все символы, кроме цифр и отрезаем 7
+            phone = ''.join(filter(str.isdigit, phone))[1:]
             if len(phone) != 10:
                 raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
         return phone

@@ -51,8 +51,11 @@ class ProfileView(LoginRequiredMixin, UpdateView):
     """
     CBV для обновления профиля пользователя
 
-    model - модель, с которой работаем
-    form_class - форма для редактирования профиля
+    Attributes:
+        template_name (str): Шаблон, используемый для отображения формы.
+        context_object_name (str): Имя контекста для объекта профиля.
+        model (Model): Модель профиля, с которой работаем.
+        form_class (Form): Форма для редактирования профиля.
 
     """
     template_name = "account/profile.html"
@@ -76,13 +79,15 @@ class ProfileView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        profile = form.save(commit=False)  # Не сохраняем профиль сразу
-        user = self.request.user
-        user.email = form.cleaned_data["email"]  # Обновляем email пользователя
-        user.save()
-        profile.save()
-        messages.success(self.request, "Профиль успешно сохранен!")
-        return redirect(self.get_success_url())
+        if form.is_valid():
+            profile = form.save(commit=False)  # Не сохраняем профиль сразу
+            user = self.request.user
+            user.email = form.cleaned_data["email"]  # Обновляем email пользователя
+            user.save()
+            profile.save()
+            messages.success(self.request, "Профиль успешно сохранен!")
+            return redirect(self.get_success_url())
+        return redirect(self.request.path)
 
     def get_success_url(self):
         return reverse_lazy("account:profile")
