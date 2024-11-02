@@ -1,8 +1,9 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, View, FormView
+from django.views.generic import FormView, TemplateView, View
 
-from catalog.models import Product, Price
+from catalog.models import Price, Product
+
 from .cart import Cart
 
 
@@ -23,7 +24,8 @@ class DetailCart(TemplateView):
     Примечания:
 
     """
-    template_name = 'cart/cart_detail.html'
+
+    template_name = "cart/cart_detail.html"
 
     def get_context_data(self, **kwargs):
         """
@@ -40,7 +42,7 @@ class DetailCart(TemplateView):
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
         info_cart = [info_product for info_product in cart]
-        context['info_cart'] = info_cart
+        context["info_cart"] = info_cart
         return context
 
 
@@ -63,7 +65,9 @@ class AddProductInCart(View):
         -
     """
 
-    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1):
+    def post(
+        self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1
+    ):
         """
         Выполняет POST-запрос для добавления товара в корзину.
 
@@ -80,19 +84,23 @@ class AddProductInCart(View):
         added_product = Product.objects.get(pk=product_id)
         added_price = Price.objects.get(pk=price_id)
         cart.add(added_product, added_price, quantity)
-        return JsonResponse({'status_code': 200})
+        return JsonResponse({"status_code": 200})
 
 
 class UpdateQuantityProductInCart(View):
-    """
+    """ """
 
-    """
     def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int):
         cart = Cart(request)
         updated_product = Product.objects.get(pk=product_id)
         price_updated_product = Price.objects.get(pk=price_id)
-        cart.add(updated_product, price_updated_product, quantity=quantity, update_quantity=True)
-        return JsonResponse({'status_code': 200})
+        cart.add(
+            updated_product,
+            price_updated_product,
+            quantity=quantity,
+            update_quantity=True,
+        )
+        return JsonResponse({"status_code": 200})
 
 
 class DeleteProductInCart(View):
@@ -128,8 +136,8 @@ class DeleteProductInCart(View):
         cart = Cart(request)
         deleted_product = Product.objects.get(pk=product_id)
         cart.remove(deleted_product)
-        request.COOKIES['total_price'] = cart.get_total_price()
-        return JsonResponse({'status_code': 204})
+        request.COOKIES["total_price"] = cart.get_total_price()
+        return JsonResponse({"status_code": 204})
 
 
 class GetTotalQuantityCart(View):
@@ -148,6 +156,7 @@ class GetTotalQuantityCart(View):
     Примечания:
         общее кол-во товаров сохраняется в куках если там не было
     """
+
     def get(self, request: HttpRequest) -> JsonResponse:
         """
         Выполняет GET-запрос для получения информации об общем кол-ве товаров.
@@ -159,10 +168,10 @@ class GetTotalQuantityCart(View):
             JsonResponse: Ответ в ключе 'total_quantity'.
         """
         cart = Cart(request)
-        if 'total_quantity' not in request.COOKIES:
-            request.COOKIES['total_quantity'] = len(cart)
-        total_quantity = request.COOKIES.get('total_quantity')
-        return JsonResponse({'total_quantity': total_quantity})
+        if "total_quantity" not in request.COOKIES:
+            request.COOKIES["total_quantity"] = len(cart)
+        total_quantity = request.COOKIES.get("total_quantity")
+        return JsonResponse({"total_quantity": total_quantity})
 
 
 class GetTotalPriceCart(View):
@@ -181,6 +190,7 @@ class GetTotalPriceCart(View):
     Примечания:
         общая стоимость товаров сохраняется в куках если там не было
     """
+
     def get(self, request: HttpRequest) -> JsonResponse:
         """
         Выполняет GET-запрос для получения информации об общей стоимости товаров.
@@ -192,7 +202,7 @@ class GetTotalPriceCart(View):
             JsonResponse: Ответ в ключе 'total_price'.
         """
         cart = Cart(request)
-        if 'total_price' not in request.COOKIES:
-            request.COOKIES['total_price'] = cart.get_total_price()
-        total_price = request.COOKIES.get('total_price')
-        return JsonResponse({'total_price': total_price})
+        if "total_price" not in request.COOKIES:
+            request.COOKIES["total_price"] = cart.get_total_price()
+        total_price = request.COOKIES.get("total_price")
+        return JsonResponse({"total_price": total_price})

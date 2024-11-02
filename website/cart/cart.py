@@ -102,11 +102,11 @@ class Cart:
         """
         for item in self.cart.values():
             info_item = {
-                'price': item['price'],
-                'product': Product.objects.get(pk=item['product_id']),
-                'quantity': item['quantity'],
-                'seller': Seller.objects.get(pk=item['seller_id']),
-                'total_price': str(Decimal(item["price"]) * item["quantity"]),
+                "price": item["price"],
+                "product": Product.objects.get(pk=item["product_id"]),
+                "quantity": item["quantity"],
+                "seller": Seller.objects.get(pk=item["seller_id"]),
+                "total_price": str(Decimal(item["price"]) * item["quantity"]),
             }
             yield info_item
 
