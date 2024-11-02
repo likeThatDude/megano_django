@@ -88,7 +88,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <a class="CartBlock-block" href=""><img class="CartBlock-img"
+                    <a class="CartBlock-block" href="{% url 'cart:detail' %}"><img class="CartBlock-img"
                                                             src="{% static 'assets/img/icons/cart.svg' %}"
                                                             alt="cart.svg"/><span
                             class="CartBlock-amount">0</span></a>
