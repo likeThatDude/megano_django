@@ -103,6 +103,7 @@
                         </div>
                     </div>
                     <div class="Cards">
+                        {% csrf_token %}
                         {% for product in products %}
                             <div class="Card" {% if forloop.counter > 4 %} hide_md {% endif %}
                                              {% if forloop.counter > 6 %} hide_1450 {% endif %}>

@@ -1,3 +1,18 @@
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 async function getTotalQuantity() {
     try {
         const response = await fetch(TOTAL_QUANTITY_CART);
@@ -17,7 +32,13 @@ async function getTotalQuantity() {
 
 async function addProductInCart(url) {
     try {
-        const response = await fetch(url);
+        const csrftoken = getCookie('csrftoken');
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+            }
+        });
 
         if (!response.ok) {
             throw new Error('Сеть не в порядке: ' + response.status);

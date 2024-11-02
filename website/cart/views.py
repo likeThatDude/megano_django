@@ -1,6 +1,6 @@
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, View, FormView
 
 from catalog.models import Product, Price
 from .cart import Cart
@@ -32,7 +32,7 @@ class AddProductInCart(View):
     Добавление продукта в корзину и возвращает на предыдущую страницу с которой был запрос
     """
 
-    def get(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1, update_quantity: bool = False):
+    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1, update_quantity: bool = False):
         cart = Cart(request)
         added_product = Product.objects.get(pk=product_id)
         added_price = Price.objects.get(pk=price_id)
