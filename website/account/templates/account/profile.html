@@ -53,19 +53,14 @@
                     <form class="form Profile-form" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
 
-                        <!-- Отображение ошибок формы -->
-                        {% for error in form.non_field_errors %}
-                            <div class="error-input">{{ error }}</div>
-                        {% endfor %}
-
                         <div class="row">
                             <div class="row-block">
 
                                 <div class="form-group">
                                     <label class="form-label" for="photo">Аватар</label>
                                     <div class="Profile-avatar Profile-avatar_noimg">
-                                        {% if profile.photo %}
-                                            <img src="{{ profile.photo.url }}" alt="profile photo"/>
+                                        {% if profile_form.instance.photo %}
+                                            <img src="{{ profile_form.instance.photo.url }}" alt="profile photo"/>
 
                                         {% else %}
                                             <label class="Profile-fileLabel" for="photo">
@@ -74,26 +69,30 @@
                                             </label>
 
                                         {% endif %}
-                                        <input class="Profile-file form-input" id="photo" name="photo" type="file" data-validate="onlyImgAvatar" />
+                                        <input class="Profile-file form-input" id="photo" name="photo" type="file"
+                                               data-validate="onlyImgAvatar" />
 
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="last_name">Фамилия</label>
-                                    <input class="form-input" id="last_name" type="text" name="last_name" value="{{ profile.last_name }}">
-                                    {% for error in form.last_name.errors %}
+                                    <input class="form-input" id="last_name" type="text" name="last_name"
+                                           value="{{ profile_form.instance.last_name }}">
+                                    {% for error in profile_form.last_name.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
 
                                     <label class="form-label" for="first_name">Имя</label>
-                                    <input class="form-input" id="first_name" type="text" name="first_name" value="{{ profile.first_name }}">
-                                    {% for error in form.first_name.errors %}
+                                    <input class="form-input" id="first_name" type="text" name="first_name"
+                                           value="{{ profile_form.instance.first_name }}">
+                                    {% for error in profile_form.first_name.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
 
                                     <label class="form-label" for="patronymic">Отчество</label>
-                                    <input class="form-input" id="patronymic" type="text" name="patronymic" value="{{ profile.patronymic }}">
-                                    {% for error in form.patronymic.errors %}
+                                    <input class="form-input" id="patronymic" type="text" name="patronymic"
+                                           value="{{ profile_form.instance.patronymic }}">
+                                    {% for error in profile_form.patronymic.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
 
@@ -103,25 +102,45 @@
                             <div class="row-block">
                                 <div class="form-group">
                                     <label class="form-label" for="phone">Телефон</label>
-                                    <input class="form-input" id="phone" name="phone" type="text" value="{{ profile.phone }}" />
-                                    {% for error in form.phone.errors %}
+                                    <input class="form-input" id="phone" name="phone" type="text"
+                                           value="{{ profile_form.instance.phone }}"
+                                           placeholder="+7 (___) ___-__-__"/>
+                                    {% for error in profile_form.phone.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="email">E-mail</label>
-                                    <input class="form-input" id="email" name="email" type="email" value="{{ profile.user.email }}" data-validate="require" />
-                                    {% for error in form.email.errors %}
+                                    <input class="form-input" id="email" name="email" type="email"
+                                           value="{{ password_form.instance.user.email }}"
+                                           data-validate="require" />
+                                    {% for error in password_form.email.errors %}
                                         <div class="error-message">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="password">Пароль</label>
-                                    <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
+                                    <label class="form-label" for="old_password">Текущий пароль</label>
+                                    <input class="form-input" id="old_password" name="old_password" type="password"
+                                           placeholder="Старый пароль" />
+                                    {% for error in password_form.old_password.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="passwordReply">Подтверждение пароля</label>
-                                    <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
+                                    <label class="form-label" for="new_password1">Новый пароль</label>
+                                    <input class="form-input" id="new_password1" name="new_password1" type="password"
+                                           placeholder="Введите новый пароль" />
+                                    {% for error in password_form.new_password1.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="new_password2">Подтверждение пароля</label>
+                                    <input class="form-input" id="new_password2" name="new_password2" type="password"
+                                           placeholder="Введите новый пароль повторно" />
+                                    {% for error in password_form.new_password2.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
                                 </div>
                                 <div class="form-group">
                                     <div class="Profile-btn">

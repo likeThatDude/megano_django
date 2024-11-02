@@ -1,12 +1,14 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import (
+    authenticate,
+    login,
+    update_session_auth_hash,
+)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
-from django.http import HttpRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.db import transaction
+from django.views import View
 from django.views.generic import CreateView, DetailView, UpdateView
 
 from .forms import (
@@ -47,47 +49,53 @@ class RegisterView(CreateView):
         return reverse_lazy("core:index")
 
 
-class ProfileView(LoginRequiredMixin, UpdateView):
+class ProfileView(LoginRequiredMixin, View):
     """
-    CBV для обновления профиля пользователя
+    View для управления профилем пользователя.
 
-    Attributes:
-        template_name (str): Шаблон, используемый для отображения формы.
-        context_object_name (str): Имя контекста для объекта профиля.
-        model (Model): Модель профиля, с которой работаем.
-        form_class (Form): Форма для редактирования профиля.
-
+    Этот класс позволяет пользователю изменять свои данные профиля и пароль.
+    Доступ к этому представлению возможен только для аутентифицированных пользователей.
     """
     template_name = "account/profile.html"
-    context_object_name = "profile"
-    model = Profile
-    form_class = ProfileChangeForm
 
-    def get_object(self, queryset=None):
+    def get(self, request, *args, **kwargs):
         """
-        Получаем профиль пользователя
-        """
-        return self.request.user.profile
+        Обрабатывает GET-запрос.
 
-    def get_context_data(self, **kwargs):
+        Отображает форму изменения профиля и форму изменения пароля.
         """
-        Передаем в форму в качестве инстанса профиль пользователя
-        """
-        context = super().get_context_data(**kwargs)
-        context["profile_form"] = self.get_form(self.form_class)  # Получаем форму
-        context["profile_form"].user = self.request.user  # Передаем пользователя в форму
-        return context
+        profile_form = ProfileChangeForm(instance=request.user.profile)
+        password_form = CustomUserChangeForm(instance=request.user)
+        context = {
+            'profile_form': profile_form,
+            'password_form': password_form,
+        }
+        return render(request, self.template_name, context)
 
-    def form_valid(self, form):
-        if form.is_valid():
-            profile = form.save(commit=False)  # Не сохраняем профиль сразу
-            user = self.request.user
-            user.email = form.cleaned_data["email"]  # Обновляем email пользователя
+    def post(self, request, *args, **kwargs):
+        """
+        Обрабатывает POST-запрос.
+
+        Обновляет данные профиля и пароль пользователя, если формы валидны.
+        """
+        profile_form = ProfileChangeForm(request.POST, request.FILES, instance=request.user.profile)
+        password_form = CustomUserChangeForm(request.POST, instance=request.user)
+
+        if profile_form.is_valid() and password_form.is_valid():
+            profile_form.save()
+            user = request.user
+            user.email = profile_form.cleaned_data.get("email", user.email)
             user.save()
-            profile.save()
-            messages.success(self.request, "Профиль успешно сохранен!")
+            # Обновляем сессию, чтобы не разлогинивать пользователя
+            update_session_auth_hash(request, password_form.save())
+            messages.success(request, "Профиль успешно сохранен!")
             return redirect(self.get_success_url())
-        return redirect(self.request.path)
+
+        context = {
+            'profile_form': profile_form,
+            'password_form': password_form,
+        }
+        return render(request, self.template_name, context)
 
     def get_success_url(self):
         return reverse_lazy("account:profile")
