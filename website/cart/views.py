@@ -15,13 +15,6 @@ class DetailCart(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
-
-        # Эта часть кода нужна для проверки работоспособности вьюхи
-        # test_product = Product.objects.first()
-        # test_price = Price.objects.get(product=test_product.pk)
-        # cart.add(test_product, test_price)
-        # При необходимости удалить/закоментировать
-
         info_cart = [info_product for info_product in cart]
         context['info_cart'] = info_cart
         return context
