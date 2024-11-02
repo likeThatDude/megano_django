@@ -3,7 +3,7 @@ async function removeProductInCart(url, productCard) {
     try {
         const csrftoken = getCookie('csrftoken');
         const response = await fetch(url, {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'X-CSRFToken': csrftoken,
             }
