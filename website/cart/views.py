@@ -71,7 +71,18 @@ class GetTotalQuantityCart(View):
         cart = Cart(request)
         if 'total_quantity' not in request.COOKIES:
             request.COOKIES['total_quantity'] = len(cart)
-            return JsonResponse({'total_quantity': len(cart)})
-        else:
-            total_quantity = request.COOKIES.get('total_quantity')
-            return JsonResponse({'total_quantity': total_quantity})
+        total_quantity = request.COOKIES.get('total_quantity')
+        return JsonResponse({'total_quantity': total_quantity})
+
+
+class GetTotalPriceCart(View):
+    """
+    Данное представление возвращает общую стоимость товаров в корзине
+    Поддерживает только один метод GET
+    """
+    def get(self, request: HttpRequest) -> JsonResponse:
+        cart = Cart(request)
+        if 'total_price' not in request.COOKIES:
+            request.COOKIES['total_price'] = cart.get_total_price()
+        total_price = request.COOKIES.get('total_price')
+        return JsonResponse({'total_price': total_price})
