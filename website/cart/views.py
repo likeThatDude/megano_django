@@ -69,7 +69,7 @@ class GetTotalQuantityCart(View):
     """
     def get(self, request: HttpRequest) -> JsonResponse:
         cart = Cart(request)
-        if not request.COOKIES['total_quantity']:
+        if 'total_quantity' not in request.COOKIES:
             request.COOKIES['total_quantity'] = len(cart)
             return JsonResponse({'total_quantity': len(cart)})
         else:

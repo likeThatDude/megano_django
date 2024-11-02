@@ -13,22 +13,7 @@ function getCookie(name) {
     return cookieValue;
 }
 
-async function getTotalQuantity() {
-    try {
-        const response = await fetch(TOTAL_QUANTITY_CART);
 
-        if (!response.ok) {
-            throw new Error('Сеть не в порядке: ' + response.status);
-        }
-
-        const data = await response.json(); // Предполагаем, что ответ в формате JSON
-        const totalQuantity = data.total_quantity;
-        return totalQuantity; // Возвращаем полученные данные
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error);
-        throw error; // Пробрасываем ошибку дальше, если нужно
-    }
-}
 
 async function addProductInCart(url) {
     try {
