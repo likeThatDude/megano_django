@@ -46,14 +46,7 @@ async function addProductInCart(url) {
 
         // Если статус код 200, выполняем запрос на TOTAL_QUANTITY_CART
         const totalQuantityData = await getTotalQuantity(TOTAL_QUANTITY_CART);
-
-        // Обновляем элемент на странице
-        const cartAmountElement = document.querySelector('.CartBlock-amount');
-        if (cartAmountElement) {
-            cartAmountElement.innerText = totalQuantityData; // Убедитесь, что вы обращаетесь к правильному ключу
-        } else {
-            console.warn('Элемент с классом "CartBlock-amount" не найден.');
-            }
+        await updateCartAmount(); // Обновляем общее кол-во товаров в корзине
     } catch (error) {
         console.error('Ошибка при добавлении товара в корзину:', error);
     }
