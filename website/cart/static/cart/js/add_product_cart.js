@@ -1,3 +1,4 @@
+// Функция для получения куков
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -14,7 +15,7 @@ function getCookie(name) {
 }
 
 
-
+// Функция для добавления товара в корзину
 async function addProductInCart(url) {
     try {
         const csrftoken = getCookie('csrftoken');
@@ -37,6 +38,7 @@ async function addProductInCart(url) {
     }
 }
 
+// Добавление функций addProductInCart всем кнопкам на странице
 document.addEventListener('DOMContentLoaded', function() {
     const cartButtons = document.querySelectorAll('.Card-btn'); // Находим все кнопки с классом Card-btn
     if (cartButtons.length > 0) { // Проверяем, существуют ли кнопки
