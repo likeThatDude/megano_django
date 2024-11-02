@@ -53,13 +53,16 @@ class UpdateQuantityProductInCart(View):
 
 class DeleteProductInCart(View):
     """
-
+    Представление для удаления товара из корзины
+    Поддерживает только один метод POST
     """
 
-    def get(self, request: HttpRequest, product_id: int):
+    def post(self, request: HttpRequest, product_id: int):
         cart = Cart(request)
         deleted_product = Product.objects.get(pk=product_id)
         cart.remove(deleted_product)
+        request.COOKIES['total_price'] = cart.get_total_price()
+        return JsonResponse({'status_code': 204})
 
 
 class GetTotalQuantityCart(View):
