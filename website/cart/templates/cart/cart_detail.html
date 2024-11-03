@@ -30,15 +30,15 @@
     <div class="Middle Middle_top">
         <div class="Section">
             <div class="wrap">
-                <div class="Product">
+                <div class="Product Products-in-cart">
                     {% if info_cart %}
                     {% for info_product in info_cart %}
-                    <div class="ProductCard">
-                        <div class="ProductCard-look">
+                    <div class="ProductCard ProductCard-inCart">
+                        <div class="ProductCard-look ProductCard-inCart">
                             <div class="ProductCard-photo">
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
                             </div>
-                            <div class="ProductCard-desc">
+                            <div class="ProductCard-desc ProductCard-desc-in-cart">
                                 <div class="ProductCard-header">
                                     <h2 class="ProductCard-title"> {{ info_product.product.name }}
                                     </h2>
