@@ -39,50 +39,36 @@
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
                             </div>
                             <div class="ProductCard-desc">
-                            <div class="ProductCard-header">
-                                <h2 class="ProductCard-title"> {{ info_product.product.name }}
-                                </h2>
-                                <div class="ProductCard-info">
-                                    <div class="ProductCard-cost">
-                                        <div class="ProductCard-price">
-                                            {{ info_product.total_price }} $
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ProductCard-cart">
-                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                                    <div class="Amount Amount_product">
-                                        <button class="Amount-remove" type="button">
-                                        </button>
-                                        <input class="Amount-input form-input" name="amount" type="text" value="{{ info_product.quantity }}"/>
-                                        <button class="Amount-add" type="button">
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="ProductCard-cartElement">
-                                    <a class="btn btn_primary" href="{% url 'cart:delete_product' product_id=info_product.product.pk %}">
-                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                             alt="cart_white.svg"/>
-                                        <span class="btn-content">Удалить</span>
-                                    </a>
-                                </div>
-                                <div id="modal_open" class="my_modal">
-                                    <div class="my_modal-dialog">
-                                        <div class="my_modal-content">
-                                            <div class="my_modal-header">
-                                                <p class="my_modal-title">Поздравляем!</p>
-                                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
-                                            </div>
-                                            <div class="my_modal-body">
-                                                <p>Тут происходит передаресация на сервис оплаты с тем количеством товара,
-                                                    которое указано в корзине</p>
+                                <div class="ProductCard-header">
+                                    <h2 class="ProductCard-title"> {{ info_product.product.name }}
+                                    </h2>
+                                    <div class="ProductCard-info">
+                                        <div class="ProductCard-cost">
+                                            <div class="ProductCard-price">
+                                                {{ info_product.total_price }} $
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ProductCard-footer">
+                                <div class="ProductCard-cart">
+                                    <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                                        <div class="Amount Amount_product">
+                                            <button class="Amount-remove" type="button">
+                                            </button>
+                                            <input class="Amount-input form-input" name="amount" type="text" value="{{ info_product.quantity }}"/>
+                                            <button class="Amount-add" type="button">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="ProductCard-cartElement">
+                                        <a class="btn btn_primary" href="{% url 'cart:delete_product' product_id=info_product.product.pk %}">
+                                            <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                                 alt="cart_white.svg"/>
+                                            <span class="btn-content">Удалить</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ProductCard-footer">
                                 <div class="ProductCard-tags">
                                     <strong class="ProductCard-tagsTitle">Тэги:
                                     </strong>
@@ -91,9 +77,8 @@
                                     {% endfor %}
                                 </div>
                             </div>
+                            </div>
                         </div>
-                        </div>
-
                     </div>
                     {% endfor %}
                     {% else %}
