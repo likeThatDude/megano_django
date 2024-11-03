@@ -1,15 +1,11 @@
-from django.conf import settings
 from django.db import models
 from django.db.models import ManyToManyField
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
-from .utils import (
-    product_images_directory_path,
-    seller_image_directory_path,
-    product_image_directory_path,
-    category_icon_directory_path,
-)
+
+from .utils import (category_icon_directory_path, product_image_directory_path,
+                    product_images_directory_path, seller_image_directory_path)
 
 
 class Category(models.Model):
@@ -190,7 +186,7 @@ class Price(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name="price",
+        related_name="prices",
         verbose_name=_("Product"),
         db_index=True,
     )

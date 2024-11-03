@@ -1,6 +1,5 @@
-from django.contrib import admin
-
 from comparison.models import Comparison
+from django.contrib import admin
 
 
 @admin.register(Comparison)

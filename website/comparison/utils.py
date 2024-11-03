@@ -1,12 +1,7 @@
-from itertools import product
-from unicodedata import category
-
-from django.contrib.auth.models import User
-from django.db.models import Prefetch, QuerySet, Min
-from django.http import HttpRequest
-
-from catalog.models import Product, Specification, Price
+from catalog.models import Price, Product, Specification
 from comparison.models import Comparison
+from django.db.models import Min, Prefetch, QuerySet
+from django.http import HttpRequest
 
 
 def get_products_with_auth_user(user) -> tuple:
