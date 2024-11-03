@@ -10,5 +10,4 @@ class Comparison(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_("Product"), db_index=True)
 
     class Meta:
-        unique_together = ('user', 'product')
-
+        unique_together = ("user", "product")

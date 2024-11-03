@@ -1,6 +1,8 @@
 from decimal import Decimal
 
-from catalog.models import Price, Product, Seller
+from catalog.models import Price
+from catalog.models import Product
+from catalog.models import Seller
 from django.http import HttpRequest
 
 from website import settings
@@ -120,9 +122,7 @@ class Cart:
         """
         Возвращает общую стоимость товаров в корзине
         """
-        return sum(
-            Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
-        )
+        return sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values())
 
     def clear(self):
         """

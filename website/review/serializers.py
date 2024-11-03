@@ -1,8 +1,8 @@
+from account.models import CustomUser
+from catalog.models import Review
 from django.db.models import Q
 from rest_framework import serializers
 
-from account.models import CustomUser
-from catalog.models import Review
 from website import settings
 
 
@@ -14,9 +14,10 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
         product (ForeignKey): Ссылка на товар, к которому относится отзыв.
         text (str): Текст отзыва.
     """
+
     class Meta:
         model = Review
-        fields = ['product', 'text']
+        fields = ["product", "text"]
 
 
 class ReviewCreateResponseSerializer(serializers.ModelSerializer):
@@ -28,9 +29,14 @@ class ReviewCreateResponseSerializer(serializers.ModelSerializer):
         text (str): Текст отзыва.
         created_at (datetime): Дата и время создания отзыва.
     """
+
     class Meta:
         model = Review
-        fields = ['pk', 'text', 'created_at', ]
+        fields = [
+            "pk",
+            "text",
+            "created_at",
+        ]
 
 
 class ReviewUpdateSerializer(serializers.ModelSerializer):
@@ -41,9 +47,10 @@ class ReviewUpdateSerializer(serializers.ModelSerializer):
         pk (int): Первичный ключ отзыва.
         text (str): Обновленный текст отзыва.
     """
+
     class Meta:
         model = Review
-        fields = ('pk', 'text')
+        fields = ("pk", "text")
 
 
 class ReviewDeleteSerializer(serializers.ModelSerializer):
@@ -53,9 +60,11 @@ class ReviewDeleteSerializer(serializers.ModelSerializer):
     Поля:
         pk (int): Первичный ключ отзыва, который необходимо удалить.
     """
+
     class Meta:
         model = Review
-        fields = ('pk',)
+        fields = ("pk",)
+
 
 class UserReviewSerializer(serializers.ModelSerializer):
     """
@@ -65,9 +74,14 @@ class UserReviewSerializer(serializers.ModelSerializer):
         pk (int): Первичный ключ пользователя.
         login (str): Логин пользователя.
     """
+
     class Meta:
         model = CustomUser
-        fields = ['pk', 'login',]
+        fields = [
+            "pk",
+            "login",
+        ]
+
 
 class ReviewListSerializer(serializers.ModelSerializer):
     """
@@ -81,10 +95,17 @@ class ReviewListSerializer(serializers.ModelSerializer):
         update_at (datetime): Дата и время последнего обновления отзыва.
         updating (bool): Флаг, указывающий, находится ли отзыв в процессе обновления.
     """
+
     user = UserReviewSerializer(read_only=True)
 
     class Meta:
         model = Review
-        fields = ['pk', 'user', 'text', 'created_at', 'update_at', 'updating',]
-        ordering = ('-created_at',)
-
+        fields = [
+            "pk",
+            "user",
+            "text",
+            "created_at",
+            "update_at",
+            "updating",
+        ]
+        ordering = ("-created_at",)

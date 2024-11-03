@@ -1,6 +1,10 @@
-from catalog.models import Price, Product, Specification
+from catalog.models import Price
+from catalog.models import Product
+from catalog.models import Specification
 from comparison.models import Comparison
-from django.db.models import Min, Prefetch, QuerySet
+from django.db.models import Min
+from django.db.models import Prefetch
+from django.db.models import QuerySet
 from django.http import HttpRequest
 
 
@@ -16,20 +20,18 @@ def get_products_with_auth_user(user) -> tuple:
             - dict: Спецификации категорий товаров.
             - list: Список объектов товаров, связанных с пользователем.
     """
-    products = (Comparison.objects
-                .select_related('user', 'product__category')
-                .prefetch_related(
-        Prefetch(
-            'product__specifications',
-            queryset=Specification.objects.select_related('name'),
-        ),
-        Prefetch(
-            'product__price',
-            queryset=Price.objects.only('price')
+    products = (
+        Comparison.objects.select_related("user", "product__category")
+        .prefetch_related(
+            Prefetch(
+                "product__specifications",
+                queryset=Specification.objects.select_related("name"),
+            ),
+            Prefetch("product__price", queryset=Price.objects.only("price")),
         )
+        .filter(user=user)
+        .annotate(min_price=Min("product__price__price"))
     )
-                .filter(user=user)
-                .annotate(min_price=Min('product__price__price')))
     correct_spec = get_category_spec(products)
     products_data = list(products)
     return correct_spec, products_data
@@ -47,21 +49,16 @@ def get_products_with_unauth_user(request: HttpRequest) -> tuple:
             - dict: Спецификации категорий товаров.
             - list: Список объектов товаров, идентификаторы которых находятся в сессии.
     """
-    products_ids = request.session.get('products_ids', [])
-    products = (Product.objects
-                .select_related('category')
-                .prefetch_related(
-        Prefetch(
-            'specifications',
-            queryset=Specification.objects.select_related('name')
-        ),
-        Prefetch(
-            'price',
-            queryset=Price.objects.only('price')
+    products_ids = request.session.get("products_ids", [])
+    products = (
+        Product.objects.select_related("category")
+        .prefetch_related(
+            Prefetch("specifications", queryset=Specification.objects.select_related("name")),
+            Prefetch("price", queryset=Price.objects.only("price")),
         )
+        .filter(id__in=products_ids)
+        .annotate(min_price=Min("price__price"))
     )
-                .filter(id__in=products_ids)
-                .annotate(min_price=Min('price__price')))
     correct_spec = get_category_spec(products, False)
     products_data = list(products)
     return correct_spec, products_data

@@ -1,12 +1,18 @@
-from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import status, viewsets
+from catalog.models import Review
+from drf_spectacular.utils import OpenApiParameter
+from drf_spectacular.utils import extend_schema
+from rest_framework import status
+from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import DestroyAPIView, UpdateAPIView, CreateAPIView, ListAPIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.generics import CreateAPIView
+from rest_framework.generics import DestroyAPIView
+from rest_framework.generics import ListAPIView
+from rest_framework.generics import UpdateAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from catalog.models import Review
 from . import serializers
 
 
@@ -18,6 +24,7 @@ class ReviewListSet(ListAPIView):
         serializer_class (Serializer): Сериализатор для представления отзывов.
         permission_classes (tuple): Классы разрешений, определяющие доступ.
     """
+
     serializer_class = serializers.ReviewListSerializer
     permission_classes = (AllowAny,)
 
@@ -28,9 +35,8 @@ class ReviewListSet(ListAPIView):
         Возвращает:
             QuerySet: Набор запросов, содержащий отзывы для конкретного товара.
         """
-        print('Я ТУТ')
-        product_id = self.kwargs['product_id']
-        reviews = Review.objects.select_related('product', 'user').filter(product__pk=product_id)
+        product_id = self.kwargs["product_id"]
+        reviews = Review.objects.select_related("product", "user").filter(product__pk=product_id)
         return reviews
 
 
@@ -43,6 +49,7 @@ class ReviewCreateView(CreateAPIView):
         serializer_class (Serializer): Сериализатор для создания отзывов.
         permission_classes (tuple): Классы разрешений, определяющие доступ.
     """
+
     queryset = Review.objects.all()
     serializer_class = serializers.ReviewCreateSerializer
     permission_classes = (IsAuthenticated,)
@@ -85,7 +92,8 @@ class ReviewUpdateViewSet(UpdateAPIView):
         serializer_class (Serializer): Сериализатор для обновления отзывов.
         permission_classes (tuple): Классы разрешений, определяющие доступ.
     """
-    queryset = Review.objects.select_related('user').all()
+
+    queryset = Review.objects.select_related("user").all()
     serializer_class = serializers.ReviewUpdateSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -106,7 +114,7 @@ class ReviewUpdateViewSet(UpdateAPIView):
             raise PermissionDenied("Ты не владелец этого объекта.")
         else:
             obj.updating = True
-            obj.save(update_fields=['updating'])
+            obj.save(update_fields=["updating"])
         return super().update(request, *args, **kwargs)
 
 
@@ -119,12 +127,13 @@ class ReviewDeleteViewSet(DestroyAPIView):
         serializer_class (Serializer): Сериализатор для удаления отзывов.
         permission_classes (tuple): Классы разрешений, определяющие доступ.
     """
-    queryset = Review.objects.select_related('user').all()
+
+    queryset = Review.objects.select_related("user").all()
     serializer_class = serializers.ReviewDeleteSerializer
     permission_classes = (IsAuthenticated,)
 
     @extend_schema(
-        description='Удаление комментария',
+        description="Удаление комментария",
     )
     def delete(self, request, *args, **kwargs):
         """

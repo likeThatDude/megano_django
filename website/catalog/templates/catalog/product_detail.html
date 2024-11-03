@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load product_detail_tags %}
 
 {% block description %}
     <meta name="description" content="Описание страницы">
@@ -57,7 +58,8 @@
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
                                         <div class="ProductCard-price">
-                                            ${{ storages.0.price }}
+                                            {% get_lower_price sellers as lower_price %}
+                                            {{ lower_price|default:"Товара пока нету в продаже" }}
                                         </div>
                                     </div>
                                 </div>
@@ -72,202 +74,208 @@
                             {#                                    </li>#}
                             {#                                </ul>#}
                             {#                            </div>#}
-                            <div class="ProductCard-cart">
-                                <div class="ProductCard-cartElement ProductCard-cartElement_amount">
-                                    <div class="Amount Amount_product">
-                                        <button class="Amount-remove" type="button">
-                                        </button>
-                                        <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                                        <button class="Amount-add" type="button">
-                                        </button>
-                                    </div>
+                            {#                            <div class="ProductCard-cart">#}
+                            <div class="ProductCard-cartElement ProductCard-cartElement_amount">
+                                <div class="Amount Amount_product">
+                                    <button class="Amount-remove" type="button">
+                                    </button>
+                                    <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                                    <button class="Amount-add" type="button">
+                                    </button>
                                 </div>
-                                <div class="ProductCard-cartElement">
-                                    <a class="btn btn_primary" href="#modal_open">
-                                        <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                             alt="cart_white.svg"/>
-                                        <span class="btn-content">Купить</span>
-                                    </a>
-                                </div>
-                                <div id="modal_open" class="my_modal">
-                                    <div class="my_modal-dialog">
-                                        <div class="my_modal-content">
-                                            <div class="my_modal-header">
-                                                <p class="my_modal-title">Поздравляем!</p>
-                                                <a href="#" title="Закрыть модальное окно" class="close">×</a>
-                                            </div>
-                                            <div class="my_modal-body">
-                                                <p>Товар успешно добавлен в корзину!</p>
-                                            </div>
+                            </div>
+                            <div class="ProductCard-cartElement">
+                                <a class="btn btn_primary" href="#modal_open">
+                                    <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                         alt="cart_white.svg"/>
+                                    <span class="btn-content">Купить</span>
+                                </a>
+                            </div>
+                            <div id="modal_open" class="my_modal">
+                                <div class="my_modal-dialog">
+                                    <div class="my_modal-content">
+                                        <div class="my_modal-header">
+                                            <p class="my_modal-title">Поздравляем!</p>
+                                            <a href="#" title="Закрыть модальное окно" class="close">×</a>
+                                        </div>
+                                        <div class="my_modal-body">
+                                            <p>Товар успешно добавлен в корзину!</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="ProductCard-footer">
-                                <div class="ProductCard-tags">
-                                    <strong class="ProductCard-tagsTitle">Тэги:
-                                    </strong>
-                                    {% for tag in product.tags.all %}
-                                        <a href="#">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                </div>
+                        </div>
+                        <div class="ProductCard-footer">
+                            <div class="ProductCard-tags">
+                                <strong class="ProductCard-tagsTitle">Тэги:
+                                </strong>
+                                {% for tag in product.tags.all %}
+                                    <a href="#">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                    <div class="Tabs Tabs_default">
-                        <div class="Tabs-links">
-                            <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-                                <span>Описание</span>
-                            </a>
-                            <a class="Tabs-link" href="#sellers">
-                                <span>Продавцы</span>
-                            </a>
-                            <a class="Tabs-link" href="#addit">
-                                <span>Характеристика</span>
-                            </a>
-                            <a class="Tabs-link" id="main-count" href="#reviews">
-                                <span>Отзывы {{ product.reviews_count }}</span>
-                            </a>
-                        </div>
-                        <div class="Tabs-wrap">
-                            <div class="Tabs-block" id="description">
-                                <h2>Описание: {{ product.name }}
-                                </h2>
-                                <p>
-                                    {{ product.description|linebreaks }}
-                                </p>
-                                <img class="pict pict_right"
-                                     src="{{ product.preview.url }}"
-                                     alt="bigGoods.png"/>
-                                <ul>
-                                    {% if product.manufacture %}
-                                        <li>
-                                            Страна изготовитель: {{ product.manufacture }}
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                                <div class="clearfix">
-                                </div>
-                                <div class="table">
-                                    <table>
-                                        <tr>
-                                            <th>Характеристика
-                                            </th>
-                                            <th>Значение
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <td>Тип устройства
-                                            </td>
-                                            <td>{{ product.product_type }}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                </div>
+                <div class="Tabs Tabs_default">
+                    <div class="Tabs-links">
+                        <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
+                            <span>Описание</span>
+                        </a>
+                        <a class="Tabs-link" href="#sellers">
+                            <span>Продавцы</span>
+                        </a>
+                        <a class="Tabs-link" href="#addit">
+                            <span>Характеристика</span>
+                        </a>
+                        <a class="Tabs-link" id="main-count" href="#reviews">
+                            <span></span>
+                        </a>
+                    </div>
+                    <div class="Tabs-wrap">
+                        <div class="Tabs-block" id="description">
+                            <h2>Описание: {{ product.name }}
+                            </h2>
+                            <p>
+                                {{ product.description|linebreaks }}
+                            </p>
+                            <img class="pict pict_right"
+                                 src="{{ product.preview.url }}"
+                                 alt="bigGoods.png"/>
+                            <ul>
+                                {% if product.manufacture %}
+                                    <li>
+                                        Страна изготовитель: {{ product.manufacture }}
+                                    </li>
+                                {% endif %}
+                            </ul>
+                            <div class="clearfix">
                             </div>
-                            <div class="Tabs-block" id="sellers">
-                                <div class="Section-content">
-                                    <div class="Orders">
-                                        {% for storage in storages %}
-                                            <div class="Order Order_anons">
-                                                <div class="Order-personal">
-                                                    <div class="row">
-                                                        <div class="row-block">
-                                                            <a class="Order-title" href="oneorder.html">
-                                                                {{ storage.seller.name }}
+                            <div class="table">
+                                <table>
+                                    <tr>
+                                        <th>Характеристика
+                                        </th>
+                                        <th>Значение
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td>Тип устройства
+                                        </td>
+                                        <td>{{ product.product_type }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="Tabs-block" id="sellers">
+                            <div class="Section-content">
+                                <div class="Orders">
+                                    {% for seller in sellers %}
+                                        <div class="Order Order_anons">
+                                            <div class="Order-personal">
+                                                <div class="row">
+                                                    <div class="row-block">
+                                                        <a class="Order-title" href="oneorder.html">
+                                                            {{ seller.name }}
+                                                        </a>
+                                                        <div class="ProductCard-cartElement"
+                                                             style="margin-top: 10px;">
+                                                            <a class="btn btn_primary" href="#modal_open">
+                                                                <img class="btn-icon"
+                                                                     src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                                                     alt="cart_white.svg"/>
+                                                                <span class="btn-content">Купить</span>
                                                             </a>
-                                                            <div class="ProductCard-cartElement"
-                                                                 style="margin-top: 10px;">
-                                                                <a class="btn btn_primary" href="#modal_open">
-                                                                    <img class="btn-icon"
-                                                                         src="{% static 'assets/img/icons/card/cart_white.svg' %}"
-                                                                         alt="cart_white.svg"/>
-                                                                    <span class="btn-content">Купить</span>
-                                                                </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-block">
+                                                        <div class="Order-info Order-info_delivery">
+                                                            <div class="Order-infoType">Тип доставки:
+                                                            </div>
+                                                            <div class="Order-infoContent">
+                                                                {% get_seller_data_list seller.delivery_methods.all as delivery_list %}
+                                                                {{ delivery_list }}
                                                             </div>
                                                         </div>
-                                                        <div class="row-block">
-                                                            <div class="Order-info Order-info_delivery">
-                                                                <div class="Order-infoType">Тип доставки:
-                                                                </div>
-                                                                <div class="Order-infoContent">Обычная доставка
-                                                                </div>
+                                                        <div class="Order-info Order-info_pay">
+                                                            <div class="Order-infoType">Оплата:
                                                             </div>
-                                                            <div class="Order-info Order-info_pay">
-                                                                <div class="Order-infoType">Оплата:
-                                                                </div>
-                                                                <div class="Order-infoContent">Онлайн картой
-                                                                </div>
+                                                            <div class="Order-infoContent">
+                                                                {% get_seller_data_list seller.payment_methods.all as payment_list %}
+                                                                {{ payment_list }}
                                                             </div>
-                                                            <div class="Order-info">
-                                                                <div class="Order-infoType">Стоимость:
-                                                                </div>
-                                                                <div class="Order-infoContent"><span
-                                                                        class="Order-price">{{ storage.price }}$</span>
-                                                                </div>
+                                                        </div>
+                                                        <div class="Order-info">
+                                                            <div class="Order-infoType">Стоимость:
+                                                            </div>
+                                                            <div class="Order-infoContent">
+                                                                {% for price in seller.price.all %}
+                                                                    <span class="Order-price">{{ price.price }}$</span>
+                                                                {% endfor %}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        {% endfor %}
-                                    </div>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                            <div class="Tabs-block" id="addit">
-                                <div class="Product-props">
-                                    {% if product.specifications %}
-                                        {% for specification in product.specifications.all %}
-                                            <div class="Product-prop">
-                                                <strong>
-                                                    {{ specification.name.name }}
-                                                </strong>
-                                                <span>
+                        </div>
+                        <div class="Tabs-block" id="addit">
+                            <div class="Product-props">
+                                {% if product.specifications %}
+                                    {% for specification in product.specifications.all %}
+                                        <div class="Product-prop">
+                                            <strong>
+                                                {{ specification.name.name }}
+                                            </strong>
+                                            <span>
                                                 {{ specification.value }}
                                             </span>
-                                            </div>
-                                        {% endfor %}
-                                    {% else %}
-                                        <h1>Пока нету характеристик</h1>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="Tabs-block" id="reviews">
-                                <header class="Section-header">
-                                    <h3 class="Section-title" id="small-count"></h3>
-                                </header>
-                                {% if user.is_authenticated %}
-                                    <header class="Section-header Section-header_product" id="create-get-review">
-                                        <h3 class="Section-title">Добавить отзыв</h3>
-                                    </header>
-                                    <div class="Tabs-addComment">
-                                        <form id="reviewForm" class="form" action="#" method="post">
-                                            <div class="form-group">
-                                            <textarea class="form-textarea" name="review" id="review"
-                                                      placeholder="Отзыв"></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn_muted" type="submit">Отправить отзыв</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                {% else %}
-                                    <div class="non-auth-block">
-                                        <p>Для просмотра всех отзывов и возможности их оставлять</p>
-                                        <p>вы должны зарегистрироваться</p>
-                                        <div class="non-auth-block-buttons">
-                                            <a class="non-auth-block-button" href="{% url 'account:login' %}">Войти</a>
-                                            <a class="non-auth-block-button" href="{% url 'account:register' %}">Зарегистрироваться</a>
                                         </div>
-                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <h1>Пока нету характеристик</h1>
                                 {% endif %}
                             </div>
                         </div>
+                        <div class="Tabs-block" id="reviews">
+                            <header class="Section-header">
+                                <h3 class="Section-title" id="small-count"></h3>
+                            </header>
+                            {% if user.is_authenticated %}
+                                <header class="Section-header Section-header_product" id="create-get-review">
+                                    <h3 class="Section-title">Добавить отзыв</h3>
+                                </header>
+                                <div class="Tabs-addComment">
+                                    <form id="reviewForm" class="form" action="#" method="post">
+                                        <div class="form-group">
+                                            <textarea class="form-textarea" name="review" id="review"
+                                                      placeholder="Отзыв"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn btn_muted" type="submit">Отправить отзыв</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="non-auth-block">
+                                    <p>Для просмотра всех отзывов и возможности их оставлять</p>
+                                    <p>вы должны зарегистрироваться</p>
+                                    <div class="non-auth-block-buttons">
+                                        <a class="non-auth-block-button" href="{% url 'account:login' %}">Войти</a>
+                                        <a class="non-auth-block-button" href="{% url 'account:register' %}">Зарегистрироваться</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
             </div>
+
         </div>
+    </div>
     </div>
 {% endblock %}
 

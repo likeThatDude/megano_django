@@ -14,17 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from itertools import product
 
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.urls import include
+from django.urls import path
+from drf_spectacular.views import SpectacularAPIView
+from drf_spectacular.views import SpectacularSwaggerView
 
 urlpatterns = [
-
     # Standard URL
     path("", include("core.urls")),
     path("admin/", admin.site.urls),
@@ -34,11 +36,10 @@ urlpatterns = [
     path("views/", include("viewed.urls")),
     path("cart/", include("cart.urls")),
     path("comparison/", include("comparison.urls")),
-
     # API
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path("api/v1/", include('review.urls')),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/v1/", include("review.urls")),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:
