@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -93,7 +94,12 @@ class Profile(models.Model):
     address = models.CharField(
         max_length=200, null=True, blank=True, verbose_name=_("Address")
     )
-    phone = models.CharField(unique=True, max_length=15, null=True, blank=True)
+    phone = models.CharField(
+        unique=True,
+        max_length=18,
+        null=True,
+        blank=True,
+    )
     photo = models.ImageField(
         upload_to=profile_photo_directory_path,
         verbose_name=_("Photo"),
