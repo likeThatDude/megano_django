@@ -8,12 +8,21 @@ from website import settings
 
 class Cart:
     """
-    Модель корзины, которая хранит в себе информацию о товарах в сессии
+    Модель корзины, которая хранит в себе информацию о товарах в сессии.
+    Для работы с корзиной необходимо создавать объект корзины для получения информации
+    из сессии пользователя.
+
+    Примечание:
+    Данный класс работает исключительно с объектами моделей Product и Price при добавлении, удалении и изменении
     """
 
     def __init__(self, request: HttpRequest):
         """
-        Создание корзины
+        Создание корзины. Если корзины не было, то она будет создана в сессиях
+
+        Атрибуты:
+            request (HttpRequest): запрос в котором хранится сессия с корзиной.
+
         """
         # берем текущую сессию пользователя
         self.session = request.session
@@ -27,7 +36,7 @@ class Cart:
 
     def save(self):
         """
-        Сохранение корзины
+        Сохраняет корзину и ставит отметку о том, чтобы сессия была изменена
         """
         self.session[settings.CART_SESSION_ID] = self.cart
         # Отметить, что сессия изменена
@@ -38,10 +47,18 @@ class Cart:
         product: Product,
         price_product: Price,
         quantity: int = 1,
-        update_quantity=False,
+        update_quantity: bool = False,
     ):
         """
-        Добавление товара и цены в сессию
+        Добавление товара в сессию.
+
+        Атрибуты:
+            product (Product) - объект модели товара который нужно добавить в корзину
+            price_product (Price) - объект модели цены товара который добавляется
+            quantity (int = 1) - кол-во добавляемого товара
+            update_quantity (bool = False) - флаг обозначающий принцип добавления товара
+                                    False - прибавить значение quantity к текущему кол-ву
+                                    True - изменить кол-во товара на значение quantity
         """
         product_id = str(product.pk)
         if product_id not in self.cart:
@@ -59,7 +76,10 @@ class Cart:
 
     def remove(self, product: Product):
         """
-        Удаление товара из корзины
+        Удаляет товар из корзины
+
+        Атрибуты:
+            product (Product) - удаляет товар в корзине и всю информацию о нем, если он есть в корзине
         """
         product_id = str(product.pk)
         if product_id in self.cart:
@@ -68,27 +88,37 @@ class Cart:
 
     def __iter__(self):
         """
-        Перебор элементов в корзине и получение продуктов из базы данных
+        Итерация по информации о товарах в корзине.
+
+        Возвращает генератор, где при каждом методе next возвращает словарь
+        с информацией о каждом товаре в корзине в удобном формате
+
+        Структура словаря по каждому товару:
+            'price': цена товара (str),
+            'product': товар (Product),
+            'quantity': кол-во товара (int),
+            'seller': продавец этого товара (Seller),
+            'total_price': общая стоимость этого товара в корзине (str),
         """
         for item in self.cart.values():
             info_item = {
-                'price': item['price'],
-                'product': Product.objects.get(pk=item['product_id']),
-                'quantity': item['quantity'],
-                'seller': Seller.objects.get(pk=item['seller_id']),
-                'total_price': str(Decimal(item["price"]) * item["quantity"]),
+                "price": item["price"],
+                "product": Product.objects.get(pk=item["product_id"]),
+                "quantity": item["quantity"],
+                "seller": Seller.objects.get(pk=item["seller_id"]),
+                "total_price": str(Decimal(item["price"]) * item["quantity"]),
             }
             yield info_item
 
     def __len__(self):
         """
-        Подсчет всех товаров в корзине
+        Возвращает общее кол-во товаров в корзине
         """
         return sum(item["quantity"] for item in self.cart.values())
 
     def get_total_price(self):
         """
-        Подсчет стоимости товаров в корзине
+        Возвращает общую стоимость товаров в корзине
         """
         return sum(
             Decimal(item["price"]) * item["quantity"] for item in self.cart.values()
@@ -96,7 +126,7 @@ class Cart:
 
     def clear(self):
         """
-        Удаление корзины из сессии
+        Полностью очищает корзину
         """
         del self.session[settings.CART_SESSION_ID]
         self.session.modified = True

@@ -1,5 +1,12 @@
 from django.core.cache import cache
-from django.db.models import Count, Min, Prefetch, Q
+from django.db.models import (
+    Q,
+    Prefetch,
+    Min, Count,
+    OuterRef,
+    Subquery,
+)
+from django.db.models.functions import Round
 from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views.generic import DetailView, ListView, TemplateView
@@ -22,13 +29,15 @@ class CatalogListView(ListView):
         category_id = self.kwargs.get("pk")
         cache_key = PRODUCTS_KEY.format(category_id=category_id)
         queryset = cache.get(cache_key)
+        price_subquery = Price.objects.filter(product=OuterRef('pk')).values('pk')
         if not queryset:
             queryset = (
-                super(CatalogListView, self)
-                .get_queryset()
+                Product.objects
                 .filter(category__id=category_id)
+                .select_related('category')
                 .annotate(
-                    price=Min("price__price"),
+                    price=Round(Min("prices__price"), precision=2),
+                    price_pk=Subquery(price_subquery)
                 )
             )
         cache.set(cache_key, queryset, timeout=60)
