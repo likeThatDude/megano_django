@@ -1,6 +1,5 @@
-from django.db.models import Q
-from rest_framework import serializers
 from catalog.models import Review
+from rest_framework import serializers
 
 
 class ReviewCreateSerializer(serializers.ModelSerializer):

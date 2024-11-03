@@ -1,8 +1,8 @@
 from decimal import Decimal
 
+from catalog.models import Price, Product, Seller
 from django.http import HttpRequest
 
-from catalog.models import Price, Product, Seller
 from website import settings
 
 
