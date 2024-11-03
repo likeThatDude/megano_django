@@ -116,7 +116,7 @@
                                     </strong>
                                     <div class="Card-description">
                                         <div class="Card-cost">
-                                            <span class="Card-price">{{ product.price }}$ </span>
+                                            <span class="Card-price">{{ product.price|floatformat:2 }}$ </span>
                                         </div>
                                         <div class="Card-category">{{ product.category }}
                                         </div>
