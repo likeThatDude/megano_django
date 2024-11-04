@@ -23,7 +23,7 @@ def get_item(dictionary: dict, key: str) -> str:
 
 
 @register.filter
-def get_spec(specifications: QuerySet, spec_name:str) -> str:
+def get_spec(specifications: QuerySet, spec_name: str) -> str:
     """
     Фильтр для поиска значения спецификации по имени в QuerySet.
 

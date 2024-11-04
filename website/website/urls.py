@@ -36,9 +36,9 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("comparison/", include("comparison.urls")),
     # API
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path("api/v1/", include('review.urls')),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/v1/", include("review.urls")),
     path("api/v1/", include("viewed.urls")),
 ] + debug_toolbar_urls()
 

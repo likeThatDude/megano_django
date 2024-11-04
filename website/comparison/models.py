@@ -21,6 +21,7 @@ class Comparison(models.Model):
         unique_together (tuple): Ограничение, гарантирующее уникальность каждой комбинации
         пользователя и товара в списке сравнения.
     """
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), db_index=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_("Comparison product"), db_index=True)
 

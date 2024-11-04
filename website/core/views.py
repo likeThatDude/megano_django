@@ -1,5 +1,3 @@
-from django.views.generic import TemplateView
-
 from catalog.models import Category
 from django.core.cache import cache
 from django.db.models import Count
@@ -8,6 +6,7 @@ from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.generic import TemplateView
 
 from website.settings import BANNERS_KEY
 from website.settings import CATEGORY_CASHING_TIME
@@ -50,10 +49,10 @@ class IndexView(TemplateView):
         random_banners = cache.get(BANNERS_KEY)
         if random_banners is None:
             random_banners = (
-                Banner.objects.select_related('product')
+                Banner.objects.select_related("product")
                 .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
                 .order_by("?")[:3]
-                .only('product__name', 'product__preview', 'text')
+                .only("product__name", "product__preview", "text")
             )
             cache.set(BANNERS_KEY, random_banners, timeout=3)
 

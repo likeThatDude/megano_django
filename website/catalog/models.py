@@ -89,9 +89,7 @@ class Product(models.Model):
         related_name="products",
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
-    limited_edition = models.BooleanField(
-        default=False, verbose_name=_("Limited edition")
-    )
+    limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
     views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
     preview = models.ImageField(
         null=True,
@@ -202,6 +200,7 @@ class Payment(models.Model):
         verbose_name = _("Payment")
         verbose_name_plural = _("Payments")
 
+
 class Delivery(models.Model):
     """
     Модель для представления способов доставки.
@@ -247,6 +246,7 @@ class Delivery(models.Model):
     class Meta:
         verbose_name = _("Delivery")
         verbose_name_plural = _("Deliveries")
+
 
 class Price(models.Model):
     """
