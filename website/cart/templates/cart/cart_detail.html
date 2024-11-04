@@ -38,28 +38,14 @@
                             <div class="ProductCard-photo">
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
                             </div>
-                            <div class="ProductCard-picts">
-                                {% with images=info_product.product.images.all %}
-                                    {% if images %}
-                                        {% for img in images %}
-                                            <a class="ProductCard-pict ProductCard-pict_ACTIVE"
-                                               href="{% static 'assets/img/content/home/bigGoods.png' %}">
-                                                <img src="{% static 'assets/img/content/home/bigGoods.png' %}"
-                                                     alt="bigGoods.png"/>
-                                            </a>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endwith %}
-                            </div>
-                        </div>
-                        <div class="ProductCard-desc">
+                            <div class="ProductCard-desc">
                             <div class="ProductCard-header">
                                 <h2 class="ProductCard-title"> {{ info_product.product.name }}
                                 </h2>
                                 <div class="ProductCard-info">
                                     <div class="ProductCard-cost">
                                         <div class="ProductCard-price">
-                                            ${{ info_product.total_price }} $
+                                            {{ info_product.total_price }} $
                                         </div>
                                     </div>
                                 </div>
@@ -75,10 +61,10 @@
                                     </div>
                                 </div>
                                 <div class="ProductCard-cartElement">
-                                    <a class="btn btn_primary" href="#modal_open">
+                                    <a class="btn btn_primary" href="{% url 'cart:delete_product' product_id=info_product.product.pk %}">
                                         <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                              alt="cart_white.svg"/>
-                                        <span class="btn-content">Купить</span>
+                                        <span class="btn-content">Удалить</span>
                                     </a>
                                 </div>
                                 <div id="modal_open" class="my_modal">
@@ -106,6 +92,8 @@
                                 </div>
                             </div>
                         </div>
+                        </div>
+
                     </div>
                     {% endfor %}
                     {% else %}
@@ -121,6 +109,7 @@
 {% endblock %}
 
 {% block script %}
+    <script src="{% static 'cart/js/remove_product_cart.js' %}"></script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

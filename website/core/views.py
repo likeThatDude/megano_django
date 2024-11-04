@@ -1,14 +1,17 @@
-from django.contrib.auth.decorators import login_required
+from catalog.models import Category
 from django.core.cache import cache
-from django.db.models import Count, Q
-from django.http import HttpRequest, HttpResponse
+from django.db.models import Count
+from django.db.models import Q
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from website.settings import BANNERS_KEY
+from website.settings import CATEGORY_CASHING_TIME
+from website.settings import CATEGORY_KEY
 
-from catalog.models import Category
 from .models import Banner
-from website.settings import CATEGORY_CASHING_TIME, CATEGORY_KEY, BANNERS_KEY
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -16,9 +19,7 @@ def index(request: HttpRequest) -> HttpResponse:
     if categories is None:
         categories = (
             Category.objects.filter(archived=False)
-            .annotate(
-                products_count=Count("products", filter=Q(products__archived=False))
-            )
+            .annotate(products_count=Count("products", filter=Q(products__archived=False)))
             .filter(products_count__gt=0)
         )
 
@@ -26,11 +27,9 @@ def index(request: HttpRequest) -> HttpResponse:
 
     random_banners = cache.get(BANNERS_KEY)
     if random_banners is None:
-        random_banners = (
-            Banner.objects
-            .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
-            .order_by('?')[:3]
-        )
+        random_banners = Banner.objects.filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date())).order_by(
+            "?"
+        )[:3]
         cache.set(BANNERS_KEY, random_banners, timeout=3)
 
     context = {
@@ -38,6 +37,7 @@ def index(request: HttpRequest) -> HttpResponse:
         "banners": random_banners,
     }
     return render(request, "core/main_page.html", context=context)
+
 
 # def about_view(request: HttpRequest):
 #     return render(request, "core_1/about.html")

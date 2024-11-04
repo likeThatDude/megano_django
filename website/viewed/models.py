@@ -18,9 +18,7 @@ class Viewed(models.Model):
         verbose_name = _("Viewed")
         verbose_name_plural = _("Viewed")
         ordering = ("-created_at",)
-        constraints = [
-            UniqueConstraint(fields=["user", "product"], name="user_product_unique")
-        ]
+        constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

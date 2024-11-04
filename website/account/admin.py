@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .forms import CustomUserChangeForm, CustomUserCreationForm
-from .models import CustomUser, Profile
+from .forms import CustomUserChangeForm
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+from .models import Profile
 
 
 class ProfileInline(admin.StackedInline):
@@ -96,6 +98,4 @@ class CustomUserAdmin(UserAdmin):
     )
 
     def get_queryset(self, request):
-        return CustomUser.objects.select_related("profile").prefetch_related(
-            "groups", "user_permissions"
-        )
+        return CustomUser.objects.select_related("profile").prefetch_related("groups", "user_permissions")

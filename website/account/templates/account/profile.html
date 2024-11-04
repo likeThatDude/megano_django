@@ -21,78 +21,145 @@
 
 
 {% block body %}
-    <div class="Section-content">
-        <div class="Profile">
-            <form class="form Profile-form" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="row-block">
-                        <div class="form-group">
-                            <label class="form-label" for="photo">
-                                Аватар
-                            </label>
-                            <div class="Profile-avatar Profile-avatar_noimg">
-                                <div class="Profile-avatar">
-                                    {% if profile.photo %}
-                                        <img src="{{ profile.photo.url }}" alt="#.png"/>
-                                    {% endif %}
-                                </div>
+<div class="Middle Middle_top">
+    <div class="Section Section_column Section_columnLeft">
+        <div class="wrap">
+            <div class="Section-column">
+                <div class="Section-columnSection">
+                    <header class="Section-header">
+                        <strong class="Section-title">Навигация
+                        </strong>
+                    </header>
+                <div class="Section-columnContent">
+                    <div class="NavigateProfile">
+                        <ul class="menu menu_vt">
+                            <li class="menu-item">
+                                <a class="menu-link" href="{% url 'account:personal-cabinet' %}">Личный кабинет</a>
+                            </li>
+                            <li class="menu-item_ACTIVE menu-item">
+                                <a class="menu-link" href="{% url 'account:profile' %}">Профиль</a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="historyorder.html">История заказов</a>
+                            </li>
 
-                            </div>
-                            <div>
-                                <input id="photo" name="photo" type="file" data-validate="onlyImgAvatar"/>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="form-label" for="last_name">
-                                Фамилия
-                            </label>
-                            <input id="last_name" type="text" name="last_name" value="{{ profile.last_name }}">
-                            <label class="form-label" for="first_name">
-                                Имя
-                            </label>
-                            <input id="first_name" type="text" name="first_name" value="{{ profile.first_name }}">
-                            <label class="form-label" for="patronymic">
-                                Отчество
-                            </label>
-                            <input id="patronymic" type="text" name="patronymic" value="{{ profile.patronymic }}">
-                        </div>
-
-                    </div>
-                    <div class="row-block">
-                        <div class="form-group">
-                            <label class="form-label" for="phone">Телефон
-                            </label>
-                            <input class="form-input" id="phone" name="phone" type="text" value="{{ profile.phone }}" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="email">E-mail
-                            </label>
-                            <input class="form-input" id="email" name="email" type="email" value="{{ profile.user.email }}" data-validate="require" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="password">Пароль
-                            </label>
-                            <input class="form-input" id="password" name="password" type="password" placeholder="Тут можно изменить пароль" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="passwordReply">Подтверждение пароля
-                            </label>
-                            <input class="form-input" id="passwordReply" name="passwordReply" type="password" placeholder="Введите пароль повторно" />
-                        </div>
-                        <div class="form-group">
-                            <div class="Profile-btn">
-                                <button class="btn btn_success" type="submit">Сохранить
-                                </button>
-                            </div>
-                            <div class="Profile-success">Профиль успешно сохранен
-                            </div>
-                        </div>
+                        </ul>
                     </div>
                 </div>
-            </form>
+            </div>
+        </div>
+            <div class="Section-content">
+                <div class="Profile">
+                    <form class="form Profile-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="row-block">
+
+                                <div class="form-group">
+                                    <label class="form-label" for="photo">Аватар</label>
+                                    <div class="Profile-avatar Profile-avatar_noimg">
+                                        {% if profile_form.instance.photo %}
+                                            <img src="{{ profile_form.instance.photo.url }}" alt="profile photo"/>
+
+                                        {% else %}
+                                            <label class="Profile-fileLabel" for="photo">
+                                                <img src="{% static 'assets/img/icons/upload.png' %}" alt="#.png" />
+                                                Загрузить фото
+                                            </label>
+
+                                        {% endif %}
+                                        <input class="Profile-file form-input" id="photo" name="photo" type="file"
+                                               data-validate="onlyImgAvatar" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="last_name">Фамилия</label>
+                                    <input class="form-input" id="last_name" type="text" name="last_name"
+                                           value="{{ profile_form.instance.last_name }}">
+                                    {% for error in profile_form.last_name.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+
+                                    <label class="form-label" for="first_name">Имя</label>
+                                    <input class="form-input" id="first_name" type="text" name="first_name"
+                                           value="{{ profile_form.instance.first_name }}">
+                                    {% for error in profile_form.first_name.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+
+                                    <label class="form-label" for="patronymic">Отчество</label>
+                                    <input class="form-input" id="patronymic" type="text" name="patronymic"
+                                           value="{{ profile_form.instance.patronymic }}">
+                                    {% for error in profile_form.patronymic.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+
+                            <div class="row-block">
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Телефон</label>
+                                    <input class="form-input" id="phone" name="phone" type="text"
+                                           value="{{ profile_form.instance.phone }}"
+                                           placeholder="+7 (___) ___-__-__"/>
+                                    {% for error in profile_form.phone.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="email">E-mail</label>
+                                    <input class="form-input" id="email" name="email" type="email"
+                                           value="{{ password_form.instance.user.email }}"
+                                           data-validate="require" />
+                                    {% for error in password_form.email.errors %}
+                                        <div class="error-message">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="old_password">Текущий пароль</label>
+                                    <input class="form-input" id="old_password" name="old_password" type="password"
+                                           placeholder="Старый пароль" />
+                                    {% for error in password_form.old_password.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="new_password1">Новый пароль</label>
+                                    <input class="form-input" id="new_password1" name="new_password1" type="password"
+                                           placeholder="Введите новый пароль" />
+                                    {% for error in password_form.new_password1.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="new_password2">Подтверждение пароля</label>
+                                    <input class="form-input" id="new_password2" name="new_password2" type="password"
+                                           placeholder="Введите новый пароль повторно" />
+                                    {% for error in password_form.new_password2.errors %}
+                                        <div class="error-input">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="Profile-btn">
+                                        <button class="btn btn_success" type="submit">Сохранить
+                                        </button>
+                                    </div>
+                                    {% for message in messages %}
+                                        <div class="Profile-success">{{ message }}</div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
     {% block script %}
             <!--+Middle-->
@@ -106,6 +173,11 @@
         <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
         <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
         <script src="{% static 'assets/js/scripts.js' %}"></script>
+        <script>
+            $(document).ready(function(){
+                $('#phone').mask('+7 (999) 999-99-99');
+            });
+        </script>
     {% endblock %}
 
 {% endblock %}
