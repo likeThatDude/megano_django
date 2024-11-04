@@ -5,14 +5,20 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-from .models import (Category, NameSpecification, Price, Product, Review,
-                     Seller, Specification, Tag)
+from .models import Category
+from .models import Delivery
+from .models import NameSpecification
+from .models import Payment
+from .models import Price
+from .models import Product
+from .models import Review
+from .models import Seller
+from .models import Specification
+from .models import Tag
 
 
 @admin.action(description="Delete cache")
-def delete_cache(
-    model_admin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet
-):
+def delete_cache(model_admin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     cache.delete(CATEGORY_KEY)
 
 
@@ -56,7 +62,9 @@ class SellerProductsInline(admin.TabularInline):
 
 @admin.register(Seller)
 class SellerAdmin(admin.ModelAdmin):
-    inlines = [SellerProductsInline,]
+    inlines = [
+        SellerProductsInline,
+    ]
     list_display = (
         "id",
         "name",
@@ -71,8 +79,11 @@ class SellerAdmin(admin.ModelAdmin):
         "id",
         "name",
     )
-    ordering = ("name", "id", )
-    search_fields = ("name", )
+    ordering = (
+        "name",
+        "id",
+    )
+    search_fields = ("name",)
 
 
 @admin.register(Price)
@@ -90,7 +101,11 @@ class PriceAdmin(admin.ModelAdmin):
         "seller",
         "product",
     )
-    search_fields = ("id", "seller", "product", )
+    search_fields = (
+        "id",
+        "seller",
+        "product",
+    )
 
 
 @admin.register(Review)
@@ -130,6 +145,20 @@ class NameSpecificationAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-    list_display_links = ('name', )
-    ordering = ('name', )
+    list_display = ("name",)
+    list_display_links = ("name",)
+    ordering = ("name",)
+
+
+@admin.register(Delivery)
+class DeliveryAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    list_display_links = ("name",)
+    ordering = ("name",)
+
+
+@admin.register(Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    list_display_links = ("name",)
+    ordering = ("name",)

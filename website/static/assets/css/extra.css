@@ -2388,6 +2388,16 @@ a.Cart-title {
     flex-direction: column;
 }
 
+.non-auth-block p  {
+    text-align: center;
+    width: 100%;
+    font-size: 1.4em;
+}
+
+.non-auth-block>p:not(:last-child) {
+    margin-bottom: 0;
+}
+
 .non-auth-block-buttons {
     display: flex;
     flex-direction: column;
@@ -4514,6 +4524,7 @@ a.Cart-title {
     letter-spacing: 1px;
     display: inline-block;
     line-height: 1em;
+    margin-bottom: 20px;
 }
 
 .ProductCard-priceOld {
@@ -5415,6 +5426,30 @@ input[type="submit"] {
 .Section-title + .Section-control {
     padding-left: 17px;
 }
+
+
+.download-reviews {
+    width: 130px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #0063d1;
+    color: white;
+    border: none;
+    position: absolute;
+    left: 50%;
+    top: -50px;
+    transform: translateX(-50%);
+}
+
+.download-reviews:hover {
+    background-color: #003883;
+}
+
+.download-reviews:active {
+    background-color: #003883;
+    box-shadow: inset 0 0 0 2px black;
+}
+
 
 .Section-desc {
     color: #e98338;
