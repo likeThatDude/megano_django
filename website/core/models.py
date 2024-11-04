@@ -24,7 +24,5 @@ class Banner(models.Model):
         verbose_name=_("Product"),
     )
     deadline_data = models.DateField(verbose_name=_("Deadline Date"))
-    created_date = models.DateTimeField(
-        auto_now_add=True, verbose_name=_("Created_date")
-    )
+    created_date = models.DateTimeField(auto_now_add=True, verbose_name=_("Created_date"))
     active = models.BooleanField(verbose_name=_("Active"), default=True)

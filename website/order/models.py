@@ -17,6 +17,7 @@ class Order(models.Model):
     created_at: дата, когда создан заказ
 
     """
+
     PENDING = "Pending"
     PROCESSING = "Processing"
     SHIPPED = "Shipped"
@@ -24,58 +25,29 @@ class Order(models.Model):
     CANCELLED = "Cancelled"
 
     STATUS_CHOICES = {
-        PENDING: _("Pending"),        # Заказ ожидает обработки
+        PENDING: _("Pending"),  # Заказ ожидает обработки
         PROCESSING: _("Processing"),  # Заказ в процессе выполнения
-        SHIPPED: _("Shipped"),        # Заказ отправлен
-        DELIVERED: _("Delivered"),    # Заказ доставлен
-        CANCELLED: _("Cancelled"),    # Заказ отменен
+        SHIPPED: _("Shipped"),  # Заказ отправлен
+        DELIVERED: _("Delivered"),  # Заказ доставлен
+        CANCELLED: _("Cancelled"),  # Заказ отменен
     }
     PAYMENT_METHODS = (
-        ("BANKNOTES", _("Banknotes")),    # Оплата наличными
-        ("CARD", _("Bank card")),         # Оплата картой
+        ("BANKNOTES", _("Banknotes")),  # Оплата наличными
+        ("CARD", _("Bank card")),  # Оплата картой
         ("ONLINE", _("Online payment")),  # Онлайн оплата (электронный кошелек, СБП)
     )
     DELIVERY_METHOD = (
-        ("COURIER", _("Courier")),           # Доставка курьером
-        ("PICKUP", _("Pickup")),             # Самовывоз
-        ("POST", _("Postal service")),       # Доставка почтой
+        ("COURIER", _("Courier")),  # Доставка курьером
+        ("PICKUP", _("Pickup")),  # Самовывоз
+        ("POST", _("Postal service")),  # Доставка почтой
     )
 
-    profile = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-        related_name="orders",
-        verbose_name=_("Profile")
-    )
-    delivery_city = models.CharField(
-        max_length=255,
-        verbose_name=_("Delivery city")
-    )
-    delivery_address = models.TextField(
-        max_length=500,
-        verbose_name=_("Delivery address")
-    )
-    comment = models.TextField(
-        max_length=1000,
-        verbose_name=_("Comment")
-    )
-    status = models.CharField(
-        max_length=100,
-        choices=STATUS_CHOICES,
-        default=PENDING
-    )
-    payment_method = models.CharField(
-        max_length=100,
-        choices=PAYMENT_METHODS
-    )
-    delivery_method = models.CharField(
-        max_length=100,
-        choices=DELIVERY_METHOD
-    )
-    archived = models.BooleanField(
-        default=False,
-        verbose_name=_("Archived")
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="orders", verbose_name=_("Profile"))
+    delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
+    delivery_address = models.TextField(max_length=500, verbose_name=_("Delivery address"))
+    comment = models.TextField(max_length=1000, verbose_name=_("Comment"))
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=PENDING)
+    payment_method = models.CharField(max_length=100, choices=PAYMENT_METHODS)
+    delivery_method = models.CharField(max_length=100, choices=DELIVERY_METHOD)
+    archived = models.BooleanField(default=False, verbose_name=_("Archived"))
+    created_at = models.DateTimeField(auto_now_add=True)

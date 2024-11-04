@@ -1,8 +1,12 @@
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from catalog.models import Price
+from catalog.models import Product
+from django.http import HttpRequest
+from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect
-from django.views.generic import FormView, TemplateView, View
-
-from catalog.models import Price, Product
+from django.views.generic import FormView
+from django.views.generic import TemplateView
+from django.views.generic import View
 
 from .cart import Cart
 
@@ -65,9 +69,7 @@ class AddProductInCart(View):
         -
     """
 
-    def post(
-        self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1
-    ):
+    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1):
         """
         Выполняет POST-запрос для добавления товара в корзину.
 
