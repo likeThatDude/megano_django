@@ -108,7 +108,6 @@ class ProductDetailView(DetailView):
             .filter(pk=pk)
         )
 
-
         return product_data
 
     def get_object(self, queryset=None):
@@ -127,7 +126,7 @@ class ProductDetailView(DetailView):
             Product: Экземпляр модели Product, соответствующий указанному первичному ключу.
         """
         pk = self.kwargs.get("pk")
-        cache_key = f'Product_{pk}'
+        cache_key = f"Product_{pk}"
         product_data = cache.get(cache_key)
         if product_data is None:
             product_data = super().get_object(queryset)
@@ -147,7 +146,7 @@ class ProductDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get("pk")
         sellers_list = cache.get_or_set(
-            f'Seller-{pk}',
+            f"Seller-{pk}",
             Seller.objects.prefetch_related(
                 Prefetch(
                     "price",
@@ -160,8 +159,7 @@ class ProductDetailView(DetailView):
             )
             .only("name", "price")
             .filter(price__product__pk=1)
-            .order_by("price__price")
-            ,
+            .order_by("price__price"),
             timeout=240,
         )
 

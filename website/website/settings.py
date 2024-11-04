@@ -203,3 +203,9 @@ REST_FRAMEWORK = {
         "anon": "5/m",  # 5 запросов за 30 секунд для анонимных пользователей
     },
 }
+
+
+# Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
+# Позже перенесется в ENV
+user_comparison_key = "user_comparison_"
+anonymous_comparison_key = "anonymous_user_comparison_"
