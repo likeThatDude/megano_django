@@ -99,7 +99,7 @@ class Product(models.Model):
     limited_edition = models.BooleanField(
         default=False, verbose_name=_("Limited edition")
     )
-    view = models.BooleanField(default=False, verbose_name=_("View"))
+    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
     preview = models.ImageField(
         null=True,
         blank=True,
