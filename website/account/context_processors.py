@@ -1,6 +1,5 @@
-from django.http import HttpRequest
-
 from account.models import CustomUser
+from django.http import HttpRequest
 
 
 def user_is_auth(request: HttpRequest):

@@ -1,9 +1,10 @@
+from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils import timezone
-from django.contrib import admin
-from . import models
 from django.utils.translation import gettext_lazy as _
+
+from . import models
 
 
 @admin.action(description=_('Inactive old banners'))
