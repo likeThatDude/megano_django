@@ -98,7 +98,7 @@ class ProductDetailView(DetailView):
                 "name",
                 "tags",
                 "description",
-                "view",
+                "views",
                 "manufacture",
                 "product_type",
                 "specifications",

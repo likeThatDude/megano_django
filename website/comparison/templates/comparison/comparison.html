@@ -29,7 +29,9 @@
                                                         {{ comparison.product.name|truncatechars:40 }}</a>
                                                 </h2>
                                             {% else %}
-                                                <h2 class="ProductCard-title">{{ comparison.name|truncatechars:40 }}
+                                                <h2 class="ProductCard-title">
+                                                    <a href="{% url 'catalog:product_detail' pk=comparison.pk %}">
+                                                        {{ comparison.name|truncatechars:40 }}</a>
                                                 </h2>
                                             {% endif %}
                                             <div class="ProductCard-look">
