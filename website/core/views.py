@@ -27,17 +27,15 @@ def index(request: HttpRequest) -> HttpResponse:
 
     random_banners = cache.get(BANNERS_KEY)
     if random_banners is None:
-        random_banners = Banner.objects.filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date())).order_by(
-            "?"
-        )[:3]
+        random_banners = (Banner.objects.select_related('product').filter(
+            Q(active=True) & Q(deadline_data__gt=timezone.now().date())).order_by("?")[:3]
+                          .only('product__name', 'product__preview', 'text'))
         cache.set(BANNERS_KEY, random_banners, timeout=3)
-
     context = {
         "categories": categories,
         "banners": random_banners,
     }
     return render(request, "core/main_page.html", context=context)
-
 
 # def about_view(request: HttpRequest):
 #     return render(request, "core_1/about.html")
