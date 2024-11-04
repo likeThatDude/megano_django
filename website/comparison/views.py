@@ -1,12 +1,10 @@
-from itertools import product
-
-from django.http import HttpResponseRedirect, HttpRequest
+from catalog.models import Product
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, DetailView, DeleteView, CreateView
+from django.views.generic import DeleteView, TemplateView
 
-from catalog.models import Product
 from . import utils
 from .models import Comparison
 from .utils import create_categorization

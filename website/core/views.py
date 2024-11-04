@@ -1,14 +1,13 @@
-from django.contrib.auth.decorators import login_required
+from catalog.models import Category
 from django.core.cache import cache
 from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from website.settings import BANNERS_KEY, CATEGORY_CASHING_TIME, CATEGORY_KEY
 
-from catalog.models import Category
 from .models import Banner
-from website.settings import CATEGORY_CASHING_TIME, CATEGORY_KEY, BANNERS_KEY
 
 
 def index(request: HttpRequest) -> HttpResponse:
