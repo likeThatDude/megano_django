@@ -1,12 +1,13 @@
+from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils import timezone
-from django.contrib import admin
-from . import models
 from django.utils.translation import gettext_lazy as _
 
+from . import models
 
-@admin.action(description=_('Inactive old banners'))
+
+@admin.action(description=_("Inactive old banners"))
 def archive_old_banners(model_admin: admin.ModelAdmin, request: HttpRequest, queryset: QuerySet):
     """
     Устанавливает значение active в False для всех баннеров,
@@ -22,9 +23,9 @@ def archive_old_banners(model_admin: admin.ModelAdmin, request: HttpRequest, que
 
 @admin.register(models.Banner)
 class BannerAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'product', 'deadline_data', 'active')
-    list_display_links = ('pk', 'product', 'deadline_data', 'active')
-    ordering = ('pk', 'active')
+    list_display = ("pk", "product", "deadline_data", "active")
+    list_display_links = ("pk", "product", "deadline_data", "active")
+    ordering = ("pk", "active")
 
     actions = [
         archive_old_banners,

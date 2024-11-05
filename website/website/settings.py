@@ -54,11 +54,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # other lib
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
+    "django_celery_results",
 
     # Django apps
     "account.apps.AccountConfig",
@@ -68,10 +68,8 @@ INSTALLED_APPS = [
     "order.apps.OrderConfig",
     "viewed.apps.ViewedConfig",
     "comparison.apps.ComparisonConfig",
-
     # DRF API
-    "review.apps.ReviewConfig"
-
+    "review.apps.ReviewConfig",
 ]
 
 MIDDLEWARE = [
@@ -98,7 +96,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-
                 "account.context_processors.user_is_auth",
             ],
         },
@@ -173,16 +170,16 @@ LOGOUT_URL = reverse_lazy("account:logout")
 LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.yandex.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 
-CART_SESSION_ID = 'cart'
+CART_SESSION_ID = "cart"
 
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # С этой настройкой вылетает каждый раз при перезагрузке страницы
 # SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
@@ -194,12 +191,22 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    'PAGE_SIZE': 10,
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+    "PAGE_SIZE": 10,
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_RATES": {
+        "user": "50/m",  # 50 запросов за 30 секунд для зарегистрированных
+        "anon": "5/m",  # 5 запросов за 30 секунд для анонимных пользователей
+    },
 }
+
+
+# Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
+# Позже перенесется в ENV
+user_comparison_key = "user_comparison_"
+anonymous_comparison_key = "anonymous_user_comparison_"

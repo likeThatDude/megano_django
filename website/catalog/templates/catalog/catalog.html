@@ -122,6 +122,7 @@
                         </div>
                     </div>
                     <div class="Cards">
+                        {% csrf_token %}
                         {% for product in products %}
                             <div class="Card" {% if forloop.counter > 4 %} hide_md {% endif %}
                                              {% if forloop.counter > 6 %} hide_1450 {% endif %}>
@@ -139,7 +140,7 @@
                                         <div class="Card-category">{{ product.category }}
                                         </div>
                                         <div class="Card-hover">
-                                            <a class="Card-btn" href="#">
+                                            <a class="Card-btn" href="{% url 'cart:add_product' product_id=product.pk price_id=product.price_pk %}">
                                                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
 
                                             </a>
@@ -171,4 +172,15 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
+    <script src="{% static 'cart/js/add_product_cart.js' %}"></script>
 {% endblock %}

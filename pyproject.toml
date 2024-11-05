@@ -1,0 +1,26 @@
+[tool.black]
+line-length = 120
+target-version = ["py312"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.venv
+    | venv
+    | \.git
+    | \.mypy_cache
+    | migrations
+)/
+'''
+#skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_third_party = ["django", "rest_framework"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+known_first_party = ["djangowebsite"]
+skip_gitignore = true
+default_section = "THIRDPARTY"
+combine_as_imports = true
+force_single_line = true
+skip = ["migrations"]
