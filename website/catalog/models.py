@@ -4,8 +4,10 @@ from django.utils.translation import gettext_lazy as _
 
 from website import settings
 
-from .utils import (category_icon_directory_path, product_image_directory_path,
-                    product_images_directory_path, seller_image_directory_path)
+from .utils import category_icon_directory_path
+from .utils import product_image_directory_path
+from .utils import product_images_directory_path
+from .utils import seller_image_directory_path
 
 
 class Category(models.Model):
@@ -22,9 +24,7 @@ class Category(models.Model):
         ordering = ("name",)
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
-    icon = models.FileField(
-        upload_to=category_icon_directory_path, verbose_name=_("Icon")
-    )
+    icon = models.FileField(upload_to=category_icon_directory_path, verbose_name=_("Icon"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     parent_category = models.ForeignKey(
         "self",
@@ -71,9 +71,7 @@ class Product(models.Model):
     """
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
-    description = models.TextField(
-        null=True, blank=True, db_index=True, verbose_name=_("Description")
-    )
+    description = models.TextField(null=True, blank=True, db_index=True, verbose_name=_("Description"))
     product_type = models.CharField(
         max_length=100,
         db_index=True,
@@ -81,9 +79,7 @@ class Product(models.Model):
         null=False,
         blank=False,
     )
-    manufacture = models.CharField(
-        max_length=100, db_index=True, verbose_name=_("Manufacture")
-    )
+    manufacture = models.CharField(max_length=100, db_index=True, verbose_name=_("Manufacture"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     category = models.ForeignKey(
         Category,
@@ -95,7 +91,7 @@ class Product(models.Model):
     limited_edition = models.BooleanField(
         default=False, verbose_name=_("Limited edition")
     )
-    view = models.BooleanField(default=False, verbose_name=_("View"))
+    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
     preview = models.ImageField(
         null=True,
         blank=True,
@@ -121,9 +117,7 @@ class ProductImage(models.Model):
         verbose_name=_("PK product"),
         related_name="images",
     )
-    image = models.ImageField(
-        upload_to=product_images_directory_path, verbose_name=_("Image product")
-    )
+    image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
 
 
 class Seller(models.Model):
@@ -158,11 +152,93 @@ class Seller(models.Model):
         related_name="sellers",
         verbose_name=_("Products"),
     )
+    delivery_methods = ManyToManyField("Delivery", verbose_name=_("Delivery methods"))
+    payment_methods = ManyToManyField("Payment", verbose_name=_("Payment methods"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
     def __str__(self) -> str:
         return f"Seller(id={self.pk}, name={self.name!r})"
+
+
+class Payment(models.Model):
+    """
+    Модель для представления способов оплаты.
+
+    Attributes:
+        CASH (str): Константа, представляющая наличный расчет ('CH').
+        CARD_ONLINE (str): Константа, представляющая оплату картой онлайн ('CO').
+        CARD_COURIER (str): Константа, представляющая оплату картой курьеру ('CC').
+
+        PAYMENT_CHOICES (tuple): Кортеж с возможными вариантами оплаты:
+            - 'CH': Наличными
+            - 'CO': Картой онлайн
+            - 'CC': Картой курьеру
+
+        name (str): Поле для хранения выбранного способа оплаты. Доступные варианты
+        определяются PAYMENT_CHOICES. По умолчанию используется наличный расчет.
+
+    Methods:
+        __str__(): Возвращает строковое представление выбранного способа оплаты.
+    """
+
+    CASH = "CH"
+    CARD_ONLINE = "CO"
+    CARD_COURIER = "CC"
+
+    PAYMENT_CHOICES = (
+        (CASH, _("Наличными")),
+        (CARD_ONLINE, "Картой онлайн"),
+        (CARD_COURIER, "Картой курьеру"),
+    )
+
+    name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"))
+
+    def __str__(self):
+        return str(dict(self.PAYMENT_CHOICES).get(self.name))
+
+
+class Delivery(models.Model):
+    """
+    Модель для представления способов доставки.
+
+    Attributes:
+        PICKUP_POINT (str): Константа, представляющая доставку в пункт выдачи ('PP').
+        COURIER (str): Константа, представляющая курьерскую доставку ('CR').
+        LOCKER (str): Константа, представляющая доставку в постамат ('LK').
+        SELLER (str): Константа, представляющая доставку силами продавца ('SL').
+
+        DELIVERY_CHOICES (list): Список с возможными вариантами доставки:
+            - 'PP': В пункт выдачи
+            - 'CR': Курьером
+            - 'LK': В постамат
+            - 'SL': Силами продавца
+
+        name (str): Поле для хранения выбранного способа доставки. Доступные варианты
+        определяются DELIVERY_CHOICES. По умолчанию используется доставка в пункт выдачи.
+
+    Methods:
+        __str__(): Возвращает строковое представление выбранного способа доставки.
+    """
+
+    PICKUP_POINT = "PP"
+    COURIER = "CR"
+    LOCKER = "LK"
+    SELLER = "SL"
+
+    DELIVERY_CHOICES = [
+        (PICKUP_POINT, _("В пункт выдачи")),
+        (COURIER, _("Курьером")),
+        (LOCKER, _("В постамат")),
+        (SELLER, _("Силами продавца")),
+    ]
+
+    name = models.CharField(
+        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method")
+    )
+
+    def __str__(self):
+        return str(dict(self.DELIVERY_CHOICES).get(self.name))
 
 
 class Price(models.Model):
@@ -191,18 +267,14 @@ class Price(models.Model):
         db_index=True,
     )
     quantity = models.PositiveIntegerField(default=0, verbose_name=_("Quantity"))
-    price = models.DecimalField(
-        default=0, max_digits=10, decimal_places=2, verbose_name=_("Price")
-    )
-    created_at = models.DateField(
-        auto_now_add=True, verbose_name=_("Created at"), null=True
-    )
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
+    created_at = models.DateField(auto_now_add=True, verbose_name=_("Created at"), null=True)
 
     class Meta:
         unique_together = ("product", "seller")
 
     def __str__(self):
-        return f"Price(product={self.product}, seller={self.seller})"
+        return f"Price(product={self.product}, seller={self.seller}), price={self.price}"
 
 
 class Review(models.Model):
@@ -220,9 +292,7 @@ class Review(models.Model):
         verbose_name=_("Product"),
         related_name="review",
     )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User")
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"))
     text = models.TextField(verbose_name=_("Text"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     update_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
@@ -238,9 +308,10 @@ class NameSpecification(models.Model):
     name: название характеристики
     """
 
-    name = models.CharField(
-        max_length=100, db_index=True, verbose_name=_("Name specification")
-    )
+    class Meta:
+        ordering = ("name",)
+
+    name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
     def __str__(self) -> str:
         return self.name

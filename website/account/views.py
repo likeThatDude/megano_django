@@ -1,21 +1,22 @@
-from django.contrib.auth import (
-    authenticate,
-    login,
-    update_session_auth_hash,
-)
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView
+from django.views.generic import CreateView
+from django.views.generic import DetailView
+from django.views.generic import UpdateView
 
-from .forms import (
-    CustomUserCreationForm,
-    ProfileChangeForm,
-    CustomUserChangeForm,
-)
+from .forms import CustomUserChangeForm
+from .forms import CustomUserCreationForm
+from .forms import ProfileChangeForm
 from .models import Profile
 
 
@@ -56,6 +57,7 @@ class ProfileView(LoginRequiredMixin, View):
     Этот класс позволяет пользователю изменять свои данные профиля и пароль.
     Доступ к этому представлению возможен только для аутентифицированных пользователей.
     """
+
     template_name = "account/profile.html"
 
     def get(self, request, *args, **kwargs):
@@ -67,8 +69,8 @@ class ProfileView(LoginRequiredMixin, View):
         profile_form = ProfileChangeForm(instance=request.user.profile)
         password_form = CustomUserChangeForm(instance=request.user)
         context = {
-            'profile_form': profile_form,
-            'password_form': password_form,
+            "profile_form": profile_form,
+            "password_form": password_form,
         }
         return render(request, self.template_name, context)
 
@@ -92,8 +94,8 @@ class ProfileView(LoginRequiredMixin, View):
             return redirect(self.get_success_url())
 
         context = {
-            'profile_form': profile_form,
-            'password_form': password_form,
+            "profile_form": profile_form,
+            "password_form": password_form,
         }
         return render(request, self.template_name, context)
 
@@ -109,6 +111,7 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
     на все заказы профиля пользователя
 
     """
+
     template_name = "account/personal_cabinet.html"
     context_object_name = "profile"
     model = Profile
@@ -125,9 +128,9 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         # Передаем последний заказ текущего профиля
         profile_orders = profile.orders.all()
         context["profile"] = profile
-        context["last_order"] = profile_orders.order_by('-created_at').first()
+        context["last_order"] = profile_orders.order_by("-created_at").first()
         return context
 
     def get_object(self, queryset=None):
-        """ Возвращаем профиль пользователя """
+        """Возвращаем профиль пользователя"""
         return Profile.objects.get(user=self.request.user)

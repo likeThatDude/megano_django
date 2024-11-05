@@ -1,8 +1,10 @@
 from django import forms
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
 
-from .models import CustomUser, Profile
+from .models import CustomUser
+from .models import Profile
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -20,6 +22,7 @@ class CustomUserChangeForm(UserChangeForm):
     а также задать новый пароль. Она выполняет валидацию старого пароля
     и проверяет, что новый пароль соответствует требованиям безопасности.
     """
+
     old_password = forms.CharField(label="Old password", widget=forms.PasswordInput, required=False)
     new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput, required=False)
     new_password2 = forms.CharField(label="New password confirmation", widget=forms.PasswordInput, required=False)
@@ -55,14 +58,14 @@ class CustomUserChangeForm(UserChangeForm):
 
     def clean_new_password1(self):
         """
-       Проверяет новый пароль на соответствие требованиям безопасности.
-       Если новый пароль не соответствует требованиям, вызывается ошибка валидации.
+        Проверяет новый пароль на соответствие требованиям безопасности.
+        Если новый пароль не соответствует требованиям, вызывается ошибка валидации.
 
-       Returns:
-           str: Новый пароль, если он валиден.
-       Raises:
-           forms.ValidationError: Если новый пароль не соответствует требованиям.
-       """
+        Returns:
+            str: Новый пароль, если он валиден.
+        Raises:
+            forms.ValidationError: Если новый пароль не соответствует требованиям.
+        """
         new_password1 = self.cleaned_data.get("new_password1")
         if new_password1:
             validate_password(new_password1, self.instance)
@@ -118,7 +121,13 @@ class ProfileChangeForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ["first_name", "last_name", "patronymic", 'phone', 'photo',]
+        fields = [
+            "first_name",
+            "last_name",
+            "patronymic",
+            "phone",
+            "photo",
+        ]
 
     def clean_phone(self):
         """
@@ -131,10 +140,10 @@ class ProfileChangeForm(forms.ModelForm):
         Raises:
             forms.ValidationError: Если номер телефона не содержит 10 цифр.
         """
-        phone = self.cleaned_data.get('phone')
+        phone = self.cleaned_data.get("phone")
         if phone:
             # Удаляем все символы, кроме цифр и отрезаем 7
-            phone = ''.join(filter(str.isdigit, phone))[1:]
+            phone = "".join(filter(str.isdigit, phone))[1:]
             if len(phone) != 10:
                 raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
         return phone
