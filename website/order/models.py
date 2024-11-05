@@ -2,6 +2,8 @@ from account.models import Profile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from catalog.models import Product
+
 
 class Order(models.Model):
     """
@@ -41,6 +43,8 @@ class Order(models.Model):
         ("PICKUP", _("Pickup")),  # Самовывоз
         ("POST", _("Postal service")),  # Доставка почтой
     )
+
+    products = models.ManyToManyField(Product, related_name="orders", verbose_name=_("Products"))
 
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="orders", verbose_name=_("Profile"))
     delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
