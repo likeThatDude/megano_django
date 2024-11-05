@@ -38,5 +38,7 @@ stack-data==0.6.3
 tomli==2.0.2
 traitlets==5.14.3
 typing_extensions==4.12.2
+drf-spectacular~=0.27.2
+django-celery-results==2.5.1
 uritemplate==4.1.1
 wcwidth==0.2.13

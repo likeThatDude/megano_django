@@ -1,9 +1,11 @@
+from core.imports.views import import_products_view
 from django.urls import path
 
-from .views import index
+from . import views
 
 app_name = "core"
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", views.IndexView.as_view(), name="index"),
+    path("import/", import_products_view, name="import_products"),
 ]
