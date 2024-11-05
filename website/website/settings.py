@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
-    "django_extensions",  # Для показа SQL команд в шеле
+    "django_celery_results",
+
     # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
