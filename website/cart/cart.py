@@ -36,7 +36,7 @@ class Cart:
         # сохраняем корзину в атрибуте
         self.cart = cart
 
-    def save(self):
+    def save(self) -> None:
         """
         Сохраняет корзину и ставит отметку о том, чтобы сессия была изменена
         """
@@ -50,12 +50,12 @@ class Cart:
         price_product: Price,
         quantity: int = 1,
         update_quantity: bool = False,
-    ):
+    ) -> None:
         """
         Добавление товара в сессию.
 
         Атрибуты:
-            product (Product) - объект модели товара который нужно добавить в корзину
+            product (Product) - объект модели товара
             price_product (Price) - объект модели цены товара который добавляется
             quantity (int = 1) - кол-во добавляемого товара
             update_quantity (bool = False) - флаг обозначающий принцип добавления товара
@@ -76,7 +76,7 @@ class Cart:
             self.cart[product_id]["quantity"] += quantity
         self.save()
 
-    def remove(self, product: Product):
+    def remove(self, product: Product) -> None:
         """
         Удаляет товар из корзины
 
@@ -90,8 +90,6 @@ class Cart:
 
     def __iter__(self):
         """
-        Итерация по информации о товарах в корзине.
-
         Возвращает генератор, где при каждом методе next возвращает словарь
         с информацией о каждом товаре в корзине в удобном формате
 
@@ -118,13 +116,13 @@ class Cart:
         """
         return sum(item["quantity"] for item in self.cart.values())
 
-    def get_total_price(self):
+    def get_total_price(self) -> int:
         """
         Возвращает общую стоимость товаров в корзине
         """
         return sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values())
 
-    def clear(self):
+    def clear(self) -> None:
         """
         Полностью очищает корзину
         """
