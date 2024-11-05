@@ -2368,6 +2368,20 @@ a.Cart-title {
     margin-bottom: 20px;
 }
 
+.col {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.col-mt {
+    margin-top: 40px
+}
+
+.text-ml {
+    margin-left: 25px
+}
+
 .update-container {
     display: flex;
     position: absolute;
