@@ -50,7 +50,8 @@ class Tag(models.Model):
     )
 
     class Meta:
-        verbose_name_plural = "tags"
+        verbose_name = _("Tags")
+        verbose_name_plural = _("Tags")
         ordering = ("name",)
 
     def __str__(self):
@@ -88,9 +89,7 @@ class Product(models.Model):
         related_name="products",
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
-    limited_edition = models.BooleanField(
-        default=False, verbose_name=_("Limited edition")
-    )
+    limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
     views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
     preview = models.ImageField(
         null=True,
@@ -188,14 +187,18 @@ class Payment(models.Model):
 
     PAYMENT_CHOICES = (
         (CASH, _("Наличными")),
-        (CARD_ONLINE, "Картой онлайн"),
-        (CARD_COURIER, "Картой курьеру"),
+        (CARD_ONLINE, _("Картой онлайн")),
+        (CARD_COURIER, _("Картой курьеру")),
     )
 
     name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"))
 
     def __str__(self):
         return str(dict(self.PAYMENT_CHOICES).get(self.name))
+
+    class Meta:
+        verbose_name = _("Payment")
+        verbose_name_plural = _("Payments")
 
 
 class Delivery(models.Model):
@@ -239,6 +242,10 @@ class Delivery(models.Model):
 
     def __str__(self):
         return str(dict(self.DELIVERY_CHOICES).get(self.name))
+
+    class Meta:
+        verbose_name = _("Delivery")
+        verbose_name_plural = _("Deliveries")
 
 
 class Price(models.Model):
@@ -308,13 +315,13 @@ class NameSpecification(models.Model):
     name: название характеристики
     """
 
-    class Meta:
-        ordering = ("name",)
-
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
     def __str__(self) -> str:
         return self.name
+
+    class Meta:
+        ordering = ("name",)
 
 
 class Specification(models.Model):

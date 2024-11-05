@@ -1,12 +1,12 @@
+from catalog.models import Product
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema
-from rest_framework import permissions, status
+from rest_framework import permissions
+from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from catalog.models import Product
 
 from .models import Viewed
 from .serializers import ViewedSerializer
@@ -23,9 +23,7 @@ class ViewedListActionsView(APIView):
         " и возвращает true если есть, иначе - false.",
     )
     def get(self, request: Request, product_id: int) -> Response:
-        exists = Viewed.objects.filter(
-            user=request.user, product_id=product_id
-        ).exists()
+        exists = Viewed.objects.filter(user=request.user, product_id=product_id).exists()
         return Response({"exists": exists}, status=status.HTTP_200_OK)
 
     @extend_schema(
@@ -36,9 +34,7 @@ class ViewedListActionsView(APIView):
     )
     def post(self, request: Request, product_id: int) -> Response:
         with transaction.atomic():
-            new_view, created = Viewed.objects.update_or_create(
-                user=request.user, product_id=product_id
-            )
+            new_view, created = Viewed.objects.update_or_create(user=request.user, product_id=product_id)
 
             if created:
                 product = Product.objects.select_for_update().get(id=product_id)
@@ -58,9 +54,7 @@ class ViewedListActionsView(APIView):
         "возвращает логическое значение результата операции.",
     )
     def delete(self, request: Request, product_id: int) -> Response:
-        deleted_rows, deleted_dict = Viewed.objects.filter(
-            user=request.user, product_id=product_id
-        ).delete()
+        deleted_rows, deleted_dict = Viewed.objects.filter(user=request.user, product_id=product_id).delete()
         return Response({"deleted": deleted_rows != 0}, status=status.HTTP_200_OK)
 
 

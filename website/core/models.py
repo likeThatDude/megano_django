@@ -23,6 +23,7 @@ class Banner(models.Model):
         related_name="banner",
         verbose_name=_("Product"),
     )
+    text = models.TextField(max_length=200, verbose_name=_("Text banner"), default="", null=True, blank=True)
     deadline_data = models.DateField(verbose_name=_("Deadline Date"))
     created_date = models.DateTimeField(auto_now_add=True, verbose_name=_("Created_date"))
     active = models.BooleanField(verbose_name=_("Active"), default=True)
