@@ -75,7 +75,6 @@ class ReviewCreateView(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        print(serializer.data)
         response_serializer = serializers.ReviewCreateResponseSerializer(serializer.instance)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 

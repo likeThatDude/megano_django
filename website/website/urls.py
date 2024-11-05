@@ -29,7 +29,7 @@ from drf_spectacular.views import SpectacularSwaggerView
 urlpatterns = [
     # Standard URL
     path("", include("core.urls")),
-    path('import/', include("core.urls")),
+    path("import/", include("core.urls")),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("order/", include("order.urls")),

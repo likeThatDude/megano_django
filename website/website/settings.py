@@ -59,7 +59,6 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "drf_spectacular",
     "django_celery_results",
-
     # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
