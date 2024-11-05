@@ -30,7 +30,13 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
-    tags = models.ManyToManyField('Tag', null=True, blank=True, related_name="category_tags", verbose_name=_("Сategory tags"))
+    tags = models.ManyToManyField(
+        'Tag',
+        null=True,
+        blank=True,
+        related_name="category_tags",
+        verbose_name=_("Сategory tags")
+    )
 
     class Meta:
         verbose_name = 'category'
