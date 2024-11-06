@@ -2368,6 +2368,20 @@ a.Cart-title {
     margin-bottom: 20px;
 }
 
+.col {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.col-mt {
+    margin-top: 40px
+}
+
+.text-ml {
+    margin-left: 25px
+}
+
 .update-container {
     display: flex;
     position: absolute;
@@ -4013,6 +4027,13 @@ a.Cart-title {
     margin-top: 50px;
 }
 
+.Products-in-cart {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
 .Product-ratingInput {
     display: flex;
     align-items: center;
@@ -4190,6 +4211,17 @@ a.Cart-title {
     justify-content: flex-start;
 }
 
+.ProductCard-inCart {
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.ProductCard-inCart h2 {
+    justify-content: left;
+    text-align: left;
+}
+
 .DeleteButton {
     position: absolute;
     top: 0;
@@ -4234,6 +4266,10 @@ a.Cart-title {
     width: 49%;
     padding: 0;
     padding-left: 46px;
+}
+
+.ProductCard-desc-in-cart {
+    width: 37%
 }
 
 @media screen and (max-width: 990px) {

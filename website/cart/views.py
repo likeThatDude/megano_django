@@ -13,8 +13,6 @@ from .cart import Cart
 
 class DetailCart(TemplateView):
     """
-    DetailCart для отображения информации о корзине.
-
     Этот класс возвращает информацию о корзине.
     Наследуется от `TemplateView`
     Основная информация о корзине собирается в методе get_context_data.
@@ -31,7 +29,7 @@ class DetailCart(TemplateView):
 
     template_name = "cart/cart_detail.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         """
         Возвращает контекст в шаблон. Добавляет информацию о корзине в контекст.
         При итерации по объекту Cart он возвращает словарь с информацией о товаре
@@ -52,12 +50,8 @@ class DetailCart(TemplateView):
 
 class AddProductInCart(View):
     """
-    AddProductInCart для добавления товара в корзину.
-
     Этот класс позволяет добавлять товары в корзину.
     Наследуется от `View`
-    Логика добавления товара в корзину отображена в документации
-    к модели Cart
 
     Атрибуты:
         -
@@ -69,7 +63,7 @@ class AddProductInCart(View):
         -
     """
 
-    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1):
+    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1) -> JsonResponse:
         """
         Выполняет POST-запрос для добавления товара в корзину.
 
@@ -92,7 +86,7 @@ class AddProductInCart(View):
 class UpdateQuantityProductInCart(View):
     """ """
 
-    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int):
+    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int) -> JsonResponse:
         cart = Cart(request)
         updated_product = Product.objects.get(pk=product_id)
         price_updated_product = Price.objects.get(pk=price_id)
@@ -107,11 +101,9 @@ class UpdateQuantityProductInCart(View):
 
 class DeleteProductInCart(View):
     """
-    DeleteProductInCart для удаления товара в корзину.
-
     Этот класс позволяет добавлять товары в корзину.
     Наследуется от `View`
-    Логика добавления товара в корзину отображена в документации
+    Логика удаления товара в корзину отображена в документации
     к модели Cart
 
     Атрибуты:
@@ -124,7 +116,7 @@ class DeleteProductInCart(View):
         Удаляется вся информация о товаре в корзине
     """
 
-    def delete(self, request: HttpRequest, product_id: int):
+    def delete(self, request: HttpRequest, product_id: int) -> JsonResponse:
         """
         Выполняет DELETE-запрос для удаления товара из корзины.
 

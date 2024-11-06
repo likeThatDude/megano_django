@@ -1,14 +1,11 @@
-from django.urls import path
-# <<<<<<< website/core/urls.py
-from core.views import index
 from core.imports.views import import_products_view
-from .views import index
+from django.urls import path
 
+from . import views
 
 app_name = "core"
 
 urlpatterns = [
-    path("", index, name="index"),
-    path('import/', import_products_view, name='import_products'),
-
+    path("", views.IndexView.as_view(), name="index"),
+    path("import/", import_products_view, name="import_products"),
 ]

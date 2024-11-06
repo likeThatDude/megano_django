@@ -19,10 +19,6 @@ class Category(models.Model):
     parent_category: ссылка на родительскую категорию (если значение не NULL, то это подкатегория категории)
     """
 
-    class Meta:
-        verbose_name_plural = "categories"
-        ordering = ("name",)
-
     name = models.CharField(max_length=100, verbose_name=_("Name"))
     icon = models.FileField(upload_to=category_icon_directory_path, verbose_name=_("Icon"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
@@ -34,12 +30,29 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
+    tags = models.ManyToManyField(
+        'Tag',
+        null=True,
+        blank=True,
+        related_name="category_tags",
+        verbose_name=_("Сategory tags")
+    )
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = "categories"
+        ordering = ("name",)
 
     def __str__(self):
         return self.name
 
 
 class Tag(models.Model):
+    """
+    Модель тега товара
+    name: название тега
+    """
+
     name = models.CharField(
         max_length=100,
         verbose_name=_("Name"),
@@ -50,7 +63,8 @@ class Tag(models.Model):
     )
 
     class Meta:
-        verbose_name_plural = "tags"
+        verbose_name = _("Tags")
+        verbose_name_plural = _("Tags")
         ordering = ("name",)
 
     def __str__(self):
@@ -88,9 +102,7 @@ class Product(models.Model):
         related_name="products",
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
-    limited_edition = models.BooleanField(
-        default=False, verbose_name=_("Limited edition")
-    )
+    limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
     views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
     preview = models.ImageField(
         null=True,
@@ -99,6 +111,10 @@ class Product(models.Model):
         verbose_name=_("Preview"),
     )
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
+
+    class Meta:
+        verbose_name = 'product'
+        verbose_name_plural = 'products'
 
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name!r})"
@@ -119,6 +135,10 @@ class ProductImage(models.Model):
     )
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
 
+    class Meta:
+        verbose_name = 'image product'
+        verbose_name_plural = 'images product'
+
 
 class Seller(models.Model):
     """
@@ -131,7 +151,6 @@ class Seller(models.Model):
     email: адрес электронной почты продавца
     created_at: когда создан продавец
     archived: статус архива продавца
-
     """
 
     class Meta:
@@ -160,6 +179,10 @@ class Seller(models.Model):
     payment_methods = ManyToManyField("Payment", verbose_name=_("Payment methods"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
+
+    class Meta:
+        verbose_name = 'seller'
+        verbose_name_plural = 'sellers'
 
     def __str__(self) -> str:
         return f"Seller(id={self.pk}, name={self.name!r})"
@@ -192,14 +215,18 @@ class Payment(models.Model):
 
     PAYMENT_CHOICES = (
         (CASH, _("Наличными")),
-        (CARD_ONLINE, "Картой онлайн"),
-        (CARD_COURIER, "Картой курьеру"),
+        (CARD_ONLINE, _("Картой онлайн")),
+        (CARD_COURIER, _("Картой курьеру")),
     )
 
     name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"))
 
     def __str__(self):
         return str(dict(self.PAYMENT_CHOICES).get(self.name))
+
+    class Meta:
+        verbose_name = _("Payment")
+        verbose_name_plural = _("Payments")
 
 
 class Delivery(models.Model):
@@ -244,6 +271,10 @@ class Delivery(models.Model):
     def __str__(self):
         return str(dict(self.DELIVERY_CHOICES).get(self.name))
 
+    class Meta:
+        verbose_name = _("Delivery")
+        verbose_name_plural = _("Deliveries")
+
 
 class Price(models.Model):
     """
@@ -253,7 +284,6 @@ class Price(models.Model):
     quantity: доступное количество
     price: цена
     created_at: дата создания записи
-
     """
 
     seller = models.ForeignKey(
@@ -276,6 +306,8 @@ class Price(models.Model):
 
     class Meta:
         unique_together = ("product", "seller")
+        verbose_name = 'price'
+        verbose_name_plural = 'prices'
 
     def __str__(self):
         return f"Price(product={self.product}, seller={self.seller}), price={self.price}"
@@ -304,6 +336,8 @@ class Review(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
+        verbose_name = 'review'
+        verbose_name_plural = 'reviews'
 
 
 class NameSpecification(models.Model):
@@ -314,11 +348,16 @@ class NameSpecification(models.Model):
 
     class Meta:
         ordering = ("name",)
+        verbose_name = 'name specification'
+        verbose_name_plural = 'names specification'
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
     def __str__(self) -> str:
         return self.name
+
+    class Meta:
+        ordering = ("name",)
 
 
 class Specification(models.Model):
@@ -348,6 +387,10 @@ class Specification(models.Model):
         verbose_name=_("PK Product"),
         related_name="specifications",
     )
+
+    class Meta:
+        verbose_name = 'specification'
+        verbose_name_plural = 'specifications'
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
