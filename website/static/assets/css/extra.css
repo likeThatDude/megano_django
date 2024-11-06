@@ -4020,6 +4020,12 @@ a.Cart-title {
     flex-direction: column;
 }
 
+.Place_an_order {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .Product-ratingInput {
     display: flex;
     align-items: center;
