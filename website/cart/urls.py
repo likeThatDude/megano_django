@@ -20,7 +20,7 @@ urlpatterns = [
         name="add_product",
     ),
     path(
-        "update/<int:product_id>/<int:price_id>/",
+        "update/<int:product_id>/<int:quantity>/",
         UpdateQuantityProductInCart.as_view(),
         name="update_product",
     ),
