@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="form-group">
                                     <strong class="Section-title">Продавец</strong>
-                                    <select class="form-select" id="seller" name="seller[]" multiple>
+                                    <select id="seller" name="seller[]" multiple>
                                         {% for seller in sellers %}
                                             <option value="{{ seller.id }}">
                                                 {{ seller.name }}
@@ -61,9 +61,10 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+
                                 <div class="form-group">
-                                    <strong class="Section-title">Производитель</strong>
-                                    <select class="form-select" id="manufacture" name="manufacture[]" multiple>
+                                    <strong class="Section-title">Производитель:</strong>
+                                    <select id="manufacture" name="manufacture[]" multiple>
                                         {% for manufacture in manufactures %}
                                             <option value="{{ manufacture }}">
                                                 {{ manufacture }}
@@ -79,12 +80,21 @@
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    {% for specification in specifications %}
+                                    <strong class="Section-title">Характеристики</strong>
+                                    {% for name, values in grouped_specifications %}
                                         <label class="toggle">
-                                            <input type="checkbox" name="specification">
-                                                <span class="toggle-box"></span>
-                                                <span class="toggle-text">{{specification.name}} {{specification.value}}</span>
+                                            <span class="toggle-text">{{ name }}</span>
                                         </label>
+                                        <div>
+                                            {% for value in values %}
+                                                <label class="toggle">
+                                                    <input type="checkbox" name="specification">
+                                                    <span class="toggle-box"></span>
+                                                    <span class="toggle-text">{{ value }}</span>
+                                                </label>
+                                            {% endfor %}
+                                            <br><br>
+                                        </div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
@@ -92,7 +102,6 @@
                                         <button type="submit" class="btn btn_square btn_dark btn_narrow">Фильтр</button>
                                     </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
@@ -103,9 +112,8 @@
                         <div class="Section-columnContent">
                             <div class="buttons">
                                 {% for tag in tags %}
-                                    <a class="btn btn_default btn_sm" href="#">{{ tag }}</a>
+                                    <a class="btn btn_default btn_sm" href="#">{{ tag.name }}</a>
                                 {% endfor %}
-
                             </div>
                         </div>
                     </div>
@@ -176,11 +184,11 @@
 
 {% block script %}
 
-    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
-    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
-    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
-    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
-    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
-    <script src="{% static 'assets/js/scripts.js' %}"></script>
+<!--    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>-->
+<!--    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>-->
+<!--    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>-->
+<!--    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>-->
+<!--    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>-->
+<!--    <script src="{% static 'assets/js/scripts.js' %}"></script>-->
     <script src="{% static 'cart/js/add_product_cart.js' %}"></script>
 {% endblock %}

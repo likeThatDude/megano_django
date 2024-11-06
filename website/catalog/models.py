@@ -134,6 +134,10 @@ class Seller(models.Model):
 
     """
 
+    class Meta:
+        verbose_name = _("Seller")
+        verbose_name_plural = _("Sellers")
+
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     image = models.ImageField(

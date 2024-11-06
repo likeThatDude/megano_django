@@ -1,5 +1,5 @@
 from django.urls import path
-<<<<<<< website/core/urls.py
+# <<<<<<< website/core/urls.py
 from core.views import index
 from core.imports.views import import_products_view
 from .views import index

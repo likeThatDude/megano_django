@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.core.cache import cache
 from django.db.models import Min
 from django.db.models import OuterRef
@@ -24,6 +26,20 @@ def catalog_view(request: HttpRequest):
 
 
 class CatalogListView(ListView):
+    """
+       Представление для отображения списка продуктов в каталоге.
+
+       Это представление обрабатывает запросы на отображение продуктов в
+       определенной категории, предоставляет возможность фильтрации по
+       различным параметрам, таким как продавцы, производители,
+       ограниченные серии, диапазон цен, название, спецификации и теги.
+
+       Атрибуты:
+           template_name (str): Путь к шаблону, который будет использоваться для отображения.
+           model (Model): Модель, используемая для получения данных (Product).
+           context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
+
+       """
     template_name = "catalog/catalog.html"
     model = Product
     context_object_name = "products"
@@ -35,12 +51,37 @@ class CatalogListView(ListView):
 
     def get_param(self):
         """Получаем дополнительные параметры для контекста."""
+
+        category_id = self.kwargs.get("pk")
+
+        products_with_related = Product.objects.prefetch_related('specifications').filter(category__id=category_id)
+
+        sellers = Seller.objects.all()
+        manufactures = products_with_related.values_list('manufacture', flat=True).distinct()
+
+        # Получаем все спецификации для всех продуктов в категории
+        specifications = (Specification.objects
+                          .filter(product__in=products_with_related)
+                          .select_related('name')
+                          .distinct()
+                          )
+        # Группируем спецификации по имени
+        grouped_specifications = defaultdict(list)
+        for spec in specifications:
+            print('spec:', spec)
+            grouped_specifications[spec.name.name].append(spec.value)
+
+        print('spec grouped:', grouped_specifications.items)
+        # Получить уникальные теги
+        tags = Tag.objects.filter(products__isnull=False).distinct()
+        print('tags', tags)
+
         return {
-            "sellers": Seller.objects.all(),
-            "manufactures": Product.objects.values_list('manufacture', flat=True).distinct(),
-            "specifications": Specification.objects.distinct(),
-            "tags": Tag.objects.filter(products__isnull=False).distinct(),
-            "category_id": self.kwargs.get("pk"),
+            "sellers": sellers,
+            "manufactures": manufactures,
+            "grouped_specifications": grouped_specifications.items(),
+            "tags": tags,
+            "category_id": category_id,
         }
 
     def get_queryset(self):
@@ -65,7 +106,8 @@ class CatalogListView(ListView):
         selected_limited_edition = request.POST.get("limited_edition")
         selected_range_price = request.POST.get("price")
         selected_title = request.POST.get("title")
-        selected_specification = request.POST.get("specification")
+        selected_specifications = request.POST.getlist("specification")
+        selected_tags = request.POST.getlist("tags")
 
         # Фильтрация по диапазону цен
         if selected_range_price:
@@ -91,6 +133,14 @@ class CatalogListView(ListView):
         if selected_limited_edition:
             products = products.filter(limited_edition=True)
 
+        # Фильтрация по характеристикам
+        if selected_specifications:
+            products = products.filter(specifications__value__in=selected_specifications).distinct()
+
+        # Фильтрация по тегам
+        if selected_tags:
+            products = products.filter(tags__id__in=selected_tags).distinct()
+
         return products
 
     def post(self, request, *args, **kwargs):
@@ -100,7 +150,6 @@ class CatalogListView(ListView):
 
         context = self.get_param()
         context["products"] = products
-        print(context)
         return render(request, self.template_name, context)
 
 
@@ -159,7 +208,7 @@ class ProductDetailView(DetailView):
                 "name",
                 "tags",
                 "description",
-                "view",
+                "views",
                 "manufacture",
                 "product_type",
                 "specifications",
