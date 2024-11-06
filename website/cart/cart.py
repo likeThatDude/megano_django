@@ -58,17 +58,17 @@ class Cart:
             price_product_id (id) - id модели цены товара который добавляется
             quantity (int = 1) - кол-во добавляемого товара
         """
-        product = Product.objects.get(pk=product_id)
         price_product = Price.objects.get(pk=price_product_id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {
+        product_id_str = str(product_id)
+        if product_id_str not in self.cart:
+            self.cart[product_id_str] = {
                 "quantity": 0,
-                "product_id": product.pk,
+                "pk": product_id_str,
                 "price": str(price_product.price),
                 "seller_id": price_product.seller.pk,
                 "to_order": True,
             }
-        self.cart[product_id]["quantity"] += quantity
+        self.cart[product_id_str]["quantity"] += quantity
         self.save()
 
     def update_quantity(self, product_id: int, new_quantity: int) -> None:
@@ -79,8 +79,9 @@ class Cart:
             product_ud (int) - id модели товара
             new_quantity (int) - новое кол-во товара в корзине
         """
-        if product_id in self.cart:
-            self.cart[product_id]['quantity'] = new_quantity
+        product_id_str = str(product_id)
+        if product_id_str in self.cart:
+            self.cart[product_id_str]['quantity'] = new_quantity
             self.save()
 
     def remove(self, product_id: int) -> None:
@@ -90,27 +91,10 @@ class Cart:
         Атрибуты:
             product_id (int) - id модели товара, который нужно удалить
         """
-        if product_id in self.cart:
-            del self.cart[product_id]
+        product_id_str = str(product_id)
+        if product_id_str in self.cart:
+            del self.cart[product_id_str]
             self.save()
-
-    def __iter__(self):
-        """
-        Возвращает генератор, где при каждом методе next возвращает словарь
-        с информацией о каждом товаре в корзине в удобном формате
-
-
-        """
-        for item in self.cart.values():
-            info_item = {
-                "price": item["price"],
-                "product": Product.objects.get(pk=item["product_id"]),
-                "quantity": item["quantity"],
-                "seller": Seller.objects.get(pk=item["seller_id"]),
-                "total_cost": str(Decimal(item["price"]) * item["quantity"]),
-                "to_order": item["to_order"],
-            }
-            yield info_item
 
     def get_total_quantity(self) -> int:
         """
@@ -132,7 +116,15 @@ class Cart:
             ]
         """
         info_cart = list()
-        for info_product in self.cart:
+        for product in self.cart.values():
+            info_product = {
+                "price": product["price"],
+                "product": Product.objects.get(pk=product["pk"]),
+                "quantity": product["quantity"],
+                "seller": Seller.objects.get(pk=product["seller_id"]),
+                "total_cost": str(Decimal(product["price"]) * product["quantity"]),
+                "to_order": product["to_order"],
+            }
             info_cart.append(info_product)
         return info_cart
 
