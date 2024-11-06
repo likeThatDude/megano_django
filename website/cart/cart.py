@@ -46,44 +46,50 @@ class Cart:
 
     def add(
         self,
-        product: Product,
-        price_product: Price,
+        product_id: int,
+        price_product_id: int,
         quantity: int = 1,
-        update_quantity: bool = False,
     ) -> None:
         """
         Добавление товара в сессию.
 
         Атрибуты:
-            product (Product) - объект модели товара
-            price_product (Price) - объект модели цены товара который добавляется
+            product_id (int) - id модели товара
+            price_product_id (id) - id модели цены товара который добавляется
             quantity (int = 1) - кол-во добавляемого товара
-            update_quantity (bool = False) - флаг обозначающий принцип добавления товара
-                                    False - прибавить значение quantity к текущему кол-ву
-                                    True - изменить кол-во товара на значение quantity
         """
-        product_id = str(product.pk)
+        product = Product.objects.get(pk=product_id)
+        price_product = Price.objects.get(pk=price_product_id)
         if product_id not in self.cart:
             self.cart[product_id] = {
                 "quantity": 0,
                 "product_id": product.pk,
                 "price": str(price_product.price),
                 "seller_id": price_product.seller.pk,
+                "to_order": True,
             }
-        if update_quantity:
-            self.cart[product_id]["quantity"] = quantity
-        else:
-            self.cart[product_id]["quantity"] += quantity
+        self.cart[product_id]["quantity"] += quantity
         self.save()
 
-    def remove(self, product: Product) -> None:
+    def update_quantity(self, product_id: int, new_quantity: int) -> None:
+        """
+        Обновляет кол-во товара в корзине
+
+        Атрибуты:
+            product_ud (int) - id модели товара
+            new_quantity (int) - новое кол-во товара в корзине
+        """
+        if product_id in self.cart:
+            self.cart[product_id]['quantity'] = new_quantity
+            self.save()
+
+    def remove(self, product_id: int) -> None:
         """
         Удаляет товар из корзины
 
         Атрибуты:
-            product (Product) - удаляет товар в корзине и всю информацию о нем, если он есть в корзине
+            product_id (int) - id модели товара, который нужно удалить
         """
-        product_id = str(product.pk)
         if product_id in self.cart:
             del self.cart[product_id]
             self.save()
@@ -93,12 +99,7 @@ class Cart:
         Возвращает генератор, где при каждом методе next возвращает словарь
         с информацией о каждом товаре в корзине в удобном формате
 
-        Структура словаря по каждому товару:
-            'price': цена товара (str),
-            'product': товар (Product),
-            'quantity': кол-во товара (int),
-            'seller': продавец этого товара (Seller),
-            'total_price': общая стоимость этого товара в корзине (str),
+
         """
         for item in self.cart.values():
             info_item = {
@@ -106,15 +107,34 @@ class Cart:
                 "product": Product.objects.get(pk=item["product_id"]),
                 "quantity": item["quantity"],
                 "seller": Seller.objects.get(pk=item["seller_id"]),
-                "total_price": str(Decimal(item["price"]) * item["quantity"]),
+                "total_cost": str(Decimal(item["price"]) * item["quantity"]),
+                "to_order": item["to_order"],
             }
             yield info_item
 
-    def __len__(self):
+    def get_total_quantity(self) -> int:
         """
         Возвращает общее кол-во товаров в корзине
         """
         return sum(item["quantity"] for item in self.cart.values())
+
+    def get_info_cart(self) -> list[dict]:
+        """
+        Возвращает информацию о товарах в корзине
+        Структура возвращаемых данных:
+            [
+                {'product_id': {'price': цена товара (str),
+                                'product': товар (Product),
+                                'quantity': кол-во товара (int),
+                                'seller': продавец этого товара (Seller),
+                                'total_price': общая стоимость этого товара в корзине (str),}
+                }
+            ]
+        """
+        info_cart = list()
+        for info_product in self.cart:
+            info_cart.append(info_product)
+        return info_cart
 
     def get_total_price(self) -> int:
         """
