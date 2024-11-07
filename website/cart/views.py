@@ -1,3 +1,4 @@
+import json
 from catalog.models import Price
 from catalog.models import Product
 from django.http import HttpRequest
@@ -61,9 +62,13 @@ class UpdateQuantityProductInCart(View):
         post: Переопределяет метод POST для обновления кол-ва товара в корзине.
     """
 
-    def post(self, request: HttpRequest, product_id: int, quantity: int) -> JsonResponse:
+    def post(self, request: HttpRequest) -> JsonResponse:
         cart = Cart(request)
-        cart.update_quantity(product_id, quantity)
+        data = json.loads(request.body)
+        for info_product in data:
+            product_id = info_product['product_id']
+            quantity = info_product['quantity']
+            cart.update_quantity(product_id, quantity)
         return JsonResponse({"status_code": 200})
 
 
