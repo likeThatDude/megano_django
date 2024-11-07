@@ -15,11 +15,11 @@ urlpatterns = [
     path("update/", UpdateQuantityProductInCart.as_view(), name="update_product"),
     path("total_quantity/", GetTotalQuantityCart.as_view(), name="total_quantity"),
     path("total_price/", GetTotalPriceCart.as_view(), name="total_price"),
-    path("delete/<int:product_id>/", DeleteProductInCart.as_view(), name="delete_product"),
+    path("delete/<str:product_id>/", DeleteProductInCart.as_view(), name="delete_product"),
     path("get_cost/<str:product_id>/<int:quantity>/", GetCostProductInCart.as_view(), name="get_cost_product"),
     path("get_cost/<str:product_id>/", GetCostProductInCart.as_view(), name="get_cost_product"),
     path(
-        "add_product/<int:product_id>/<int:price_id>/",
+        "add_product/<str:product_id>/<str:price_id>/",
         AddProductInCart.as_view(),
         name="add_product",
     ),
