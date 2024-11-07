@@ -44,7 +44,7 @@
                                     </h2>
                                     <div class="ProductCard-info">
                                         <div class="ProductCard-cost">
-                                            <div class="ProductCard-price">
+                                            <div class="ProductCard-price" data-url-update-cost="{% url 'cart:get_cost_product' product_id=info_product.product.pk %}">
                                                 {{ info_product.total_cost }} $
                                             </div>
                                         </div>

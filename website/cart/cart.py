@@ -135,6 +135,15 @@ class Cart:
         """
         return sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values())
 
+    def get_cost_product(self, product_id: str, quantity: int) -> str:
+        """
+        Возвращает общую стоимость товара
+        """
+        if quantity != 0:
+            cost = str(Decimal(self.cart[product_id]['price']) * quantity)
+            return cost
+        return '0.00'
+
     def clear(self) -> None:
         """
         Полностью очищает корзину

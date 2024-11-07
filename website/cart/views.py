@@ -136,3 +136,17 @@ class GetTotalPriceCart(View):
             request.COOKIES["total_price"] = cart.get_total_price()
         total_price = request.COOKIES.get("total_price")
         return JsonResponse({"total_price": total_price})
+
+
+class GetCostProductInCart(View):
+    """
+
+    """
+    def get(self, request: HttpRequest, product_id: str, quantity: int | None = None) -> JsonResponse:
+        """
+
+        """
+        if quantity is not None:
+            cart = Cart(request)
+            cost = cart.get_cost_product(product_id, quantity)
+            return JsonResponse({"product_cost": cost})

@@ -6,6 +6,7 @@ from .views import DetailCart
 from .views import GetTotalPriceCart
 from .views import GetTotalQuantityCart
 from .views import UpdateQuantityProductInCart
+from .views import GetCostProductInCart
 
 app_name = "cart"
 
@@ -15,6 +16,8 @@ urlpatterns = [
     path("total_quantity/", GetTotalQuantityCart.as_view(), name="total_quantity"),
     path("total_price/", GetTotalPriceCart.as_view(), name="total_price"),
     path("delete/<int:product_id>/", DeleteProductInCart.as_view(), name="delete_product"),
+    path("get_cost/<str:product_id>/<int:quantity>/", GetCostProductInCart.as_view(), name="get_cost_product"),
+    path("get_cost/<str:product_id>/", GetCostProductInCart.as_view(), name="get_cost_product"),
     path(
         "add_product/<int:product_id>/<int:price_id>/",
         AddProductInCart.as_view(),

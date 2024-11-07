@@ -655,19 +655,46 @@ var Amount = function(){
     var $add = $('.Amount-add');
     var $input = $('.Amount-input');
     var $remove = $('.Amount-remove');
+
+    // Функция для обновления цены
+    async function updatePrice(url) {
+        try {
+            const response = await fetch(url); // Дожидаемся ответа
+            if (!response.ok) {
+                throw new Error(`Ошибка HTTP! Статус: ${response.status}`);
+            }
+            const data = await response.json(); // Дожидаемся парсинга JSON
+            const productCost = data.product_cost;
+            $('.ProductCard-price').text(productCost + ' $');
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
     return {
         init: function(){
+            // Получаем URL для обновления цены
+
             $add.on('click', function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val( value + 1);
+
+                // Вызываем функцию для обновления цены
+                var url = $('.ProductCard-price').data('url-update-cost') + $inputThis.val()
+                updatePrice(url);
             });
             $remove.on('click', function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
+                var url = $('.ProductCard-price').data('url-update-cost')
                 $inputThis.val(value>0?value - 1:0);
+
+                // Вызываем функцию для обновления цены
+                var url = $('.ProductCard-price').data('url-update-cost') + $inputThis.val()
+                updatePrice(url);
             });
         }
     };
