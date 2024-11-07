@@ -74,7 +74,7 @@ class DeleteProductInCart(View):
         delete (HttpRequest): Переопределяет метод DELETE для удаления товара.
     """
 
-    def delete(self, request: HttpRequest, product_id: int) -> JsonResponse:
+    def delete(self, request: HttpRequest, product_id: str) -> JsonResponse:
         """
         Выполняет DELETE-запрос для удаления товара из корзины.
         Параметры запроса и URL:
@@ -85,7 +85,7 @@ class DeleteProductInCart(View):
         """
         cart = Cart(request)
         cart.remove(product_id)
-        request.COOKIES["total_price"] = cart.get_total_price()
+        request.COOKIES["total_price"] = cart.get_total_cost()
         return JsonResponse({"status_code": 204})
 
 
@@ -111,7 +111,7 @@ class GetTotalQuantityCart(View):
         return JsonResponse({"total_quantity": total_quantity})
 
 
-class GetTotalPriceCart(View):
+class GetTotalCostCart(View):
     """
     GetTotalPriceCart для получения общей стоимости товаров в корзине.
     Методы:
@@ -128,7 +128,7 @@ class GetTotalPriceCart(View):
         """
         cart = Cart(request)
         if "total_price" not in request.COOKIES:
-            request.COOKIES["total_price"] = cart.get_total_price()
+            request.COOKIES["total_price"] = cart.get_total_cost()
         total_price = request.COOKIES.get("total_price")
         return JsonResponse({"total_price": total_price})
 
