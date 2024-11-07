@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
-    "django_extensions",  # Для показа SQL команд в шеле
+    "django_celery_results",
     # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
@@ -115,7 +115,6 @@ DATABASES = {
 
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
-BANNERS_KEY = "banners"
 PRODUCTS_KEY = "category_{category_id}"
 
 # Password validation
@@ -207,5 +206,6 @@ REST_FRAMEWORK = {
 
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV
+BANNERS_KEY = "banners"
 user_comparison_key = "user_comparison_"
 anonymous_comparison_key = "anonymous_user_comparison_"
