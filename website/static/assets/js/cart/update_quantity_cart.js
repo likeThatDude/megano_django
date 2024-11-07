@@ -43,6 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
     btnPlaceOrder.addEventListener('click', async function(event) {
         event.preventDefault(); // Предотвращаем переход по ссылке href в кнопке
         await updateProductInCart();
-        await updateCartAmount();
+        await updateCartAmount(); // Обновляем общее кол-во товаров
     })
 })
