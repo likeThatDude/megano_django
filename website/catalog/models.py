@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import ManyToManyField
+from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -390,3 +391,33 @@ class Specification(models.Model):
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
+
+
+class Viewed(models.Model):
+    """
+    Модель таблицы просмотренных пользователем товаров.
+
+    user: пользователь, который посмотрел товар;
+    product: товар, который был просмотрен пользователем;
+    created_at: дата/время просмотра товара.
+    """
+
+    class Meta:
+        verbose_name = _("Viewed")
+        verbose_name_plural = _("Viewed")
+        ordering = ("-created_at",)
+        constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("User"),
+        related_name="viewed",
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_("Product"),
+        related_name="viewed",
+    )
+    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created_at"))
