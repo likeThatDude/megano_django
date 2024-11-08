@@ -112,7 +112,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="email">E-mail</label>
                                     <input class="form-input" id="email" name="email" type="email"
-                                           value="{{ password_form.instance.user.email }}"
+                                           value="{{ profile_form.instance.user.email }}"
                                            data-validate="require" />
                                     {% for error in password_form.email.errors %}
                                         <div class="error-message">{{ error }}</div>
