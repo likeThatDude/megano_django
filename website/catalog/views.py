@@ -52,10 +52,6 @@ class CatalogListView(ListView):
         return queryset
 
 
-class CategoryDetailView(DetailView):
-    pass
-
-
 class ProductDetailView(DetailView):
     """
     Представление для отображения детальной информации о товаре.

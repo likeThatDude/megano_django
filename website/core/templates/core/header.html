@@ -123,7 +123,7 @@
                             {% for category in categories %}
                                 {% if category.parent_category is None %}
                                     <div class="CategoriesButton-link">
-                                        <a href="{% url 'catalog:category_detail' pk=category.pk %}">
+                                        <a href="{% url 'catalog:catalog' pk=category.pk %}">
                                             <div class="CategoriesButton-icon">
                                                 <img src="{% static category.icon %}"
                                                      alt={{ category.icon|get_filename:"" }}/>
@@ -136,7 +136,7 @@
                                                 <div class="CategoriesButton-submenu">
                                                     {% for sub_category in sub_categories %}
                                                         <a class="CategoriesButton-link"
-                                                           href="{% url 'catalog:category_detail' pk=sub_category.pk %}">
+                                                           href="{% url 'catalog:catalog' pk=sub_category.pk %}">
                                                             <div class="CategoriesButton-icon">
                                                                 <img src="{% static sub_category.icon %}"
                                                                      alt={{ sub_category.icon|get_filename:"" }}/>
