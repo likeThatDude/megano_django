@@ -26,11 +26,12 @@ async function addProductInCart(data) {
 
 // Собираем информацию из элемента
 async function getInfoProduct(elem) {
-    const data_elem = []
-    data_elem.push({
-        product_id: elem.dataset.product_id,
-        price_id: elem.dataset.price_id,
-    })
+    const data_elem = {"update_products": false};
+    const product_id = elem.dataset.product_id;
+    const price_id = elem.dataset.price_id;
+
+    data_elem['product_id'] = product_id
+    data_elem['price_id'] = price_id
     return data_elem
 }
 

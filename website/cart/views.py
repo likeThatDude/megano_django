@@ -30,16 +30,19 @@ class DetailCart(TemplateView):
 
 
 class APICart(APIView):
+    """
+    API для взаимодействия с корзиной
+    """
     def get(self, request: Request) -> Response:
         """
-        Возвращает информацию о товарах в корзине
+        Возвращает ВСЮ информацию о товарах в корзине
         """
         cart = Cart(request)
         return Response({'cart': cart.cart})
 
     def post(self, request: Request) -> Response:
         """
-        Добавляет товар в корзину
+        Добавляет товар в корзину если в теле запроса
         """
         cart = Cart(request)
         data = request.data
@@ -48,11 +51,11 @@ class APICart(APIView):
                 cart.update_quantity(product_id, quantity)
             return Response(status=HTTP_200_OK)
         else:
-            product_id = data[0]["product_id"]
-            price_id = data[0]["price_id"]
+            product_id = data["product_id"]
+            price_id = data["price_id"]
             quantity = 1
-            if "quantity" in data[0]:
-                quantity = data[0]["quantity"]
+            if "quantity" in data:
+                quantity = data["quantity"]
             cart.add(product_id, price_id, quantity)
             return Response(status=HTTP_201_CREATED)
 
