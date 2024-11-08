@@ -406,12 +406,6 @@ class Viewed(models.Model):
         created_at: дата/время просмотра товара.
     """
 
-    class Meta:
-        verbose_name = _("Viewed")
-        verbose_name_plural = _("Viewed")
-        ordering = ("-created_at",)
-        constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -425,3 +419,9 @@ class Viewed(models.Model):
         related_name="viewed",
     )
     created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created_at"))
+
+    class Meta:
+        verbose_name = _("Viewed")
+        verbose_name_plural = _("Viewed")
+        ordering = ("-created_at",)
+        constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]

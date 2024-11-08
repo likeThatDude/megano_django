@@ -22,12 +22,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         is_active: Логическое значение - для "мягкого" удаления пользователя.
     """
 
-    class Meta:
-        app_label = "auth"
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
-        ordering = ("login",)
-
     login = models.CharField(max_length=50, unique=True, verbose_name=_("Login"))
     email = models.EmailField(unique=True, verbose_name=_("Email"), db_index=True)
     username = models.CharField(max_length=255, null=True, blank=True)
@@ -49,6 +43,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    class Meta:
+        app_label = "auth"
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        ordering = ("login",)
+
     def __str__(self):
         """Возвращаем никнейм пользователя, если он имеется"""
         return self.username if self.username else "Anonymous"
@@ -67,15 +67,6 @@ class Profile(models.Model):
         phone: номер телефона пользователя;
         photo: фото/аватар пользователя.
     """
-
-    class Meta:
-        app_label = "auth"
-        verbose_name = _("Profile")
-        verbose_name_plural = _("Profiles")
-        ordering = (
-            "first_name",
-            "last_name",
-        )
 
     user = models.OneToOneField(
         CustomUser,
@@ -100,6 +91,15 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        app_label = "auth"
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+        ordering = (
+            "first_name",
+            "last_name",
+        )
 
     def __str__(self):
         """Возвращаем имя профиля, если оно имеется"""
