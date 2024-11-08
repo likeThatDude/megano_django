@@ -3,7 +3,7 @@ from decimal import Decimal
 from catalog.models import Price
 from catalog.models import Product
 from catalog.models import Seller
-from django.http import HttpRequest
+from rest_framework.request import Request
 
 from website import settings
 
@@ -18,7 +18,7 @@ class Cart:
     Данный класс работает исключительно с объектами моделей Product и Price при добавлении, удалении и изменении
     """
 
-    def __init__(self, request: HttpRequest):
+    def __init__(self, request: Request):
         """
         Создание корзины. Если корзины не было, то она будет создана в сессиях
 
@@ -74,13 +74,13 @@ class Cart:
                 "cost_product": "0.00"
             }
         self.cart["products"][product_id]["quantity"] += quantity
-        self.cart["products"][product_id]["cost_product"] = self.__get_cost_product(
+        self.cart["products"][product_id]["cost_product"] = self.get_cost_product(
             product_id,
             self.cart["products"][product_id]["quantity"]
         )
         self.save()
 
-    def __get_cost_product(self, product_id: str, quantity: int) -> str:
+    def get_cost_product(self, product_id: str, quantity: int) -> str:
         """
         Возвращает общую стоимость товара
         """

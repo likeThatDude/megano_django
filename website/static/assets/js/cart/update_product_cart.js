@@ -1,16 +1,13 @@
 // Функция для сбора данных со страницы для отправки
 async function getInfoToUpdateCart() {
     const allInputs = document.querySelectorAll('input.Amount-input');
-    const data = [];
+    const data = {"update_products": true, 'products': {}};
     allInputs.forEach(input => {
-        const product_id = input.dataset.product_id
-        const quantity = input.value
+        const product_id = input.dataset.product_id;
+        const quantity = input.value;
 
-        data.push({
-            product_id: product_id,
-            quantity: Number(quantity)
-        })
-    })
+        data.products[product_id] = Number(quantity)
+    });
     return data
 }
 
@@ -20,7 +17,7 @@ async function updateProductInCart() {
         const csrftoken = getCookie('csrftoken');
 
         const dataToReq = await getInfoToUpdateCart()
-        const response = await fetch(UPDATE_PRODUCT_IN_CART, {
+        const response = await fetch(CART_API, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrftoken,
@@ -43,6 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
     btnPlaceOrder.addEventListener('click', async function(event) {
         event.preventDefault(); // Предотвращаем переход по ссылке href в кнопке
         await updateProductInCart();
-        await updateCartAmount(); // Обновляем общее кол-во товаров
+        await updateTotalValuesCart(); // Обновляем общее кол-во товаров
     })
 })

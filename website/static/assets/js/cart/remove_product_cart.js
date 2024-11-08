@@ -1,22 +1,21 @@
 // Функция для удаления товара в корзину
-async function removeProductInCart(url, productCard) {
+async function removeProductInCart(product_id, productCard) {
     try {
         const csrftoken = getCookie('csrftoken');
-        const response = await fetch(url, {
+        const response = await fetch(CART_API, {
             method: 'DELETE',
             headers: {
                 'X-CSRFToken': csrftoken,
-            }
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({'product_id': product_id})
         });
 
         if (!response.ok) {
             throw new Error('Сеть не в порядке: ' + response.status);
         }
 
-        // Если статус код 200, выполняем запрос на TOTAL_QUANTITY_CART
-        const totalQuantityData = await getTotalQuantity(TOTAL_QUANTITY_CART);
-        productCard.remove()
-        await updateCartAmount(); // Обновляем общее кол-во товаров в корзине
+        productCard.remove();
     } catch (error) {
         console.error('Ошибка при добавлении товара в корзину:', error);
     }
@@ -30,8 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const removeButton = removeProductCard.querySelector('a.btn.btn_primary')
             removeButton.addEventListener('click', async function(event) {
                 event.preventDefault(); // Предотвращаем переход по ссылке href в кнопке
-                const url = removeButton.getAttribute('href'); // Получаем URL из атрибута href
-                await removeProductInCart(url, removeProductCard); // Вызываем функцию с переданным URL
+                const productId = removeButton.dataset.product_id; // Получаем URL из атрибута href
+                await removeProductInCart(productId, removeProductCard); // Вызываем функцию с переданным URL
+                await updateTotalValuesCart(); // Обновляем общее кол-во товаров
             });
         });
     } else {

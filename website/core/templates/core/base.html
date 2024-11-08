@@ -61,10 +61,8 @@
 <!--        +breadcrumbs('Главная','Портфолио')-->
 <!--    +Article('portfolio')-->
 <!---->
-<script>const TOTAL_QUANTITY_CART = "{% url 'cart:total_quantity' %}";</script>
-<script>const TOTAL_PRICE_CART = "{% url 'cart:total_price' %}";</script>
-<script>const UPDATE_PRODUCT_IN_CART = "{% url 'cart:update_product' %}"</script>
-<script src="{% static 'assets/js/cart/update_total_quantity.js' %}"></script>
+<script>const CART_API = "{% url 'cart:api' %}";</script>
+<script src="{% static 'assets/js/cart/update_total_values_cart.js' %}"></script>
 <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
 <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
 <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

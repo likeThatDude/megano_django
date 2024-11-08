@@ -15,54 +15,38 @@ function getCookie(name) {
 }
 
 // Функция для получения общей стоимости корзины
-async function getTotalPrice() {
+async function getTotalValues() {
     try {
-        const response = await fetch(TOTAL_PRICE_CART);
+        const response = await fetch(CART_API);
 
         if (!response.ok) {
             throw new Error('Сеть не в порядке: ' + response.status);
         }
 
         const data = await response.json();
-        const totalPrice = data.total_price;
-        return totalPrice
+        const total_values = {
+            'total_cost': data.cart.total_cost,
+            'total_quantity': data.cart.total_quantity,
+        }
+        return total_values
     } catch (error) {
         console.error('Ошибка при выполнении запроса:', error);
         throw error;
     }
 }
 
-// Функция для получения общего кол-ва товаров в корзине
-async function getTotalQuantity() {
-    try {
-        const response = await fetch(TOTAL_QUANTITY_CART);
-
-        if (!response.ok) {
-            throw new Error('Сеть не в порядке: ' + response.status);
-        }
-
-        const data = await response.json();
-        const totalQuantity = data.total_quantity;
-        return totalQuantity; // Возвращаем полученные данные
-    } catch (error) {
-        console.error('Ошибка при выполнении запроса:', error);
-        throw error; // Пробрасываем ошибку дальше, если нужно
-    }
-}
-
 
 // Функция для обновления элемента CartBlock-amount
-async function updateCartAmount() {
-    const totalQuantity = await getTotalQuantity(TOTAL_QUANTITY_CART); // Получаем общее количество
-    const totalPrice = await getTotalPrice(TOTAL_PRICE_CART); // Получаем общую стоимость
+async function updateTotalValuesCart() {
+    const totalValues = await getTotalValues(); // Получаем общие значения корзины (кол-во товаров, стоимость)
      // Получаем элемент для отображения кол-ва товаров в корзине
     const cartAmountElement = document.querySelector('.CartBlock-amount');
      // Получаем элемент для отображения общей стоимости товаров в корзине
     const cartBlockPrice = document.querySelector('.CartBlock-price');
 
     if (cartAmountElement) { // Проверяем, существует ли элемент
-        cartAmountElement.innerText = totalQuantity; // Обновляем текст элемента
-        cartBlockPrice.innerText = totalPrice
+        cartAmountElement.innerText = totalValues.total_quantity; // Обновляем кол-во товаров к корзине
+        cartBlockPrice.innerText = totalValues.total_cost; // Обновляем стоимость товаров в корзине
     } else {
         console.warn('Элемент с классом "CartBlock-amount" не найден.');
     }
@@ -70,5 +54,5 @@ async function updateCartAmount() {
 
 // Выполняем обновление при полной загрузке DOM
 document.addEventListener('DOMContentLoaded', function() {
-    updateCartAmount(); // Вызываем функцию для обновления количества в корзине
+    updateTotalValuesCart(); // Вызываем функцию для обновления количества в корзине
 });

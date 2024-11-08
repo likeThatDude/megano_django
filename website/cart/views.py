@@ -1,8 +1,10 @@
 import json
-from django.http import HttpRequest
-from django.http import JsonResponse
 from django.views.generic import TemplateView
-from django.views.generic import View
+
+from rest_framework.views import APIView
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from .cart import Cart
 
@@ -27,121 +29,50 @@ class DetailCart(TemplateView):
         return context
 
 
-class AddProductInCart(View):
-    """
-    Этот класс позволяет добавлять товары в корзину.
-    Методы:
-        post: Переопределяет метод POST для добавления товара.
-    """
-
-    def post(self, request: HttpRequest, product_id: str, price_id: str, quantity: int = 1) -> JsonResponse:
+class APICart(APIView):
+    def get(self, request: Request) -> Response:
         """
-        Выполняет POST-запрос для добавления товара в корзину.
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-            - product_id (int): pk товара который нужно добавить.
-            - price_id (int): pk цены товара которого добавляем.
-            - quantity (int): кол-во товара, которое нужно прибавить (по умолчанию 1)
-        Возвращает:
-            JsonResponse: Ответ с кодом 200 при успешном добавлении.
+        Возвращает информацию о товарах в корзине
         """
         cart = Cart(request)
-        cart.add(product_id, price_id, quantity)
-        return JsonResponse({"status_code": 200})
+        return Response({'cart': cart.cart})
 
+    def post(self, request: Request) -> Response:
+        """
+        Добавляет товар в корзину
+        """
+        cart = Cart(request)
+        data = request.data
+        if data["update_products"]:
+            for product_id, quantity in data["products"].items():
+                cart.update_quantity(product_id, quantity)
+            return Response(status=HTTP_200_OK)
+        else:
+            product_id = data[0]["product_id"]
+            price_id = data[0]["price_id"]
+            quantity = 1
+            if "quantity" in data[0]:
+                quantity = data[0]["quantity"]
+            cart.add(product_id, price_id, quantity)
+            return Response(status=HTTP_201_CREATED)
 
-class UpdateQuantityProductInCart(View):
-    """
-    Этот класс позволяет обновлять кол-во товара в корзине
-    Методы:
-        post: Переопределяет метод POST для обновления кол-ва товара в корзине.
-    """
-
-    def post(self, request: HttpRequest) -> JsonResponse:
+    def patch(self, request: Request) -> Response:
+        """
+        Обновляет кол-во товаров в корзине
+        """
         cart = Cart(request)
         data = json.loads(request.body)
         for info_product in data:
             product_id = info_product['product_id']
             quantity = info_product['quantity']
             cart.update_quantity(product_id, quantity)
-        return JsonResponse({"status_code": 200})
+        return Response(status=HTTP_200_OK)
 
-
-class DeleteProductInCart(View):
-    """
-    Этот класс позволяет добавлять товары в корзину.
-    Методы:
-        delete (HttpRequest): Переопределяет метод DELETE для удаления товара.
-    """
-
-    def delete(self, request: HttpRequest, product_id: str) -> JsonResponse:
+    def delete(self, request: Request) -> Response:
         """
-        Выполняет DELETE-запрос для удаления товара из корзины.
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-            - product_id (int): pk товара который нужно удалить.
-        Возвращает:
-            JsonResponse: Ответ с кодом 204 при успешном удалении.
+        Удаляет товар из корзины
         """
         cart = Cart(request)
+        product_id = request.data["product_id"]
         cart.remove(product_id)
-        request.COOKIES["total_price"] = cart.get_total_cost()
-        return JsonResponse({"status_code": 204})
-
-
-class GetTotalQuantityCart(View):
-    """
-    GetTotalQuantityCart для получения общего кол-ва товаров в корзине.
-    Методы:
-        get (HttpRequest): возвращает json {'total_quantity': кол-во (int)}
-    """
-
-    def get(self, request: HttpRequest) -> JsonResponse:
-        """
-        Выполняет GET-запрос для получения информации об общем кол-ве товаров.
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-        Возвращает:
-            JsonResponse: Ответ в ключе 'total_quantity'.
-        """
-        cart = Cart(request)
-        if "total_quantity" not in request.COOKIES:
-            request.COOKIES["total_quantity"] = cart.get_total_quantity()
-        total_quantity = request.COOKIES.get("total_quantity")
-        return JsonResponse({"total_quantity": total_quantity})
-
-
-class GetTotalCostCart(View):
-    """
-    GetTotalPriceCart для получения общей стоимости товаров в корзине.
-    Методы:
-        get (HttpRequest): возвращает json {'total_price': стоимость (int)}
-    """
-
-    def get(self, request: HttpRequest) -> JsonResponse:
-        """
-        Выполняет GET-запрос для получения информации об общей стоимости товаров.
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-        Возвращает:
-            JsonResponse: Ответ в ключе 'total_price'.
-        """
-        cart = Cart(request)
-        if "total_price" not in request.COOKIES:
-            request.COOKIES["total_price"] = cart.get_total_cost()
-        total_price = request.COOKIES.get("total_price")
-        return JsonResponse({"total_price": total_price})
-
-
-class GetCostProductInCart(View):
-    """
-
-    """
-    def get(self, request: HttpRequest, product_id: str, quantity: int | None = None) -> JsonResponse:
-        """
-
-        """
-        if quantity is not None:
-            cart = Cart(request)
-            cost = cart.get_cost_product(product_id, quantity)
-            return JsonResponse({"product_cost": cost})
+        return Response(status=HTTP_204_NO_CONTENT)

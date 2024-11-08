@@ -658,37 +658,26 @@ var Amount = function(){
     var $prod_desc = $('.ProductCard-desc-in-cart');
     var $prod_price = $('.ProductCard-price');
 
-    // Функция для обновления цены
-    async function updatePrice(url, thisCost) {
-        try {
-            const response = await fetch(url); // Дожидаемся ответа
-            if (!response.ok) {
-                throw new Error(`Ошибка HTTP! Статус: ${response.status}`);
-            }
-            const data = await response.json(); // Дожидаемся парсинга JSON
-            const productCost = data.product_cost;
-            thisCost.text(productCost + ' $');
-        } catch (error) {
-            console.error('Ошибка:', error);
-        }
+    function updateCostProduct(inputElem, btnEvent) {
+       // Достаем цену товара в элементе input
+        var $priceProduct = inputElem.data('price_product')
+        // Находим элемент со стоимостью товара
+        var $thisProdCost = $(btnEvent).closest($prod_desc).find($prod_price);
+        // Высчитываем новую стоимость
+        var $newProdCost = parseFloat(inputElem.val()) * parseFloat($priceProduct)
+        // Подставляем новое значение округленное до 2 знаков
+        $thisProdCost.text($newProdCost.toFixed(2) + ' $')
     }
 
     return {
         init: function(){
-            // Получаем URL для обновления цены
-
             $add.on('click', function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val( value + 1);
 
-                // Вызываем функцию для обновления цены
-                var $thisProdDesc = $(this).closest($prod_desc).filter($prod_desc);
-                var $thisProdCost = $thisProdDesc.find($prod_price);
-                var url = $thisProdCost.data('url-update-cost') + $inputThis.val();
-
-                updatePrice(url, $thisProdCost);
+                updateCostProduct($inputThis, this)
             });
             $remove.on('click', function(e){
                 e.preventDefault();
@@ -697,12 +686,7 @@ var Amount = function(){
                 var url = $('.ProductCard-price').data('url-update-cost')
                 $inputThis.val(value>0?value - 1:0);
 
-                // Вызываем функцию для обновления цены
-                var $thisProdDesc = $(this).closest($prod_desc).filter($prod_desc);
-                var $thisProdCost = $thisProdDesc.find($prod_price);
-                var url = $thisProdCost.data('url-update-cost') + $inputThis.val();
-
-                updatePrice(url, $thisProdCost);
+                updateCostProduct($inputThis, this)
             });
         }
     };
