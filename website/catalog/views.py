@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Min
@@ -33,11 +35,66 @@ def catalog_view(request: HttpRequest):
 
 
 class CatalogListView(ListView):
+    """
+       Представление для отображения списка продуктов в каталоге.
+
+       Это представление обрабатывает запросы на отображение продуктов в
+       определенной категории, предоставляет возможность фильтрации по
+       различным параметрам, таким как продавцы, производители,
+       ограниченные серии, диапазон цен, название, спецификации и теги.
+
+       Атрибуты:
+           template_name (str): Путь к шаблону, который будет использоваться для отображения.
+           model (Model): Модель, используемая для получения данных (Product).
+           context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
+
+       """
     template_name = "catalog/catalog.html"
     model = Product
     context_object_name = "products"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_param())
+        return context
+
+    def get_param(self):
+        """Получаем дополнительные параметры для контекста."""
+
+        category_id = self.kwargs.get("pk")
+
+        products_with_related = Product.objects.prefetch_related('specifications').filter(category__id=category_id)
+
+        sellers = Seller.objects.all()
+        manufactures = products_with_related.values_list('manufacture', flat=True).distinct()
+
+        # Получаем все спецификации для всех продуктов в категории
+        specifications = (Specification.objects
+                          .filter(product__in=products_with_related)
+                          .select_related('name')
+                          .distinct()
+                          )
+        # Группируем спецификации по имени
+        grouped_specifications = defaultdict(list)
+        for spec in specifications:
+            print('spec:', spec)
+            grouped_specifications[spec.name.name].append(spec.value)
+
+        print('spec grouped:', grouped_specifications.items)
+        # Получить уникальные теги
+        tags = Tag.objects.filter(products__isnull=False).distinct()
+        print('tags', tags)
+
+        return {
+            "sellers": sellers,
+            "manufactures": manufactures,
+            "grouped_specifications": grouped_specifications.items(),
+            "tags": tags,
+            "category_id": category_id,
+        }
+
     def get_queryset(self):
+        """Получаем список продуктов с учетом кэширования."""
         category_id = self.kwargs.get("pk")
         cache_key = PRODUCTS_KEY.format(category_id=category_id)
         queryset = cache.get(cache_key)
@@ -50,6 +107,59 @@ class CatalogListView(ListView):
             )
         cache.set(cache_key, queryset, timeout=60)
         return queryset
+
+    def filter_products(self, products, request):
+        """Фильтруем продукты по выбранным параметрам."""
+        selected_sellers = request.POST.getlist("seller[]")
+        selected_manufactures = request.POST.getlist("manufacture[]")
+        selected_limited_edition = request.POST.get("limited_edition")
+        selected_range_price = request.POST.get("price")
+        selected_title = request.POST.get("title")
+        selected_specifications = request.POST.getlist("specification")
+        selected_tags = request.POST.getlist("tags")
+
+        # Фильтрация по диапазону цен
+        if selected_range_price:
+            try:
+                price_min, price_max = map(float, selected_range_price.split(";"))
+                products = products.filter(price__range=[price_min, price_max])
+            except ValueError:
+                pass  # Игнорируем ошибку, если значения некорректные
+
+        # Фильтрация по названию
+        if selected_title:
+            products = products.filter(name__icontains=selected_title)
+
+        # Фильтрация по продавцам
+        if selected_sellers:
+            products = products.filter(prices__seller__id__in=selected_sellers)
+
+        # Фильтрация по производителям
+        if selected_manufactures:
+            products = products.filter(manufacture__in=selected_manufactures)
+
+        # Фильтрация по ограниченным сериям
+        if selected_limited_edition:
+            products = products.filter(limited_edition=True)
+
+        # Фильтрация по характеристикам
+        if selected_specifications:
+            products = products.filter(specifications__value__in=selected_specifications).distinct()
+
+        # Фильтрация по тегам
+        if selected_tags:
+            products = products.filter(tags__id__in=selected_tags).distinct()
+
+        return products
+
+    def post(self, request, *args, **kwargs):
+        """Обработка POST-запроса для фильтрации продуктов."""
+        products = self.get_queryset()
+        products = self.filter_products(products, request)
+
+        context = self.get_param()
+        context["products"] = products
+        return render(request, self.template_name, context)
 
 
 class ProductDetailView(DetailView):
