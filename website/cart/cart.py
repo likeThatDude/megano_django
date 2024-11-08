@@ -13,36 +13,28 @@ class Cart:
     Модель корзины, которая хранит в себе информацию о товарах в сессии.
     Для работы с корзиной необходимо создавать объект корзины для получения информации
     из сессии пользователя.
-
-    Примечание:
-    Данный класс работает исключительно с объектами моделей Product и Price при добавлении, удалении и изменении
     """
 
     def __init__(self, request: Request):
         """
-        Создание корзины. Если корзины не было, то она будет создана в сессиях
+        Создание корзины
 
         Атрибуты:
-            request (HttpRequest): запрос в котором хранится сессия с корзиной.
-
+            request (Request): запрос в котором хранится сессия с корзиной.
         """
-        # берем текущую сессию пользователя
         self.session = request.session
-        # достаем корзину из этой сессии
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
-            # если корзины нет, то создаем пустой список
             cart = self.session[settings.CART_SESSION_ID] = {
                 "products": {},
                 "total_quantity": 0,
                 "total_cost": '0',
-                                                             }
-        # сохраняем корзину в атрибуте
+            }
         self.cart = cart
 
     def save(self) -> None:
         """
-        Сохраняет корзину и ставит отметку о том, чтобы сессия была изменена
+        Обновляет кол-во, стоимость товаров в корзине и сохраняет корзину в сессии
         """
         self.__update_total_values_cart()
         self.session[settings.CART_SESSION_ID] = self.cart
@@ -74,13 +66,13 @@ class Cart:
                 "cost_product": "0.00"
             }
         self.cart["products"][product_id]["quantity"] += quantity
-        self.cart["products"][product_id]["cost_product"] = self.get_cost_product(
+        self.cart["products"][product_id]["cost_product"] = self.__get_cost_product(
             product_id,
             self.cart["products"][product_id]["quantity"]
         )
         self.save()
 
-    def get_cost_product(self, product_id: str, quantity: int) -> str:
+    def __get_cost_product(self, product_id: str, quantity: int) -> str:
         """
         Возвращает общую стоимость товара
         """
@@ -114,13 +106,22 @@ class Cart:
 
     @property
     def total_quantity(self) -> int:
+        """
+        Возвращает общее кол-во товаров в корзине
+        """
         return self.cart["total_quantity"]
 
     @property
     def total_cost(self) -> str:
+        """
+        Возвращает общую стоимость товаров в корзине
+        """
         return self.cart["total_cost"]
 
     def __update_total_values_cart(self):
+        """
+        Обновляет общую информацию о корзине (кол-во и стоимость товаров)
+        """
         self.cart["total_quantity"] = self.__get_total_quantity()
         self.cart["total_cost"] = self.__get_total_cost()
 
@@ -137,9 +138,9 @@ class Cart:
         total_cost = sum(Decimal(item["price"]) * item["quantity"] for item in self.cart["products"].values())
         return str(total_cost)
 
-    def get_info_cart(self) -> list[dict]:
+    def get_context_info(self) -> list[dict]:
         """
-        Возвращает информацию о товарах в корзине
+        Возвращает информацию для отображения страницы корзины
         Структура возвращаемых данных:
             [
                 {'product_id': {'price': цена товара (str),

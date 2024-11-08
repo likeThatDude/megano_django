@@ -1,4 +1,3 @@
-import json
 from django.views.generic import TemplateView
 
 from rest_framework.views import APIView
@@ -22,7 +21,7 @@ class DetailCart(TemplateView):
         """
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
-        context["info_cart"] = cart.get_info_cart()
+        context["info_cart"] = cart.get_context_info()
         return context
 
 
