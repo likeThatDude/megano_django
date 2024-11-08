@@ -11,17 +11,14 @@ from .cart import Cart
 
 class DetailCart(TemplateView):
     """
-    Этот класс возвращает информацию о корзине.
-    Методы:
-        get_context_data (**kwargs): собирает информацию из корзины и передает ее в контекст шаблона.
+    Представление для отображения страницы корзины
     """
 
     template_name = "cart/cart_detail.html"
 
     def get_context_data(self, **kwargs) -> dict:
         """
-        Возвращает контекст в шаблон. Добавляет информацию о корзине в контекст.
-        При итерации по объекту Cart он возвращает словарь с информацией о товаре
+        Возвращает контекст в шаблон
         """
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
@@ -35,39 +32,32 @@ class APICart(APIView):
     """
     def get(self, request: Request) -> Response:
         """
-        Возвращает ВСЮ информацию о товарах в корзине
+        Возвращает информацию о товарах в корзине
         """
         cart = Cart(request)
         return Response({'cart': cart.cart})
 
     def post(self, request: Request) -> Response:
         """
-        Добавляет товар в корзину если в теле запроса
+        Добавляет товар в корзину
         """
         cart = Cart(request)
         data = request.data
-        if data["update_products"]:
-            for product_id, quantity in data["products"].items():
-                cart.update_quantity(product_id, quantity)
-            return Response(status=HTTP_200_OK)
-        else:
-            product_id = data["product_id"]
-            price_id = data["price_id"]
-            quantity = 1
-            if "quantity" in data:
-                quantity = data["quantity"]
-            cart.add(product_id, price_id, quantity)
-            return Response(status=HTTP_201_CREATED)
+        product_id = data["product_id"]
+        price_id = data["price_id"]
+        quantity = 1
+        if "quantity" in data:
+            quantity = data["quantity"]
+        cart.add(product_id, price_id, quantity)
+        return Response(status=HTTP_201_CREATED)
 
     def patch(self, request: Request) -> Response:
         """
         Обновляет кол-во товаров в корзине
         """
         cart = Cart(request)
-        data = json.loads(request.body)
-        for info_product in data:
-            product_id = info_product['product_id']
-            quantity = info_product['quantity']
+        data = request.data
+        for product_id, quantity in data.items():
             cart.update_quantity(product_id, quantity)
         return Response(status=HTTP_200_OK)
 

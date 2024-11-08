@@ -1,12 +1,12 @@
 // Функция для сбора данных со страницы для отправки
 async function getInfoToUpdateCart() {
     const allInputs = document.querySelectorAll('input.Amount-input');
-    const data = {"update_products": true, 'products': {}};
+    const data = {};
     allInputs.forEach(input => {
         const product_id = input.dataset.product_id;
         const quantity = input.value;
 
-        data.products[product_id] = Number(quantity)
+        data[product_id] = Number(quantity)
     });
     return data
 }
@@ -18,7 +18,7 @@ async function updateProductInCart() {
 
         const dataToReq = await getInfoToUpdateCart()
         const response = await fetch(CART_API, {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'X-CSRFToken': csrftoken,
                 'Content-Type': 'application/json',
