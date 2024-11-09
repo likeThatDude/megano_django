@@ -17,6 +17,7 @@ from django.views.generic import UpdateView
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
+from .forms import ProfileRegistrationForm
 from .models import Profile
 
 
@@ -33,18 +34,48 @@ class LogOutView(LogoutView):
 
 
 class RegisterView(CreateView):
+    """
+    CBV регистрации профиля пользователя
+    """
     template_name = "account/register.html"
     form_class = CustomUserCreationForm
+    context_object_name = "register_form"
+
+    def get_context_data(self, **kwargs):
+        """
+        Передаем в шаблон контекст с формой ProfileRegistrationForm для ввода ФИО и номера телефона
+        """
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            context["profile_registration_form"] = ProfileRegistrationForm(self.request.POST)
+        else:
+            context["profile_registration_form"] = ProfileRegistrationForm()
+        return context
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password1")
-        user = authenticate(self.request, email=email, password=password)
-        if user:
-            login(self.request, user=user)
+        """
+        Получаем экземпляр формы ProfileRegistrationForm, проверяем две формы на валидность
+        Если проверку прошли: то сохраняем основную форму, привязываем пользователя к профилю,
+        аутентифицируем пользователя, логиним
+        """
+        profile_form = ProfileRegistrationForm(self.request.POST)
 
-        return response
+        if profile_form.is_valid() and form.is_valid():
+            user = form.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(self.request, email=email, password=password)
+            if user:
+                login(self.request, user=user)
+
+            return redirect(self.get_success_url())
+
+        return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy("core:index")
