@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import ManyToManyField
+from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -13,15 +14,14 @@ from .utils import seller_image_directory_path
 class Category(models.Model):
     """
     Модель категории товара
-    name: название категории
-    icon: иконка категории
-    archived: статус архива категории
-    parent_category: ссылка на родительскую категорию (если значение не NULL, то это подкатегория категории)
-    """
 
-    class Meta:
-        verbose_name_plural = "categories"
-        ordering = ("name",)
+    Attributes:
+        name: название категории
+        icon: иконка категории
+        archived: статус архива категории
+        parent_category: ссылка на родительскую категорию (если значение не NULL,
+         то это подкатегория категории)
+    """
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
     icon = models.FileField(upload_to=category_icon_directory_path, verbose_name=_("Icon"))
@@ -34,12 +34,29 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
+    tags = models.ManyToManyField(
+        'Tag',
+        null=True,
+        blank=True,
+        related_name="category_tags",
+        verbose_name=_("Сategory tags")
+    )
+
+    class Meta:
+        verbose_name = 'category'
+        verbose_name_plural = "categories"
+        ordering = ("name",)
 
     def __str__(self):
         return self.name
 
 
 class Tag(models.Model):
+    """
+    Модель тега товара
+    name: название тега
+    """
+
     name = models.CharField(
         max_length=100,
         verbose_name=_("Name"),
@@ -99,6 +116,10 @@ class Product(models.Model):
     )
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
 
+    class Meta:
+        verbose_name = 'product'
+        verbose_name_plural = 'products'
+
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
 
@@ -118,6 +139,10 @@ class ProductImage(models.Model):
     )
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
 
+    class Meta:
+        verbose_name = 'image product'
+        verbose_name_plural = 'images product'
+
 
 class Seller(models.Model):
     """
@@ -130,8 +155,11 @@ class Seller(models.Model):
     email: адрес электронной почты продавца
     created_at: когда создан продавец
     archived: статус архива продавца
-
     """
+
+    class Meta:
+        verbose_name = _("Seller")
+        verbose_name_plural = _("Sellers")
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
@@ -155,6 +183,10 @@ class Seller(models.Model):
     payment_methods = ManyToManyField("Payment", verbose_name=_("Payment methods"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
+
+    class Meta:
+        verbose_name = 'seller'
+        verbose_name_plural = 'sellers'
 
     def __str__(self) -> str:
         return f"Seller(id={self.pk}, name={self.name!r})"
@@ -268,7 +300,6 @@ class Price(models.Model):
     quantity: доступное количество
     price: цена
     created_at: дата создания записи
-
     """
 
     seller = models.ForeignKey(
@@ -291,6 +322,8 @@ class Price(models.Model):
 
     class Meta:
         unique_together = ("product", "seller")
+        verbose_name = 'price'
+        verbose_name_plural = 'prices'
 
     def __str__(self):
         return f"Price(product={self.product}, seller={self.seller}), price={self.price}"
@@ -319,6 +352,8 @@ class Review(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
+        verbose_name = 'review'
+        verbose_name_plural = 'reviews'
 
 
 class NameSpecification(models.Model):
@@ -326,6 +361,11 @@ class NameSpecification(models.Model):
     Модель названия характеристики
     name: название характеристики
     """
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = 'name specification'
+        verbose_name_plural = 'names specification'
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
@@ -364,5 +404,40 @@ class Specification(models.Model):
         related_name="specifications",
     )
 
+    class Meta:
+        verbose_name = 'specification'
+        verbose_name_plural = 'specifications'
+
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
+
+
+class Viewed(models.Model):
+    """
+    Модель таблицы просмотренных пользователем товаров.
+
+    Attributes:
+        user: пользователь, который посмотрел товар;
+        product: товар, который был просмотрен пользователем;
+        created_at: дата/время просмотра товара.
+    """
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_("User"),
+        related_name="viewed",
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name=_("Product"),
+        related_name="viewed",
+    )
+    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created_at"))
+
+    class Meta:
+        verbose_name = _("Viewed")
+        verbose_name_plural = _("Viewed")
+        ordering = ("-created_at",)
+        constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
