@@ -74,7 +74,7 @@
                                                      src="{% static 'assets/img/icons/loon-icon.svg' %}"
                                                      alt="loon-icon.svg"/></button>
                         <div class="dropdown-content">
-                            {% if user_is_auth %}
+                            {% if request.user.is_authenticated %}
                                 <a class="dropdown-content-a" href="{% url 'account:personal-cabinet' %}">Личный кабинет</a>
                             {% endif %}
                             <a class="dropdown-content-a" href="{% static 'account.html' %}">Административный
