@@ -27,7 +27,7 @@
         <div class="Order-personal">
           <div class="col">
             {% for order in orders %}
-            <div class="row-block col-mt"><a class="Order-title" href="oneorder.html">Заказ&#32;<span class="Order-numberOrder">{{ order.pk }}</span>&#32;от&#32;<span class="Order-dateOrder">{{ order.created_at }}</span></a></div>
+            <div class="row-block col-mt"><a class="Order-title" href="{% url 'order:order_detail' pk=order.pk %}">Заказ&#32;<span class="Order-numberOrder">{{ order.pk }}</span>&#32;от&#32;<span class="Order-dateOrder">{{ order.created_at }}</span></a></div>
               <div>
                 <div class="row-block">
                   <div class="Order-info Order-info_delivery text-ml">
