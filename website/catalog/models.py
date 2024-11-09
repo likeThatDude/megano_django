@@ -36,8 +36,6 @@ class Category(models.Model):
     )
     tags = models.ManyToManyField(
         'Tag',
-        null=True,
-        blank=True,
         related_name="category_tags",
         verbose_name=_("Сategory tags")
     )

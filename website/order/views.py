@@ -53,18 +53,18 @@ def pay_view(request: HttpRequest):
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
 
-class OrdersHistoryListView(ListView):
-    """
-    Представление для истории заказов профиля пользователя.
-
-    Атрибуты:
-        template_name (str): Путь к шаблону, который будет использоваться для отображения страницы истории заказов
-        queryset (Queryset): Queryset всех заказов пользователя
-        context_object_name (str): Имя объекта контекста для передачи в шаблон.
-    """
-
-    queryset = Order.objects.annotate(
-        total_price=Sum(F("products__prices__price") * F("products__prices__quantity"))
-    )
-    context_object_name = "orders"
-    template_name = "order/orders_history.html"
+# class OrdersHistoryListView(ListView):
+#     """
+#     Представление для истории заказов профиля пользователя.
+#
+#     Атрибуты:
+#         template_name (str): Путь к шаблону, который будет использоваться для отображения страницы истории заказов
+#         queryset (Queryset): Queryset всех заказов пользователя
+#         context_object_name (str): Имя объекта контекста для передачи в шаблон.
+#     """
+#
+#     queryset = Order.objects.annotate(
+#         total_price=Sum(F("products__prices__price") * F("products__prices__quantity"))
+#     )
+#     context_object_name = "orders"
+#     template_name = "order/orders_history.html"
