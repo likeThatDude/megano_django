@@ -1,9 +1,12 @@
 from account.models import Profile
+from catalog.models import Delivery
+from catalog.models import Payment
+from catalog.models import Product
+from catalog.models import Seller
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
-from catalog.models import Product, Seller, Delivery, Payment
 
 
 class Order(models.Model):
@@ -21,8 +24,9 @@ class Order(models.Model):
         (CANCELLED, _("Заказ отменен")),
     )
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"),
-                             related_name="orders")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="orders"
+    )
     delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
     delivery_address = models.TextField(max_length=500, verbose_name=_("Delivery address"))
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=PENDING)
@@ -31,7 +35,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
 
     def __str__(self):
-        return f'Order: {self.id}'
+        return f"Order: {self.id}"
 
 
 class OrderItem(models.Model):
@@ -41,8 +45,8 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"), default=0.00)
     delivery = models.ForeignKey(Delivery, on_delete=models.PROTECT, verbose_name=_("Delivery"))
     payment_type = models.ForeignKey(Payment, on_delete=models.PROTECT, verbose_name=_("Payment type"))
-    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.PROTECT, verbose_name=_("Order"))
+    order = models.ForeignKey(Order, related_name="order_items", on_delete=models.PROTECT, verbose_name=_("Order"))
     active = models.BooleanField(default=True, verbose_name=_("Active"))
 
     def __str__(self):
-        return f'{self.product}, {self.seller}, {self.quantity}, {self.price}'
+        return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"

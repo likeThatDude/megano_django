@@ -1,8 +1,9 @@
+from catalog.models import Delivery
+from catalog.models import Payment
 from django import forms
 from django.core.exceptions import ValidationError
 from django.http import QueryDict
 
-from catalog.models import Delivery, Payment
 
 class OrderForm(forms.Form):
     name = forms.CharField(max_length=100, required=True)
@@ -32,11 +33,11 @@ class OrderForm(forms.Form):
     def check_delivery_type(keys_data: list[str], post_data: QueryDict, cleaned_data: dict[str, str]) -> None:
         delivery_choices: list[str] = list(dict(Delivery.DELIVERY_CHOICES).keys())
 
-        if 'delivery_' not in keys_data and 'delivery' not in keys_data:
-            raise ValidationError('Не найдены данные о способе доставки')
+        if "delivery_" not in keys_data and "delivery" not in keys_data:
+            raise ValidationError("Не найдены данные о способе доставки")
 
         for key, value in post_data.items():
-            if key.startswith('delivery'):
+            if key.startswith("delivery"):
                 if value not in delivery_choices:
                     raise forms.ValidationError(f"Неверный тип данных для {key}")
                 cleaned_data[key] = value
@@ -45,11 +46,11 @@ class OrderForm(forms.Form):
     def check_payment_method(keys_data: list[str], post_data: QueryDict, cleaned_data: dict[str, str]) -> None:
         payments_choices: list[str] = list(dict(Payment.PAYMENT_CHOICES).keys())
 
-        if 'pay' not in keys_data and 'pay_' not in keys_data:
-            raise ValidationError('Не найдены данные о способе оплаты')
+        if "pay" not in keys_data and "pay_" not in keys_data:
+            raise ValidationError("Не найдены данные о способе оплаты")
 
         for key, value in post_data.items():
-            if key.startswith('pay'):
+            if key.startswith("pay"):
                 if value not in payments_choices:
-                    raise forms.ValidationError(f'Неверный тип данных для поля {key}')
+                    raise forms.ValidationError(f"Неверный тип данных для поля {key}")
                 cleaned_data[key] = value

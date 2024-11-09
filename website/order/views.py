@@ -1,33 +1,16 @@
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpRequest
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-
-from order.forms import OrderForm
 from order import utils
+from order.forms import OrderForm
 
 products_list = {
-    'product1': {
-        "quantity": 2,
-        "product_id": 1,
-        "price": 1200,
-        "seller_id": 2,
-        "to_order": True
-    },
-    'product2': {
-        "quantity": 1,
-        "product_id": 2,
-        "price": 1300,
-        "seller_id": 1,
-        "to_order": True
-    },
-    'product3': {
-        "quantity": 1,
-        "product_id": 3,
-        "price": 1500,
-        "seller_id": 1,
-        "to_order": True
-    }
+    "product1": {"quantity": 2, "product_id": 1, "price": 1200, "seller_id": 2, "to_order": True},
+    "product2": {"quantity": 1, "product_id": 2, "price": 1300, "seller_id": 1, "to_order": True},
+    "product3": {"quantity": 1, "product_id": 3, "price": 1500, "seller_id": 1, "to_order": True},
 }
 
 
@@ -41,7 +24,7 @@ class OrderCreateView(View):
 
             prices = utils.get_correct_queryset(products_list)
 
-            context['order_data'] = prices
+            context["order_data"] = prices
 
         return render(request, "order/order.html", context=context)
 
@@ -53,7 +36,7 @@ class OrderCreateView(View):
             utils.check_data_into_db(correct_data, products_list, request.user.pk)
         else:
             data_errors = validate_data.errors.items()
-        return redirect(reverse('order:order_create'))
+        return redirect(reverse("order:order_create"))
 
 
 def order_detail_view(request: HttpRequest):
@@ -61,7 +44,8 @@ def order_detail_view(request: HttpRequest):
 
 
 def pay_view(request: HttpRequest):
-    return render(request, 'order/payment.html')
+    return render(request, "order/payment.html")
+
 
 def pay_view2(request: HttpRequest):
-    return render(request, 'order/paymentsomeone.html')
+    return render(request, "order/paymentsomeone.html")

@@ -186,8 +186,8 @@ class Payment(models.Model):
     CASH = "CH"
     CARD_ONLINE = "CO"
     CARD_COURIER = "CC"
-    STORE_ONLINE = 'SO'
-    STORE_RANDOM = 'SR'
+    STORE_ONLINE = "SO"
+    STORE_RANDOM = "SR"
 
     PAYMENT_CHOICES = (
         (CASH, _("Наличными")),
@@ -197,8 +197,9 @@ class Payment(models.Model):
         (STORE_RANDOM, _("Случайной картой магазину")),
     )
 
-    name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH,
-                            verbose_name=_("Payment method"), db_index=True)
+    name = models.CharField(
+        max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"), db_index=True
+    )
 
     def __str__(self):
         return str(dict(self.PAYMENT_CHOICES).get(self.name))
@@ -235,8 +236,8 @@ class Delivery(models.Model):
     COURIER = "CR"
     LOCKER = "LK"
     SELLER = "SL"
-    SHOP_STANDARD = 'SS'
-    SHOP_EXPRESS = 'SE'
+    SHOP_STANDARD = "SS"
+    SHOP_EXPRESS = "SE"
 
     DELIVERY_CHOICES = [
         (PICKUP_POINT, _("В пункт выдачи")),

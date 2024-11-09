@@ -58,7 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
     def product_name_short(self, obj: Product) -> str:
         if len(obj.name) < 20:
             return obj.name
-        return obj.name[:20] + '...'
+        return obj.name[:20] + "..."
 
 
 class SellerProductsInline(admin.TabularInline):
