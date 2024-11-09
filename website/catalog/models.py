@@ -34,14 +34,10 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
-    tags = models.ManyToManyField(
-        'Tag',
-        related_name="category_tags",
-        verbose_name=_("Сategory tags")
-    )
+    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"))
 
     class Meta:
-        verbose_name = 'category'
+        verbose_name = "category"
         verbose_name_plural = "categories"
         ordering = ("name",)
 
@@ -115,8 +111,8 @@ class Product(models.Model):
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
 
     class Meta:
-        verbose_name = 'product'
-        verbose_name_plural = 'products'
+        verbose_name = "product"
+        verbose_name_plural = "products"
 
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
@@ -138,8 +134,8 @@ class ProductImage(models.Model):
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
 
     class Meta:
-        verbose_name = 'image product'
-        verbose_name_plural = 'images product'
+        verbose_name = "image product"
+        verbose_name_plural = "images product"
 
 
 class Seller(models.Model):
@@ -183,8 +179,8 @@ class Seller(models.Model):
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
     class Meta:
-        verbose_name = 'seller'
-        verbose_name_plural = 'sellers'
+        verbose_name = "seller"
+        verbose_name_plural = "sellers"
 
     def __str__(self) -> str:
         return f"Seller(id={self.pk}, name={self.name!r})"
@@ -320,8 +316,8 @@ class Price(models.Model):
 
     class Meta:
         unique_together = ("product", "seller")
-        verbose_name = 'price'
-        verbose_name_plural = 'prices'
+        verbose_name = "price"
+        verbose_name_plural = "prices"
 
     def __str__(self):
         return f"Price(product={self.product}, seller={self.seller}), price={self.price}"
@@ -350,8 +346,8 @@ class Review(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
-        verbose_name = 'review'
-        verbose_name_plural = 'reviews'
+        verbose_name = "review"
+        verbose_name_plural = "reviews"
 
 
 class NameSpecification(models.Model):
@@ -362,8 +358,8 @@ class NameSpecification(models.Model):
 
     class Meta:
         ordering = ("name",)
-        verbose_name = 'name specification'
-        verbose_name_plural = 'names specification'
+        verbose_name = "name specification"
+        verbose_name_plural = "names specification"
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
@@ -403,8 +399,8 @@ class Specification(models.Model):
     )
 
     class Meta:
-        verbose_name = 'specification'
-        verbose_name_plural = 'specifications'
+        verbose_name = "specification"
+        verbose_name_plural = "specifications"
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"

@@ -1,13 +1,15 @@
+from django.db.models import F
+from django.db.models import Sum
 from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.db.models import F, Sum
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
+from django.views.generic import ListView
 from order import utils
 from order.forms import OrderForm
-from django.views.generic import ListView
+
 from .models import Order
 
 products_list = {
@@ -52,6 +54,7 @@ def pay_view(request: HttpRequest):
 
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
+
 
 # class OrdersHistoryListView(ListView):
 #     """

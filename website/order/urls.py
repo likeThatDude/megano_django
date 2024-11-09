@@ -10,5 +10,4 @@ urlpatterns = [
     path("payment/", views.pay_view, name="payment_view"),
     path("payment1/", views.pay_view2, name="payment_view"),
     # path("orders_history/", views.OrdersHistoryListView.as_view(), name="orders-history"),
-
 ]
