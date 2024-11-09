@@ -100,7 +100,7 @@ class Product(models.Model):
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
 
     def __str__(self) -> str:
-        return f"Product(id={self.pk}, name={self.name!r})"
+        return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
 
 
 class ProductImage(models.Model):
@@ -173,6 +173,8 @@ class Payment(models.Model):
             - 'CH': Наличными
             - 'CO': Картой онлайн
             - 'CC': Картой курьеру
+            - 'SO': Картой магазину
+            - 'SR': Случайной картой магазину
 
         name (str): Поле для хранения выбранного способа оплаты. Доступные варианты
         определяются PAYMENT_CHOICES. По умолчанию используется наличный расчет.
@@ -184,14 +186,19 @@ class Payment(models.Model):
     CASH = "CH"
     CARD_ONLINE = "CO"
     CARD_COURIER = "CC"
+    STORE_ONLINE = 'SO'
+    STORE_RANDOM = 'SR'
 
     PAYMENT_CHOICES = (
         (CASH, _("Наличными")),
         (CARD_ONLINE, _("Картой онлайн")),
         (CARD_COURIER, _("Картой курьеру")),
+        (STORE_ONLINE, _("Картой магазину")),
+        (STORE_RANDOM, _("Случайной картой магазину")),
     )
 
-    name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"))
+    name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH,
+                            verbose_name=_("Payment method"), db_index=True)
 
     def __str__(self):
         return str(dict(self.PAYMENT_CHOICES).get(self.name))
@@ -228,16 +235,20 @@ class Delivery(models.Model):
     COURIER = "CR"
     LOCKER = "LK"
     SELLER = "SL"
+    SHOP_STANDARD = 'SS'
+    SHOP_EXPRESS = 'SE'
 
     DELIVERY_CHOICES = [
         (PICKUP_POINT, _("В пункт выдачи")),
         (COURIER, _("Курьером")),
         (LOCKER, _("В постамат")),
         (SELLER, _("Силами продавца")),
+        (SHOP_STANDARD, _("Магазином обычная")),
+        (SHOP_EXPRESS, _("Магазином экспресс")),
     ]
 
     name = models.CharField(
-        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method")
+        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method"), db_index=True
     )
 
     def __str__(self):

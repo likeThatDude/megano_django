@@ -1,0 +1,31 @@
+{% load create_correct_delivery_data %}
+{% with order_data|get_delivery_data as my_order_data %}
+    {% for seller, products in my_order_data.items %}
+        <div class="seller_block">
+            <div class="order_info">
+                <p>Продавец: {{ seller.name|truncatechars:80 }}</p>
+                <p>Товар{% if products|length > 1 %}ы{% endif %}:
+                    {% for product in products %}
+                        <p class="product_name">
+                            <a href="{% url 'catalog:product_detail' pk=product.pk %}">
+                                {{ product.name|truncatechars:80 }}
+                            </a>
+                        </p>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="delivery_block">
+                {% for foo in seller.delivery_methods.all %}
+                    <div>
+                        <label class="toggle">
+                            <input type="radio" name="delivery_{{ seller.pk }}"
+                                   value="{{ foo.name }}"/><span
+                                class="toggle-box"></span>
+                            <span class="toggle-text">{{ foo }}</span>
+                        </label>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endwith %}

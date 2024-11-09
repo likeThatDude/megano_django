@@ -2388,13 +2388,13 @@ a.Cart-title {
     flex-direction: column;
 }
 
-.non-auth-block p  {
+.non-auth-block p {
     text-align: center;
     width: 100%;
     font-size: 1.4em;
 }
 
-.non-auth-block>p:not(:last-child) {
+.non-auth-block > p:not(:last-child) {
     margin-bottom: 0;
 }
 
@@ -3766,6 +3766,37 @@ a.Cart-title {
     background-color: #f4f4f4;
 }
 
+.sellers_payments {
+    max-width: 600px;
+}
+
+.sellers_payments > div:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.current_seller {
+    outline: 1px solid gray;
+    padding: 10px 20px 10px 20px;
+    border-radius: 20px;
+}
+
+.current_seller_info > p:not(:last-child) {
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+.current_seller_payments {
+    margin-left: 20px;
+}
+
+.seller_info {
+    margin-bottom: 20px;
+}
+
+.seller_info > p:not(:last-child) {
+    margin-bottom: 5px;
+}
+
 .NavigateProfile {
     visibility: visible;
 }
@@ -3797,6 +3828,85 @@ a.Cart-title {
 
 .Order-block {
     display: none;
+}
+
+.delivery_choices {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    width: auto;
+    max-width: 900px;
+    height: auto;
+}
+
+.seller_block {
+    outline: 1px solid gray;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.product_name {
+    width: 100%;
+    height: auto;
+    outline: 1px solid gray;
+    border-radius: 20px;
+    padding: 5px 20px 5px 20px;
+}
+
+
+.order_info {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid gray;
+}
+
+.order_info p:nth-child(-n+2) {
+    margin-bottom: 5px;
+}
+
+.order_info p:not(:nth-child(-n+2)) {
+    margin-bottom: 20px;
+}
+
+.seller_delivery {
+    width: auto;
+    height: auto;
+}
+
+.seller_delivery > label {
+    margin-bottom: 20px;
+}
+
+.store_delivery_choices {
+    width: 100%;
+    margin-left: 30px;
+    height: auto;
+}
+
+.seller_delivery_choices > div:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+.seller_delivery_choices {
+    width: 90%;
+    margin-left: 30px;
+    height: auto;
+}
+
+.hidden {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
+}
+
+.show {
+    height: auto;
+    opacity: 1;
+    transform: translateY(0);
+    transition: max-height 0.5s ease, opacity 0.5s ease, transform 0.5s ease;
 }
 
 .Order-block_OPEN {

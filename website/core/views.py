@@ -54,7 +54,7 @@ class IndexView(TemplateView):
                 .order_by("?")[:3]
                 .only("product__name", "product__preview", "text")
             )
-            cache.set(BANNERS_KEY, random_banners, timeout=3)
+            cache.set(BANNERS_KEY, random_banners, timeout=3600)
 
         context["categories"] = categories
         context["banners"] = random_banners
