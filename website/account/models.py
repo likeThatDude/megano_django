@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -15,18 +14,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     Изменённая модель пользователя, с которым завязаны все действия по
     регистрации, аутентификации и авторизации.
 
-    login: login пользователя;
-    email: email пользователя;
-    created_at: дата регистрации пользователя;
-    is_staff: Логическое значение - является ли пользователь администратором;
-    is_active: Логическое значение - для "мягкого" удаления пользователя.
+    Attributes:
+        login: login пользователя;
+        email: email пользователя;
+        created_at: дата регистрации пользователя;
+        is_staff: Логическое значение - является ли пользователь администратором;
+        is_active: Логическое значение - для "мягкого" удаления пользователя.
     """
-
-    class Meta:
-        app_label = "auth"
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
-        ordering = ("login",)
 
     login = models.CharField(max_length=50, unique=True, verbose_name=_("Login"))
     email = models.EmailField(unique=True, verbose_name=_("Email"), db_index=True)
@@ -49,6 +43,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+    class Meta:
+        app_label = "auth"
+        verbose_name = _("User")
+        verbose_name_plural = _("Users")
+        ordering = ("login",)
+
     def __str__(self):
         """Возвращаем никнейм пользователя, если он имеется"""
         return self.username if self.username else "Anonymous"
@@ -58,23 +58,15 @@ class Profile(models.Model):
     """
     Модель для дополнительной информации пользователя.
 
-    user: связь к пользователю по типу связи один-к-одному
-    first_name: имя пользователя;
-    last_name: фамилия пользователя;
-    patronymic: отчество (при наличии)
-    address: адрес пользователя;
-    phone: номер телефона пользователя;
-    photo: фото/аватар пользователя.
+    Attributes:
+        user: связь к пользователю по типу связи один-к-одному
+        first_name: имя пользователя;
+        last_name: фамилия пользователя;
+        patronymic: отчество (при наличии)
+        address: адрес пользователя;
+        phone: номер телефона пользователя;
+        photo: фото/аватар пользователя.
     """
-
-    class Meta:
-        app_label = "auth"
-        verbose_name = _("Profile")
-        verbose_name_plural = _("Profiles")
-        ordering = (
-            "first_name",
-            "last_name",
-        )
 
     user = models.OneToOneField(
         CustomUser,
@@ -99,6 +91,15 @@ class Profile(models.Model):
         null=True,
         blank=True,
     )
+
+    class Meta:
+        app_label = "auth"
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
+        ordering = (
+            "first_name",
+            "last_name",
+        )
 
     def __str__(self):
         """Возвращаем имя профиля, если оно имеется"""
