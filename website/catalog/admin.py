@@ -15,6 +15,7 @@ from .models import Review
 from .models import Seller
 from .models import Specification
 from .models import Tag
+from .models import Viewed
 
 
 @admin.action(description="Delete cache")
@@ -162,3 +163,26 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_display_links = ("name",)
     ordering = ("name",)
+
+
+@admin.register(Viewed)
+class ViewedAdmin(admin.ModelAdmin):
+    list_display = (
+        "pk",
+        "user",
+        "product",
+        "created_at",
+    )
+    list_display_links = (
+        "pk",
+        "user",
+        "product",
+    )
+    list_filter = (
+        "user",
+        "product",
+    )
+    search_fields = (
+        "user__login",
+        "product__name",
+    )

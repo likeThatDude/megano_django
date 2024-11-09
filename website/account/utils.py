@@ -15,6 +15,10 @@ def profile_photo_directory_path(instance: "Profile", filename: str) -> str:
 
 
 def validate_avatar_size(file: ImageFieldFile):
+    """
+    Функция проверки допустимости (валидатор) размера изображения.
+    Возвращает ValidationError, если размер превышает 2 мегабайта.
+    """
     if file.size > 2 * 1024 * 1024:
         raise ValidationError(
             _("The file %(filename)s larger than 2 MB"),
