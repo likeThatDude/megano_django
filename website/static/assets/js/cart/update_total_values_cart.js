@@ -25,6 +25,7 @@ async function getTotalValues() {
 
         const data = await response.json();
         const total_values = {
+            'products': data.cart.products,
             'total_cost': data.cart.total_cost,
             'total_quantity': data.cart.total_quantity,
         }
@@ -36,17 +37,27 @@ async function getTotalValues() {
 }
 
 
-// Функция для обновления элемента CartBlock-amount
+// Функция для обновления элементов с информацией о товаре в корзине
 async function updateTotalValuesCart() {
-    const totalValues = await getTotalValues(); // Получаем общие значения корзины (кол-во товаров, стоимость)
+    const dataProductsCart = await getTotalValues(); // Получаем общие значения корзины (кол-во товаров, стоимость)
      // Получаем элемент для отображения кол-ва товаров в корзине
     const cartAmountElement = document.querySelector('.CartBlock-amount');
      // Получаем элемент для отображения общей стоимости товаров в корзине
     const cartBlockPrice = document.querySelector('.CartBlock-price');
 
+    Object.values(dataProductsCart.products).forEach(product => {
+        const elemCardProduct = document.getElementById(product.pk)
+        const elemPriceProduct = elemCardProduct.querySelector('.ProductCard-price')
+        const elemSellerProduct = elemCardProduct.querySelector('.Seller-product')
+
+        const newPriceProduct = product.cost_product + ' $'
+        elemPriceProduct.innerText = newPriceProduct
+        elemSellerProduct.innerText = product.seller_name
+    })
+
     if (cartAmountElement) { // Проверяем, существует ли элемент
-        cartAmountElement.innerText = totalValues.total_quantity; // Обновляем кол-во товаров к корзине
-        cartBlockPrice.innerText = totalValues.total_cost; // Обновляем стоимость товаров в корзине
+        cartAmountElement.innerText = dataProductsCart.total_quantity; // Обновляем кол-во товаров к корзине
+        cartBlockPrice.innerText = dataProductsCart.total_cost; // Обновляем стоимость товаров в корзине
     } else {
         console.warn('Элемент с классом "CartBlock-amount" не найден.');
     }

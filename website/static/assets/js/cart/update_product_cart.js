@@ -1,12 +1,20 @@
 // Функция для сбора данных со страницы для отправки
 async function getInfoToUpdateCart() {
     const allInputs = document.querySelectorAll('input.Amount-input');
+    const allSelects = document.querySelectorAll('select.Select-seller-product');
     const data = {};
     allInputs.forEach(input => {
         const product_id = input.dataset.product_id;
         const quantity = input.value;
 
-        data[product_id] = Number(quantity)
+        const select = Array.from(allSelects).find(select => select.dataset.product_id === product_id);
+        const seller_id = select ? select.value : null; // Получаем value выбранного option, если select найден
+
+        data[product_id] = {
+            'product_id': product_id,
+            'quantity': Number(quantity),
+            'seller_id': Number(seller_id),
+        }
     });
     return data
 }
@@ -25,6 +33,8 @@ async function updateProductInCart() {
             },
             body: JSON.stringify(dataToReq)
         });
+
+        await updateTotalValuesCart();
 
         if (!response.ok) {
             throw new Error('Сеть не в порядке: ' + response.status);

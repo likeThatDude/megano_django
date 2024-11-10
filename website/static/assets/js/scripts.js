@@ -677,16 +677,17 @@ var Amount = function(){
                 var value = parseFloat($inputThis.val());
                 $inputThis.val( value + 1);
 
-                updateCostProduct($inputThis, this)
+                updateProductInCart();
+                updateTotalValuesCart();
             });
             $remove.on('click', function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
-                var url = $('.ProductCard-price').data('url-update-cost')
                 $inputThis.val(value>0?value - 1:0);
 
-                updateCostProduct($inputThis, this)
+                updateProductInCart();
+                updateTotalValuesCart();
             });
         }
     };

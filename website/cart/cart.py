@@ -62,6 +62,7 @@ class Cart:
                 "pk": product_id,
                 "price": str(price_product.price),
                 "seller_id": price_product.seller.pk,
+                "seller_name": str(price_product.seller),
                 "to_order": True,
                 "cost_product": "0.00"
             }
@@ -81,9 +82,9 @@ class Cart:
             return cost
         return '0.00'
 
-    def update_quantity(self, product_id: str, new_quantity: int) -> None:
+    def update_product(self, product_id: str, new_seller_id: int, new_quantity: int) -> None:
         """
-        Обновляет кол-во товара в корзине
+        Обновляет информацию о товаре в корзине
 
         Атрибуты:
             product_ud (int) - id модели товара
@@ -91,6 +92,11 @@ class Cart:
         """
         if product_id in self.cart["products"]:
             self.cart["products"][product_id]["quantity"] = new_quantity
+            self.cart["products"][product_id]["seller_id"] = new_seller_id
+            self.cart["products"][product_id]["seller_name"] = str(Seller.objects.get(pk=new_seller_id))
+            new_price_product = str(Price.objects.get(seller=new_seller_id, product=product_id).price)
+            self.cart["products"][product_id]["price"] = new_price_product
+            self.cart["products"][product_id]["cost_product"] = self.__get_cost_product(product_id, new_quantity)
             self.save()
 
     def remove(self, product_id: str) -> None:
@@ -159,6 +165,7 @@ class Cart:
                 "product": Product.objects.get(pk=product["pk"]),
                 "quantity": product["quantity"],
                 "seller": Seller.objects.get(pk=product["seller_id"]),
+                "sellers_product": Seller.objects.prefetch_related("products").filter(products=product["pk"]),
                 "total_cost": str(Decimal(product["price"]) * product["quantity"]),
                 "to_order": product["to_order"],
             }
