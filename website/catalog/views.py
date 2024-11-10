@@ -13,7 +13,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import ListView
 from drf_spectacular.utils import extend_schema
-from rest_framework import permissions, status
+from rest_framework import permissions
+from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -36,19 +37,20 @@ def catalog_view(request: HttpRequest):
 
 class CatalogListView(ListView):
     """
-       Представление для отображения списка продуктов в каталоге.
+    Представление для отображения списка продуктов в каталоге.
 
-       Это представление обрабатывает запросы на отображение продуктов в
-       определенной категории, предоставляет возможность фильтрации по
-       различным параметрам, таким как продавцы, производители,
-       ограниченные серии, диапазон цен, название, спецификации и теги.
+    Это представление обрабатывает запросы на отображение продуктов в
+    определенной категории, предоставляет возможность фильтрации по
+    различным параметрам, таким как продавцы, производители,
+    ограниченные серии, диапазон цен, название, спецификации и теги.
 
-       Атрибуты:
-           template_name (str): Путь к шаблону, который будет использоваться для отображения.
-           model (Model): Модель, используемая для получения данных (Product).
-           context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
+    Атрибуты:
+        template_name (str): Путь к шаблону, который будет использоваться для отображения.
+        model (Model): Модель, используемая для получения данных (Product).
+        context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
 
-       """
+    """
+
     template_name = "catalog/catalog.html"
     model = Product
     context_object_name = "products"
@@ -63,27 +65,25 @@ class CatalogListView(ListView):
 
         category_id = self.kwargs.get("pk")
 
-        products_with_related = Product.objects.prefetch_related('specifications').filter(category__id=category_id)
+        products_with_related = Product.objects.prefetch_related("specifications").filter(category__id=category_id)
 
         sellers = Seller.objects.all()
-        manufactures = products_with_related.values_list('manufacture', flat=True).distinct()
+        manufactures = products_with_related.values_list("manufacture", flat=True).distinct()
 
         # Получаем все спецификации для всех продуктов в категории
-        specifications = (Specification.objects
-                          .filter(product__in=products_with_related)
-                          .select_related('name')
-                          .distinct()
-                          )
+        specifications = (
+            Specification.objects.filter(product__in=products_with_related).select_related("name").distinct()
+        )
         # Группируем спецификации по имени
         grouped_specifications = defaultdict(list)
         for spec in specifications:
-            print('spec:', spec)
+            print("spec:", spec)
             grouped_specifications[spec.name.name].append(spec.value)
 
-        print('spec grouped:', grouped_specifications.items)
+        print("spec grouped:", grouped_specifications.items)
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
-        print('tags', tags)
+        print("tags", tags)
 
         return {
             "sellers": sellers,

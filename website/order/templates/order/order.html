@@ -57,7 +57,8 @@
 
 
                 <div class="Section-content">
-                    <form class="form" action="#" method="post">
+                    <form class="form" action="{% url 'order:order_create' %}" method="post">
+                        {% csrf_token %}
                         <div class="Order-block Order-block_OPEN" id="step1">
                             <header class="Section-header Section-header_sm">
                                 <h2 class="Section-title">Шаг 1. Параметры пользователя
@@ -69,39 +70,42 @@
                                         <label class="form-label" for="name">ФИО
                                         </label>
                                         <input class="form-input" id="name" name="name" type="text"
-                                               value="Иванов Иван Иванович"/>
+                                               value="{{ name|default:'' }}"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="phone">Телефон
                                         </label>
                                         <input class="form-input" id="phone" name="phone" type="text"
-                                               value="+70000000000"/>
+                                               value="{{ phone|default:'' }}"/>
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label" for="mail">E-mail
                                         </label>
-                                        <input class="form-input" id="mail" name="mail" type="text" value=""
+                                        <input class="form-input" id="mail" name="mail" type="text"
+                                               value="{{ email|default:'' }}"
                                                data-validate="require"/>
                                     </div>
                                 </div>
-                                <div class="row-block">
-                                    <div class="form-group">
-                                        <label class="form-label" for="password">Пароль
-                                        </label>
-                                        <input class="form-input" id="password" name="password" type="password"
-                                               placeholder="Тут можно изменить пароль"/>
+                                {% if not user.is_authenticated %}
+                                    <div class="row-block">
+                                        <div class="form-group">
+                                            <label class="form-label" for="password">Пароль
+                                            </label>
+                                            <input class="form-input" id="password" name="password" type="password"
+                                                   placeholder="Тут можно изменить пароль"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="passwordReply">Подтверждение пароля
+                                            </label>
+                                            <input class="form-input" id="passwordReply" name="passwordReply"
+                                                   type="password"
+                                                   placeholder="Введите пароль повторно"/>
+                                        </div>
+                                        <div class="form-group"><a class="btn btn_muted Order-btnReg" href="#">Я уже
+                                            зарегистрирован</a>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="form-label" for="passwordReply">Подтверждение пароля
-                                        </label>
-                                        <input class="form-input" id="passwordReply" name="passwordReply"
-                                               type="password"
-                                               placeholder="Введите пароль повторно"/>
-                                    </div>
-                                    <div class="form-group"><a class="btn btn_muted Order-btnReg" href="#">Я уже
-                                        зарегистрирован</a>
-                                    </div>
-                                </div>
+                                {% endif %}
                             </div>
                             <div class="Order-footer"><a class="btn btn_success Order-next" href="#step2">Дальше</a>
                             </div>
@@ -112,19 +116,48 @@
                                 </h2>
                             </header>
                             <div class="form-group">
-                                <div>
-                                    <label class="toggle">
-                                        <input type="radio" name="delivery" value="ordinary" checked="checked"/><span
-                                            class="toggle-box"></span><span class="toggle-text">Обычная доставка</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <label class="toggle">
-                                        <input type="radio" name="delivery" value="express"/><span
-                                            class="toggle-box"></span><span class="toggle-text">Экспресс доставка</span>
-                                    </label>
+                                <div class="delivery_choices">
+                                    <div class="store_delivery">
+                                        <label>
+                                            <input type="radio" name="choice_delivery_type" checked value="store"
+                                                   onclick="toggleDeliveryOptions()"> Доставку на себя возьмём мы
+                                        </label>
+                                        <div class="store_delivery_choices show">
+                                            <div>
+                                                <label class="toggle">
+                                                    <input type="radio" name="delivery" value="SS"/><span
+                                                        class="toggle-box"></span>
+                                                    <span class="toggle-text">Обычная доставка</span>
+                                                </label>
+                                            </div>
+                                            <div>
+                                                <label class="toggle">
+                                                    <input type="radio" name="delivery" value="SE"/><span
+                                                        class="toggle-box"></span>
+                                                    <span class="toggle-text">Экспресс доставка</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="seller_delivery">
+                                        <label>
+                                            <input type="radio" name="choice_delivery_type" value="seller"
+                                                   onclick="toggleDeliveryOptions()"> Доставку осуществит продавец
+                                        </label>
+                                        <div class="seller_delivery_choices hidden">
+                                            {% include 'order/delivery_block.html' %}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <p>
+                                <strong>
+                                    Заполните данные о городе и адрес доставки<br>
+                                    На этот адрес будет осуществлена доставка,
+                                    или будет найден ближайший пункт выдачи,<br>
+                                    в зависимости от вашего выбора.
+                                </strong>
+                            </p>
                             <div class="form-group">
                                 <label class="form-label" for="city">Город
                                 </label>
@@ -143,20 +176,7 @@
                                 <h2 class="Section-title">Шаг 3. Способ оплаты
                                 </h2>
                             </header>
-                            <div class="form-group">
-                                <div>
-                                    <label class="toggle">
-                                        <input type="radio" name="pay" value="online" checked="checked"/><span
-                                            class="toggle-box"></span><span class="toggle-text">Онлайн картой</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <label class="toggle">
-                                        <input type="radio" name="pay" value="someone"/><span
-                                            class="toggle-box"></span><span class="toggle-text">Онлайн со случайного чужого счета</span>
-                                    </label>
-                                </div>
-                            </div>
+                            {% include 'order/payments_block.html' %}
                             <div class="Order-footer"><a class="btn btn_success Order-next" href="#step4">Дальше</a>
                             </div>
                         </div>
@@ -312,5 +332,66 @@
     <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
     <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
     <script src="{% static 'assets/js/scripts.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Вызовите toggleDeliveryOptions при загрузке страницы
+            toggleDeliveryOptions();
+        });
+
+        function toggleDeliveryOptions() {
+            const storeOptions = document.querySelector('.store_delivery_choices');
+            const sellerOptions = document.querySelector('.seller_delivery_choices');
+            const storePayment = document.querySelector('.store_payment');
+            const sellerPayment = document.querySelector('.sellers_payments');
+
+            const selectedType = document.querySelector('input[name="choice_delivery_type"]:checked').value;
+
+            if (selectedType === 'store') {
+                storeOptions.classList.add('show');
+                storeOptions.classList.remove('hidden');
+                sellerOptions.classList.add('hidden');
+                sellerOptions.classList.remove('show');
+
+                sellerPayment.classList.add('hidden');
+                sellerPayment.classList.remove('show');
+                storePayment.classList.add('show');
+                storePayment.classList.remove('hidden');
+
+                // Автовыбор первой опции
+                selectFirstOption(storeOptions);
+            } else if (selectedType === 'seller') {
+                sellerOptions.classList.add('show');
+                sellerOptions.classList.remove('hidden');
+                storeOptions.classList.add('hidden');
+                storeOptions.classList.remove('show');
+
+                storePayment.classList.add('hidden');
+                storePayment.classList.remove('show');
+                sellerPayment.classList.add('show');
+                sellerPayment.classList.remove('hidden');
+
+                // Автовыбор первой опции
+                selectFirstOption(sellerOptions);
+            }
+        }
+
+        function selectFirstOption(container) {
+            const sellerBlocks = container.querySelectorAll('.seller_block');
+
+            sellerBlocks.forEach(block => {
+                const firstOption = block.querySelector('input[type="radio"]:not(:disabled)');
+                if (firstOption) {
+                    firstOption.checked = true;
+                }
+            });
+
+            const firstOptionInContainer = container.querySelector('input[type="radio"]:not(:disabled)');
+            if (firstOptionInContainer) {
+                firstOptionInContainer.checked = true;
+            }
+        }
+    </script>
 {% endblock %}
+
 
