@@ -1,9 +1,9 @@
+import bleach
 from catalog.models import Delivery
 from catalog.models import Payment
 from django import forms
 from django.core.exceptions import ValidationError
 from django.http import QueryDict
-import bleach
 from django.utils.translation import gettext_lazy as _
 
 
@@ -12,55 +12,55 @@ class OrderForm(forms.Form):
         max_length=100,
         required=True,
         error_messages={
-            'required': _('Имя это обязательное поле для заполнения.'),
-            'max_length': _('Имя не может быть длиннее 100 символов.'),
-        }
+            "required": _("Имя это обязательное поле для заполнения."),
+            "max_length": _("Имя не может быть длиннее 100 символов."),
+        },
     )
     phone = forms.CharField(
         max_length=15,
         required=True,
         error_messages={
-            'required': _('Телефон это обязательное поле для заполнения.'),
-            'max_length': _('Телефон не может быть длиннее 15 символов.'),
-        }
+            "required": _("Телефон это обязательное поле для заполнения."),
+            "max_length": _("Телефон не может быть длиннее 15 символов."),
+        },
     )
     mail = forms.EmailField(
         required=True,
         error_messages={
-            'required': _('Email это обязательное поле для заполнения.'),
-            'invalid': _('Введите корректный email адрес.'),
-        }
+            "required": _("Email это обязательное поле для заполнения."),
+            "invalid": _("Введите корректный email адрес."),
+        },
     )
     choice_delivery_type = forms.CharField(
         max_length=15,
         required=True,
         error_messages={
-            'required': _('Тип доставки — это обязательное поле для заполнения.'),
-            'max_length': _('Тип доставки не может быть длиннее 15 символов.'),
-        }
+            "required": _("Тип доставки — это обязательное поле для заполнения."),
+            "max_length": _("Тип доставки не может быть длиннее 15 символов."),
+        },
     )
     city = forms.CharField(
         max_length=100,
         required=True,
         error_messages={
-            'required': _('Город — это обязательное поле для заполнения.'),
-            'max_length': _('Название города не может быть длиннее 100 символов.'),
-        }
+            "required": _("Город — это обязательное поле для заполнения."),
+            "max_length": _("Название города не может быть длиннее 100 символов."),
+        },
     )
     address = forms.CharField(
         max_length=100,
         required=True,
         error_messages={
-            'required': _('Адрес — это обязательное поле для заполнения.'),
-            'max_length': _('Адрес не может быть длиннее 100 символов.'),
-        }
+            "required": _("Адрес — это обязательное поле для заполнения."),
+            "max_length": _("Адрес не может быть длиннее 100 символов."),
+        },
     )
     comment = forms.CharField(
         max_length=1000,
         required=False,
         error_messages={
-            'max_length': _('Комментарий не может быть длиннее 1000 символов.'),
-        }
+            "max_length": _("Комментарий не может быть длиннее 1000 символов."),
+        },
     )
 
     def clean_choice_delivery_type(self):

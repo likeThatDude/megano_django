@@ -13,7 +13,8 @@ from order.forms import OrderForm
 from website import settings
 
 from .models import Order
-from .utils import get_order_products, create_errors_list
+from .utils import create_errors_list
+from .utils import get_order_products
 
 products_list = {
     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
@@ -51,6 +52,7 @@ class OrderCreateView(View):
         HttpResponse: Страница с данными для оформления заказа или страница с ошибками,
         или перенаправление на страницу подтверждения создания заказа.
     """
+
     def get(self, request: HttpRequest) -> HttpResponse:
         context = {}
         user = utils.get_user_data(request)
@@ -76,7 +78,7 @@ class OrderCreateView(View):
                 context = {}
                 data_errors = validate_data.errors.items()
                 errors_list = create_errors_list(data_errors)
-                context['errors'] = errors_list
+                context["errors"] = errors_list
                 return render(request, "order/order_error_list.html", context=context)
             return redirect(reverse("order:order_create"))
         else:
@@ -93,6 +95,7 @@ def pay_view(request: HttpRequest):
 
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
+
 
 # class OrdersHistoryListView(ListView):
 #     """

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Order, DeliveryPrice
+from .models import DeliveryPrice
+from .models import Order
 from .models import OrderItem
 
 
@@ -21,7 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
         "total_price",
-        'delivery_price',
+        "delivery_price",
     )
     list_display_links = (
         "pk",
@@ -33,7 +34,7 @@ class OrderAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
         "total_price",
-        'delivery_price',
+        "delivery_price",
     )
     ordering = ("pk",)
     inlines = [OrderItemInline]
@@ -75,10 +76,10 @@ class OrderItemAdmin(admin.ModelAdmin):
 @admin.register(DeliveryPrice)
 class DeliveryPriceAdmin(admin.ModelAdmin):
     list_display = (
-        'name',
-        'price',
+        "name",
+        "price",
     )
     list_display_links = (
-        'name',
-        'price',
+        "name",
+        "price",
     )

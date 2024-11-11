@@ -229,7 +229,12 @@ class Payment(models.Model):
     )
 
     name = models.CharField(
-        max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"), db_index=True, unique=True
+        max_length=2,
+        choices=PAYMENT_CHOICES,
+        default=CASH,
+        verbose_name=_("Payment method"),
+        db_index=True,
+        unique=True,
     )
 
     def __str__(self):
@@ -280,8 +285,12 @@ class Delivery(models.Model):
     ]
 
     name = models.CharField(
-        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method"), db_index=True,
-        unique=True
+        max_length=2,
+        choices=DELIVERY_CHOICES,
+        default=PICKUP_POINT,
+        verbose_name=_("Delivery method"),
+        db_index=True,
+        unique=True,
     )
 
     def __str__(self):

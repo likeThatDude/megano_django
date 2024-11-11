@@ -1,11 +1,10 @@
-from django.db.models import PROTECT
-
 from account.models import Profile
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Product
 from catalog.models import Seller
 from django.db import models
+from django.db.models import PROTECT
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -36,6 +35,7 @@ class Order(models.Model):
     Метаданные:
         уникальность данных не гарантируется, но статус заказа можно изменять по мере обработки.
     """
+
     PENDING = "OP"
     PROCESSING = "PR"
     SHIPPED = "SH"
@@ -63,8 +63,7 @@ class Order(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
     total_price = models.DecimalField(null=False, max_digits=10, decimal_places=2, verbose_name=_("Total price"))
     comment = models.TextField(max_length=1000, null=True, blank=True, verbose_name=_("Comment"))
-    delivery_price = models.ForeignKey('DeliveryPrice',
-                                       on_delete=PROTECT, verbose_name=_("Delivery price"))
+    delivery_price = models.ForeignKey("DeliveryPrice", on_delete=PROTECT, verbose_name=_("Delivery price"))
 
     def __str__(self):
         return f"Order: {self.id}"
@@ -90,6 +89,7 @@ class OrderItem(models.Model):
     Метаданные:
         Один заказ может содержать несколько товаров. Связь с заказом через `related_name="order_items"`.
     """
+
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, verbose_name=_("Seller"))
     product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name=_("Product"))
     quantity = models.IntegerField(verbose_name=_("Quantity"))
@@ -101,8 +101,6 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"
-
-    
 
 
 class DeliveryPrice(models.Model):
@@ -118,6 +116,7 @@ class DeliveryPrice(models.Model):
     Метаданные:
         `name` уникален для каждого типа доставки и индексируется для быстрого поиска.
     """
+
     FREE_DELIVERY = "FD"
     STANDARD_DELIVERY = "SD"
     EXPRESS_DELIVERY = "ED"
@@ -128,8 +127,12 @@ class DeliveryPrice(models.Model):
         (EXPRESS_DELIVERY, _("Экспресс доставка")),
     )
     name = models.CharField(
-        max_length=2, choices=DELIVERY_PRICE_CHOICES, default=FREE_DELIVERY, verbose_name=_("Delivery price"),
-        db_index=True, unique=True
+        max_length=2,
+        choices=DELIVERY_PRICE_CHOICES,
+        default=FREE_DELIVERY,
+        verbose_name=_("Delivery price"),
+        db_index=True,
+        unique=True,
     )
 
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))

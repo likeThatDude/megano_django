@@ -1,7 +1,8 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 from multiprocessing.connection import deliver_challenge
-from typing import List, Any
+from typing import Any
+from typing import List
 
 from account.models import CustomUser
 from catalog.models import Delivery
@@ -11,7 +12,8 @@ from django.db import transaction
 from django.db.models import Q
 from django.db.models import QuerySet
 from django.http import HttpRequest
-from order.models import Order, DeliveryPrice
+from order.models import DeliveryPrice
+from order.models import Order
 from order.models import OrderItem
 from rest_framework.exceptions import ValidationError
 
@@ -145,9 +147,9 @@ def get_correct_queryset(products_list: dict[str, dict[str, int | bool]]) -> Que
 
 
 def data_preparation_and_recording(
-        correct_valid_data: dict[str, str],
-        products_list: dict[str, dict[str, int | bool]],
-        user_id: int,
+    correct_valid_data: dict[str, str],
+    products_list: dict[str, dict[str, int | bool]],
+    user_id: int,
 ):
     """
     Подготавливает и сохраняет данные о заказе в базе данных.
@@ -190,9 +192,9 @@ def data_preparation_and_recording(
 
 
 def create_order_items_data(
-        correct_valid_data: dict[str, str],
-        products_list: dict[str, dict[str, int | bool]],
-        order: Order,
+    correct_valid_data: dict[str, str],
+    products_list: dict[str, dict[str, int | bool]],
+    order: Order,
 ) -> list[OrderItem]:
     """
     Создает список объектов OrderItem для добавления в заказ.
@@ -252,7 +254,7 @@ def create_order_items_data(
 
 
 def create_product_context_data(
-        products_list: dict[str, dict[str, int | bool]]
+    products_list: dict[str, dict[str, int | bool]]
 ) -> dict[int | str, dict[str, int] | Decimal]:
     """
     Создает контекст данных для продуктов, который включает информацию о цене, количестве
@@ -309,10 +311,9 @@ def get_total_price(products_list: dict[str, dict[str, int | bool]]) -> Decimal:
 
 
 def set_delivery_price(
-        correct_valid_data: dict[str, str],
-        products_list: dict[str, dict[str, int | bool]],
-        total_price: Decimal,
-
+    correct_valid_data: dict[str, str],
+    products_list: dict[str, dict[str, int | bool]],
+    total_price: Decimal,
 ):
     """
     Определяет цену доставки для заказа в зависимости от выбранного способа доставки.
@@ -335,16 +336,16 @@ def set_delivery_price(
         в магазин, а также стоимость заказа и количество продавцов.
     """
     deliver_price = None
-    if correct_valid_data['choice_delivery_type'] == 'seller':
+    if correct_valid_data["choice_delivery_type"] == "seller":
         deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
-    elif correct_valid_data['choice_delivery_type'] == 'store':
-        if correct_valid_data['delivery'] == Delivery.SHOP_STANDARD:
+    elif correct_valid_data["choice_delivery_type"] == "store":
+        if correct_valid_data["delivery"] == Delivery.SHOP_STANDARD:
             seller_ids = {product["seller_id"] for product in products_list.values()}
             if total_price < 2000 or len(seller_ids) > 1:
                 deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.STANDARD_DELIVERY)
             else:
                 deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
-        elif correct_valid_data['delivery'] == Delivery.SHOP_EXPRESS:
+        elif correct_valid_data["delivery"] == Delivery.SHOP_EXPRESS:
             deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.EXPRESS_DELIVERY)
     return deliver_price
 
