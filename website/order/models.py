@@ -4,12 +4,38 @@ from catalog.models import Payment
 from catalog.models import Product
 from catalog.models import Seller
 from django.db import models
+from django.db.models import PROTECT
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
 
 
 class Order(models.Model):
+    """
+    Модель для хранения информации о заказах пользователей.
+
+    Этот класс представляет заказ пользователя, содержащий информацию о доставке, статусе, стоимости и других деталях.
+    Каждый заказ может быть в одном из нескольких состояний (например, в процессе обработки или доставлен).
+    Каждый заказ связан с конкретным пользователем.
+
+    Атрибуты:
+        user (ForeignKey): Ссылка на пользователя, сделавшего заказ.
+        delivery_city (CharField): Город, в который будет доставлен заказ.
+        delivery_address (TextField): Адрес для доставки.
+        recipient_phone (CharField): Телефон получателя заказа.
+        recipient_email (EmailField): Email получателя заказа.
+        status (CharField): Статус заказа, выбирается из заранее заданных вариантов.
+        archived (BooleanField): Указывает, является ли заказ архивированным.
+        created_at (DateTimeField): Дата и время создания заказа.
+        updated_at (DateTimeField): Дата и время последнего обновления заказа.
+        total_price (DecimalField): Общая стоимость заказа.
+        comment (TextField): Комментарий к заказу.
+        delivery_price (ForeignKey): Ссылка на цену доставки для этого заказа.
+
+    Метаданные:
+        уникальность данных не гарантируется, но статус заказа можно изменять по мере обработки.
+    """
+
     PENDING = "OP"
     PROCESSING = "PR"
     SHIPPED = "SH"
@@ -29,16 +55,41 @@ class Order(models.Model):
     )
     delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
     delivery_address = models.TextField(max_length=500, verbose_name=_("Delivery address"))
+    recipient_phone = models.CharField(max_length=15, verbose_name=_("Recipient phone number"))
+    recipient_email = models.EmailField(verbose_name=_("Recipient email"))
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=PENDING)
     archived = models.BooleanField(default=False, verbose_name=_("Archived"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
+    total_price = models.DecimalField(null=False, max_digits=10, decimal_places=2, verbose_name=_("Total price"))
+    comment = models.TextField(max_length=1000, null=True, blank=True, verbose_name=_("Comment"))
+    delivery_price = models.ForeignKey("DeliveryPrice", on_delete=PROTECT, verbose_name=_("Delivery price"))
 
     def __str__(self):
         return f"Order: {self.id}"
 
 
 class OrderItem(models.Model):
+    """
+    Модель для хранения информации о товаре в рамках заказа.
+
+    Этот класс представляет товар, добавленный в заказ. Каждый товар имеет ссылку на продавца, тип доставки, способ оплаты, а также
+    информацию о количестве и цене. Один заказ может содержать несколько товаров.
+
+    Атрибуты:
+        seller (ForeignKey): Ссылка на продавца товара.
+        product (ForeignKey): Ссылка на товар, добавленный в заказ.
+        quantity (IntegerField): Количество товара в заказе.
+        price (DecimalField): Цена товара в заказе.
+        delivery (ForeignKey): Ссылка на тип доставки для товара.
+        payment_type (ForeignKey): Ссылка на способ оплаты для товара.
+        order (ForeignKey): Ссылка на заказ, к которому относится товар.
+        active (BooleanField): Указывает, активен ли товар в заказе.
+
+    Метаданные:
+        Один заказ может содержать несколько товаров. Связь с заказом через `related_name="order_items"`.
+    """
+
     seller = models.ForeignKey(Seller, on_delete=models.PROTECT, verbose_name=_("Seller"))
     product = models.ForeignKey(Product, on_delete=models.PROTECT, verbose_name=_("Product"))
     quantity = models.IntegerField(verbose_name=_("Quantity"))
@@ -50,3 +101,41 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"
+
+
+class DeliveryPrice(models.Model):
+    """
+    Модель для хранения информации о типах доставки и их ценах.
+
+    Этот класс представляет различные варианты доставки с ценами. Типы доставки могут включать бесплатную, стандартную или экспресс-доставку.
+
+    Атрибуты:
+        name (CharField): Тип доставки, выбирается из предустановленных вариантов.
+        price (DecimalField): Цена выбранного типа доставки.
+
+    Метаданные:
+        `name` уникален для каждого типа доставки и индексируется для быстрого поиска.
+    """
+
+    FREE_DELIVERY = "FD"
+    STANDARD_DELIVERY = "SD"
+    EXPRESS_DELIVERY = "ED"
+
+    DELIVERY_PRICE_CHOICES = (
+        (FREE_DELIVERY, _("Бесплатная доставка")),
+        (STANDARD_DELIVERY, _("Стандартная доставка")),
+        (EXPRESS_DELIVERY, _("Экспресс доставка")),
+    )
+    name = models.CharField(
+        max_length=2,
+        choices=DELIVERY_PRICE_CHOICES,
+        default=FREE_DELIVERY,
+        verbose_name=_("Delivery price"),
+        db_index=True,
+        unique=True,
+    )
+
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Price"))
+
+    def __str__(self):
+        return str(dict(self.DELIVERY_PRICE_CHOICES).get(self.name))

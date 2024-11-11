@@ -1,0 +1,34 @@
+{% load create_correct_delivery_data %}
+{% load static %}
+{% for order_datum in order_data %}
+    <div class="Cart-product">
+        <div class="Cart-block Cart-block_row">
+            <div class="Cart-block Cart-block_pict">
+                <a class="Cart-pict" href="#">
+                    <img
+                            class="Cart-img"
+                            src="{{ order_datum.product.preview.url }}"
+                            alt="{{ order_datum.product.preview.name }}"/>
+                </a>
+            </div>
+            <div class="Cart-block Cart-block_info">
+                <a class="Cart-title" target="_blank" href="{{ order_datum.product.get_absolute_url }}">
+                    {{ order_datum.product.name|truncatechars:80 }}
+                </a>
+                <p>Продавец: {{ order_datum.seller.name }}</p>
+                <div class="Cart-desc">{{ order_datum.product.short_description }}
+                </div>
+            </div>
+            <div class="Cart-block Cart-block_price">
+                <div class="Cart-price">
+                    {% get_product_data order_datum.product.pk product_data "price" %} $
+                </div>
+            </div>
+        </div>
+        <div class="Cart-block Cart-block_row">
+            <div class="Cart-block Cart-block_amount">
+                {% get_product_data order_datum.product.pk product_data "quantity" %} шт.
+            </div>
+        </div>
+    </div>
+{% endfor %}

@@ -219,6 +219,7 @@ class ProductDetailView(DetailView):
                 "specifications",
                 "images",
                 "preview",
+                "short_description",
             )
             .filter(pk=pk)
         )
