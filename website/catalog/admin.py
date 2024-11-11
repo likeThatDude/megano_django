@@ -15,6 +15,7 @@ from .models import Review
 from .models import Seller
 from .models import Specification
 from .models import Tag
+from .models import Viewed
 
 
 @admin.action(description="Delete cache")
@@ -45,15 +46,20 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "name",
+        "product_name_short",
         "archived",
         "product_type",
     )
     list_display_links = (
         "id",
-        "name",
+        "product_name_short",
     )
     ordering = ("id",)
+
+    def product_name_short(self, obj: Product) -> str:
+        if len(obj.name) < 20:
+            return obj.name
+        return obj.name[:20] + "..."
 
 
 class SellerProductsInline(admin.TabularInline):
@@ -162,3 +168,26 @@ class PaymentAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_display_links = ("name",)
     ordering = ("name",)
+
+
+@admin.register(Viewed)
+class ViewedAdmin(admin.ModelAdmin):
+    list_display = (
+        "pk",
+        "user",
+        "product",
+        "created_at",
+    )
+    list_display_links = (
+        "pk",
+        "user",
+        "product",
+    )
+    list_filter = (
+        "user",
+        "product",
+    )
+    search_fields = (
+        "user__login",
+        "product__name",
+    )

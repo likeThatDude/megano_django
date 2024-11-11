@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
-    "viewed.apps.ViewedConfig",
     "comparison.apps.ComparisonConfig",
     # DRF API
     "review.apps.ReviewConfig",
@@ -95,7 +94,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "account.context_processors.user_is_auth",
+                # "account.context_processors.user_is_auth",
             ],
         },
     },

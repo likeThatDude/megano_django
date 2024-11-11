@@ -1,0 +1,44 @@
+{% load create_correct_delivery_data %}
+{% with order_data|get_delivery_data as my_order_data %}
+    <div class="form-group">
+        <div class="store_payment">
+            <div>
+                <label class="toggle">
+                    <input type="radio" name="pay" value="SO" checked="checked"/><span
+                        class="toggle-box"></span><span class="toggle-text">Онлайн картой</span>
+                </label>
+            </div>
+            <div>
+                <label class="toggle">
+                    <input type="radio" name="pay" value="SR"/><span
+                        class="toggle-box"></span><span class="toggle-text">Онлайн со случайного чужого счета</span>
+                </label>
+            </div>
+        </div>
+        <div class="sellers_payments">
+            <div class="seller_info">
+                <p>Вы выбрали доставку силами продавца.</p>
+                <p>Выберете доступные способы оплаты у каждого продавца</p>
+            </div>
+            {% for seller in my_order_data %}
+                <div class="current_seller">
+                    <div class="current_seller_info">
+                        <p>Продавец: {{ seller.name|truncatechars:80 }}</p>
+                        <p>Доступные способы оплаты:</p>
+                    </div>
+                    <div class="current_seller_payments">
+                        {% for payment_method in seller.payment_methods.all %}
+                            <div>
+                                <label class="toggle">
+                                    <input type="radio" name="pay_{{ seller.pk }}" value="{{ payment_method.name }}"
+                                            {% if forloop.first %}checked="checked"{% endif %}/><span
+                                        class="toggle-box"></span><span class="toggle-text">{{ payment_method }}</span>
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endwith %}
