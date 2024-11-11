@@ -116,6 +116,7 @@ DATABASES = {
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
+OFFER_KEY = "offers"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

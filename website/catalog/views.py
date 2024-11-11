@@ -68,13 +68,11 @@ class CatalogListView(ListView):
         # Группируем спецификации по имени
         grouped_specifications = defaultdict(list)
         for spec in specifications:
-            print('spec:', spec)
             grouped_specifications[spec.name.name].append(spec.value)
 
         print('spec grouped:', grouped_specifications.items)
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
-        print('tags', tags)
 
         return {
             "sellers": sellers,
