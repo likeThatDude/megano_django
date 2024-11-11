@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import ManyToManyField
 from django.db.models.constraints import UniqueConstraint
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -82,8 +83,9 @@ class Product(models.Model):
     view: статус просмотра товара
     """
 
-    name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
+    name = models.CharField(max_length=100, null=False, blank=False, db_index=True, verbose_name=_("Name"))
     description = models.TextField(null=True, blank=True, db_index=True, verbose_name=_("Description"))
+    short_description = models.CharField(max_length=80, null=True, blank=True, verbose_name=_("Short description"))
     product_type = models.CharField(
         max_length=100,
         db_index=True,
@@ -109,6 +111,9 @@ class Product(models.Model):
         verbose_name=_("Preview"),
     )
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
+
+    def get_absolute_url(self):
+        return reverse("catalog:product_detail", kwargs={"pk": self.pk})
 
     class Meta:
         verbose_name = "product"
@@ -224,7 +229,7 @@ class Payment(models.Model):
     )
 
     name = models.CharField(
-        max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"), db_index=True
+        max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"), db_index=True, unique=True
     )
 
     def __str__(self):
@@ -275,7 +280,8 @@ class Delivery(models.Model):
     ]
 
     name = models.CharField(
-        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method"), db_index=True
+        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method"), db_index=True,
+        unique=True
     )
 
     def __str__(self):
