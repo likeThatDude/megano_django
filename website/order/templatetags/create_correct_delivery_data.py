@@ -33,14 +33,20 @@ def get_product_data(product_id: int, products_dict: dict[int, dict[str, int]], 
 
 
 @register.simple_tag
-def get_short_delivery_type(data: Order) -> str:
-    delivery_type_data = {delivery.delivery.__str__() for delivery in data.order_items.all()}
+def get_short_delivery_payment_type(data: Order, payment=False) -> str:
+    if not payment:
+        delivery_type_data = {delivery.delivery.__str__() for delivery in data.order_items.all()}
+    else:
+        delivery_type_data = {delivery.payment_type.__str__() for delivery in data.order_items.all()}
     correct_data = ", ".join(delivery_type_data)
     return correct_data.capitalize()
 
 @register.simple_tag
-def get_full_delivery_type(data: Order) -> dict[str, list[str]]:
+def get_full_delivery_payment_type(data: Order, payment=False) -> dict[str, list[str]]:
     seller_product_dict = defaultdict(list)
     for i in data.order_items.all():
-        seller_product_dict[i.seller.name].append(i.delivery.__str__())
+        if not payment:
+            seller_product_dict[i.seller.name].append(i.delivery.__str__())
+        else:
+            seller_product_dict[i.seller.name].append(i.payment_type.__str__())
     return dict(seller_product_dict)

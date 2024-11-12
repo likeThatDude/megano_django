@@ -4084,8 +4084,14 @@ a.Cart-title {
 .Order-info_delivery {
     position: relative;
     visibility: visible;
-    z-index: 50;
+    z-index: 51;
 
+}
+
+.Order-info_pay {
+    position: relative;
+    visibility: visible;
+    z-index: 50;
 }
 
 .Order-info_date .Order-infoContent {

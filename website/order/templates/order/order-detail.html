@@ -77,7 +77,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {% get_short_delivery_type order as delivery %}
+                                    {% get_short_delivery_payment_type order as delivery %}
                                     <div class="row-block">
                                         <div class="Order-info Order-info_delivery">
                                             <div class="Order-infoType">
@@ -87,9 +87,9 @@
                                                 {{ delivery|truncatechars:20 }}
                                                 {% if delivery|length > 1 %}
                                                     <div class="delivery_full_data">
-                                                        {% get_full_delivery_type order as seller_delivery %}
+                                                        {% get_full_delivery_payment_type order as seller_delivery %}
                                                         {% for seller, delivery_types in seller_delivery.items %}
-                                                            <p>{{ seller }}: {{ delivery_types|join:", " }}</p>
+                                                            <p>{{ seller }}: {{ delivery_types|join:', ' }}</p>
                                                         {% endfor %}
                                                     </div>
                                                 {% endif %}
@@ -112,9 +112,20 @@
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_pay">
-                                            <div class="Order-infoType">Оплата:
+                                            {% get_short_delivery_payment_type order True as payment %}
+                                            <div class="Order-infoType">
+                                                Оплата:
                                             </div>
-                                            <div class="Order-infoContent">Онлайн картой
+                                            <div class="Order-infoContent ">
+                                                {{ payment|truncatechars:20 }}
+                                                {% if delivery|length > 1 %}
+                                                    <div class="delivery_full_data">
+                                                        {% get_full_delivery_payment_type order True as seller_payment %}
+                                                        {% for seller, payment_types in seller_payment.items %}
+                                                            <p>{{ seller }}: {{ payment_types|join:', ' }}</p>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_status">
