@@ -1,25 +1,28 @@
-from django.db.models import F
+from django.core.exceptions import PermissionDenied
+from django.db.models import F, Q, Prefetch
 from django.db.models import Sum
 from django.http import HttpRequest
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
+from kombu.exceptions import HttpError
+
 from order import utils
 from order.forms import OrderForm
 
 from website import settings
 
-from .models import Order
+from .models import Order, OrderItem
 from .utils import create_errors_list
 from .utils import get_order_products
 
 products_list = {
     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
     "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
-    "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
+    "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": True},
 }
 
 
@@ -85,6 +88,31 @@ class OrderCreateView(View):
             return redirect(reverse("account:login"))
 
 
+class OrderDetailView(DetailView):
+    template_name = "order/order-detail.html"
+    context_object_name = "order"
+
+    def get_object(self):
+        order = get_object_or_404(
+            Order.objects
+            .select_related("user", "delivery_price", )
+            .prefetch_related(
+                Prefetch(
+                    "order_items",
+                    queryset=OrderItem.objects.select_related(
+                        "seller",
+                        "product",
+                        "delivery",
+                        "payment_type", )
+                )),
+            pk=self.kwargs['pk'])
+
+        if order.user.pk == self.request.user.pk or self.request.user.is_staff:
+            return order
+        else:
+            raise PermissionDenied("У вас нет доступа к этому заказу.")
+
+
 def order_detail_view(request: HttpRequest):
     return render(request, "order/order-detail.html")
 
@@ -95,7 +123,6 @@ def pay_view(request: HttpRequest):
 
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
-
 
 # class OrdersHistoryListView(ListView):
 #     """

@@ -53,6 +53,7 @@ class Order(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="orders"
     )
+    name = models.CharField(max_length=255, verbose_name=_("Name"))
     delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
     delivery_address = models.TextField(max_length=500, verbose_name=_("Delivery address"))
     recipient_phone = models.CharField(max_length=15, verbose_name=_("Recipient phone number"))
@@ -98,6 +99,7 @@ class OrderItem(models.Model):
     payment_type = models.ForeignKey(Payment, on_delete=models.PROTECT, verbose_name=_("Payment type"))
     order = models.ForeignKey(Order, related_name="order_items", on_delete=models.PROTECT, verbose_name=_("Order"))
     active = models.BooleanField(default=True, verbose_name=_("Active"))
+    payment_status = models.BooleanField(default=False, verbose_name=_("Payment status"))
 
     def __str__(self):
         return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"

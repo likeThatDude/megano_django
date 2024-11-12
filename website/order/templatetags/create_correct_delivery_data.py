@@ -6,6 +6,8 @@ from catalog.models import Seller
 from django import template
 from django.db.models import QuerySet
 
+from order.models import Order
+
 register = template.Library()
 
 
@@ -28,3 +30,17 @@ def get_payments_data(data: QuerySet) -> dict[Seller, list[Product]]:
 @register.simple_tag
 def get_product_data(product_id: int, products_dict: dict[int, dict[str, int]], target: str) -> int:
     return products_dict[product_id][target]
+
+
+@register.simple_tag
+def get_short_delivery_type(data: Order) -> str:
+    delivery_type_data = {delivery.delivery.__str__() for delivery in data.order_items.all()}
+    correct_data = ", ".join(delivery_type_data)
+    return correct_data.capitalize()
+
+@register.simple_tag
+def get_full_delivery_type(data: Order) -> dict[str, list[str]]:
+    seller_product_dict = defaultdict(list)
+    for i in data.order_items.all():
+        seller_product_dict[i.seller.name].append(i.delivery.__str__())
+    return dict(seller_product_dict)

@@ -174,6 +174,7 @@ def data_preparation_and_recording(
     with transaction.atomic():
         order = Order.objects.create(
             user_id=user_id,
+            name=correct_valid_data["name"],
             delivery_city=correct_valid_data["city"],
             delivery_address=correct_valid_data["address"],
             recipient_phone=correct_valid_data["phone"],
