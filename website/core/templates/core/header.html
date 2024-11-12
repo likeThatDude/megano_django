@@ -74,24 +74,29 @@
                                                      src="{% static 'assets/img/icons/loon-icon.svg' %}"
                                                      alt="loon-icon.svg"/></button>
                         <div class="dropdown-content">
-                            {% if user_is_auth %}
-                                <a class="dropdown-content-a" href="{% url 'account:personal-cabinet' %}">Личный кабинет</a>
+                            {#                            {% if user_is_auth %}#}
+                            {% if user.is_authenticated %}
+                                <a class="dropdown-content-a" href="{% url 'account:personal-cabinet' %}">Личный
+                                    кабинет</a>
                             {% endif %}
                             <a class="dropdown-content-a" href="{% static 'account.html' %}">Административный
                                 раздел</a>
-                            <form id="logout-form" method="post" action="{% url 'account:logout' %}" style="display: none;">
+                            <form id="logout-form" method="post" action="{% url 'account:logout' %}"
+                                  style="display: none;">
                                 {% csrf_token %}
                             </form>
-                            {% if user_is_auth %}
-                                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            {#                            {% if user_is_auth %}#}
+                            {% if user.is_authenticated %}
+                                <a href="#"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Выход
                                 </a>
                             {% endif %}
                         </div>
                     </div>
                     <a class="CartBlock-block" href="{% url 'cart:detail' %}"><img class="CartBlock-img"
-                                                            src="{% static 'assets/img/icons/cart.svg' %}"
-                                                            alt="cart.svg"/><span
+                                                                                   src="{% static 'assets/img/icons/cart.svg' %}"
+                                                                                   alt="cart.svg"/><span
                             class="CartBlock-amount">0</span></a>
                     <div class="CartBlock-block"><span class="CartBlock-price">0.00</span>
 
@@ -170,6 +175,7 @@
             <div class="Header-search">
                 <div class="search">
                     <form class="form form_search" action="#" method="post">
+                        {% csrf_token %}
                         <input class="search-input" id="query" name="query" type="text"
                                placeholder="NVIDIA GeForce RTX 3060"/>
                         <button class="search-button" type="submit" name="search" id="search"><img

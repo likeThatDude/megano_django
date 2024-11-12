@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import ManyToManyField
 from django.db.models.constraints import UniqueConstraint
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -34,16 +35,10 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
-    tags = models.ManyToManyField(
-        'Tag',
-        null=True,
-        blank=True,
-        related_name="category_tags",
-        verbose_name=_("Сategory tags")
-    )
+    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"))
 
     class Meta:
-        verbose_name = 'category'
+        verbose_name = "category"
         verbose_name_plural = "categories"
         ordering = ("name",)
 
@@ -88,8 +83,9 @@ class Product(models.Model):
     view: статус просмотра товара
     """
 
-    name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name"))
+    name = models.CharField(max_length=100, null=False, blank=False, db_index=True, verbose_name=_("Name"))
     description = models.TextField(null=True, blank=True, db_index=True, verbose_name=_("Description"))
+    short_description = models.CharField(max_length=80, null=True, blank=True, verbose_name=_("Short description"))
     product_type = models.CharField(
         max_length=100,
         db_index=True,
@@ -116,12 +112,15 @@ class Product(models.Model):
     )
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
 
+    def get_absolute_url(self):
+        return reverse("catalog:product_detail", kwargs={"pk": self.pk})
+
     class Meta:
-        verbose_name = 'product'
-        verbose_name_plural = 'products'
+        verbose_name = "product"
+        verbose_name_plural = "products"
 
     def __str__(self) -> str:
-        return f"Product(id={self.pk}, name={self.name!r})"
+        return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
 
 
 class ProductImage(models.Model):
@@ -140,8 +139,8 @@ class ProductImage(models.Model):
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
 
     class Meta:
-        verbose_name = 'image product'
-        verbose_name_plural = 'images product'
+        verbose_name = "image product"
+        verbose_name_plural = "images product"
 
 
 class Seller(models.Model):
@@ -185,8 +184,8 @@ class Seller(models.Model):
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
     class Meta:
-        verbose_name = 'seller'
-        verbose_name_plural = 'sellers'
+        verbose_name = "seller"
+        verbose_name_plural = "sellers"
 
     def __str__(self) -> str:
         return f"Seller(id={self.pk}, name={self.name!r})"
@@ -205,6 +204,8 @@ class Payment(models.Model):
             - 'CH': Наличными
             - 'CO': Картой онлайн
             - 'CC': Картой курьеру
+            - 'SO': Картой магазину
+            - 'SR': Случайной картой магазину
 
         name (str): Поле для хранения выбранного способа оплаты. Доступные варианты
         определяются PAYMENT_CHOICES. По умолчанию используется наличный расчет.
@@ -216,14 +217,25 @@ class Payment(models.Model):
     CASH = "CH"
     CARD_ONLINE = "CO"
     CARD_COURIER = "CC"
+    STORE_ONLINE = "SO"
+    STORE_RANDOM = "SR"
 
     PAYMENT_CHOICES = (
         (CASH, _("Наличными")),
         (CARD_ONLINE, _("Картой онлайн")),
         (CARD_COURIER, _("Картой курьеру")),
+        (STORE_ONLINE, _("Картой магазину")),
+        (STORE_RANDOM, _("Случайной картой магазину")),
     )
 
-    name = models.CharField(max_length=2, choices=PAYMENT_CHOICES, default=CASH, verbose_name=_("Payment method"))
+    name = models.CharField(
+        max_length=2,
+        choices=PAYMENT_CHOICES,
+        default=CASH,
+        verbose_name=_("Payment method"),
+        db_index=True,
+        unique=True,
+    )
 
     def __str__(self):
         return str(dict(self.PAYMENT_CHOICES).get(self.name))
@@ -260,16 +272,25 @@ class Delivery(models.Model):
     COURIER = "CR"
     LOCKER = "LK"
     SELLER = "SL"
+    SHOP_STANDARD = "SS"
+    SHOP_EXPRESS = "SE"
 
     DELIVERY_CHOICES = [
         (PICKUP_POINT, _("В пункт выдачи")),
         (COURIER, _("Курьером")),
         (LOCKER, _("В постамат")),
         (SELLER, _("Силами продавца")),
+        (SHOP_STANDARD, _("Магазином обычная")),
+        (SHOP_EXPRESS, _("Магазином экспресс")),
     ]
 
     name = models.CharField(
-        max_length=2, choices=DELIVERY_CHOICES, default=PICKUP_POINT, verbose_name=_("Delivery method")
+        max_length=2,
+        choices=DELIVERY_CHOICES,
+        default=PICKUP_POINT,
+        verbose_name=_("Delivery method"),
+        db_index=True,
+        unique=True,
     )
 
     def __str__(self):
@@ -310,8 +331,8 @@ class Price(models.Model):
 
     class Meta:
         unique_together = ("product", "seller")
-        verbose_name = 'price'
-        verbose_name_plural = 'prices'
+        verbose_name = "price"
+        verbose_name_plural = "prices"
 
     def __str__(self):
         return f"Price(product={self.product}, seller={self.seller}), price={self.price}"
@@ -340,8 +361,8 @@ class Review(models.Model):
 
     class Meta:
         ordering = ("-created_at",)
-        verbose_name = 'review'
-        verbose_name_plural = 'reviews'
+        verbose_name = "review"
+        verbose_name_plural = "reviews"
 
 
 class NameSpecification(models.Model):
@@ -352,8 +373,8 @@ class NameSpecification(models.Model):
 
     class Meta:
         ordering = ("name",)
-        verbose_name = 'name specification'
-        verbose_name_plural = 'names specification'
+        verbose_name = "name specification"
+        verbose_name_plural = "names specification"
 
     name = models.CharField(max_length=100, db_index=True, verbose_name=_("Name specification"))
 
@@ -393,8 +414,8 @@ class Specification(models.Model):
     )
 
     class Meta:
-        verbose_name = 'specification'
-        verbose_name_plural = 'specifications'
+        verbose_name = "specification"
+        verbose_name_plural = "specifications"
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"

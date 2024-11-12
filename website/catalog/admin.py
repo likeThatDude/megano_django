@@ -46,15 +46,20 @@ class CategoryAdmin(admin.ModelAdmin):
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "name",
+        "product_name_short",
         "archived",
         "product_type",
     )
     list_display_links = (
         "id",
-        "name",
+        "product_name_short",
     )
     ordering = ("id",)
+
+    def product_name_short(self, obj: Product) -> str:
+        if len(obj.name) < 20:
+            return obj.name
+        return obj.name[:20] + "..."
 
 
 class SellerProductsInline(admin.TabularInline):
@@ -123,6 +128,7 @@ class ReviewAdmin(admin.ModelAdmin):
         "text",
     )
     ordering = ("id",)
+    list_per_page = 20
 
 
 @admin.register(Specification)
