@@ -58,8 +58,8 @@
                                     <h2 class="ProductCard-title"> {{ info_product.product.name }}
                                     </h2>
                                     <div class="ProductCard-info">
-                                        <div class="ProductCard-cost">
-                                            <div class="ProductCard-price">
+                                        <div class="Cost-product">
+                                            <div class="Cost-product-value">
                                                 {{ info_product.total_cost }} $
                                             </div>
                                         </div>
@@ -104,6 +104,9 @@
                     {% endif %}
                 </div>
                 <div class="Place_an_order">
+                    <div class="Info-cart">
+                        <span class="Info-cart-span">{{ total_quantity_products }}</span>
+                    </div>
                     <a class="btn btn_place_an_order">
                         <span class="btn-content">
                             Перейти к оформлению

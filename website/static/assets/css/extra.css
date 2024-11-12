@@ -4511,7 +4511,7 @@ a.Cart-title {
     }
 }
 
-.ProductCard-cost {
+.Cost-product {
     display: flex;
     align-items: center;
     margin-right: auto;
@@ -4545,7 +4545,7 @@ a.Cart-title {
     }
 }
 
-.ProductCard-price {
+.Cost-product-value {
     color: #0063d1;
     font-size: 38px;
     font-weight: 600;
