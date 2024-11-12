@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
     "comparison.apps.ComparisonConfig",
+    "discount.apps.DiscountConfig",
     # DRF API
     "review.apps.ReviewConfig",
 ]
