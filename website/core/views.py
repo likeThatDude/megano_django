@@ -1,9 +1,4 @@
-import random
 import datetime
-
-from django.db.models.functions import (
-    Round,
-)
 
 from catalog.models import (
     Category,
