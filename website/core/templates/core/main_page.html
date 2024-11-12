@@ -69,6 +69,7 @@
                             <strong class="Section-columnTitle">ОГРАНИЧЕННЫЕ ПРЕДЛОЖЕНИЯ</strong>
                         </header>
                         <div class="Card">
+                            {% if offers %}
                             <a class="Card-picture" href="{% url 'catalog:product_detail' offers.daily_offer.product.id %}">
                             <img src="{{offers.daily_offer.product.preview.url}}" alt="card.jpg"/></a>
                             <div class="Card-content">
@@ -115,6 +116,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
