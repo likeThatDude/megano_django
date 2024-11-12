@@ -9,6 +9,7 @@ from django.core.cache import cache
 from django.db.models import (
     Count,
     Min,
+    Sum,
 )
 from django.db.models import Q
 from django.http import HttpRequest
@@ -100,10 +101,12 @@ class IndexView(TemplateView):
             Product.objects
             .filter(archived=False)
             .annotate(
-                price=Min("prices__price")
+                price=Min("prices__price"),
+                total_sold=Sum('prices__sold_quantity'),
             )
-            .order_by("?")[:8]
+            .order_by('sorting_index', '-total_sold')[:8]
         )
+
         return top_products
 
     def get_daily_offer_and_limited_editions(self):
