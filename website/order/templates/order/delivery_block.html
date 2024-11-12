@@ -7,7 +7,7 @@
                 <p>Товар{% if products|length > 1 %}ы{% endif %}:
                     {% for product in products %}
                         <p class="product_name">
-                            <a href="{% url 'catalog:product_detail' pk=product.pk %}">
+                            <a href="{{ product.get_absolute_url }}">
                                 {{ product.name|truncatechars:80 }}
                             </a>
                         </p>

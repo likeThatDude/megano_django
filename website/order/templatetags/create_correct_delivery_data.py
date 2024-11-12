@@ -23,3 +23,8 @@ def get_payments_data(data: QuerySet) -> dict[Seller, list[Product]]:
     for i in data:
         seller_filter_data[i.seller].append(i.product)
     return dict(seller_filter_data)
+
+
+@register.simple_tag
+def get_product_data(product_id: int, products_dict: dict[int, dict[str, int]], target: str) -> int:
+    return products_dict[product_id][target]

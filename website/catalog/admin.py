@@ -128,6 +128,7 @@ class ReviewAdmin(admin.ModelAdmin):
         "text",
     )
     ordering = ("id",)
+    list_per_page = 20
 
 
 @admin.register(Specification)
