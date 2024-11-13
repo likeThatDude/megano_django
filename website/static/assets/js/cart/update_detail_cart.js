@@ -21,8 +21,8 @@ async function footerUpdateQuantityCart(newQuantity) {
 async function updateCostProduct(productCard) {
     var thisCostProduct = productCard.querySelector('.Cost-product-value');
     var quantityProduct = productCard.querySelector('.Amount-input').value;
-    var priceProduct = parseFloat(productCard.dataset.price_product);
-    var newCostProduct = parseFloat(quantityProduct * priceProduct);
+    var priceProduct = new Decimal(productCard.dataset.price_product.replace(',', '.'));
+    var newCostProduct = priceProduct.mul(quantityProduct);
     thisCostProduct.innerText = String(newCostProduct.toFixed(2)) + ' $';
 }
 
@@ -49,8 +49,8 @@ async function selectUpdateProductCard(selectElement) {
     await patchAPICart(dataProduct);
 
     const newData = await getAPICart();
-    const productId = Number(productCard.dataset.product_id);
-    const newPriceProduct = newData.products[productId].price;
+    const productName = 'product' + productCard.dataset.product_id;
+    const newPriceProduct = newData[productName].price;
     const newTotalQuantity = newData.total_quantity;
 
     await changePriceProduct(productCard, newPriceProduct);

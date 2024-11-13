@@ -121,6 +121,10 @@
 {% block script %}
     <script src="{% static 'assets/js/cart/delete_product_cart.js' %}"></script>
     <script src="{% static 'assets/js/cart/update_detail_cart.js' %}"></script>
+    <script src="{% static 'assets/plg/decimal/decimal.js' %}"></script>
+    <script type="module">
+        import Decimal from '{% static 'assets/plg/decimal/decimal.mjs' %}';
+    </script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
