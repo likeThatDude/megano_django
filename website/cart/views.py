@@ -33,6 +33,20 @@ class APICart(APIView):
     def get(self, request: Request) -> Response:
         """
         Возвращает информацию о товарах в корзине
+        Формат корзины:
+        {
+            "product1": {
+                    "quantity": "кол-во товара (int)",
+                    "product_id": "id товара (int)",
+                    "price": "цена товара (float)",
+                    "seller_id": "id продавца (int)",
+                    "seller_name": "имя продавца (str)",
+                    "to_order": "в заказе товара или нет (bool)",
+                    "cost_product": "стоимость товара (str),"
+            },
+            "total_quantity": "общее кол-во товара в корзине (int)",
+            "total_cost": "общая стоимость товаров в корзине (str)",
+        }
         """
         cart = Cart(request)
         return Response(cart.cart)

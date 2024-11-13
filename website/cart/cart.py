@@ -26,11 +26,10 @@ class Cart:
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             cart = self.session[settings.CART_SESSION_ID] = {
-                "products": {},
                 "total_quantity": 0,
                 "total_cost": '0',
             }
-        self.cart = cart
+        self.cart: dict = cart
 
     def save(self) -> None:
         """
@@ -51,52 +50,54 @@ class Cart:
         Добавление товара в сессию.
 
         Атрибуты:
-            product_id (int) - id модели товара
-            price_product_id (id) - id модели цены товара который добавляется
+            product_id (str) - id модели товара
+            price_product_id (str) - id модели цены товара который добавляется
             quantity (int = 1) - кол-во добавляемого товара
         """
         price_product = Price.objects.get(pk=int(price_product_id))
-        if product_id not in self.cart["products"]:
-            self.cart["products"][product_id] = {
+        product_key = f'product{product_id}'
+        if product_key not in self.cart:
+            self.cart[product_key] = {
                 "quantity": 0,
-                "pk": product_id,
-                "price": str(price_product.price),
+                "product_id": int(product_id),
+                "price": float(price_product.price),
                 "seller_id": price_product.seller.pk,
                 "seller_name": str(price_product.seller),
                 "to_order": True,
                 "cost_product": "0.00"
             }
-        self.cart["products"][product_id]["quantity"] += quantity
-        self.cart["products"][product_id]["cost_product"] = self.__get_cost_product(
+        self.cart[product_key]["quantity"] += quantity
+        self.cart[product_key]["cost_product"] = self.__get_cost_product(
             product_id,
-            self.cart["products"][product_id]["quantity"]
+            self.cart[product_key]["quantity"]
         )
         self.save()
 
-    def __get_cost_product(self, product_id: str, quantity: int) -> str:
+    def __get_cost_product(self, product_id: str, quantity: int) -> float:
         """
         Возвращает общую стоимость товара
         """
         if quantity != 0:
-            cost = str(Decimal(self.cart["products"][product_id]['price']) * quantity)
+            cost = float(round(Decimal(self.cart[f"product{product_id}"]['price']) * quantity, 2))
             return cost
-        return '0.00'
+        return 0.00
 
     def update_product(self, product_id: str, new_seller_id: int, new_quantity: int) -> None:
         """
         Обновляет информацию о товаре в корзине
 
         Атрибуты:
-            product_ud (int) - id модели товара
+            product_ud (str) - id модели товара
+            new_seller_id (int) - id продавца товара
             new_quantity (int) - новое кол-во товара в корзине
         """
-        if product_id in self.cart["products"]:
-            self.cart["products"][product_id]["quantity"] = new_quantity
-            self.cart["products"][product_id]["seller_id"] = new_seller_id
-            self.cart["products"][product_id]["seller_name"] = str(Seller.objects.get(pk=new_seller_id))
-            new_price_product = str(Price.objects.get(seller=new_seller_id, product=product_id).price)
-            self.cart["products"][product_id]["price"] = new_price_product
-            self.cart["products"][product_id]["cost_product"] = self.__get_cost_product(product_id, new_quantity)
+        if f"product{product_id}" in self.cart:
+            self.cart[f"product{product_id}"]["quantity"] = new_quantity
+            self.cart[f"product{product_id}"]["seller_id"] = new_seller_id
+            self.cart[f"product{product_id}"]["seller_name"] = str(Seller.objects.get(pk=new_seller_id))
+            new_price_product = float(Price.objects.get(seller=new_seller_id, product=product_id).price)
+            self.cart[f"product{product_id}"]["price"] = new_price_product
+            self.cart[f"product{product_id}"]["cost_product"] = self.__get_cost_product(product_id, new_quantity)
             self.save()
 
     def remove(self, product_id: str) -> None:
@@ -104,10 +105,10 @@ class Cart:
         Удаляет товар из корзины
 
         Атрибуты:
-            product_id (int) - id модели товара, который нужно удалить
+            product_id (str) - id модели товара, который нужно удалить
         """
-        if product_id in self.cart["products"]:
-            del self.cart["products"][product_id]
+        if f"product{product_id}" in self.cart:
+            del self.cart[f"product{product_id}"]
             self.save()
 
     @property
@@ -135,13 +136,13 @@ class Cart:
         """
         Возвращает общее кол-во товаров в корзине
         """
-        return sum(item["quantity"] for item in self.cart["products"].values())
+        return sum(item["quantity"] for item in self.cart.values() if isinstance(item, dict))
 
     def __get_total_cost(self) -> str:
         """
         Возвращает общую стоимость товаров в корзине
         """
-        total_cost = sum(Decimal(item["price"]) * item["quantity"] for item in self.cart["products"].values())
+        total_cost = round(sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values() if isinstance(item, dict)), 2)
         return str(total_cost)
 
     def get_context_info(self) -> list[dict]:
@@ -159,17 +160,18 @@ class Cart:
             ]
         """
         info_cart = list()
-        for product in self.cart["products"].values():
-            info_product = {
-                "price": product["price"],
-                "product": Product.objects.get(pk=product["pk"]),
-                "quantity": product["quantity"],
-                "seller": Seller.objects.get(pk=product["seller_id"]),
-                "sellers_product": Seller.objects.prefetch_related("products").filter(products=product["pk"]),
-                "total_cost": str(Decimal(product["price"]) * product["quantity"]),
-                "to_order": product["to_order"],
-            }
-            info_cart.append(info_product)
+        for product in self.cart.values():
+            if isinstance(product, dict):
+                info_product = {
+                    "price": product["price"],
+                    "product": Product.objects.get(pk=product["product_id"]),
+                    "quantity": product["quantity"],
+                    "seller": Seller.objects.get(pk=product["seller_id"]),
+                    "sellers_product": Seller.objects.prefetch_related("products").filter(products=product["product_id"]),
+                    "total_cost": product["cost_product"],
+                    "to_order": product["to_order"],
+                }
+                info_cart.append(info_product)
         return info_cart
 
     def clear(self) -> None:
