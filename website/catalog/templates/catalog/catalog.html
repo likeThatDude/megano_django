@@ -148,7 +148,7 @@
                                         <div class="Card-category">{{ product.category }}
                                         </div>
                                         <div class="Card-hover">
-                                            <a class="Card-btn" href="{% url 'cart:add_product' product_id=product.pk price_id=product.price_pk %}">
+                                            <a class="Card-btn" data-product_id="{{ product.pk }}" data-price_id="{{ product.price_pk }}">
                                                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
 
                                             </a>
@@ -190,5 +190,6 @@
 <!--    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>-->
 <!--    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>-->
 <!--    <script src="{% static 'assets/js/scripts.js' %}"></script>-->
-    <script src="{% static 'cart/js/add_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/collect_data_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/add_product_cart.js' %}"></script>
 {% endblock %}
