@@ -22,6 +22,7 @@ class DetailCart(TemplateView):
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
         context["info_cart"] = cart.get_context_info()
+        context["total_quantity_products"] = cart.total_quantity
         return context
 
 
@@ -34,7 +35,7 @@ class APICart(APIView):
         Возвращает информацию о товарах в корзине
         """
         cart = Cart(request)
-        return Response({'cart': cart.cart})
+        return Response(cart.cart)
 
     def post(self, request: Request) -> Response:
         """
@@ -56,11 +57,10 @@ class APICart(APIView):
         """
         cart = Cart(request)
         data = request.data
-        for new_info in data.values():
-            product_id = new_info["product_id"]
-            quantity = new_info["quantity"]
-            seller_id = new_info["seller_id"]
-            cart.update_product(product_id, seller_id, quantity)
+        product_id = data["product_id"]
+        quantity = data["quantity"]
+        seller_id = data["seller_id"]
+        cart.update_product(product_id, seller_id, quantity)
         return Response(status=HTTP_200_OK)
 
     def delete(self, request: Request) -> Response:
