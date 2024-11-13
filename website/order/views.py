@@ -1,23 +1,28 @@
+from cart.cart import Cart
 from django.core.exceptions import PermissionDenied
-from django.db.models import F, Q, Prefetch, Count
+from django.db.models import Count
+from django.db.models import F
+from django.db.models import Prefetch
+from django.db.models import Q
 from django.db.models import Sum
 from django.http import HttpRequest
 from django.http import HttpResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views import View
-from django.views.generic import ListView, DetailView
-from kombu.exceptions import HttpError
 from django.utils.translation import gettext_lazy as _
-
+from django.views import View
+from django.views.generic import DetailView
+from django.views.generic import ListView
+from kombu.exceptions import HttpError
 from order import utils
 from order.forms import OrderForm
 
 from website import settings
 
-from .models import Order, OrderItem
-from cart.cart import Cart
+from .models import Order
+from .models import OrderItem
 from .utils import create_errors_list
 from .utils import get_order_products
 
@@ -64,12 +69,15 @@ class OrderCreateView(View):
         context.update(user)
         cart = Cart(request)
         products_list = cart.products
-        products_correct_list = get_order_products(products_list)
-        product_data = utils.create_product_context_data(products_correct_list)
-        prices = utils.get_correct_queryset(products_correct_list)
-        context["order_data"] = prices
-        context["product_data"] = product_data
-        return render(request, "order/order.html", context=context)
+        if products_list:
+            products_correct_list = get_order_products(products_list)
+            product_data = utils.create_product_context_data(products_correct_list)
+            prices = utils.get_correct_queryset(products_correct_list)
+            context["order_data"] = prices
+            context["product_data"] = product_data
+            return render(request, "order/order.html", context=context)
+        else:
+            return redirect(reverse('core:index'))
 
     def post(self, request: HttpRequest) -> HttpResponse:
         if request.user.is_authenticated:
@@ -104,6 +112,7 @@ class OrderDetailView(DetailView):
         template_name (str): Шаблон для рендеринга страницы с деталями заказа.
         context_object_name (str): Имя объекта, доступного в контексте шаблона.
     """
+
     template_name = "order/order-detail.html"
     context_object_name = "order"
 
@@ -132,8 +141,10 @@ class OrderDetailView(DetailView):
             нужные поля и избегая ненужных запросов к базе данных.
         """
         order = get_object_or_404(
-            Order.objects
-            .select_related("user", "delivery_price", )
+            Order.objects.select_related(
+                "user",
+                "delivery_price",
+            )
             .prefetch_related(
                 Prefetch(
                     "order_items",
@@ -142,7 +153,9 @@ class OrderDetailView(DetailView):
                         "product",
                         "delivery",
                         "payment_type",
-                    ).filter(active=True).only(
+                    )
+                    .filter(active=True)
+                    .only(
                         "seller__name",
                         "product__preview",
                         "product__name",
@@ -152,10 +165,10 @@ class OrderDetailView(DetailView):
                         "order__id",
                         "quantity",
                         "price",
-                    )
+                    ),
                 )
             )
-            .annotate(unique_payment_types=Count('order_items__payment_type', distinct=True))
+            .annotate(unique_payment_types=Count("order_items__payment_type", distinct=True))
             .only(
                 "user__id",
                 "order_items",
@@ -169,9 +182,10 @@ class OrderDetailView(DetailView):
                 "created_at",
                 "total_price",
                 "delivery_price",
-                "paid_status"
+                "paid_status",
             ),
-            pk=self.kwargs['pk'])
+            pk=self.kwargs["pk"],
+        )
 
         if order.user.pk == self.request.user.pk or self.request.user.is_staff:
             return order
@@ -189,6 +203,7 @@ def pay_view(request: HttpRequest):
 
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
+
 
 # class OrdersHistoryListView(ListView):
 #     """

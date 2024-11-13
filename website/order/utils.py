@@ -193,6 +193,7 @@ def data_preparation_and_recording(
         order.save()
     return order.pk
 
+
 def create_order_items_data(
     correct_valid_data: dict[str, str],
     products_list: dict[str, dict[str, int | bool]],

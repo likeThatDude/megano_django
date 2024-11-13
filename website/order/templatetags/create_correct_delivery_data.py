@@ -1,10 +1,10 @@
 from collections import defaultdict
 from decimal import Decimal
+
 from catalog.models import Product
 from catalog.models import Seller
 from django import template
 from django.db.models import QuerySet
-
 from order.models import Order
 
 register = template.Library()

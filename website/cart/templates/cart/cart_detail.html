@@ -39,7 +39,7 @@
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
                             </div>
                             <div class="ProductCard-desc">
-                                <div class="Short-description">{{ info_product.product.short_description }}</div>
+                                <div class="Short-description">{{ info_product.product.short_description|truncatechars:50 }}</div>
                                 <div class="Seller-product">{{ info_product.seller }}</div>
                                 <div class="ProductCard-select-sellers-product">
                                     <select class="Select-seller-product" onchange="selectUpdateProductCard(this)">
