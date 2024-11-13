@@ -18,3 +18,4 @@ class ComparisonAdmin(admin.ModelAdmin):
         "user",
         "pk",
     )
+    list_per_page = 20

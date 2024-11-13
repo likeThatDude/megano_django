@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Min
 from django.db.models import OuterRef
 from django.db.models import Prefetch
@@ -8,8 +9,15 @@ from django.db.models import Subquery
 from django.db.models.functions import Round
 from django.http import HttpRequest
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from drf_spectacular.utils import extend_schema
+from rest_framework import permissions
+from rest_framework import status
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from website.settings import PRODUCTS_KEY
 
@@ -19,6 +27,8 @@ from .models import ProductImage
 from .models import Seller
 from .models import Specification
 from .models import Tag
+from .models import Viewed
+from .serializers import ViewedSerializer
 
 
 def catalog_view(request: HttpRequest):
@@ -27,19 +37,20 @@ def catalog_view(request: HttpRequest):
 
 class CatalogListView(ListView):
     """
-       Представление для отображения списка продуктов в каталоге.
+    Представление для отображения списка продуктов в каталоге.
 
-       Это представление обрабатывает запросы на отображение продуктов в
-       определенной категории, предоставляет возможность фильтрации по
-       различным параметрам, таким как продавцы, производители,
-       ограниченные серии, диапазон цен, название, спецификации и теги.
+    Это представление обрабатывает запросы на отображение продуктов в
+    определенной категории, предоставляет возможность фильтрации по
+    различным параметрам, таким как продавцы, производители,
+    ограниченные серии, диапазон цен, название, спецификации и теги.
 
-       Атрибуты:
-           template_name (str): Путь к шаблону, который будет использоваться для отображения.
-           model (Model): Модель, используемая для получения данных (Product).
-           context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
+    Атрибуты:
+        template_name (str): Путь к шаблону, который будет использоваться для отображения.
+        model (Model): Модель, используемая для получения данных (Product).
+        context_object_name (str): Имя контекста, под которым будут доступны продукты в шаблоне.
 
-       """
+    """
+
     template_name = "catalog/catalog.html"
     model = Product
     context_object_name = "products"
@@ -54,27 +65,25 @@ class CatalogListView(ListView):
 
         category_id = self.kwargs.get("pk")
 
-        products_with_related = Product.objects.prefetch_related('specifications').filter(category__id=category_id)
+        products_with_related = Product.objects.prefetch_related("specifications").filter(category__id=category_id)
 
         sellers = Seller.objects.all()
-        manufactures = products_with_related.values_list('manufacture', flat=True).distinct()
+        manufactures = products_with_related.values_list("manufacture", flat=True).distinct()
 
         # Получаем все спецификации для всех продуктов в категории
-        specifications = (Specification.objects
-                          .filter(product__in=products_with_related)
-                          .select_related('name')
-                          .distinct()
-                          )
+        specifications = (
+            Specification.objects.filter(product__in=products_with_related).select_related("name").distinct()
+        )
         # Группируем спецификации по имени
         grouped_specifications = defaultdict(list)
         for spec in specifications:
-            print('spec:', spec)
+            print("spec:", spec)
             grouped_specifications[spec.name.name].append(spec.value)
 
-        print('spec grouped:', grouped_specifications.items)
+        print("spec grouped:", grouped_specifications.items)
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
-        print('tags', tags)
+        print("tags", tags)
 
         return {
             "sellers": sellers,
@@ -153,10 +162,6 @@ class CatalogListView(ListView):
         return render(request, self.template_name, context)
 
 
-class CategoryDetailView(DetailView):
-    pass
-
-
 class ProductDetailView(DetailView):
     """
     Представление для отображения детальной информации о товаре.
@@ -214,6 +219,7 @@ class ProductDetailView(DetailView):
                 "specifications",
                 "images",
                 "preview",
+                "short_description",
             )
             .filter(pk=pk)
         )
@@ -275,3 +281,83 @@ class ProductDetailView(DetailView):
 
         context["sellers"] = sellers_list
         return context
+
+
+class ViewedListActionsView(APIView):
+    serializer_class = ViewedSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @extend_schema(
+        tags=[_("views")],
+        summary="Есть ли товар в списке просмотренных",
+        description="Проверяет есть ли указанный товар в списке просмотренных"
+        " и возвращает true если есть, иначе - false.",
+    )
+    def get(self, request: Request, product_id: int) -> Response:
+        exists = Viewed.objects.filter(user=request.user, product_id=product_id).exists()
+        return Response({"exists": exists}, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        tags=[_("views")],
+        summary="Добавление/обновление товара в просмотренных",
+        description="Добавляет или обновляет товар в списке просмотренных текущим пользователем."
+        " Если товар еще не существует в списке, то увеличивается его количество просмотров.",
+    )
+    def post(self, request: Request, product_id: int) -> Response:
+        with transaction.atomic():
+            new_view, created = Viewed.objects.update_or_create(user=request.user, product_id=product_id)
+
+            if created:
+                product = Product.objects.select_for_update().get(id=product_id)
+                product.views += 1
+                product.save()
+
+        serialized = ViewedSerializer(new_view)
+        return Response(
+            {"viewed": serialized.data},
+            status=status.HTTP_201_CREATED,
+        )
+
+    @extend_schema(
+        tags=[_("views")],
+        summary="Удаление товара из просмотренных",
+        description="Удаляет товар из списка просмотренных пользователем, "
+        "возвращает логическое значение результата операции.",
+    )
+    def delete(self, request: Request, product_id: int) -> Response:
+        deleted_rows, deleted_dict = Viewed.objects.filter(user=request.user, product_id=product_id).delete()
+        return Response({"deleted": deleted_rows != 0}, status=status.HTTP_200_OK)
+
+
+class ViewedListView(APIView):
+    serializer_class = ViewedSerializer
+
+    @extend_schema(
+        tags=[_("views")],
+        summary="Список просмотренных товаров",
+        description="Возварщает список просмотренных текущим пользователем товаров (по умолчанию 20)",
+    )
+    def get(self, request: Request):
+        limit = request.query_params.get("limit", 20)
+        viewed_products = Viewed.objects.filter(user=request.user)[:limit].all()
+        serialized = ViewedSerializer(viewed_products, many=True)
+        return Response(
+            {"viewed products": serialized.data},
+            status=status.HTTP_200_OK,
+        )
+
+
+class ViewsCountView(APIView):
+    serializer_class = ViewedSerializer
+
+    @extend_schema(
+        tags=[_("views")],
+        summary="Количество просмотров товара",
+        description="Возвращает количество просмотров указанного товара.",
+    )
+    def get(self, request: Request, product_id: int) -> Response:
+        product = Product.objects.only("views").filter(id=product_id).first()
+        return Response(
+            {"product id": product_id, "views count": product.views},
+            status=status.HTTP_200_OK,
+        )
