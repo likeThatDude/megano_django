@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import DetailCart
 from .views import APICart
+from .views import DetailCart
 
 app_name = "cart"
 

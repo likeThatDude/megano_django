@@ -27,7 +27,7 @@ class Cart:
         if not cart:
             cart = self.session[settings.CART_SESSION_ID] = {
                 "total_quantity": 0,
-                "total_cost": '0',
+                "total_cost": "0",
             }
         self.cart: dict = cart
 
@@ -55,7 +55,7 @@ class Cart:
             quantity (int = 1) - кол-во добавляемого товара
         """
         price_product = Price.objects.get(pk=int(price_product_id))
-        product_key = f'product{product_id}'
+        product_key = f"product{product_id}"
         if product_key not in self.cart:
             self.cart[product_key] = {
                 "quantity": 0,
@@ -64,13 +64,10 @@ class Cart:
                 "seller_id": price_product.seller.pk,
                 "seller_name": str(price_product.seller),
                 "to_order": True,
-                "cost_product": "0.00"
+                "cost_product": "0.00",
             }
         self.cart[product_key]["quantity"] += quantity
-        self.cart[product_key]["cost_product"] = self.__get_cost_product(
-            product_id,
-            self.cart[product_key]["quantity"]
-        )
+        self.cart[product_key]["cost_product"] = self.__get_cost_product(product_id, self.cart[product_key]["quantity"])
         self.save()
 
     def __get_cost_product(self, product_id: str, quantity: int) -> float:
@@ -78,7 +75,7 @@ class Cart:
         Возвращает общую стоимость товара
         """
         if quantity != 0:
-            cost = float(round(Decimal(self.cart[f"product{product_id}"]['price']) * quantity, 2))
+            cost = float(round(Decimal(self.cart[f"product{product_id}"]["price"]) * quantity, 2))
             return cost
         return 0.00
 
@@ -142,7 +139,9 @@ class Cart:
         """
         Возвращает общую стоимость товаров в корзине
         """
-        total_cost = round(sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values() if isinstance(item, dict)), 2)
+        total_cost = round(
+            sum(Decimal(item["price"]) * item["quantity"] for item in self.cart.values() if isinstance(item, dict)), 2
+        )
         return str(total_cost)
 
     def get_context_info(self) -> list[dict]:
@@ -167,7 +166,9 @@ class Cart:
                     "product": Product.objects.get(pk=product["product_id"]),
                     "quantity": product["quantity"],
                     "seller": Seller.objects.get(pk=product["seller_id"]),
-                    "sellers_product": Seller.objects.prefetch_related("products").filter(products=product["product_id"]),
+                    "sellers_product": Seller.objects.prefetch_related("products").filter(
+                        products=product["product_id"]
+                    ),
                     "total_cost": product["cost_product"],
                     "to_order": product["to_order"],
                 }

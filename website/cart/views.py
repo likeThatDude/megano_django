@@ -1,9 +1,10 @@
 from django.views.generic import TemplateView
-
-from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.views import APIView
 
 from .cart import Cart
 
@@ -30,6 +31,7 @@ class APICart(APIView):
     """
     API для взаимодействия с корзиной
     """
+
     def get(self, request: Request) -> Response:
         """
         Возвращает информацию о товарах в корзине
