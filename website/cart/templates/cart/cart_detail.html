@@ -33,7 +33,7 @@
                 <div class="Product Products-in-cart">
                     {% if info_cart %}
                     {% for info_product in info_cart %}
-                    <div class="ProductCard ProductCard-inCart" id="{{ info_product.product.pk }}">
+                    <div class="ProductCard ProductCard-inCart" data-product_id="{{ info_product.product.pk }}" data-price_product="{{ info_product.price }}">
                         <div class="ProductCard-look ProductCard-inCart">
                             <div class="ProductCard-photo">
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
@@ -42,7 +42,7 @@
                                 <div class="Short-description">{{ info_product.product.short_description }}</div>
                                 <div class="Seller-product">{{ info_product.seller }}</div>
                                 <div class="ProductCard-select-sellers-product">
-                                    <select class="Select-seller-product" data-product_id="{{ info_product.product.pk }}" onchange="updateProductInCart()">
+                                    <select class="Select-seller-product" onchange="selectUpdateProductCard(this)">
                                         {% for seller in info_product.sellers_product %}
                                         {% if seller.pk == info_product.seller.pk %}
                                             <option value="{{ seller.pk }}" selected>{{ seller.name }}</option>
@@ -70,7 +70,7 @@
                                         <div class="Amount Amount_product">
                                             <button class="Amount-remove" type="button">
                                             </button>
-                                            <input class="Amount-input form-input" name="amount" type="text" value="{{ info_product.quantity }}" data-price_product="{{ info_product.price }}" data-product_id="{{ info_product.product.pk }}"/>
+                                            <input class="Amount-input form-input" name="amount" type="text" value="{{ info_product.quantity }}"/>
                                             <button class="Amount-add" type="button">
                                             </button>
                                         </div>
@@ -103,9 +103,9 @@
                     </div>
                     {% endif %}
                 </div>
-                <div class="Place_an_order">
-                    <div class="Info-cart">
-                        <span class="Info-cart-span">{{ total_quantity_products }}</span>
+                <div class="Footer-cart">
+                    <div class="Footer-info">
+                        <span class="Footer-quantity-products-cart">{{ total_quantity_products }}</span>
                     </div>
                     <a class="btn btn_place_an_order">
                         <span class="btn-content">
@@ -119,8 +119,8 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'assets/js/cart/remove_product_cart.js' %}"></script>
-    <script src="{% static 'assets/js/cart/update_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/delete_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/update_detail_cart.js' %}"></script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

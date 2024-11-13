@@ -4020,7 +4020,7 @@ a.Cart-title {
     flex-direction: column;
 }
 
-.Place_an_order {
+.Footer-cart {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
