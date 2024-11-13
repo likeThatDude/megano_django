@@ -1221,6 +1221,10 @@
     margin-left: 10px;
 }
 
+.Cart-price p:not(:last-child) {
+    margin-bottom: 0!important;
+}
+
 .Cart-total .Cart-title {
     display: inline-block;
     margin-right: 10px;
