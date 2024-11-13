@@ -119,6 +119,10 @@ class Product(models.Model):
         verbose_name = "product"
         verbose_name_plural = "products"
 
+    @property
+    def short_description(self) -> str:
+        return f"{self.description[:50]}..." if len(self.description) > 50 else self.description
+
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
 
@@ -188,7 +192,7 @@ class Seller(models.Model):
         verbose_name_plural = "sellers"
 
     def __str__(self) -> str:
-        return f"Seller(id={self.pk}, name={self.name!r})"
+        return str(self.name)
 
 
 class Payment(models.Model):
