@@ -655,39 +655,31 @@ var Amount = function(){
     var $add = $('.Amount-add');
     var $input = $('.Amount-input');
     var $remove = $('.Amount-remove');
-    var $prod_desc = $('.ProductCard-desc-in-cart');
-    var $prod_price = $('.ProductCard-price');
-
-    function updateCostProduct(inputElem, btnEvent) {
-       // Достаем цену товара в элементе input
-        var $priceProduct = inputElem.data('price_product')
-        // Находим элемент со стоимостью товара
-        var $thisProdCost = $(btnEvent).closest($prod_desc).find($prod_price);
-        // Высчитываем новую стоимость
-        var $newProdCost = parseFloat(inputElem.val()) * parseFloat($priceProduct)
-        // Подставляем новое значение округленное до 2 знаков
-        $thisProdCost.text($newProdCost.toFixed(2) + ' $')
-    }
-
     return {
-        init: function(){
-            $add.on('click', function(e){
+        init: async function(){
+            $add.on('click', async function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val( value + 1);
 
-                updateProductInCart();
-                updateTotalValuesCart();
+                var productCard = $(this).closest($('.ProductCard')).get(0)
+                var newTotalQuantity = await getDynamicTotalQuantity();
+
+                await updateCostProduct(productCard);
+                await footerUpdateQuantityCart(newTotalQuantity);
             });
-            $remove.on('click', function(e){
+            $remove.on('click', async function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val(value>0?value - 1:0);
 
-                updateProductInCart();
-                updateTotalValuesCart();
+                var productCard = $(this).closest($('.ProductCard')).get(0)
+                var newTotalQuantity = await getDynamicTotalQuantity();
+
+                await updateCostProduct(productCard);
+                await footerUpdateQuantityCart(newTotalQuantity);
             });
         }
     };
