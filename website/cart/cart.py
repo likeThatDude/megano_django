@@ -3,6 +3,7 @@ from decimal import Decimal
 from catalog.models import Price
 from catalog.models import Product
 from catalog.models import Seller
+from django.http import HttpRequest
 from rest_framework.request import Request
 
 from website import settings
@@ -15,7 +16,7 @@ class Cart:
     из сессии пользователя.
     """
 
-    def __init__(self, request: Request):
+    def __init__(self, request: Request | HttpRequest):
         """
         Создание корзины
 
@@ -41,10 +42,10 @@ class Cart:
         self.session.modified = True
 
     def add(
-        self,
-        product_id: str,
-        price_product_id: str,
-        quantity: int = 1,
+            self,
+            product_id: str,
+            price_product_id: str,
+            quantity: int = 1,
     ) -> None:
         """
         Добавление товара в сессию.
@@ -69,6 +70,16 @@ class Cart:
         self.cart[product_key]["quantity"] += quantity
         self.cart[product_key]["cost_product"] = self.__get_cost_product(product_id, self.cart[product_key]["quantity"])
         self.save()
+
+    @property
+    def products(self) -> dict:
+        """
+        Возвращает словарь только с товарами
+        """
+        return {product_key: product_info
+                for product_key, product_info in self.cart.items()
+                if isinstance(product_info, dict)
+                }
 
     def __get_cost_product(self, product_id: str, quantity: int) -> float:
         """
