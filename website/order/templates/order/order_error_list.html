@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block description %}
+    <meta name="description" content="Ошибка создания заказа">
+{% endblock %}
+
+
+{% block links %}
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    {{ user.login }} order create error
+{% endblock %}
+
+{% block body %}
+    <div class="main_error">
+        <p class="error_header">Ошибк{% if errors|length > 1 %}и{% else %}а{% endif %} при создании заказа:</p>
+        {% for error in errors %}
+            <div class="error_block">
+                <p>{{ error.0 }}) {{ error.1 }}</p>
+            </div>
+        {% endfor %}
+        <div class="non-auth-block-buttons">
+            <a class="non-auth-block-button" href="{% url 'order:order_create' %}">Перейти к заказу</a>
+            <a class="non-auth-block-button" href="{% url 'core:index' %}">На главную</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
+{% endblock %}
+
+

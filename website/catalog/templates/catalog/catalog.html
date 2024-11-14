@@ -134,12 +134,12 @@
                         {% for product in products %}
                             <div class="Card" {% if forloop.counter > 4 %} hide_md {% endif %}
                                              {% if forloop.counter > 6 %} hide_1450 {% endif %}>
-                                <a class="Card-picture" href="{% url 'catalog:product_detail' product.id %}">
+                                <a class="Card-picture" href="{{ product.get_absolute_url }}">
                                     <img src="{{ product.preview.url }}" alt=""/>
                                 </a>
                                 <div class="Card-content">
                                     <strong class="Card-title">
-                                        <a href="{% url 'catalog:product_detail' product.id %}">{{ product.name }}</a>
+                                        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                                     </strong>
                                     <div class="Card-description">
                                         <div class="Card-cost">
@@ -148,7 +148,7 @@
                                         <div class="Card-category">{{ product.category }}
                                         </div>
                                         <div class="Card-hover">
-                                            <a class="Card-btn" href="{% url 'cart:add_product' product_id=product.pk price_id=product.price_pk %}">
+                                            <a class="Card-btn" data-product_id="{{ product.pk }}" data-price_id="{{ product.price_pk }}">
                                                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
 
                                             </a>
@@ -190,5 +190,6 @@
 <!--    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>-->
 <!--    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>-->
 <!--    <script src="{% static 'assets/js/scripts.js' %}"></script>-->
-    <script src="{% static 'cart/js/add_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/collect_data_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/add_product_cart.js' %}"></script>
 {% endblock %}
