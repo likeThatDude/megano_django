@@ -50,6 +50,7 @@ class IndexView(TemplateView):
         context["favorite_categories"] = self.get_categories()
         context["top_products"] = self.get_top_products()
         context["offers"] = self.get_daily_offer_and_limited_editions()
+        context["hot_offers"] = self.get_hot_offers()
 
         return context
 
@@ -132,4 +133,16 @@ class IndexView(TemplateView):
                 }
             cache.set(OFFER_KEY, offers, timeout=10)
         return offers
+
+    def get_hot_offers(self):
+        """ В слайдер с горячими предложениями попадает до девяти случайных товаров,
+        на которые действует какая-нибудь акция"""
+        hot_offers = cache.get(OFFER_KEY)
+        if hot_offers is None:
+            hot_offers = (
+                Price.objects
+                .select_related('product')
+                .order_by("?")[:9]
+            )
+        return hot_offers
 
