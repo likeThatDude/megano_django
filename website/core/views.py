@@ -112,7 +112,7 @@ class IndexView(TemplateView):
 
     def get_daily_offer_and_limited_editions(self):
         """Получает случайный товар с ограниченным тиражом для блока 'Предложение дня'
-         и оставшиеся 15 предложений для слайдера Ограниченый тираж
+         и оставшиеся 15 предложений для слайдера Ограниченный тираж
          """
         offers = cache.get(OFFER_KEY)
         if offers is None:
@@ -144,5 +144,6 @@ class IndexView(TemplateView):
                 .select_related('product')
                 .order_by("?")[:9]
             )
+            cache.set(OFFER_KEY, hot_offers, timeout=10)
         return hot_offers
 
