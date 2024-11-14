@@ -42,10 +42,10 @@ class Cart:
         self.session.modified = True
 
     def add(
-            self,
-            product_id: str,
-            price_product_id: str,
-            quantity: int = 1,
+        self,
+        product_id: str,
+        price_product_id: str,
+        quantity: int = 1,
     ) -> None:
         """
         Добавление товара в сессию.
@@ -76,10 +76,11 @@ class Cart:
         """
         Возвращает словарь только с товарами
         """
-        return {product_key: product_info
-                for product_key, product_info in self.cart.items()
-                if isinstance(product_info, dict)
-                }
+        return {
+            product_key: product_info
+            for product_key, product_info in self.cart.items()
+            if isinstance(product_info, dict)
+        }
 
     def __get_cost_product(self, product_id: str, quantity: int) -> float:
         """
