@@ -656,18 +656,30 @@ var Amount = function(){
     var $input = $('.Amount-input');
     var $remove = $('.Amount-remove');
     return {
-        init: function(){
-            $add.on('click', function(e){
+        init: async function(){
+            $add.on('click', async function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val( value + 1);
+
+                var productCard = $(this).closest($('.ProductCard')).get(0)
+                var newTotalQuantity = await getDynamicTotalQuantity();
+
+                await updateCostProduct(productCard);
+                await footerUpdateQuantityCart(newTotalQuantity);
             });
-            $remove.on('click', function(e){
+            $remove.on('click', async function(e){
                 e.preventDefault();
                 var $inputThis = $(this).siblings($input).filter($input);
                 var value = parseFloat($inputThis.val());
                 $inputThis.val(value>0?value - 1:0);
+
+                var productCard = $(this).closest($('.ProductCard')).get(0)
+                var newTotalQuantity = await getDynamicTotalQuantity();
+
+                await updateCostProduct(productCard);
+                await footerUpdateQuantityCart(newTotalQuantity);
             });
         }
     };

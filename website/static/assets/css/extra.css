@@ -1542,7 +1542,7 @@ a.Cart-title {
     border-radius: 100px;
 }
 
-.CartBlock-price {
+.CartBlock-cost {
     font-size: 13px;
     color: #777;
     font-weight: 500;
@@ -4193,6 +4193,12 @@ a.Cart-title {
     flex-direction: column;
 }
 
+.Footer-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .Product-ratingInput {
     display: flex;
     align-items: center;
@@ -4678,7 +4684,7 @@ a.Cart-title {
     }
 }
 
-.ProductCard-cost {
+.Cost-product {
     display: flex;
     align-items: center;
     margin-right: auto;
@@ -4712,7 +4718,7 @@ a.Cart-title {
     }
 }
 
-.ProductCard-price {
+.Cost-product-value {
     color: #0063d1;
     font-size: 38px;
     font-weight: 600;
