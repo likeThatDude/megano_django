@@ -33,19 +33,34 @@
                 <div class="Product Products-in-cart">
                     {% if info_cart %}
                     {% for info_product in info_cart %}
-                    <div class="ProductCard ProductCard-inCart">
+                    <div class="ProductCard ProductCard-inCart" data-product_id="{{ info_product.product.pk }}" data-price_product="{{ info_product.price }}">
                         <div class="ProductCard-look ProductCard-inCart">
                             <div class="ProductCard-photo">
                                 <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
+                            </div>
+                            <div class="ProductCard-desc">
+                                <div class="Short-description">{{ info_product.product.short_description|truncatechars:50 }}</div>
+                                <div class="Seller-product">{{ info_product.seller }}</div>
+                                <div class="ProductCard-select-sellers-product">
+                                    <select class="Select-seller-product" onchange="selectUpdateProductCard(this)">
+                                        {% for seller in info_product.sellers_product %}
+                                        {% if seller.pk == info_product.seller.pk %}
+                                            <option value="{{ seller.pk }}" selected>{{ seller.name }}</option>
+                                        {% else %}
+                                            <option value="{{ seller.pk }}">{{ seller.name }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
                             <div class="ProductCard-desc ProductCard-desc-in-cart">
                                 <div class="ProductCard-header">
                                     <h2 class="ProductCard-title"> {{ info_product.product.name }}
                                     </h2>
                                     <div class="ProductCard-info">
-                                        <div class="ProductCard-cost">
-                                            <div class="ProductCard-price">
-                                                {{ info_product.total_price }} $
+                                        <div class="Cost-product">
+                                            <div class="Cost-product-value">
+                                                {{ info_product.total_cost }} $
                                             </div>
                                         </div>
                                     </div>
@@ -61,7 +76,7 @@
                                         </div>
                                     </div>
                                     <div class="ProductCard-cartElement">
-                                        <a class="btn btn_primary" href="{% url 'cart:delete_product' product_id=info_product.product.pk %}">
+                                        <a class="btn btn_primary" data-product_id="{{ info_product.product.pk }}">
                                             <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                                  alt="cart_white.svg"/>
                                             <span class="btn-content">Удалить</span>
@@ -88,13 +103,28 @@
                     </div>
                     {% endif %}
                 </div>
+                <div class="Footer-cart">
+                    <div class="Footer-info">
+                        <span class="Footer-quantity-products-cart">{{ total_quantity_products }}</span>
+                    </div>
+                    <a class="btn btn_place_an_order">
+                        <span class="btn-content">
+                            Перейти к оформлению
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'assets/js/cart/remove_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/delete_product_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/update_detail_cart.js' %}"></script>
+    <script src="{% static 'assets/plg/decimal/decimal.js' %}"></script>
+    <script type="module">
+        import Decimal from '{% static 'assets/plg/decimal/decimal.mjs' %}';
+    </script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

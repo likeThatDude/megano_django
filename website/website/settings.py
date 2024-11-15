@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
     "comparison.apps.ComparisonConfig",
+    "discount.apps.DiscountConfig",
     # DRF API
     "review.apps.ReviewConfig",
 ]

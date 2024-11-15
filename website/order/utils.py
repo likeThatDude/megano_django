@@ -1,6 +1,7 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 from multiprocessing.connection import deliver_challenge
+from struct import error
 from typing import Any
 from typing import List
 
@@ -150,7 +151,7 @@ def data_preparation_and_recording(
     correct_valid_data: dict[str, str],
     products_list: dict[str, dict[str, int | bool]],
     user_id: int,
-):
+) -> int:
     """
     Подготавливает и сохраняет данные о заказе в базе данных.
 
@@ -164,7 +165,7 @@ def data_preparation_and_recording(
         user_id (int): Идентификатор пользователя, который сделал заказ.
 
     Возвращает:
-        None
+        pk созданного заказа
 
     Используется транзакция для обеспечения целостности данных при записи в базу.
     """
@@ -174,6 +175,7 @@ def data_preparation_and_recording(
     with transaction.atomic():
         order = Order.objects.create(
             user_id=user_id,
+            name=correct_valid_data["name"],
             delivery_city=correct_valid_data["city"],
             delivery_address=correct_valid_data["address"],
             recipient_phone=correct_valid_data["phone"],
@@ -189,6 +191,7 @@ def data_preparation_and_recording(
         OrderItem.objects.bulk_create(data)
         order.order_items.add(*data)
         order.save()
+    return order.pk
 
 
 def create_order_items_data(

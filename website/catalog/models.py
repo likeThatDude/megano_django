@@ -189,7 +189,7 @@ class Seller(models.Model):
         verbose_name_plural = "sellers"
 
     def __str__(self) -> str:
-        return f"Seller(id={self.pk}, name={self.name!r})"
+        return str(self.name)
 
 
 class Payment(models.Model):

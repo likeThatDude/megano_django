@@ -1,202 +1,89 @@
-from catalog.models import Price
-from catalog.models import Product
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import JsonResponse
-from django.shortcuts import redirect
-from django.views.generic import FormView
 from django.views.generic import TemplateView
-from django.views.generic import View
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED
+from rest_framework.status import HTTP_204_NO_CONTENT
+from rest_framework.views import APIView
 
 from .cart import Cart
 
 
 class DetailCart(TemplateView):
     """
-    Этот класс возвращает информацию о корзине.
-    Наследуется от `TemplateView`
-    Основная информация о корзине собирается в методе get_context_data.
-
-    Атрибуты:
-        template_name (str) - путь к шаблону корзины
-
-    Методы:
-        get_context_data (**kwargs): собирает информацию из корзины и передает ее в контекст шаблона.
-
-    Примечания:
-
+    Представление для отображения страницы корзины
     """
 
     template_name = "cart/cart_detail.html"
 
     def get_context_data(self, **kwargs) -> dict:
         """
-        Возвращает контекст в шаблон. Добавляет информацию о корзине в контекст.
-        При итерации по объекту Cart он возвращает словарь с информацией о товаре
-
-        Структура словаря по каждому товару:
-            'price': цена товара (str),
-            'product': товар (Product),
-            'quantity': кол-во товара (int),
-            'seller': продавец этого товара (Seller),
-            'total_price': общая стоимость этого товара в корзине (str),
+        Возвращает контекст в шаблон
         """
         context = super().get_context_data(**kwargs)
         cart = Cart(self.request)
-        info_cart = [info_product for info_product in cart]
-        context["info_cart"] = info_cart
+        context["info_cart"] = cart.get_context_info()
+        context["total_quantity_products"] = cart.total_quantity
         return context
 
 
-class AddProductInCart(View):
+class APICart(APIView):
     """
-    Этот класс позволяет добавлять товары в корзину.
-    Наследуется от `View`
-
-    Атрибуты:
-        -
-
-    Методы:
-        post (HttpRequest): Переопределяет метод POST для добавления товара.
-
-    Примечания:
-        -
+    API для взаимодействия с корзиной
     """
 
-    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int = 1) -> JsonResponse:
+    def get(self, request: Request) -> Response:
         """
-        Выполняет POST-запрос для добавления товара в корзину.
-
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-            - product_id (int): pk товара который нужно добавить.
-            - price_id (int): pk цены товара которого добавляем.
-            - quantity (int): кол-во товара, которое нужно прибавить (по умолчанию 1)
-
-        Возвращает:
-            JsonResponse: Ответ с кодом 200 при успешном добавлении.
+        Возвращает информацию о товарах в корзине
+        Формат корзины:
+        {
+            "product1": {
+                    "quantity": "кол-во товара (int)",
+                    "product_id": "id товара (int)",
+                    "price": "цена товара (float)",
+                    "seller_id": "id продавца (int)",
+                    "seller_name": "имя продавца (str)",
+                    "to_order": "в заказе товара или нет (bool)",
+                    "cost_product": "стоимость товара (str),"
+            },
+            "total_quantity": "общее кол-во товара в корзине (int)",
+            "total_cost": "общая стоимость товаров в корзине (str)",
+        }
         """
         cart = Cart(request)
-        added_product = Product.objects.get(pk=product_id)
-        added_price = Price.objects.get(pk=price_id)
-        cart.add(added_product, added_price, quantity)
-        return JsonResponse({"status_code": 200})
+        return Response(cart.cart)
 
-
-class UpdateQuantityProductInCart(View):
-    """ """
-
-    def post(self, request: HttpRequest, product_id: int, price_id: int, quantity: int) -> JsonResponse:
-        cart = Cart(request)
-        updated_product = Product.objects.get(pk=product_id)
-        price_updated_product = Price.objects.get(pk=price_id)
-        cart.add(
-            updated_product,
-            price_updated_product,
-            quantity=quantity,
-            update_quantity=True,
-        )
-        return JsonResponse({"status_code": 200})
-
-
-class DeleteProductInCart(View):
-    """
-    Этот класс позволяет добавлять товары в корзину.
-    Наследуется от `View`
-    Логика удаления товара в корзину отображена в документации
-    к модели Cart
-
-    Атрибуты:
-        -
-
-    Методы:
-        delete (HttpRequest): Переопределяет метод DELETE для удаления товара.
-
-    Примечания:
-        Удаляется вся информация о товаре в корзине
-    """
-
-    def delete(self, request: HttpRequest, product_id: int) -> JsonResponse:
+    def post(self, request: Request) -> Response:
         """
-        Выполняет DELETE-запрос для удаления товара из корзины.
-
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-            - product_id (int): pk товара который нужно удалить.
-
-        Возвращает:
-            JsonResponse: Ответ с кодом 204 при успешном удалении.
+        Добавляет товар в корзину
         """
         cart = Cart(request)
-        deleted_product = Product.objects.get(pk=product_id)
-        cart.remove(deleted_product)
-        request.COOKIES["total_price"] = cart.get_total_price()
-        return JsonResponse({"status_code": 204})
+        data = request.data
+        product_id = data["product_id"]
+        price_id = data["price_id"]
+        quantity = 1
+        if "quantity" in data:
+            quantity = data["quantity"]
+        cart.add(product_id, price_id, quantity)
+        return Response(status=HTTP_201_CREATED)
 
-
-class GetTotalQuantityCart(View):
-    """
-    GetTotalQuantityCart для получения общего кол-ва товаров в корзине.
-
-    Этот класс возвращает общее кол-во товаров в корзине и сохраняет его
-    в куках для оптимизации запросов
-
-    Атрибуты:
-        -
-
-    Методы:
-        get (HttpRequest): возвращает json {'total_quantity': кол-во (int)}
-
-    Примечания:
-        общее кол-во товаров сохраняется в куках если там не было
-    """
-
-    def get(self, request: HttpRequest) -> JsonResponse:
+    def patch(self, request: Request) -> Response:
         """
-        Выполняет GET-запрос для получения информации об общем кол-ве товаров.
-
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-
-        Возвращает:
-            JsonResponse: Ответ в ключе 'total_quantity'.
+        Обновляет кол-во товаров в корзине
         """
         cart = Cart(request)
-        if "total_quantity" not in request.COOKIES:
-            request.COOKIES["total_quantity"] = len(cart)
-        total_quantity = request.COOKIES.get("total_quantity")
-        return JsonResponse({"total_quantity": total_quantity})
+        data = request.data
+        product_id = data["product_id"]
+        quantity = data["quantity"]
+        seller_id = data["seller_id"]
+        cart.update_product(product_id, seller_id, quantity)
+        return Response(status=HTTP_200_OK)
 
-
-class GetTotalPriceCart(View):
-    """
-    GetTotalPriceCart для получения общей стоимости товаров в корзине.
-
-    Этот класс возвращает общую стоимость товаров в корзине и сохраняет его
-    в куках для оптимизации запросов
-
-    Атрибуты:
-        -
-
-    Методы:
-        get (HttpRequest): возвращает json {'total_price': стоимость (int)}
-
-    Примечания:
-        общая стоимость товаров сохраняется в куках если там не было
-    """
-
-    def get(self, request: HttpRequest) -> JsonResponse:
+    def delete(self, request: Request) -> Response:
         """
-        Выполняет GET-запрос для получения информации об общей стоимости товаров.
-
-        Параметры запроса и URL:
-            - request (HttpRequest): Текущий запрос пользователя.
-
-        Возвращает:
-            JsonResponse: Ответ в ключе 'total_price'.
+        Удаляет товар из корзины
         """
         cart = Cart(request)
-        if "total_price" not in request.COOKIES:
-            request.COOKIES["total_price"] = cart.get_total_price()
-        total_price = request.COOKIES.get("total_price")
-        return JsonResponse({"total_price": total_price})
+        product_id = request.data["product_id"]
+        cart.remove(product_id)
+        return Response(status=HTTP_204_NO_CONTENT)
