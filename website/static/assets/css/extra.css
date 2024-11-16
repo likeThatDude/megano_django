@@ -3168,6 +3168,18 @@ a.Cart-title {
     }
 }
 
+.elem_center {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom_margin {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
 .Footer-news .media_news {
     color: #86878a;
 }
