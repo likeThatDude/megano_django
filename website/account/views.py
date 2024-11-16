@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
-from django.views.generic import UpdateView
+from django.views.generic import ListView
 
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
@@ -156,15 +156,40 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         profile - профиль пользователя
         last_order - последний заказ
         """
+        user = self.request.user
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(user=self.request.user)
+        profile = Profile.objects.get(user=user)
 
         # Передаем последний заказ текущего профиля
-        profile_orders = profile.orders.all()
+        user_orders = user.orders.all()
+        if user_orders:
+            context["last_order"] = user_orders.order_by("-created_at").first()
+
         context["profile"] = profile
-        context["last_order"] = profile_orders.order_by("-created_at").first()
         return context
 
     def get_object(self, queryset=None):
         """Возвращаем профиль пользователя"""
-        return Profile.objects.get(user=self.request.user)
+        user = self.request.user
+        queryset = Profile.objects.get(user=user)
+        return queryset
+        # return Profile.objects.get(user=self.request.)
+
+
+class ProfileOrdersView(LoginRequiredMixin, ListView):
+    """
+    CBV для отображения заказов профиля.
+    Доступно только аутентифицированным пользователям.
+    Если у профиля имеются заказы, то отображаются, иначе
+    отображается текст "У вас пустая история заказов"
+
+    Атрибуты:
+        template_name - шаблон для отображения заказов профиля пользователя
+
+    """
+    template_name = "account/profile_orders.html"
+
+    def get_queryset(self):
+        """ Получаем заказы пользователя """
+        user = self.request.user
+        return user.orders.all()
