@@ -1222,7 +1222,7 @@
 }
 
 .Cart-price p:not(:last-child) {
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
 }
 
 .Cart-total .Cart-title {
@@ -4410,6 +4410,38 @@ a.Cart-title {
     text-align: center;
 }
 
+.unic_spec_form {
+    width: auto;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 5px;
+}
+
+.unic_spec_form form {
+    padding: 5px;
+}
+
+.unic_spec_form label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.unic_spec_label {
+    font-size: 1.3em;
+}
+
+.unic_spec_form span {
+    margin-bottom: 5px;
+}
+
+.unic_spec_form button {
+    display: none;
+}
+
 .ProductCard {
     display: flex;
     flex-direction: column;
@@ -4674,6 +4706,12 @@ a.Cart-title {
     display: flex;
     align-items: center;
     margin-top: 25px;
+}
+
+.ProductCard-price {
+    color: rgb(0, 99, 209);
+    font-size: 2em;
+    font-weight: bold;
 }
 
 @media screen and (max-width: 480px) {

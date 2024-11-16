@@ -17,6 +17,16 @@
             <div class="Product">
                 <div class="ProductCard">
                     {% if comparison_products %}
+                        <div class="unic_spec_form">
+                            <form action="{% url 'comparison:comparison_page' %}" method="get">
+                                <label for="unic_spec" class="unic_spec_label">
+                                    <input id="unic_spec" name="unic_spec" type="checkbox"
+                                           {% if unic_spec %}checked{% endif %}>
+                                    Убрать одинаковые характеристики
+                                </label>
+                                <button id="myButton"></button>
+                            </form>
+                        </div>
                         {% for category, comparisons in comparison_products.items %}
                             <h1>Сравниваемая категория: {{ category.name }}</h1>
                             <div class="CategoryComparison">
@@ -126,4 +136,18 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        // Получаем элементы чекбокса и кнопки
+        const checkBox = document.getElementById('unic_spec');
+        const button = document.getElementById('myButton');
+
+        // Добавляем обработчик события на изменение состояния чекбокса
+        checkBox.addEventListener('change', function () {
+            // Нажимаем кнопку каждый раз, когда состояние чекбокса меняется
+            button.click();
+        });
+    </script>
 {% endblock %}

@@ -5,7 +5,7 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-from .models import Category
+from .models import Category, ProductImage
 from .models import Delivery
 from .models import NameSpecification
 from .models import Payment
@@ -41,6 +41,8 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     ordering = ("id",)
 
+class ProductInline(admin.StackedInline):
+    model = ProductImage
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -55,6 +57,9 @@ class ProductAdmin(admin.ModelAdmin):
         "product_name_short",
     )
     ordering = ("id",)
+    inlines = [
+        ProductInline,
+    ]
 
     def product_name_short(self, obj: Product) -> str:
         if len(obj.name) < 20:
@@ -134,6 +139,7 @@ class ReviewAdmin(admin.ModelAdmin):
 @admin.register(Specification)
 class SpecificationAdmin(admin.ModelAdmin):
     list_display = (
+        "pk",
         "value",
         "name",
         "product",
@@ -147,7 +153,7 @@ class SpecificationAdmin(admin.ModelAdmin):
 
 @admin.register(NameSpecification)
 class NameSpecificationAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("pk", "name",)
 
 
 @admin.register(Tag)

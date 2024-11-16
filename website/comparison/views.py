@@ -1,3 +1,6 @@
+from django.template.context_processors import request
+from rest_framework.generics import DestroyAPIView
+
 from catalog.models import Product
 from django.core.cache import cache
 from django.db import IntegrityError
@@ -39,20 +42,20 @@ class ComparisonView(TemplateView):
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
+        unic_spec = self.request.GET.get('unic_spec')
         if user.is_authenticated:
-            comparison_products = utils.get_products_with_auth_user(user.pk)
+            comparison_products = utils.get_products_with_auth_user(user.pk, unic_spec)
             data = create_categorization(comparison_products[1])
-            context["comparison_products"] = data
-            context["correct_spec"] = comparison_products[0]
+
         else:
-            comparison_products = utils.get_products_with_unauth_user(self.request)
+            comparison_products = utils.get_products_with_unauth_user(self.request, unic_spec)
             data = create_categorization(comparison_products[1], False)
-            context["comparison_products"] = data
-            context["correct_spec"] = comparison_products[0]
+        context["comparison_products"] = data
+        context["correct_spec"] = comparison_products[0]
+        context["unic_spec"] = True if unic_spec else False
         return context
 
 
-# Переписать при помощи DRF пока так пока не готовы зависимые элементы.
 class ComparisonDeleteView(DeleteView):
     """
     View для удаления товара из списка сравнения.
@@ -116,7 +119,6 @@ class ComparisonDeleteView(DeleteView):
         return HttpResponseRedirect(reverse_lazy("comparison:comparison_page"))
 
 
-# Переписать при помощи DRF пока так пока не готовы зависимые элементы.
 class ComparisonAddView(View):
     """
     View для обработки добавления товара в список сравнения.
