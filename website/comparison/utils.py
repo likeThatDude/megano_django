@@ -111,10 +111,9 @@ def get_products_with_unauth_user(request: HttpRequest, unic_spec: None | str) -
     запросов.
     """
     products_ids = request.session.get("products_ids", [])
-    products_ids = [1,2,3,4,5]
     key = f"{anonymous_comparison_key}{request.session.session_key}{unic_spec}"
+
     products = cache.get(key)
-    cache.delete(key)
 
     if products is None:
         common_specifications = list()
