@@ -1,16 +1,15 @@
-from django.template.context_processors import request
-from rest_framework.generics import DestroyAPIView
-
 from catalog.models import Product
 from django.core.cache import cache
 from django.db import IntegrityError
 from django.http import HttpRequest
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DeleteView
 from django.views.generic import TemplateView
+from rest_framework.generics import DestroyAPIView
 
 from website.settings import anonymous_comparison_key
 from website.settings import user_comparison_key
@@ -42,7 +41,7 @@ class ComparisonView(TemplateView):
         """
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        unic_spec = self.request.GET.get('unic_spec')
+        unic_spec = self.request.GET.get("unic_spec")
         if user.is_authenticated:
             comparison_products = utils.get_products_with_auth_user(user.pk, unic_spec)
             data = create_categorization(comparison_products[1])

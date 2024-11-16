@@ -5,12 +5,13 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-from .models import Category, ProductImage
+from .models import Category
 from .models import Delivery
 from .models import NameSpecification
 from .models import Payment
 from .models import Price
 from .models import Product
+from .models import ProductImage
 from .models import Review
 from .models import Seller
 from .models import Specification
@@ -41,8 +42,10 @@ class CategoryAdmin(admin.ModelAdmin):
     )
     ordering = ("id",)
 
+
 class ProductInline(admin.StackedInline):
     model = ProductImage
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -153,7 +156,10 @@ class SpecificationAdmin(admin.ModelAdmin):
 
 @admin.register(NameSpecification)
 class NameSpecificationAdmin(admin.ModelAdmin):
-    list_display = ("pk", "name",)
+    list_display = (
+        "pk",
+        "name",
+    )
 
 
 @admin.register(Tag)
