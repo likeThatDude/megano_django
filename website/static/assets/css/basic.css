@@ -2434,6 +2434,7 @@ label.toggle {
 }
 
 .row-block {
+    position: relative;
     display: block;
     flex-grow: 0;
     width: 100%;
