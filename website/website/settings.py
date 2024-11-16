@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -59,15 +59,14 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "drf_spectacular",
     "django_celery_results",
-
     # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
     "order.apps.OrderConfig",
-    "viewed.apps.ViewedConfig",
     "comparison.apps.ComparisonConfig",
+    "discount.apps.DiscountConfig",
     # DRF API
     "review.apps.ReviewConfig",
 ]
@@ -96,7 +95,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "account.context_processors.user_is_auth",
+                # "account.context_processors.user_is_auth",
             ],
         },
     },
@@ -116,7 +115,6 @@ DATABASES = {
 
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
-BANNERS_KEY = "banners"
 PRODUCTS_KEY = "category_{category_id}"
 
 # Password validation
@@ -208,5 +206,6 @@ REST_FRAMEWORK = {
 
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV
+BANNERS_KEY = "banners"
 user_comparison_key = "user_comparison_"
 anonymous_comparison_key = "anonymous_user_comparison_"

@@ -28,7 +28,7 @@ class BannerAdmin(admin.ModelAdmin):
     list_display = ("pk", "product", "deadline_data", "active")
     list_display_links = ("pk", "product", "deadline_data", "active")
     ordering = ("pk", "active")
-
+    list_per_page = 20
     actions = [
         archive_old_banners,
     ]

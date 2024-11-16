@@ -1,11 +1,13 @@
 from django.urls import path
 
-from .views import order_create_view
-from .views import order_detail_view
+from . import views
 
 app_name = "order"
 
 urlpatterns = [
-    path("create/", order_create_view, name="order_create"),
-    path("detail/", order_detail_view, name="order_detail"),
+    path("create/", views.OrderCreateView.as_view(), name="order_create"),
+    path("detail/<int:pk>/", views.OrderDetailView.as_view(), name="order_detail"),
+    path("payment/", views.pay_view, name="payment_view"),
+    path("payment1/", views.pay_view2, name="payment_view"),
+    # path("orders_history/", views.OrdersHistoryListView.as_view(), name="orders-history"),
 ]

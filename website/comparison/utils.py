@@ -98,8 +98,6 @@ def get_products_with_unauth_user(request: HttpRequest) -> tuple:
     запросов.
     """
     products_ids = request.session.get("products_ids", [])
-    # request.session["products_ids"] = ['1']
-    print(products_ids)
     key = f"{anonymous_comparison_key}{request.session.session_key}"
     products = cache.get(key)
     if products is None:

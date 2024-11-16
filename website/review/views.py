@@ -1,8 +1,7 @@
+import bleach
 from catalog.models import Review
-from drf_spectacular.utils import OpenApiParameter
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
@@ -11,7 +10,6 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from . import serializers
 
@@ -66,6 +64,8 @@ class ReviewCreateView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         """
         Обрабатывает POST-запрос для создания нового отзыва.
+        Если в тексте есть код, который может быть использован для XSS-атаки,
+        то очищает сообщение от этого.
 
         Параметры:
             request (Request): Объект запроса.
@@ -75,10 +75,10 @@ class ReviewCreateView(CreateAPIView):
         Возвращает:
             Response: Ответ с данными созданного отзыва и статусом 201.
         """
+        request.data["text"] = bleach.clean(request.data["text"], tags=[], strip=True)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        print(serializer.data)
         response_serializer = serializers.ReviewCreateResponseSerializer(serializer.instance)
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
 
@@ -110,11 +110,11 @@ class ReviewUpdateViewSet(UpdateAPIView):
             Response: Ответ с данными обновленного отзыва.
         """
         obj = self.get_object()
-        if obj.user != request.user:
-            raise PermissionDenied("Ты не владелец этого объекта.")
-        else:
+        if obj.user == request.user or request.user.is_staff:
             obj.updating = True
             obj.save(update_fields=["updating"])
+        else:
+            raise PermissionDenied("Ты не владелец этого объекта.")
         return super().update(request, *args, **kwargs)
 
 
@@ -162,7 +162,7 @@ class ReviewDeleteViewSet(DestroyAPIView):
             Response: Ответ с кодом 204 при успешном удалении или 400 при ошибке.
         """
         instance = self.get_object()
-        if instance.user.id == request.user.id:
+        if instance.user.id == request.user.id or request.user.is_staff:
             self.perform_destroy(instance)
             return Response(status=status.HTTP_204_NO_CONTENT)
         else:
