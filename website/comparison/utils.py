@@ -5,9 +5,14 @@ from catalog.models import Product
 from catalog.models import Specification
 from comparison.models import Comparison
 from django.core.cache import cache
-from django.db.models import Min, Count, Subquery, OuterRef, F, Q
+from django.db.models import Count
+from django.db.models import F
+from django.db.models import Min
+from django.db.models import OuterRef
 from django.db.models import Prefetch
+from django.db.models import Q
 from django.db.models import QuerySet
+from django.db.models import Subquery
 from django.http import HttpRequest
 
 from website.settings import anonymous_comparison_key
@@ -50,12 +55,9 @@ def get_products_with_auth_user(user, unic_spec: None | str) -> tuple:
             .prefetch_related(
                 Prefetch(
                     "product__specifications",
-                    queryset=Specification.objects
-                    .select_related("name", "product")
-                    .only(
-                        "value", "name__name", "product__id"
-                    ).exclude(id__in=common_specifications)
-                    ,
+                    queryset=Specification.objects.select_related("name", "product")
+                    .only("value", "name__name", "product__id")
+                    .exclude(id__in=common_specifications),
                 ),
                 Prefetch(
                     "product__prices", queryset=Price.objects.select_related("product").only("product__id", "price")
@@ -124,9 +126,9 @@ def get_products_with_unauth_user(request: HttpRequest, unic_spec: None | str) -
             .prefetch_related(
                 Prefetch(
                     "specifications",
-                    queryset=Specification.objects.select_related("name", "product").only(
-                        "value", "name__name", "product__id"
-                    ).exclude(id__in=common_specifications),
+                    queryset=Specification.objects.select_related("name", "product")
+                    .only("value", "name__name", "product__id")
+                    .exclude(id__in=common_specifications),
                 ),
                 Prefetch("prices", queryset=Price.objects.select_related("product").only("product__id", "price")),
             )
@@ -205,17 +207,15 @@ def get_unic_spec_for_auth_user(user: int) -> list[int]:
     list[int]: Список ID спецификаций, соответствующих условиям запроса.
     """
     subquery = (
-        Comparison.objects
-        .select_related("product__category")
-        .filter(user=user, product__category=OuterRef("product__category"))
+        Comparison.objects.select_related("product__category")
+        .filter(Q(user=user) & Q(product__category=OuterRef("product__category")))
         .values("product__category")
         .annotate(category_count=Count("id"))
         .values("category_count")
     )
 
     common_specifications = list(
-        Comparison.objects
-        .select_related("user", "product__category")
+        Comparison.objects.select_related("user", "product__category")
         .prefetch_related(
             Prefetch(
                 "product__specifications",
@@ -233,24 +233,22 @@ def get_unic_spec_for_auth_user(user: int) -> list[int]:
             product_count=Count("product"),
             category_count=Subquery(subquery),
         )
-        .filter(user=user, product_count=F('category_count'))
+        .filter(Q(user=user) & Q(product_count=F("category_count")))
     )
 
     if common_specifications:
         spec_ids = (
-            Specification.objects
-            .select_related("name", "product")
+            Specification.objects.select_related("name", "product")
             .filter(
-                value__in=list(
-                    spec_value['product__specifications__value'] for spec_value in common_specifications
-                ),
-                name__name__in=list(
-                    spec_name['product__specifications__name__name'] for spec_name in common_specifications
-                ),
+                Q(value__in=list(spec_value["product__specifications__value"] for spec_value in common_specifications))
+                & Q(
+                    name__name__in=list(
+                        spec_name["product__specifications__name__name"] for spec_name in common_specifications
+                    )
+                )
             )
-            .values_list('id', flat=True)
+            .values_list("id", flat=True)
         )
-        print(spec_ids)
         return list(spec_ids)
     return list()
 
@@ -270,17 +268,15 @@ def get_unic_spec_for_unauth_user(products_ids: list[int]) -> list[int]:
     list[int]: Список ID спецификаций, соответствующих условиям запроса.
     """
     subquery = (
-        Product.objects
-        .select_related('category')
-        .filter(category=OuterRef("category"), id__in=products_ids,)
+        Product.objects.select_related("category")
+        .filter(Q(category=OuterRef("category")) & Q(id__in=products_ids))
         .values("category")
         .annotate(category_count=Count("id"))
         .values("category_count")
     )
 
     common_specifications = (
-        Product.objects
-        .select_related('category')
+        Product.objects.select_related("category")
         .prefetch_related(
             Prefetch(
                 "specifications",
@@ -298,22 +294,19 @@ def get_unic_spec_for_unauth_user(products_ids: list[int]) -> list[int]:
             product_count=Count("specifications"),
             category_count=Subquery(subquery),
         )
-        .filter(id__in=products_ids, product_count=F('category_count'))
+        .filter(Q(id__in=products_ids) & Q(product_count=F("category_count")))
     )
 
     if common_specifications:
         spec_ids = (
-            Specification.objects
-            .select_related("name", "product")
+            Specification.objects.select_related("name", "product")
             .filter(
-                value__in=list(
-                    spec_value['specifications__value'] for spec_value in common_specifications
-                ),
-                name__name__in=list(
-                    spec_name['specifications__name__name'] for spec_name in common_specifications
+                Q(value__in=list(spec_value["specifications__value"] for spec_value in common_specifications))
+                & Q(
+                    name__name__in=list(spec_name["specifications__name__name"] for spec_name in common_specifications)
                 ),
             )
-            .values_list('id', flat=True)
+            .values_list("id", flat=True)
         )
         return list(spec_ids)
     return list()
