@@ -22,7 +22,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ["email", "password1", "password2"]
+        fields = ["login", "email", "password1", "password2"]
 
 
 class CustomUserChangeForm(UserChangeForm):
