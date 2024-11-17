@@ -45,6 +45,12 @@
                         <div class="error-input">{{ error }}</div>
                     {% endfor %}
 
+                    <label class="form-label" for="login">Никнейм</label>
+                    <input class="form-input" id="login" type="text" name="login">
+                    {% for error in register_form.login.errors %}
+                        <div class="error-input">{{ error }}</div>
+                    {% endfor %}
+
                     <label class="form-label" for="last_name">Фамилия</label>
                     <input class="form-input" id="last_name" type="text" name="last_name">
                     {% for error in profile_registration_form.last_name.errors %}
