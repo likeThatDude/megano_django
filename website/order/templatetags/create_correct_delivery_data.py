@@ -1,7 +1,7 @@
 from collections import defaultdict
 from decimal import Decimal
 
-from catalog.models import Product
+from catalog.models import Product, Payment
 from catalog.models import Seller
 from django import template
 from django.db.models import QuerySet
@@ -122,3 +122,67 @@ def check_delivery_payment_type(price: Decimal, order_price: Decimal) -> bool | 
     else:
         total_price = price + order_price
         return total_price
+
+
+@register.simple_tag
+def def_get_seller_payment_block(order: Order) -> dict[str, dict[str, list[Product] | Decimal]]:
+    """
+    Группирует продукты и общую стоимость по каждому продавцу в заказе.
+
+    Параметры:
+        order (Order): Объект заказа, содержащий элементы заказа (OrderItems) с информацией о продавцах,
+                       продуктах и ценах.
+
+    Возвращает:
+        dict: Словарь, где ключи - имена продавцов (str), а значения - вложенные словари с двумя ключами:
+            - "products": список продуктов (list[Product]), связанных с продавцом.
+            - "total_price": общая стоимость всех продуктов продавца (Decimal).
+    """
+    seller_data = defaultdict(lambda: {"products": [], "total_price": Decimal(0)})
+
+    for item in order.order_items.all():
+        seller_name = item.seller
+        seller_data[seller_name]["products"].append(item.product)
+        seller_data[seller_name]["total_price"] += item.price * item.quantity
+    return dict(seller_data)
+
+
+@register.simple_tag
+def get_price_and_quantity(order: Order, product: Product, seller: str) -> tuple[Decimal, int] | None:
+    """
+    Возвращает цену и количество продукта в заказе для указанного продавца.
+
+    Параметры:
+        order (Order): Объект заказа, содержащий элементы заказа (OrderItems).
+        product (Product): Продукт, для которого требуется получить данные.
+        seller (str): Имя продавца, связанного с продуктом.
+
+    Возвращает:
+        tuple[Decimal, int] | None: Кортеж, содержащий:
+            - price (Decimal): Цена продукта.
+            - quantity (int): Количество продукта в заказе.
+        Если продукт не найден у указанного продавца, возвращает `None`.
+    """
+    for i in order.order_items.all():
+        if i.product.pk == product.pk and i.seller.name == seller:
+            return i.price, i.quantity
+    return None
+
+@register.simple_tag
+def check_payment_type(order: Order, seller: str) -> bool:
+    """
+    Проверяет, нужно ли оплачивать заказ онлайн у указанного продавца.
+
+    Параметры:
+        order (Order): Объект заказа, содержащий товары и их данные.
+        seller (str): Имя продавца, для которого проверяется тип оплаты.
+
+    Возвращает:
+        bool: Возвращает True, если хотя бы один товар в заказе от указанного продавца имеет тип оплаты,
+              подходящий для онлайн-платежей, иначе False.
+    """
+    need_pay = (Payment.CARD_ONLINE, Payment.STORE_ONLINE, Payment.STORE_RANDOM,)
+    for i in order.order_items.all():
+        if i.seller.name == seller and i.payment_type.name in need_pay:
+            return True
+    return False

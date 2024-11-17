@@ -135,72 +135,152 @@
                                                 {{ order.get_paid_status_display }}
                                             </div>
                                         </div>
-{#                                        <div class="Order-info Order-info_error">#}
-{#                                            <div class="Order-infoType">Оплата не прошла:#}
-{#                                            </div>#}
-{#                                            <div class="Order-infoContent">Оплата не выполнена#}
-{#                                            </div>#}
-{#                                        </div>#}
+                                        {#                                        <div class="Order-info Order-info_error">#}
+                                        {#                                            <div class="Order-infoType">Оплата не прошла:#}
+                                        {#                                            </div>#}
+                                        {#                                            <div class="Order-infoContent">Оплата не выполнена#}
+                                        {#                                            </div>#}
+                                        {#                                        </div>#}
                                     </div>
                                 </div>
                             </div>
-                            <div class="Cart Cart_order">
-                                {% for order_item in object.order_items.all %}
-                                    <div class="Cart-product">
-                                        <div class="Cart-block Cart-block_row">
-                                            <div class="Cart-block Cart-block_pict">
-                                                <a class="Cart-pict" href="{{ order_item.product.get_absolute_url }}">
-                                                    <img
-                                                            class="Cart-img"
-                                                            src="{{ order_item.product.preview.url }}"
-                                                            alt="card.jpg"/>
-                                                </a>
-                                            </div>
-                                            <div class="Cart-block Cart-block_info">
-                                                <a class="Cart-title" href="{{ order_item.product.get_absolute_url }}">
-                                                    {{ order_item.product.name|truncatechars:80 }}
-                                                </a>
-                                                <div class="Cart-desc">
-                                                    {{ order_item.product.short_description }}
+                            {% with order.order_items.all.0.delivery.name as order_type %}
+                                {% if order_type == "SS" or order_type == "SE" %}
+                                    <div class="Cart Cart_order">
+                                        {% for order_item in object.order_items.all %}
+                                            <div class="Cart-product">
+                                                <div class="Cart-block Cart-block_row">
+                                                    <div class="Cart-block Cart-block_pict">
+                                                        <a class="Cart-pict"
+                                                           href="{{ order_item.product.get_absolute_url }}">
+                                                            <img
+                                                                    class="Cart-img"
+                                                                    src="{{ order_item.product.preview.url }}"
+                                                                    alt="card.jpg"/>
+                                                        </a>
+                                                    </div>
+                                                    <div class="Cart-block Cart-block_info">
+                                                        <a class="Cart-title"
+                                                           href="{{ order_item.product.get_absolute_url }}">
+                                                            {{ order_item.product.name|truncatechars:80 }}
+                                                        </a>
+                                                        <div class="Cart-desc">
+                                                            {{ order_item.product.short_description }}
+                                                        </div>
+                                                        <div class="Cart-desc">
+                                                            Продавец: {{ order_item.seller.name }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="Cart-block Cart-block_price">
+                                                        <div class="Cart-price">
+                                                            {{ order_item.price }}$
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="Cart-desc">
-                                                    Продавец: {{ order_item.seller.name }}
-                                                </div>
-                                            </div>
-                                            <div class="Cart-block Cart-block_price">
-                                                <div class="Cart-price">
-                                                    {{ order_item.price }}$
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="Cart-block Cart-block_row">
+                                                <div class="Cart-block Cart-block_row">
 
-                                            <div class="Cart-block Cart-block_amount">
-                                                {{ order_item.quantity }} шт.
+                                                    <div class="Cart-block Cart-block_amount">
+                                                        {{ order_item.quantity }} шт.
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-                                <div class="Cart-total">
-                                    <div class="Cart-block Cart-block_total">
-                                        <strong class="Cart-title">Итого:
-                                            <span class="Cart-price">
+                                        {% endfor %}
+                                        <div class="Cart-total">
+                                            <div class="Cart-block Cart-block_total">
+                                                <strong class="Cart-title">Итого:
+                                                    <span class="Cart-price">
                                                 {% check_delivery_payment_type order.delivery_price.price order.total_price as delivery_price %}
-                                                {% if delivery_price is False %}
-                                                    {{ order.total_price }}$
-                                                {% else %}
-                                                    <p>Цена товара: {{ order.total_price }}$ </p>
-                                                    <p>Доставка: {{ order.delivery_price.price }}</p>
-                                                    <p>Общая: {{ delivery_price }}</p>
-                                                {% endif %}
+                                                        {% if delivery_price is False %}
+                                                            {{ order.total_price }}$
+                                                        {% else %}
+                                                            <p>Цена товара: {{ order.total_price }}$ </p>
+                                                            <p>Доставка: {{ order.delivery_price.price }}</p>
+                                                            <p>Общая: {{ delivery_price }}</p>
+                                                        {% endif %}
                                             </span>
-                                        </strong>
+                                                </strong>
+                                            </div>
+                                            <div class="Cart-block">
+                                                <a class="btn btn_primary btn_lg"
+                                                   href="{% url 'payment:checkout' order.pk %}">
+                                                    Оплатить
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="Cart-block"><a class="btn btn_primary btn_lg" href="#">Оплатить</a>
+                                {% else %}
+                                    <div class="Cart Cart_order">
+                                        {% def_get_seller_payment_block order as seller_filter_data %}
+                                        {% for seller, value in seller_filter_data.items %}
+                                            <p>Продавец: {{ seller }}</p>
+                                            {% for product in value.products %}
+                                                {% get_price_and_quantity order product seller.name as product_data %}
+                                                <div class="Cart-product">
+                                                    <div class="Cart-block Cart-block_row">
+                                                        <div class="Cart-block Cart-block_pict">
+                                                            <a class="Cart-pict"
+                                                               href="{{ product.get_absolute_url }}">
+                                                                <img
+                                                                        class="Cart-img"
+                                                                        src="{{ product.preview.url }}"
+                                                                        alt="card.jpg"/>
+                                                            </a>
+                                                        </div>
+                                                        <div class="Cart-block Cart-block_info">
+                                                            <a class="Cart-title"
+                                                               href="{{ product.get_absolute_url }}">
+                                                                {{ product.name|truncatechars:80 }}
+                                                            </a>
+                                                            <div class="Cart-desc">
+                                                                {{ product.short_description }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="Cart-block Cart-block_price">
+                                                            <div class="Cart-price">
+                                                                {{ product_data.0 }}$
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="Cart-block Cart-block_row">
+
+                                                        <div class="Cart-block Cart-block_amount">
+                                                            {{ product_data.1 }} шт.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                            {% check_payment_type order seller.name as payment_data %}
+                                            <div class="Cart-total">
+                                                {% if payment_data %}
+                                                    <div class="Cart-block Cart-block_total">
+                                                        <strong class="Cart-title">
+                                                            Итого:
+                                                            <span class="Cart-price">
+                                                            {{ value.total_price }}$
+                                                        </span>
+                                                        </strong>
+                                                    </div>
+                                                    <div class="Cart-block">
+                                                        <a class="btn btn_primary btn_lg"
+                                                           href="{% url 'payment:checkout_one' order.pk seller.pk %}">
+                                                            Оплатить
+                                                        </a>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="Cart-block Cart-block_total">
+                                                        <strong class="Cart-title">
+                                                            Итого:
+                                                            <span class="Cart-price">
+                                                            Оплата онлайн не требуется
+                                                        </span>
+                                                        </strong>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                </div>
-                            </div>
+                                {% endif %}
+                            {% endwith %}
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+	Успешная оплата
+{% endblock %}
+
+{% block description %}
+
+{% endblock %}
+
+{% block body %}
+	{{ user.login }} ваш заказ №{{ request.GET.order_id }} оплачен !
+{% endblock %}

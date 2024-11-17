@@ -195,9 +195,7 @@ class ProductDetailView(DetailView):
                 ),
                 Prefetch(
                     "images",
-                    queryset=ProductImage.objects.all().only(
-                        "image",
-                    ),
+                    queryset=ProductImage.objects.all()
                 ),
                 Prefetch(
                     "specifications",
