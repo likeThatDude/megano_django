@@ -3180,6 +3180,12 @@ a.Cart-title {
     margin-bottom: 50px;
 }
 
+.change_password_container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
 .Footer-news .media_news {
     color: #86878a;
 }
