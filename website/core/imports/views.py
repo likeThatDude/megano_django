@@ -41,3 +41,5 @@ def import_products_view(request):
         return redirect("success")
 
     return render(request, "core/import.html")
+
+
