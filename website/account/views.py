@@ -13,6 +13,9 @@ from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import SetPasswordForm
+
 
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
@@ -193,3 +196,17 @@ class ProfileOrdersView(LoginRequiredMixin, ListView):
         """ Получаем заказы пользователя """
         user = self.request.user
         return user.orders.all()
+
+
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    """
+    Класс представления для ввода нового пароля.
+
+    Атрибуты:
+        template_name - шаблон для отображения формы ввода нового пароля
+        success_url - путь, по которому после ввода нового пароля перенаправим пользователя
+        form_class - используемая форма в шаблоне
+    """
+    template_name = "account/password_reset_confirm.html"
+    success_url = reverse_lazy("account:password_reset_complete")
+    form_class = SetPasswordForm
