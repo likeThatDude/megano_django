@@ -77,7 +77,7 @@ class OrderCreateView(View):
             context["product_data"] = product_data
             return render(request, "order/order.html", context=context)
         else:
-            return redirect(reverse('core:index'))
+            return redirect(reverse("core:index"))
 
     def post(self, request: HttpRequest) -> HttpResponse:
         if request.user.is_authenticated:
