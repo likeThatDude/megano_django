@@ -7,14 +7,22 @@
                         <div class="Slider-content">
                             <div class="row">
                                 <div class="row-block">
-                                    <strong class="Slider-title">{{ banner.product.name|truncatechars:20 }}<span
-                                            class="text_primary"> lorem1 </span>
+                                    <strong class="Slider-title">
+                                        {{ banner.product.name|truncatechars:20 }}
+                                        <span class="text_primary">
+                                            lorem1
+                                        </span>
                                         lorem2
                                     </strong>
+                                    <p class="slider_short_description">{{ banner.product.short_description }}</p>
                                     <div class="Slider-text">
-                                        lorem10
+                                        {{ banner.text }}
                                     </div>
-                                    <div class="Slider-footer"><a class="btn btn_primary" href="#">Get Started</a>
+                                    <div class="Slider-footer">
+                                        <a class="btn btn_primary"
+                                           href="{{ banner.product.get_absolute_url }}">
+                                            Get Started
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="row-block">

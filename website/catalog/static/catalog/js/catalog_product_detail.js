@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ${reviewText}
                             </div>
                         </div>
-                        ${userId === Number(current_user_id) ? `
+                        ${userId === Number(current_user_id) || current_status ? `
                             <div class="User-control">
                                 <button class="UpdateDeleteReviewButton"
                                         data-review-id="${reviewId}"
@@ -500,7 +500,7 @@ document.addEventListener('click', function (event) {
                                 ${reviewText}
                             </div>
                         </div>
-                        ${userId === Number(current_user_id) ? `
+                        ${userId === Number(current_user_id) || current_status ? `
                             <div class="User-control">
                                 <button class="UpdateDeleteReviewButton"
                                         data-review-id="${reviewId}"

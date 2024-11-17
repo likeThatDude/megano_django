@@ -641,6 +641,7 @@ textarea {
     transition: all 200ms;
 }
 
+
 .btn_primary.btn_outline {
     background: transparent;
     color: #0063d1;
@@ -656,6 +657,32 @@ textarea {
     }
 
     .btn_primary.btn_outline:hover {
+        color: #fff;
+    }
+}
+
+.btn_place_an_order {
+    border-color: #0063d1;
+    color: #fff;
+    background: #0063d1;
+    transition: all 200ms;
+}
+
+.btn_place_an_order.btn_outline {
+    background: transparent;
+    color: #0063d1;
+}
+
+@media screen and (min-width: 990px) {
+    .btn_place_an_order:hover {
+        transition: all 200ms;
+        cursor: pointer;
+        background-color: #1f7eff;
+        border-color: #1f7eff;
+        text-decoration: none;
+    }
+
+    .btn_place_an_order.btn_outline:hover {
         color: #fff;
     }
 }
@@ -2407,6 +2434,7 @@ label.toggle {
 }
 
 .row-block {
+    position: relative;
     display: block;
     flex-grow: 0;
     width: 100%;
