@@ -8,6 +8,7 @@ from .views import PersonalCabinet
 from .views import ProfileOrdersView
 from .views import ProfileView
 from .views import RegisterView
+from .views import UserPasswordResetConfirmView
 
 app_name = "account"
 
@@ -34,10 +35,7 @@ urlpatterns = [
     ),
     path(
         "password_reset_confirm/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="account/password_reset_confirm.html",
-            success_url=reverse_lazy("account:password_reset_complete"),
-        ),
+        UserPasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
     path(
