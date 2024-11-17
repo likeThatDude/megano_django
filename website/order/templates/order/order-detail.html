@@ -129,10 +129,17 @@
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_status">
-                                            <div class="Order-infoType">Статус:
+                                            <div class="Order-infoType">Статус оплаты:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.get_paid_status_display }}
+                                            </div>
+                                        </div>
+                                        <div class="Order-info Order-info_status">
+                                            <div class="Order-infoType">Статус заказа:
+                                            </div>
+                                            <div class="Order-infoContent">
+                                                {{ order.get_status_display }}
                                             </div>
                                         </div>
                                         {#                                        <div class="Order-info Order-info_error">#}
@@ -200,12 +207,14 @@
                                             </span>
                                                 </strong>
                                             </div>
-                                            <div class="Cart-block">
-                                                <a class="btn btn_primary btn_lg"
-                                                   href="{% url 'payment:checkout' order.pk %}">
-                                                    Оплатить
-                                                </a>
-                                            </div>
+                                            {% if not order.paid_status == 'PD' %}
+                                                <div class="Cart-block">
+                                                    <a class="btn btn_primary btn_lg"
+                                                       href="{% url 'payment:checkout' order.pk %}">
+                                                        Оплатить
+                                                    </a>
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 {% else %}
@@ -260,12 +269,14 @@
                                                         </span>
                                                         </strong>
                                                     </div>
-                                                    <div class="Cart-block">
-                                                        <a class="btn btn_primary btn_lg"
-                                                           href="{% url 'payment:checkout_one' order.pk seller.pk %}">
-                                                            Оплатить
-                                                        </a>
-                                                    </div>
+                                                    {% if not value.payment_status|all_true %}
+                                                        <div class="Cart-block">
+                                                            <a class="btn btn_primary btn_lg"
+                                                               href="{% url 'payment:checkout_one' order.pk seller.pk %}">
+                                                                Оплатить
+                                                            </a>
+                                                        </div>
+                                                    {% endif %}
                                                 {% else %}
                                                     <div class="Cart-block Cart-block_total">
                                                         <strong class="Cart-title">

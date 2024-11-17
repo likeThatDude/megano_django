@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+
 from environ import Env
 
 env = Env()
@@ -34,12 +35,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "b758-37-213-170-123.ngrok-free.app",
+    "c978-37-213-170-123.ngrok-free.app",
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://b758-37-213-170-123.ngrok-free.app'
-]
+CSRF_TRUSTED_ORIGINS = ["https://c978-37-213-170-123.ngrok-free.app"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -208,6 +207,7 @@ CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
 from dotenv import load_dotenv
+
 load_dotenv()
 import os
 

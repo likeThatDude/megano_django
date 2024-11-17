@@ -159,6 +159,7 @@ class OrderDetailView(DetailView):
                         "order__id",
                         "quantity",
                         "price",
+                        "payment_status",
                     ),
                 )
             )
@@ -196,6 +197,7 @@ def pay_view(request: HttpRequest):
 
 def pay_view2(request: HttpRequest):
     return render(request, "order/paymentsomeone.html")
+
 
 # class OrdersHistoryListView(ListView):
 #     """

@@ -193,10 +193,7 @@ class ProductDetailView(DetailView):
                         "name",
                     ),
                 ),
-                Prefetch(
-                    "images",
-                    queryset=ProductImage.objects.all()
-                ),
+                Prefetch("images", queryset=ProductImage.objects.all()),
                 Prefetch(
                     "specifications",
                     queryset=Specification.objects.select_related(

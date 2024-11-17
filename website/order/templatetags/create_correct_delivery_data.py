@@ -1,7 +1,8 @@
 from collections import defaultdict
 from decimal import Decimal
 
-from catalog.models import Product, Payment
+from catalog.models import Payment
+from catalog.models import Product
 from catalog.models import Seller
 from django import template
 from django.db.models import QuerySet
@@ -138,12 +139,12 @@ def def_get_seller_payment_block(order: Order) -> dict[str, dict[str, list[Produ
             - "products": список продуктов (list[Product]), связанных с продавцом.
             - "total_price": общая стоимость всех продуктов продавца (Decimal).
     """
-    seller_data = defaultdict(lambda: {"products": [], "total_price": Decimal(0)})
-
+    seller_data = defaultdict(lambda: {"products": [], "total_price": Decimal(0), "payment_status": []})
     for item in order.order_items.all():
         seller_name = item.seller
         seller_data[seller_name]["products"].append(item.product)
         seller_data[seller_name]["total_price"] += item.price * item.quantity
+        seller_data[seller_name]["payment_status"].append(item.payment_status)
     return dict(seller_data)
 
 
@@ -168,6 +169,7 @@ def get_price_and_quantity(order: Order, product: Product, seller: str) -> tuple
             return i.price, i.quantity
     return None
 
+
 @register.simple_tag
 def check_payment_type(order: Order, seller: str) -> bool:
     """
@@ -181,8 +183,17 @@ def check_payment_type(order: Order, seller: str) -> bool:
         bool: Возвращает True, если хотя бы один товар в заказе от указанного продавца имеет тип оплаты,
               подходящий для онлайн-платежей, иначе False.
     """
-    need_pay = (Payment.CARD_ONLINE, Payment.STORE_ONLINE, Payment.STORE_RANDOM,)
+    need_pay = (
+        Payment.CARD_ONLINE,
+        Payment.STORE_ONLINE,
+        Payment.STORE_RANDOM,
+    )
     for i in order.order_items.all():
         if i.seller.name == seller and i.payment_type.name in need_pay:
             return True
     return False
+
+
+@register.filter
+def all_true(value):
+    return all(value)
