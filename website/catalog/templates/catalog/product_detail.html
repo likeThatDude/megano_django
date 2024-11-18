@@ -37,19 +37,19 @@
                             <div class="ProductCard-photo">
                                 <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
                             </div>
-                            <div class="ProductCard-picts">
-                                {% with images=product.images.all %}
-                                    {% if images %}
-                                        {% for img in images %}
-                                            <a class="ProductCard-pict ProductCard-pict_ACTIVE"
-                                               href="{% static 'assets/img/content/home/bigGoods.png' %}">
-                                                <img src="{% static 'assets/img/content/home/bigGoods.png' %}"
-                                                     alt="bigGoods.png"/>
-                                            </a>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endwith %}
-                            </div>
+                        </div>
+                        <div class="ProductCard-picts">
+                            {% with images=product.images.all %}
+                                {% if images %}
+                                    {% for img in images %}
+                                        <a class="ProductCard-pict ProductCard-pict_ACTIVE"
+                                           href="{{ img.image.url }}">
+                                            <img src="{{ img.image.url }}"
+                                                 alt="bigGoods.png"/>
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
                         </div>
                         <div class="ProductCard-desc">
                             <div class="ProductCard-header">
@@ -64,13 +64,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ProductCard-text">
-                                <ul>
-                                    <li>
-                                        {{ product.short_description }}
-                                    </li>
-                                </ul>
-                            </div>
+                            {% if product.short_description %}
+                                <div class="ProductCard-text">
+                                    <ul>
+                                        <li>
+                                            {{ product.short_description }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% endif %}
                             <div class="ProductCard-cart">
                                 <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                                     <div class="Amount Amount_product">

@@ -50,20 +50,32 @@ class Order(models.Model):
         (CANCELLED, _("Заказ отменен")),
     )
 
+    PAID = "PD"
+    PARTLY_PAID = "PP"
+    UNPAID = "UN"
+
+    PAID_CHOICES = (
+        (PAID, _("Заказ оплачен")),
+        (PARTLY_PAID, _("Заказ оплачен частично")),
+        (UNPAID, _("Заказ не оплачен")),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User"), related_name="orders"
     )
+    name = models.CharField(max_length=255, verbose_name=_("Name"))
     delivery_city = models.CharField(max_length=255, verbose_name=_("Delivery city"))
     delivery_address = models.TextField(max_length=500, verbose_name=_("Delivery address"))
     recipient_phone = models.CharField(max_length=15, verbose_name=_("Recipient phone number"))
     recipient_email = models.EmailField(verbose_name=_("Recipient email"))
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default=PENDING)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PENDING)
     archived = models.BooleanField(default=False, verbose_name=_("Archived"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     updated_at = models.DateTimeField(auto_now=True, verbose_name=_("Updated at"))
     total_price = models.DecimalField(null=False, max_digits=10, decimal_places=2, verbose_name=_("Total price"))
     comment = models.TextField(max_length=1000, null=True, blank=True, verbose_name=_("Comment"))
     delivery_price = models.ForeignKey("DeliveryPrice", on_delete=PROTECT, verbose_name=_("Delivery price"))
+    paid_status = models.CharField(max_length=2, choices=PAID_CHOICES, default=UNPAID)
 
     def __str__(self):
         return f"Order: {self.id}"
@@ -85,6 +97,7 @@ class OrderItem(models.Model):
         payment_type (ForeignKey): Ссылка на способ оплаты для товара.
         order (ForeignKey): Ссылка на заказ, к которому относится товар.
         active (BooleanField): Указывает, активен ли товар в заказе.
+        payment_status (BooleanField): Указывает, оплачен ли товар.
 
     Метаданные:
         Один заказ может содержать несколько товаров. Связь с заказом через `related_name="order_items"`.
@@ -98,6 +111,7 @@ class OrderItem(models.Model):
     payment_type = models.ForeignKey(Payment, on_delete=models.PROTECT, verbose_name=_("Payment type"))
     order = models.ForeignKey(Order, related_name="order_items", on_delete=models.PROTECT, verbose_name=_("Order"))
     active = models.BooleanField(default=True, verbose_name=_("Active"))
+    payment_status = models.BooleanField(default=False, verbose_name=_("Payment status"))
 
     def __str__(self):
         return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"

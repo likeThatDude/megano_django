@@ -52,20 +52,23 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = (
+        "pk",
         "seller",
         "product",
         "quantity",
         "price",
         "delivery",
         "payment_type",
+        "payment_status",
     )
-    list_display_link = (
+    list_display_links = (
         "seller",
         "product",
         "quantity",
         "price",
         "delivery",
         "payment_type",
+        "payment_status",
     )
     ordering = ("pk",)
 
