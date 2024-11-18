@@ -15,8 +15,9 @@ from django.views.generic import DetailView
 from django.views.generic import ListView
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import SetPasswordForm
+from django.db.models import Prefetch
 
-
+from order.models import Order, OrderItem
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
@@ -191,11 +192,46 @@ class ProfileOrdersView(LoginRequiredMixin, ListView):
 
     """
     template_name = "account/profile_orders.html"
+    context_object_name = "orders"
 
     def get_queryset(self):
-        """ Получаем заказы пользователя """
+        """
+        Получаем queryset заказов пользователя
+
+        Этот метод используется в представлении для загрузки всех заказов пользователя.
+        Подгружается связанная модель DeliveryPrice, связанная FK с моделью Order.
+        Также, подгружаем связанные сущности модели OrderItem
+
+        Возвращает:
+            список заказов пользователя с информацией о ценах: цена доставки, общая стоимость заказа,
+            статус, оплачен заказ или нет.
+
+        Примечание:
+            Этот метод использует `select_related` и `prefetch_related` для оптимизации запросов, загружая только
+            нужные поля и избегая ненужных запросов к базе данных.
+
+        """
         user = self.request.user
-        return user.orders.all()
+        user_orders = Order.objects.filter(
+            user=user
+        ).select_related(
+            "delivery_price",
+        ).prefetch_related(
+            Prefetch(
+                "order_items",
+                queryset=OrderItem.objects.select_related(
+                    "delivery",
+                    "payment_type",
+                ).only(
+                    "delivery__name",
+                    "payment_type__name",
+                ),
+            )
+        ).only(
+            "delivery_price",
+            "paid_status",
+        )
+        return user_orders
 
 
 class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
