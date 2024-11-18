@@ -5,6 +5,7 @@ from catalog.models import Product
 from catalog.models import Seller
 from django.db import models
 from django.db.models import PROTECT
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -76,6 +77,9 @@ class Order(models.Model):
     comment = models.TextField(max_length=1000, null=True, blank=True, verbose_name=_("Comment"))
     delivery_price = models.ForeignKey("DeliveryPrice", on_delete=PROTECT, verbose_name=_("Delivery price"))
     paid_status = models.CharField(max_length=2, choices=PAID_CHOICES, default=UNPAID)
+
+    def get_absolute_url(self):
+        return reverse_lazy("order:order_detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return f"Order: {self.id}"
