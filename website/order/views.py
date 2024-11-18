@@ -19,12 +19,16 @@ from kombu.exceptions import HttpError
 from order import utils
 from order.forms import OrderForm
 
-from website import settings
-
 from .models import Order
 from .models import OrderItem
 from .utils import create_errors_list
 from .utils import get_order_products
+
+# products_list = {
+#     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
+#     "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
+#     "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
+# }
 
 
 class OrderCreateView(View):
