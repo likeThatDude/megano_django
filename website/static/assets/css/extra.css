@@ -3180,6 +3180,10 @@ a.Cart-title {
     margin-bottom: 50px;
 }
 
+.custom_left_margin {
+    margin-left: 60px;
+}
+
 .change_password_container {
     display: flex;
     justify-content: center;
