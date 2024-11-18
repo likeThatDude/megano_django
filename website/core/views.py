@@ -24,6 +24,7 @@ from website.settings import CATEGORY_KEY
 from website.settings import OFFER_KEY
 
 from .models import Banner
+from discount.utils import get_discounted_products
 
 
 class IndexView(TemplateView):
@@ -139,11 +140,7 @@ class IndexView(TemplateView):
         на которые действует какая-нибудь акция"""
         hot_offers = cache.get(OFFER_KEY)
         if hot_offers is None:
-            hot_offers = (
-                Price.objects
-                .select_related('product')
-                .order_by("?")[:9]
-            )
+            hot_offers = get_discounted_products(8)
             cache.set(OFFER_KEY, hot_offers, timeout=10)
         return hot_offers
 

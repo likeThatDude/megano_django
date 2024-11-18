@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load catalog_extras %}
 
 {% block description %}
     <meta name="description" content="Описание страницы">
@@ -173,24 +174,24 @@
                             </div>
                         </header>
                         <div class="Slider-box Cards">
-                            {% for item in hot_offers %}
+                            {% for hot_product in hot_offers %}
                                 <div class="Slider-item">
                                     <div class="Slider-content">
                                         <div class="Card">
-                                            <a class="Card-picture" href="{% url 'catalog:product_detail' pk=item.product.id %}">
-                                                <img src="{{ item.product.preview.url }}" alt=""/></a>
+                                            <a class="Card-picture" href="{% url 'catalog:product_detail' pk=hot_product.id %}">
+                                                <img src="{{ hot_product.preview.url }}" alt={{ hot_product.preview.url|get_filename:"" }}/></a>
                                             <div class="Card-content">
                                                 <strong class="Card-title">
-                                                    <a href="{% url 'catalog:product_detail' pk=item.product.id %}">
-                                                        {{item.product.name}}
+                                                    <a href="{% url 'catalog:product_detail' pk=hot_product.id %}">
+                                                        {{ hot_product.name }}
                                                     </a>
                                                 </strong>
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
-                                                        <span class="Card-price">${{item.price}}</span>
+                                                        <span class="Card-price">${% firstof hot_product.price " нет в наличии" %}</span>
                                                     </div>
                                                     <div class="Card-category">
-                                                        {{item.product.category}}
+                                                        {{ hot_product.category }}
                                                     </div>
                                                     <div class="Card-hover">
                                                         <form method="post" action="{% url 'comparison:comparison_add'%}">
