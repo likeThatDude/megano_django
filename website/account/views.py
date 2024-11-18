@@ -143,10 +143,14 @@ class ProfileView(LoginRequiredMixin, View):
 
 class PersonalCabinet(LoginRequiredMixin, DetailView):
     """
+    Этот метод используется в представлении для отображения последнего заказа пользователя
+    (если такой заказ будет найден)
 
-    CBV личного кабинета профиля пользователя
-    В шаблоне присутствуют ссылки на профиль,
-    на все заказы профиля пользователя
+    Делаем запрос на получение заказа определенного пользователя, подгружая
+    модель DeliveryPrice, модель OrderItem и связанные сущности с OrderItem -
+    Delivery и Price
+
+    От последних моделей нам понадобятся поля "Тип доставки", "Статус" и "Статус оплаты"
 
     """
 
@@ -158,26 +162,52 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         """
         Атрибуты:
         profile - профиль пользователя
-        last_order - последний заказ
+        last_order - последний заказ (если такой существует)
         """
-        user = self.request.user
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(user=user)
+        profile = get_object_or_404(
+            Profile,
+            user=self.request.user
+        )
 
-        # Передаем последний заказ текущего профиля
-        user_orders = user.orders.all()
-        if user_orders:
-            context["last_order"] = user_orders.order_by("-created_at").first()
+        last_order = self.get_object()
+        if last_order:
+            context["last_order"] = last_order
 
         context["profile"] = profile
         return context
 
     def get_object(self, queryset=None):
-        """Возвращаем профиль пользователя"""
-        user = self.request.user
-        queryset = Profile.objects.get(user=user)
+        """
+        Получает последний заказ пользователя.
+
+        Метод возвращает последний заказ, созданный пользователем, на основе поля `created_at`.
+        Загружаются связанные данные о типе доставки (`delivery_price`) и связанных элементах заказа
+        (`order_items`) с минимизацией количества SQL-запросов.
+
+        """
+        queryset = Order.objects.filter(
+            user=self.request.user
+        ).select_related(
+            "delivery_price",
+        ).prefetch_related(
+            Prefetch(
+                "order_items",
+                queryset=OrderItem.objects.select_related(
+                    "delivery",
+                    "payment_type",
+                ).only(
+                    "delivery__name",
+                    "payment_type__name",
+                ),
+            ),
+        ).only(
+            "delivery_price",
+            "paid_status",
+            "created_at",
+        ).order_by("-created_at").first()
+
         return queryset
-        # return Profile.objects.get(user=self.request.)
 
 
 class ProfileOrdersView(LoginRequiredMixin, ListView):
