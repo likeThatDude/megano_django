@@ -3168,6 +3168,28 @@ a.Cart-title {
     }
 }
 
+.elem_center {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom_margin {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.custom_left_margin {
+    margin-left: 60px;
+}
+
+.change_password_container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
 .Footer-news .media_news {
     color: #86878a;
 }

@@ -12,11 +12,16 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
-from django.views.generic import UpdateView
+from django.views.generic import ListView
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import SetPasswordForm
+from django.db.models import Prefetch
 
+from order.models import Order, OrderItem
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
+from .forms import ProfileRegistrationForm
 from .models import Profile
 
 
@@ -36,18 +41,48 @@ class LogOutView(LogoutView):
 
 
 class RegisterView(CreateView):
+    """
+    CBV регистрации профиля пользователя
+    """
     template_name = "account/register.html"
     form_class = CustomUserCreationForm
+    context_object_name = "register_form"
+
+    def get_context_data(self, **kwargs):
+        """
+        Передаем в шаблон контекст с формой ProfileRegistrationForm для ввода ФИО и номера телефона
+        """
+        context = super().get_context_data(**kwargs)
+        if self.request.method == 'POST':
+            context["profile_registration_form"] = ProfileRegistrationForm(self.request.POST)
+        else:
+            context["profile_registration_form"] = ProfileRegistrationForm()
+        return context
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password1")
-        user = authenticate(self.request, email=email, password=password)
-        if user:
-            login(self.request, user=user)
+        """
+        Получаем экземпляр формы ProfileRegistrationForm, проверяем две формы на валидность
+        Если проверку прошли: то сохраняем основную форму, привязываем пользователя к профилю,
+        аутентифицируем пользователя, логиним
+        """
+        profile_form = ProfileRegistrationForm(self.request.POST)
 
-        return response
+        if profile_form.is_valid() and form.is_valid():
+            user = form.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(self.request, email=email, password=password)
+            if user:
+                login(self.request, user=user)
+
+            return redirect(self.get_success_url())
+
+        return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse_lazy("core:index")
@@ -108,10 +143,14 @@ class ProfileView(LoginRequiredMixin, View):
 
 class PersonalCabinet(LoginRequiredMixin, DetailView):
     """
+    Этот метод используется в представлении для отображения последнего заказа пользователя
+    (если такой заказ будет найден)
 
-    CBV личного кабинета профиля пользователя
-    В шаблоне присутствуют ссылки на профиль,
-    на все заказы профиля пользователя
+    Делаем запрос на получение заказа определенного пользователя, подгружая
+    модель DeliveryPrice, модель OrderItem и связанные сущности с OrderItem -
+    Delivery и Price
+
+    От последних моделей нам понадобятся поля "Тип доставки", "Статус" и "Статус оплаты"
 
     """
 
@@ -123,17 +162,117 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         """
         Атрибуты:
         profile - профиль пользователя
-        last_order - последний заказ
+        last_order - последний заказ (если такой существует)
         """
         context = super().get_context_data(**kwargs)
-        profile = Profile.objects.get(user=self.request.user)
+        profile = get_object_or_404(
+            Profile,
+            user=self.request.user
+        )
 
-        # Передаем последний заказ текущего профиля
-        profile_orders = profile.orders.all()
+        last_order = self.get_object()
+        if last_order:
+            context["last_order"] = last_order
+
         context["profile"] = profile
-        context["last_order"] = profile_orders.order_by("-created_at").first()
         return context
 
     def get_object(self, queryset=None):
-        """Возвращаем профиль пользователя"""
-        return Profile.objects.get(user=self.request.user)
+        """
+        Получает последний заказ пользователя.
+
+        Метод возвращает последний заказ, созданный пользователем, на основе поля `created_at`.
+        Загружаются связанные данные о типе доставки (`delivery_price`) и связанных элементах заказа
+        (`order_items`) с минимизацией количества SQL-запросов.
+
+        """
+        queryset = Order.objects.filter(
+            user=self.request.user
+        ).select_related(
+            "delivery_price",
+        ).prefetch_related(
+            Prefetch(
+                "order_items",
+                queryset=OrderItem.objects.select_related(
+                    "delivery",
+                    "payment_type",
+                ).only(
+                    "delivery__name",
+                    "payment_type__name",
+                ),
+            ),
+        ).only(
+            "delivery_price",
+            "paid_status",
+            "created_at",
+        ).order_by("-created_at").first()
+
+        return queryset
+
+
+class ProfileOrdersView(LoginRequiredMixin, ListView):
+    """
+    CBV для отображения заказов профиля.
+    Доступно только аутентифицированным пользователям.
+    Если у профиля имеются заказы, то отображаются, иначе
+    отображается текст "У вас пустая история заказов"
+
+    Атрибуты:
+        template_name - шаблон для отображения заказов профиля пользователя
+
+    """
+    template_name = "account/profile_orders.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        """
+        Получаем queryset заказов пользователя
+
+        Этот метод используется в представлении для загрузки всех заказов пользователя.
+        Подгружается связанная модель DeliveryPrice, связанная FK с моделью Order.
+        Также, подгружаем связанные сущности модели OrderItem
+
+        Возвращает:
+            список заказов пользователя с информацией о ценах: цена доставки, общая стоимость заказа,
+            статус, оплачен заказ или нет.
+
+        Примечание:
+            Этот метод использует `select_related` и `prefetch_related` для оптимизации запросов, загружая только
+            нужные поля и избегая ненужных запросов к базе данных.
+
+        """
+        user = self.request.user
+        user_orders = Order.objects.filter(
+            user=user
+        ).select_related(
+            "delivery_price",
+        ).prefetch_related(
+            Prefetch(
+                "order_items",
+                queryset=OrderItem.objects.select_related(
+                    "delivery",
+                    "payment_type",
+                ).only(
+                    "delivery__name",
+                    "payment_type__name",
+                ),
+            )
+        ).only(
+            "delivery_price",
+            "paid_status",
+        )
+        return user_orders
+
+
+class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+    """
+    Класс представления для ввода нового пароля.
+
+    Атрибуты:
+        template_name - шаблон для отображения формы ввода нового пароля
+        success_url - путь, по которому после ввода нового пароля перенаправим пользователя
+        form_class - используемая форма в шаблоне
+    """
+    template_name = "account/password_reset_confirm.html"
+    success_url = reverse_lazy("account:password_reset_complete")
+    form_class = SetPasswordForm
