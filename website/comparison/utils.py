@@ -1,18 +1,25 @@
+from itertools import product
+
 from catalog.models import Price
 from catalog.models import Product
 from catalog.models import Specification
 from comparison.models import Comparison
 from django.core.cache import cache
+from django.db.models import Count
+from django.db.models import F
 from django.db.models import Min
+from django.db.models import OuterRef
 from django.db.models import Prefetch
+from django.db.models import Q
 from django.db.models import QuerySet
+from django.db.models import Subquery
 from django.http import HttpRequest
 
 from website.settings import anonymous_comparison_key
 from website.settings import user_comparison_key
 
 
-def get_products_with_auth_user(user) -> tuple:
+def get_products_with_auth_user(user, unic_spec: None | str) -> tuple:
     """
     Получает товары, добавленные пользователем в сравнение.
 
@@ -25,6 +32,9 @@ def get_products_with_auth_user(user) -> tuple:
     ----------
     user : User
         id аутентифицированного пользователя, чьи товары необходимо получить.
+    unic_spec : None | str
+        Передаёт состояние чекбокса в шаблоне, если пользователь не хочет видеть
+        одинаковые характеристики, то с бд загружаются только разные характеристики
 
     Возвращает:
     ----------
@@ -32,24 +42,28 @@ def get_products_with_auth_user(user) -> tuple:
         - correct_spec: Спецификации товаров, отформатированные для дальнейшей обработки.
         - products_data: Список объектов Comparison, представляющих товары, добавленные в сравнение.
     """
-    key = f"{user_comparison_key}{user}"
+    key = f"{user_comparison_key}{user}{unic_spec}"
     products = cache.get(key)
+
     if products is None:
+        common_specifications = list()
+        if unic_spec:
+            common_specifications = get_unic_spec_for_auth_user(user)
+
         products = (
             Comparison.objects.select_related("user", "product__category")
             .prefetch_related(
                 Prefetch(
                     "product__specifications",
-                    queryset=Specification.objects.select_related("name", "product").only(
-                        "value", "name__name", "product__id"
-                    ),
+                    queryset=Specification.objects.select_related("name", "product")
+                    .only("value", "name__name", "product__id")
+                    .exclude(id__in=common_specifications),
                 ),
                 Prefetch(
                     "product__prices", queryset=Price.objects.select_related("product").only("product__id", "price")
                 ),
             )
             .filter(user__pk=user)
-            .annotate(min_price=Min("product__prices__price"))
             .only(
                 "user__id",
                 "product__name",
@@ -58,6 +72,7 @@ def get_products_with_auth_user(user) -> tuple:
                 "product__preview",
                 "product__product_type",
             )
+            .annotate(min_price=Min("product__prices__price"))
         )
         cache.set(key, products, timeout=3600)
     correct_spec = get_category_spec(products)
@@ -65,7 +80,7 @@ def get_products_with_auth_user(user) -> tuple:
     return correct_spec, products_data
 
 
-def get_products_with_unauth_user(request: HttpRequest) -> tuple:
+def get_products_with_unauth_user(request: HttpRequest, unic_spec: None | str) -> tuple:
     """
     Получает список товаров для неаутентифицированного пользователя.
 
@@ -98,17 +113,22 @@ def get_products_with_unauth_user(request: HttpRequest) -> tuple:
     запросов.
     """
     products_ids = request.session.get("products_ids", [])
-    key = f"{anonymous_comparison_key}{request.session.session_key}"
+    key = f"{anonymous_comparison_key}{request.session.session_key}{unic_spec}"
+
     products = cache.get(key)
+
     if products is None:
+        common_specifications = list()
+        if unic_spec:
+            common_specifications = get_unic_spec_for_unauth_user(products_ids)
         products = (
             Product.objects.select_related("category")
             .prefetch_related(
                 Prefetch(
                     "specifications",
-                    queryset=Specification.objects.select_related("name", "product").only(
-                        "value", "name__name", "product__id"
-                    ),
+                    queryset=Specification.objects.select_related("name", "product")
+                    .only("value", "name__name", "product__id")
+                    .exclude(id__in=common_specifications),
                 ),
                 Prefetch("prices", queryset=Price.objects.select_related("product").only("product__id", "price")),
             )
@@ -170,3 +190,123 @@ def get_category_spec(products: QuerySet, auth_flag: bool = True) -> dict:
                 category_spec[product.category.name].append(spec.name.name)
 
     return category_spec
+
+
+def get_unic_spec_for_auth_user(user: int) -> list[int]:
+    """
+    Получает список уникальных спецификаций для заданного пользователя, основываясь на категориях
+    товаров в их сравнении. Сравнивает количество товаров в категории с количеством товаров
+    в каждой спецификации и возвращает ID спецификаций, которые соответствуют этому условию.
+
+    Параметры:
+    ----------
+    user (int): ID пользователя, для которого выполняется запрос.
+
+    Возвращает:
+    ----------
+    list[int]: Список ID спецификаций, соответствующих условиям запроса.
+    """
+    subquery = (
+        Comparison.objects.select_related("product__category")
+        .filter(Q(user=user) & Q(product__category=OuterRef("product__category")))
+        .values("product__category")
+        .annotate(category_count=Count("id"))
+        .values("category_count")
+    )
+
+    common_specifications = list(
+        Comparison.objects.select_related("user", "product__category")
+        .prefetch_related(
+            Prefetch(
+                "product__specifications",
+                queryset=Specification.objects.select_related("name", "product").only(
+                    "value", "name__name", "product__id"
+                ),
+            )
+        )
+        .values(
+            "product__specifications__name__name",
+            "product__specifications__value",
+            "product__category",
+        )
+        .annotate(
+            product_count=Count("product"),
+            category_count=Subquery(subquery),
+        )
+        .filter(Q(user=user) & Q(product_count=F("category_count")))
+    )
+
+    if common_specifications:
+        spec_ids = (
+            Specification.objects.select_related("name", "product")
+            .filter(
+                Q(value__in=list(spec_value["product__specifications__value"] for spec_value in common_specifications))
+                & Q(
+                    name__name__in=list(
+                        spec_name["product__specifications__name__name"] for spec_name in common_specifications
+                    )
+                )
+            )
+            .values_list("id", flat=True)
+        )
+        return list(spec_ids)
+    return list()
+
+
+def get_unic_spec_for_unauth_user(products_ids: list[int]) -> list[int]:
+    """
+    Получает список уникальных спецификаций для заданного пользователя, основываясь на категориях
+    товаров в их сравнении. Сравнивает количество товаров в категории с количеством товаров
+    в каждой спецификации и возвращает ID спецификаций, которые соответствуют этому условию.
+
+    Параметры:
+    ----------
+    products_ids: list[int]: ID продуктов полученных из сессии.
+
+    Возвращает:
+    ----------
+    list[int]: Список ID спецификаций, соответствующих условиям запроса.
+    """
+    subquery = (
+        Product.objects.select_related("category")
+        .filter(Q(category=OuterRef("category")) & Q(id__in=products_ids))
+        .values("category")
+        .annotate(category_count=Count("id"))
+        .values("category_count")
+    )
+
+    common_specifications = (
+        Product.objects.select_related("category")
+        .prefetch_related(
+            Prefetch(
+                "specifications",
+                queryset=Specification.objects.select_related("name", "product").only(
+                    "value", "name__name", "product__id"
+                ),
+            )
+        )
+        .values(
+            "specifications__name__name",
+            "specifications__value",
+            "category",
+        )
+        .annotate(
+            product_count=Count("specifications"),
+            category_count=Subquery(subquery),
+        )
+        .filter(Q(id__in=products_ids) & Q(product_count=F("category_count")))
+    )
+
+    if common_specifications:
+        spec_ids = (
+            Specification.objects.select_related("name", "product")
+            .filter(
+                Q(value__in=list(spec_value["specifications__value"] for spec_value in common_specifications))
+                & Q(
+                    name__name__in=list(spec_name["specifications__name__name"] for spec_name in common_specifications)
+                ),
+            )
+            .values_list("id", flat=True)
+        )
+        return list(spec_ids)
+    return list()
