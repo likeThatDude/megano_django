@@ -188,8 +188,8 @@ def check_payment_type(order: Order, seller: str) -> bool:
         Payment.STORE_ONLINE,
         Payment.STORE_RANDOM,
     )
-    for i in order.order_items.all():
-        if i.seller.name == seller and i.payment_type.name in need_pay:
+    for item in order.order_items.all():
+        if item.seller.name == seller and item.payment_type.name in need_pay:
             return True
     return False
 
@@ -197,3 +197,17 @@ def check_payment_type(order: Order, seller: str) -> bool:
 @register.filter
 def all_true(value):
     return all(value)
+
+
+@register.simple_tag
+def get_recipes_url(order: Order, seller_id: int, base_url: str) -> str | None:
+    for item in order.order_items.all():
+        if item.seller.pk == seller_id:
+            return base_url + item.receipt_url
+    return None
+
+@register.simple_tag
+def get_order_recipes_url(order: Order, base_url: str) -> str | None:
+    for item in order.order_items.all():
+        return base_url + item.receipt_url
+    return None

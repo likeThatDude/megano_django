@@ -214,6 +214,16 @@
                                                         Оплатить
                                                     </a>
                                                 </div>
+                                            {% else %}
+                                                {% get_order_recipes_url order current_receipt_url as receipt_url %}
+                                                {% if receipt_url %}
+                                                    <div class="Cart-block">
+                                                        <a class="btn btn_primary btn_lg"
+                                                           href="{{ receipt_url }}">
+                                                            Чек
+                                                        </a>
+                                                    </div>
+                                                {% endif %}
                                             {% endif %}
                                         </div>
                                     </div>
@@ -276,6 +286,16 @@
                                                                 Оплатить
                                                             </a>
                                                         </div>
+                                                    {% else %}
+                                                        {% get_recipes_url order seller.pk current_receipt_url as receipt_url %}
+                                                        {% if receipt_url %}
+                                                            <div class="Cart-block">
+                                                                <a class="btn btn_primary btn_lg"
+                                                                   href="{{ receipt_url }}">
+                                                                    Чек
+                                                                </a>
+                                                            </div>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% else %}
                                                     <div class="Cart-block Cart-block_total">

@@ -1,13 +1,64 @@
 {% extends 'core/base.html' %}
 
 {% block title %}
-	Успешная оплата
+    Успешная оплата
 {% endblock %}
 
 {% block description %}
-
+    <meta name="description" content="Описание страницы">
 {% endblock %}
 
 {% block body %}
-	{{ user.login }} ваш заказ №{{ request.GET.order_id }} оплачен !
+    <div class="Middle Middle_top">
+        <div class="central_check_block">
+            <div class="paper_block">
+                <div class="receipt_header">
+                    <p>Оплата прошла успешно!</p>
+                    <p>Спасибо за покупку!</p>
+                </div>
+                <div class="receipt_info_block">
+                    <p>Номер заказа: {{ order.pk }}</p>
+                    <p>
+                        {% if all_order %}
+                            Заказ оплачен полностью
+                        {% else %}
+                            <b>Заказ оплачен частично</b>
+                        {% endif %}
+                    </p>
+                    <p>
+                        Дата: {{ date }}
+                    </p>
+                </div>
+                <p>Оплаченные товары:</p>
+                <div class="receipt_product_list">
+                    {% for item in order.order_items.all %}
+                        <p>Продавец: {{ item.seller.name }}</p>
+                        <div class="receipt_product_block">
+                            <div class="receipt_product_name">
+                                <a href="{{ item.product.get_absolute_url }}">
+                                    {{ item.product.name|truncatechars:80 }}
+                                </a>
+                            </div>
+                            <div class="receipt_product_price_and_quantity">
+                                {{ item.quantity }} х {{ item.price }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="receipt_total_price">
+                        {% if delivery_price %}
+                            <p>Стоимость заказа: {{ delivery_price }}</p>
+                        {% endif %}
+                        <p>Общая стоймость: {{ total_price }}</p>
+                    </div>
+                    <div class="receipt_navigate">
+                        <p>
+                            <a href="{{ order.get_absolute_url }}">
+                                На страницу заказа
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

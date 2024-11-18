@@ -35,10 +35,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "c978-37-213-170-123.ngrok-free.app",
+    "a7d2-37-213-170-123.ngrok-free.app",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://c978-37-213-170-123.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://a7d2-37-213-170-123.ngrok-free.app"]
 
 INTERNAL_IPS = [
     "127.0.0.1",

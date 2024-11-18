@@ -1,4 +1,6 @@
+from datetime import datetime
 from decimal import Decimal
+from itertools import product
 
 import stripe
 from django.db import transaction
@@ -6,6 +8,8 @@ from django.db.models import Prefetch
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from rest_framework.reverse import reverse_lazy
+
 from order.models import Order
 from order.models import OrderItem
 from stripe.checkout import Session
@@ -18,13 +22,19 @@ def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, st
 
 
 def checkout_process(
-    order: Order,
-    redirect_urls: tuple[str, str],
-    all_product: bool = True,
-    seller_id: None | int = None,
-    total_price: None | Decimal = None,
-) -> Session:
+        order: Order,
+        redirect_urls: tuple[str, str],
+        all_product: bool = True,
+        seller_id: None | int = None,
+        total_price: None | Decimal = None,) -> Session:
+
+    now = datetime.now()
+    formatted_date = now.strftime("%H:%M %d.%m.%Y")
+    date_to_db = '%20'.join(formatted_date.split(' '))
     if all_product:
+        total_price_all = int((order.total_price + order.delivery_price.price) * 100)
+        url_total_price = order.total_price + order.delivery_price.price
+
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[
@@ -34,17 +44,22 @@ def checkout_process(
                         "product_data": {
                             "name": f"Order №{order.id}",
                         },
-                        "unit_amount": int((order.total_price + order.delivery_price.price) * 100),
+                        "unit_amount": total_price_all,
                     },
                     "quantity": 1,
                 },
             ],
             mode="payment",
-            success_url=redirect_urls[0] + f"?order_id={order.id}",
+            success_url=redirect_urls[0] + f"?order_id={order.id}&total_price={url_total_price}"
+                                           f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}",
             metadata={
                 "all_order": 1,
                 "order_id": order.id,
+                "total_price": url_total_price,
+                "date": formatted_date,
+                "url": f"?order_id={order.id}&total_price={total_price_all}&date={date_to_db}",
+                "delivery_price": order.delivery_price.price,
             },
         )
     else:
@@ -63,12 +78,17 @@ def checkout_process(
                 },
             ],
             mode="payment",
-            success_url=redirect_urls[0] + f"?order_id={order.id}",
-            cancel_url=redirect_urls[1] + f"?order_id={order.id}",
+            success_url=redirect_urls[0] + f"?order_id={order.id}&seller_id={seller_id}"
+                                           f"&total_price={total_price}&date={formatted_date}",
+            cancel_url=redirect_urls[1] + f"?order_id={order.id}&seller_id={seller_id}",
             metadata={
                 "all_order": 0,
                 "order_id": order.id,
                 "seller_id": seller_id,
+                "total_price": total_price,
+                "date": formatted_date,
+                "url": f"?order_id={order.id}&seller_id={seller_id}"
+                       f"&total_price={total_price}&date={date_to_db}",
             },
         )
 
@@ -100,12 +120,17 @@ def get_order_total_price(order: Order, seller_id: int) -> Decimal:
 
 def change_order_payment_status(session: Session) -> None:
     if session["payment_status"] == "paid":
+
         order_id = session["metadata"]["order_id"]
+        current_receipt_url = create_recipes_url_for_db(session)
+
         order = (
             Order.objects.prefetch_related(
                 Prefetch(
                     "order_items",
-                    queryset=OrderItem.objects.select_related("order").only("payment_status", "order__id"),
+                    queryset=OrderItem.objects
+                    .select_related("order")
+                    .only("payment_status", "order__id", "receipt_url", ),
                 )
             )
             .only("order_items", "paid_status", "status")
@@ -115,18 +140,23 @@ def change_order_payment_status(session: Session) -> None:
             order.paid_status = Order.PAID
             order.status = Order.PROCESSING
             order.save()
-            order.order_items.update(payment_status=True)
+            order.order_items.update(payment_status=True, receipt_url=current_receipt_url)
 
 
 def change_certain_items_payment_status(session: Session) -> None:
     if session["payment_status"] == "paid":
+
         order_id = session["metadata"]["order_id"]
         seller_id = session["metadata"]["seller_id"]
+        current_receipt_url = create_recipes_url_for_db(session)
+
         order = (
             Order.objects.prefetch_related(
                 Prefetch(
                     "order_items",
-                    queryset=OrderItem.objects.select_related("order").only("payment_status", "order__id"),
+                    queryset=OrderItem.objects
+                    .select_related("order")
+                    .only("payment_status", "order__id", "receipt_url", ),
                 )
             )
             .only("order_items", "paid_status", "status")
@@ -134,10 +164,10 @@ def change_certain_items_payment_status(session: Session) -> None:
         )
 
         with transaction.atomic():
-            order.order_items.filter(seller_id=seller_id, payment_status=False).update(payment_status=True)
+            order.order_items.filter(seller_id=seller_id).update(payment_status=True, receipt_url=current_receipt_url)
             updated_order_items = (
                 OrderItem.objects.select_related("seller", "order", "product")
-                .filter(order__id=41)
+                .filter(order_id=order_id)
                 .only(
                     "seller__id",
                     "order__id",
@@ -153,3 +183,41 @@ def change_certain_items_payment_status(session: Session) -> None:
             order.paid_status = Order.PAID if current_payment_status else Order.PARTLY_PAID
             order.status = Order.PROCESSING
             order.save()
+
+def create_recipes_url_for_db(session: Session) -> str:
+    current_receipt_url = session["metadata"]["url"]
+    correct_payment_success_url = reverse('payment:payment_success')
+    ready_url = correct_payment_success_url + current_receipt_url
+    return ready_url
+
+def get_paid_order(order_id: int, user_id: int ,seller_id: int | None = None) -> Order | bool:
+    if seller_id is None:
+        queryset = (
+            OrderItem.objects
+            .select_related("order")
+            .only("payment_status", "order__id")
+        )
+    else:
+        queryset = (
+            OrderItem.objects
+            .select_related("order", "seller", "product")
+            .filter(seller_id=seller_id)
+            .only("order__id", "seller__name", "product__name", "price", "quantity")
+        )
+
+    order = (
+        Order.objects
+        .select_related('user')
+        .prefetch_related(
+            Prefetch(
+                "order_items",
+                queryset=queryset,
+            )
+        )
+        .only("order_items", "paid_status", "status", 'user__id')
+        .get(pk=order_id)
+    )
+    if user_id == order.user.pk:
+        return order
+
+    return False
