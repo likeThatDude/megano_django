@@ -28,8 +28,7 @@ from drf_spectacular.views import SpectacularSwaggerView
 
 urlpatterns = [
     # Standard URL
-    path("", include("core.urls", namespace='default')),
-    path('import/', include("core.urls")),
+    path("", include("core.urls")),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("order/", include("order.urls")),
@@ -37,6 +36,7 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("comparison/", include("comparison.urls")),
     path("discount/", include("discount.urls")),
+    path("payment/", include("payment.urls")),
     # API
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
