@@ -8,10 +8,9 @@ from django.db.models import Prefetch
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from rest_framework.reverse import reverse_lazy
-
 from order.models import Order
 from order.models import OrderItem
+from rest_framework.reverse import reverse_lazy
 from stripe.checkout import Session
 
 """
@@ -50,11 +49,12 @@ def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, st
 
 
 def checkout_process(
-        order: Order,
-        redirect_urls: tuple[str, str],
-        all_product: bool = True,
-        seller_id: None | int = None,
-        total_price: None | Decimal = None, ) -> Session:
+    order: Order,
+    redirect_urls: tuple[str, str],
+    all_product: bool = True,
+    seller_id: None | int = None,
+    total_price: None | Decimal = None,
+) -> Session:
     """
     Создает Stripe Checkout сессию для оплаты заказа.
 
@@ -70,7 +70,7 @@ def checkout_process(
     """
     now = datetime.now()
     formatted_date = now.strftime("%H:%M %d.%m.%Y")
-    date_to_db = '%20'.join(formatted_date.split(' '))
+    date_to_db = "%20".join(formatted_date.split(" "))
     if all_product:
         total_price_all = int((order.total_price + order.delivery_price.price) * 100)
         url_total_price = order.total_price + order.delivery_price.price
@@ -91,7 +91,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&total_price={url_total_price}"
-                                           f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
+            f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}",
             metadata={
                 "all_order": 1,
@@ -119,7 +119,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&seller_id={seller_id}"
-                                           f"&total_price={total_price}&date={formatted_date}",
+            f"&total_price={total_price}&date={formatted_date}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}&seller_id={seller_id}",
             metadata={
                 "all_order": 0,
@@ -127,8 +127,7 @@ def checkout_process(
                 "seller_id": seller_id,
                 "total_price": total_price,
                 "date": formatted_date,
-                "url": f"?order_id={order.id}&seller_id={seller_id}"
-                       f"&total_price={total_price}&date={date_to_db}",
+                "url": f"?order_id={order.id}&seller_id={seller_id}" f"&total_price={total_price}&date={date_to_db}",
             },
         )
 
@@ -197,9 +196,11 @@ def change_order_payment_status(session: Session) -> None:
             Order.objects.prefetch_related(
                 Prefetch(
                     "order_items",
-                    queryset=OrderItem.objects
-                    .select_related("order")
-                    .only("payment_status", "order__id", "receipt_url", ),
+                    queryset=OrderItem.objects.select_related("order").only(
+                        "payment_status",
+                        "order__id",
+                        "receipt_url",
+                    ),
                 )
             )
             .only("order_items", "paid_status", "status")
@@ -232,9 +233,11 @@ def change_certain_items_payment_status(session: Session) -> None:
             Order.objects.prefetch_related(
                 Prefetch(
                     "order_items",
-                    queryset=OrderItem.objects
-                    .select_related("order")
-                    .only("payment_status", "order__id", "receipt_url", ),
+                    queryset=OrderItem.objects.select_related("order").only(
+                        "payment_status",
+                        "order__id",
+                        "receipt_url",
+                    ),
                 )
             )
             .only("order_items", "paid_status", "status")
@@ -274,7 +277,7 @@ def create_recipes_url_for_db(session: Session) -> str:
         - str: Сформированный URL.
     """
     current_receipt_url = session["metadata"]["url"]
-    correct_payment_success_url = reverse('payment:payment_success')
+    correct_payment_success_url = reverse("payment:payment_success")
     ready_url = correct_payment_success_url + current_receipt_url
     return ready_url
 
@@ -293,29 +296,23 @@ def get_paid_order(order_id: int, user_id: int, seller_id: int | None = None) ->
         - Order | bool: Объект заказа, если пользователь имеет доступ, иначе False.
     """
     if seller_id is None:
-        queryset = (
-            OrderItem.objects
-            .select_related("order")
-            .only("payment_status", "order__id")
-        )
+        queryset = OrderItem.objects.select_related("order").only("payment_status", "order__id")
     else:
         queryset = (
-            OrderItem.objects
-            .select_related("order", "seller", "product")
+            OrderItem.objects.select_related("order", "seller", "product")
             .filter(seller_id=seller_id)
             .only("order__id", "seller__name", "product__name", "price", "quantity")
         )
 
     order = (
-        Order.objects
-        .select_related('user')
+        Order.objects.select_related("user")
         .prefetch_related(
             Prefetch(
                 "order_items",
                 queryset=queryset,
             )
         )
-        .only("order_items", "paid_status", "status", 'user__id')
+        .only("order_items", "paid_status", "status", "user__id")
         .get(pk=order_id)
     )
     if user_id == order.user.pk:

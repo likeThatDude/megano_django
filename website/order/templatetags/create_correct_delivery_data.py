@@ -206,6 +206,7 @@ def get_recipes_url(order: Order, seller_id: int, base_url: str) -> str | None:
             return base_url + item.receipt_url
     return None
 
+
 @register.simple_tag
 def get_order_recipes_url(order: Order, base_url: str) -> str | None:
     for item in order.order_items.all():

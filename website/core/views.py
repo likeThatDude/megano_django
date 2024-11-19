@@ -57,4 +57,3 @@ class IndexView(TemplateView):
         context["banners"] = random_banners
 
         return context
-

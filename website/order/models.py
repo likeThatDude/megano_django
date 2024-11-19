@@ -1,5 +1,3 @@
-from django.urls import reverse
-
 from account.models import Profile
 from catalog.models import Delivery
 from catalog.models import Payment
@@ -7,6 +5,7 @@ from catalog.models import Product
 from catalog.models import Seller
 from django.db import models
 from django.db.models import PROTECT
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -117,7 +116,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name="order_items", on_delete=models.PROTECT, verbose_name=_("Order"))
     active = models.BooleanField(default=True, verbose_name=_("Active"))
     payment_status = models.BooleanField(default=False, verbose_name=_("Payment status"))
-    receipt_url = models.CharField(max_length=255, null=False, default='', verbose_name=_("Receipt url"))
+    receipt_url = models.CharField(max_length=255, null=False, default="", verbose_name=_("Receipt url"))
 
     def __str__(self):
         return f"{self.product}, {self.seller}, {self.quantity}, {self.price}"

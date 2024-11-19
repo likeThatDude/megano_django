@@ -2,9 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -13,11 +16,9 @@ from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.forms import SetPasswordForm
-from django.db.models import Prefetch
+from order.models import Order
+from order.models import OrderItem
 
-from order.models import Order, OrderItem
 from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
@@ -44,6 +45,7 @@ class RegisterView(CreateView):
     """
     CBV регистрации профиля пользователя
     """
+
     template_name = "account/register.html"
     form_class = CustomUserCreationForm
     context_object_name = "register_form"
@@ -53,7 +55,7 @@ class RegisterView(CreateView):
         Передаем в шаблон контекст с формой ProfileRegistrationForm для ввода ФИО и номера телефона
         """
         context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
+        if self.request.method == "POST":
             context["profile_registration_form"] = ProfileRegistrationForm(self.request.POST)
         else:
             context["profile_registration_form"] = ProfileRegistrationForm()
@@ -165,10 +167,7 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         last_order - последний заказ (если такой существует)
         """
         context = super().get_context_data(**kwargs)
-        profile = get_object_or_404(
-            Profile,
-            user=self.request.user
-        )
+        profile = get_object_or_404(Profile, user=self.request.user)
 
         last_order = self.get_object()
         if last_order:
@@ -186,26 +185,31 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
         (`order_items`) с минимизацией количества SQL-запросов.
 
         """
-        queryset = Order.objects.filter(
-            user=self.request.user
-        ).select_related(
-            "delivery_price",
-        ).prefetch_related(
-            Prefetch(
-                "order_items",
-                queryset=OrderItem.objects.select_related(
-                    "delivery",
-                    "payment_type",
-                ).only(
-                    "delivery__name",
-                    "payment_type__name",
+        queryset = (
+            Order.objects.filter(user=self.request.user)
+            .select_related(
+                "delivery_price",
+            )
+            .prefetch_related(
+                Prefetch(
+                    "order_items",
+                    queryset=OrderItem.objects.select_related(
+                        "delivery",
+                        "payment_type",
+                    ).only(
+                        "delivery__name",
+                        "payment_type__name",
+                    ),
                 ),
-            ),
-        ).only(
-            "delivery_price",
-            "paid_status",
-            "created_at",
-        ).order_by("-created_at").first()
+            )
+            .only(
+                "delivery_price",
+                "paid_status",
+                "created_at",
+            )
+            .order_by("-created_at")
+            .first()
+        )
 
         return queryset
 
@@ -221,6 +225,7 @@ class ProfileOrdersView(LoginRequiredMixin, ListView):
         template_name - шаблон для отображения заказов профиля пользователя
 
     """
+
     template_name = "account/profile_orders.html"
     context_object_name = "orders"
 
@@ -242,24 +247,27 @@ class ProfileOrdersView(LoginRequiredMixin, ListView):
 
         """
         user = self.request.user
-        user_orders = Order.objects.filter(
-            user=user
-        ).select_related(
-            "delivery_price",
-        ).prefetch_related(
-            Prefetch(
-                "order_items",
-                queryset=OrderItem.objects.select_related(
-                    "delivery",
-                    "payment_type",
-                ).only(
-                    "delivery__name",
-                    "payment_type__name",
-                ),
+        user_orders = (
+            Order.objects.filter(user=user)
+            .select_related(
+                "delivery_price",
             )
-        ).only(
-            "delivery_price",
-            "paid_status",
+            .prefetch_related(
+                Prefetch(
+                    "order_items",
+                    queryset=OrderItem.objects.select_related(
+                        "delivery",
+                        "payment_type",
+                    ).only(
+                        "delivery__name",
+                        "payment_type__name",
+                    ),
+                )
+            )
+            .only(
+                "delivery_price",
+                "paid_status",
+            )
         )
         return user_orders
 
@@ -273,6 +281,7 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
         success_url - путь, по которому после ввода нового пароля перенаправим пользователя
         form_class - используемая форма в шаблоне
     """
+
     template_name = "account/password_reset_confirm.html"
     success_url = reverse_lazy("account:password_reset_complete")
     form_class = SetPasswordForm

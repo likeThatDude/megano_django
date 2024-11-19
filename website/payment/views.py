@@ -2,7 +2,9 @@ from datetime import datetime
 
 import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse, Http404
+from django.http import Http404
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -116,31 +118,31 @@ class PaymentSuccessView(LoginRequiredMixin, View):
     """
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        seller_id = request.GET.get('seller_id', None)
-        order_id = request.GET.get('order_id', None)
-        total_price = request.GET.get('total_price', None)
-        date = request.GET.get('date', None)
-        delivery_price = request.GET.get('delivery_price', None)
+        seller_id = request.GET.get("seller_id", None)
+        order_id = request.GET.get("order_id", None)
+        total_price = request.GET.get("total_price", None)
+        date = request.GET.get("date", None)
+        delivery_price = request.GET.get("delivery_price", None)
 
         context = {
-            'total_price': total_price,
-            'all_order': True if seller_id is None else False,
-            'date': date,
+            "total_price": total_price,
+            "all_order": True if seller_id is None else False,
+            "date": date,
         }
         if not seller_id is None:
             order = get_paid_order(order_id, request.user.pk, seller_id)
             if not order:
                 return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
-            context['order'] = order
+            context["order"] = order
 
         elif seller_id is None:
             order = get_paid_order(order_id, request.user.pk)
             if not order:
                 return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
-            context['order'] = order
-            context['delivery_price'] = delivery_price
+            context["order"] = order
+            context["delivery_price"] = delivery_price
         else:
-            return HttpResponse(_('Ошибка данных при формировании страницы успешной оплаты'), status=502)
+            return HttpResponse(_("Ошибка данных при формировании страницы успешной оплаты"), status=502)
         return render(request, "payment/payment_success.html", context=context)
 
 
@@ -159,9 +161,9 @@ class PaymentCuncelView(LoginRequiredMixin, View):
     """
 
     def get(self, request: HttpRequest) -> HttpResponse:
-        order_id = request.GET.get('order_id', None)
+        order_id = request.GET.get("order_id", None)
         context = {
-            'order_id': order_id,
+            "order_id": order_id,
         }
         return render(request, "payment/payment_cancel.html", context=context)
 
@@ -184,6 +186,7 @@ class StripeWebhookAPIView(APIView):
     Возвращает:
         - Response: JSON-ответ с подтверждением успешной обработки Webhook.
     """
+
     authentication_classes = ()
     permission_classes = ()
 
