@@ -24,11 +24,11 @@ from .models import OrderItem
 from .utils import create_errors_list
 from .utils import get_order_products
 
-# products_list = {
-#     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
-#     "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
-#     "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
-# }
+products_list = {
+    "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
+    "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
+    "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
+}
 
 
 class OrderCreateView(View):
@@ -65,8 +65,8 @@ class OrderCreateView(View):
         context = {}
         user = utils.get_user_data(request)
         context.update(user)
-        cart = Cart(request)
-        products_list = cart.products
+        # cart = Cart(request)
+        # products_list = cart.products
         if products_list:
             products_correct_list = get_order_products(products_list)
             product_data = utils.create_product_context_data(products_correct_list)
@@ -79,8 +79,8 @@ class OrderCreateView(View):
 
     def post(self, request: HttpRequest) -> HttpResponse:
         if request.user.is_authenticated:
-            cart = Cart(request)
-            products_list = cart.products
+            # cart = Cart(request)
+            # products_list = cart.products
             data = request.POST
             validate_data = OrderForm(data)
             if validate_data.is_valid():
