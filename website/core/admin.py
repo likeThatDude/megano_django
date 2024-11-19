@@ -32,4 +32,3 @@ class BannerAdmin(admin.ModelAdmin):
     actions = [
         archive_old_banners,
     ]
-

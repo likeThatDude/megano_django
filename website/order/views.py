@@ -19,18 +19,16 @@ from kombu.exceptions import HttpError
 from order import utils
 from order.forms import OrderForm
 
-from website import settings
-
 from .models import Order
 from .models import OrderItem
 from .utils import create_errors_list
 from .utils import get_order_products
 
-# products_list = {
-#     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
-#     "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
-#     "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
-# }
+products_list = {
+    "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
+    "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
+    "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
+}
 
 
 class OrderCreateView(View):
@@ -67,8 +65,8 @@ class OrderCreateView(View):
         context = {}
         user = utils.get_user_data(request)
         context.update(user)
-        cart = Cart(request)
-        products_list = cart.products
+        # cart = Cart(request)
+        # products_list = cart.products
         if products_list:
             products_correct_list = get_order_products(products_list)
             product_data = utils.create_product_context_data(products_correct_list)
@@ -81,8 +79,8 @@ class OrderCreateView(View):
 
     def post(self, request: HttpRequest) -> HttpResponse:
         if request.user.is_authenticated:
-            cart = Cart(request)
-            products_list = cart.products
+            # cart = Cart(request)
+            # products_list = cart.products
             data = request.POST
             validate_data = OrderForm(data)
             if validate_data.is_valid():
@@ -165,6 +163,7 @@ class OrderDetailView(DetailView):
                         "order__id",
                         "quantity",
                         "price",
+                        "payment_status",
                     ),
                 )
             )
@@ -186,37 +185,17 @@ class OrderDetailView(DetailView):
             ),
             pk=self.kwargs["pk"],
         )
-
         if order.user.pk == self.request.user.pk or self.request.user.is_staff:
             return order
         else:
             raise PermissionDenied(_("У вас нет доступа к этому заказу."))
 
+    def get_context_data(self, **kwargs):
 
-def order_detail_view(request: HttpRequest):
-    return render(request, "order/order-detail.html")
+        context = super().get_context_data(**kwargs)
+        scheme = self.request.scheme
+        host = self.request.get_host()
+        current_receipt_url = f"{scheme}://{host}"
+        context["current_receipt_url"] = current_receipt_url
 
-
-def pay_view(request: HttpRequest):
-    return render(request, "order/payment.html")
-
-
-def pay_view2(request: HttpRequest):
-    return render(request, "order/paymentsomeone.html")
-
-
-# class OrdersHistoryListView(ListView):
-#     """
-#     Представление для истории заказов профиля пользователя.
-#
-#     Атрибуты:
-#         template_name (str): Путь к шаблону, который будет использоваться для отображения страницы истории заказов
-#         queryset (Queryset): Queryset всех заказов пользователя
-#         context_object_name (str): Имя объекта контекста для передачи в шаблон.
-#     """
-#
-#     queryset = Order.objects.annotate(
-#         total_price=Sum(F("products__prices__price") * F("products__prices__quantity"))
-#     )
-#     context_object_name = "orders"
-#     template_name = "order/orders_history.html"
+        return context

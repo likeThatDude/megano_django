@@ -31,7 +31,13 @@ SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "a7d2-37-213-170-123.ngrok-free.app",
+]
+
+CSRF_TRUSTED_ORIGINS = ["https://a7d2-37-213-170-123.ngrok-free.app"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -59,6 +65,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "drf_spectacular",
     "django_celery_results",
+    "django_extensions",
     # Django apps
     "account.apps.AccountConfig",
     "cart.apps.CartConfig",
@@ -67,6 +74,7 @@ INSTALLED_APPS = [
     "order.apps.OrderConfig",
     "comparison.apps.ComparisonConfig",
     "discount.apps.DiscountConfig",
+    "payment.apps.PaymentConfig",
     # DRF API
     "review.apps.ReviewConfig",
 ]
@@ -87,7 +95,7 @@ ROOT_URLCONF = "website.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -112,10 +120,6 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
-CATEGORY_CASHING_TIME = 60 * 60 * 24
-CATEGORY_KEY = "categories"
-PRODUCTS_KEY = "category_{category_id}"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -175,13 +179,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 
-CART_SESSION_ID = "cart"
-
+# Session settings
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-
-# С этой настройкой вылетает каждый раз при перезагрузке страницы
-# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-
 # Время жизни сессии (2 недели)
 SESSION_COOKIE_AGE = 1209600
 # Обновляем таймер каждый заход пользователя на сайт
@@ -203,9 +202,19 @@ REST_FRAMEWORK = {
     },
 }
 
-
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV
 BANNERS_KEY = "banners"
 user_comparison_key = "user_comparison_"
 anonymous_comparison_key = "anonymous_user_comparison_"
+CART_SESSION_ID = "cart"
+CATEGORY_CASHING_TIME = 60 * 60 * 24
+CATEGORY_KEY = "categories"
+PRODUCTS_KEY = "category_{category_id}"
+from dotenv import load_dotenv
+
+load_dotenv()
+import os
+
+SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY")

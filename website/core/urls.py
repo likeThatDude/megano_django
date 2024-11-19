@@ -8,3 +8,4 @@ urlpatterns = [
     path("", IndexView.as_view(), name="index"),
     path('import/', import_products_view, name='import_view'),
 ]
+
