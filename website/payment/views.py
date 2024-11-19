@@ -17,10 +17,42 @@ from website import settings
 from . import utils
 from .utils import get_paid_order
 
+"""
+Views для работы с процессом оплаты через Stripe.
+
+Данные классы реализуют создание сессии оплаты, обработку успешной или
+отмененной оплаты, а также обработку Stripe Webhook событий.  
+
+Классы:
+
+- CreateCheckoutView: Создает сессию оплаты для всех товаров в заказе.
+- CreateCheckoutCurrentView: Создает сессию оплаты для конкретного продавца в заказе.
+- PaymentSuccessView: Отображает страницу успешной оплаты с деталями заказа.
+- PaymentCancelView: Отображает страницу отмены оплаты.
+- StripeWebhookAPIView: Обрабатывает события Webhook от Stripe.
+
+Общее:
+    Все представления, кроме StripeWebhookAPIView, требуют аутентификации пользователя.
+"""
+
 stripe.api_key = settings.SECRET_KEY_STRIPE
 
 
 class CreateCheckoutView(LoginRequiredMixin, View):
+    """
+    Создание Stripe Checkout сессии для всех товаров в заказе.
+
+    Обрабатывает GET-запросы для создания сессии Stripe Checkout и перенаправления
+    пользователя на страницу оплаты.
+
+    Параметры:
+        - request (HttpRequest): HTTP-запрос с информацией о текущем пользователе.
+        - order_id (int): Идентификатор заказа, передаваемый в запросе.
+
+    Возвращает:
+        - HttpResponseRedirect: Перенаправляет пользователя на URL Stripe Checkout.
+        - HttpResponseForbidden: Возвращает ошибку доступа, если заказ не принадлежит текущему пользователю.
+    """
 
     def get(self, request: HttpRequest, order_id: int) -> HttpResponse:
         order = utils.get_order_from_db(order_id=order_id)
@@ -32,6 +64,22 @@ class CreateCheckoutView(LoginRequiredMixin, View):
 
 
 class CreateCheckoutCurrentView(LoginRequiredMixin, View):
+    """
+    Создание Stripe Checkout сессии для товаров конкретного продавца в заказе.
+
+    Обрабатывает GET-запросы для создания сессии Stripe Checkout с учетом продавца
+    и стоимости его товаров.
+
+    Параметры:
+        - request (HttpRequest): HTTP-запрос с информацией о текущем пользователе.
+        - order_id (int): Идентификатор заказа.
+        - seller_id (int): Идентификатор продавца, товары которого оплачиваются.
+
+    Возвращает:
+        - HttpResponseRedirect: Перенаправляет пользователя на URL Stripe Checkout.
+        - HttpResponseForbidden: Возвращает ошибку доступа, если заказ не принадлежит текущему пользователю.
+    """
+
     def get(self, request: HttpRequest, order_id: int, seller_id: int) -> HttpResponse:
         order = utils.get_order_from_db(order_id=order_id, all_product=False)
 
@@ -47,6 +95,26 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
 
 
 class PaymentSuccessView(LoginRequiredMixin, View):
+    """
+    Отображение страницы успешной оплаты.
+
+    Обрабатывает GET-запросы для отображения страницы успешной оплаты с деталями
+    заказа или отдельных товаров.
+
+    Параметры:
+        - request (HttpRequest): HTTP-запрос с параметрами успешной оплаты.
+            - order_id (str): Идентификатор заказа.
+            - seller_id (str): Идентификатор продавца (опционально).
+            - total_price (str): Общая сумма оплаты.
+            - date (str): Дата оплаты.
+            - delivery_price (str): Стоимость доставки (опционально).
+
+    Возвращает:
+        - HttpResponse: HTML-страница с деталями успешной оплаты.
+        - HttpResponseForbidden: Возвращает ошибку доступа, если данные оплаты некорректны.
+        - HttpResponse: Страница с ошибкой 502, если параметры запроса некорректны.
+    """
+
     def get(self, request: HttpRequest) -> HttpResponse:
         seller_id = request.GET.get('seller_id', None)
         order_id = request.GET.get('order_id', None)
@@ -77,6 +145,19 @@ class PaymentSuccessView(LoginRequiredMixin, View):
 
 
 class PaymentCuncelView(LoginRequiredMixin, View):
+    """
+    Отображение страницы отмены оплаты.
+
+    Обрабатывает GET-запросы для отображения страницы, информирующей пользователя об отмене оплаты.
+
+    Параметры:
+        - request (HttpRequest): HTTP-запрос с информацией об отмене.
+            - order_id (str): Идентификатор заказа.
+
+    Возвращает:
+        - HttpResponse: HTML-страница с информацией об отмене оплаты.
+    """
+
     def get(self, request: HttpRequest) -> HttpResponse:
         order_id = request.GET.get('order_id', None)
         context = {
@@ -86,6 +167,23 @@ class PaymentCuncelView(LoginRequiredMixin, View):
 
 
 class StripeWebhookAPIView(APIView):
+    """
+    Обработка событий Stripe Webhook.
+
+    Этот класс обрабатывает события от Stripe, такие как завершение оплаты или
+    частичная оплата. Используется для обновления статуса заказа или отдельных товаров.
+
+    Параметры:
+        - request (HttpRequest): HTTP-запрос с телом Webhook события и заголовками.
+        - *args: Неименованные аргументы.
+        - **kwargs: Именованные аргументы.
+
+    Исключения:
+        - ValidationError: Выбрасывается при ошибках валидации данных Webhook (невалидный payload или подпись).
+
+    Возвращает:
+        - Response: JSON-ответ с подтверждением успешной обработки Webhook.
+    """
     authentication_classes = ()
     permission_classes = ()
 

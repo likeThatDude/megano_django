@@ -14,8 +14,36 @@ from order.models import Order
 from order.models import OrderItem
 from stripe.checkout import Session
 
+"""
+Функции для работы с оплатой заказов через Stripe.
+
+Содержит утилиты для создания сессий оплаты, получения данных о заказах,
+изменения статусов оплаты и обработки событий Stripe.
+
+Функции:
+- get_current_urls_for_payment_response: Генерация URL-адресов для успешной и отмененной оплаты.
+- checkout_process: Создание Stripe Checkout сессии для всех товаров или товаров конкретного продавца.
+- get_order_from_db: Получение объекта заказа из базы данных.
+- get_order_total_price: Расчет общей стоимости товаров для конкретного продавца.
+- change_order_payment_status: Обновление статуса оплаты всего заказа.
+- change_certain_items_payment_status: Обновление статуса оплаты определенных товаров в заказе.
+- create_recipes_url_for_db: Генерация URL чека, для сохранения в базе данных после оплаты.
+- get_paid_order: Проверка оплаченного заказа и получение его данных для текущего пользователя.
+"""
+
 
 def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, str]:
+    """
+    Генерирует абсолютные URL-адреса для успешной и отмененной оплаты.
+
+    Параметры:
+        - request (HttpRequest): Текущий HTTP-запрос.
+
+    Возвращает:
+        - tuple[str, str]: Кортеж из двух URL:
+            - success_url: URL для успешной оплаты.
+            - cancel_url: URL для отмененной оплаты.
+    """
     success_url = request.build_absolute_uri(reverse("payment:payment_success"))
     cancel_url = request.build_absolute_uri(reverse("payment:payment_cancel"))
     return success_url, cancel_url
@@ -26,8 +54,20 @@ def checkout_process(
         redirect_urls: tuple[str, str],
         all_product: bool = True,
         seller_id: None | int = None,
-        total_price: None | Decimal = None,) -> Session:
+        total_price: None | Decimal = None, ) -> Session:
+    """
+    Создает Stripe Checkout сессию для оплаты заказа.
 
+    Параметры:
+        - order (Order): Объект заказа.
+        - redirect_urls (tuple[str, str]): URL-адреса для успешной и отмененной оплаты.
+        - all_product (bool): Если True, оплачиваются все товары в заказе. По умолчанию True.
+        - seller_id (int | None): ID продавца для оплаты конкретных товаров. По умолчанию None.
+        - total_price (Decimal | None): Сумма для оплаты, если оплачиваются товары конкретного продавца. По умолчанию None.
+
+    Возвращает:
+        - Session: Объект Stripe Checkout Session.
+    """
     now = datetime.now()
     formatted_date = now.strftime("%H:%M %d.%m.%Y")
     date_to_db = '%20'.join(formatted_date.split(' '))
@@ -96,6 +136,16 @@ def checkout_process(
 
 
 def get_order_from_db(order_id: int, all_product: bool = True) -> Order:
+    """
+    Получает объект заказа из базы данных.
+
+    Параметры:
+        - order_id (int): ID заказа.
+        - all_product (bool): Если True, возвращает заказ с минимальными связями. Иначе загружает связанные данные. По умолчанию True.
+
+    Возвращает:
+        - Order: Объект заказа.
+    """
     if all_product:
         order = get_object_or_404(Order, pk=order_id)
     else:
@@ -111,6 +161,16 @@ def get_order_from_db(order_id: int, all_product: bool = True) -> Order:
 
 
 def get_order_total_price(order: Order, seller_id: int) -> Decimal:
+    """
+    Рассчитывает общую стоимость товаров для конкретного продавца.
+
+    Параметры:
+        - order (Order): Объект заказа.
+        - seller_id (int): ID продавца.
+
+    Возвращает:
+        - Decimal: Общая стоимость товаров продавца в заказе.
+    """
     total_price = Decimal(0)
     for item in order.order_items.all():
         if item.seller.pk == seller_id:
@@ -119,8 +179,17 @@ def get_order_total_price(order: Order, seller_id: int) -> Decimal:
 
 
 def change_order_payment_status(session: Session) -> None:
-    if session["payment_status"] == "paid":
+    """
+    Обновляет статус оплаты всего заказа.
 
+    Параметры:
+        - session (Session): Объект Stripe Session с информацией об оплате.
+
+    Действия:
+        - Устанавливает статус заказа как "оплачен".
+        - Обновляет статус всех товаров в заказе.
+    """
+    if session["payment_status"] == "paid":
         order_id = session["metadata"]["order_id"]
         current_receipt_url = create_recipes_url_for_db(session)
 
@@ -144,8 +213,17 @@ def change_order_payment_status(session: Session) -> None:
 
 
 def change_certain_items_payment_status(session: Session) -> None:
-    if session["payment_status"] == "paid":
+    """
+    Обновляет статус оплаты определенных товаров в заказе.
 
+    Параметры:
+        - session (Session): Объект Stripe Session с информацией об оплате.
+
+    Действия:
+        - Устанавливает статус оплаты для товаров конкретного продавца.
+        - Проверяет статус всех товаров в заказе и обновляет общий статус заказа.
+    """
+    if session["payment_status"] == "paid":
         order_id = session["metadata"]["order_id"]
         seller_id = session["metadata"]["seller_id"]
         current_receipt_url = create_recipes_url_for_db(session)
@@ -184,13 +262,36 @@ def change_certain_items_payment_status(session: Session) -> None:
             order.status = Order.PROCESSING
             order.save()
 
+
 def create_recipes_url_for_db(session: Session) -> str:
+    """
+    Генерирует URL чека, для сохранения в базе данных после успешной оплаты.
+
+    Параметры:
+        - session (Session): Объект Stripe Session с метаданными об оплате.
+
+    Возвращает:
+        - str: Сформированный URL.
+    """
     current_receipt_url = session["metadata"]["url"]
     correct_payment_success_url = reverse('payment:payment_success')
     ready_url = correct_payment_success_url + current_receipt_url
     return ready_url
 
-def get_paid_order(order_id: int, user_id: int ,seller_id: int | None = None) -> Order | bool:
+
+def get_paid_order(order_id: int, user_id: int, seller_id: int | None = None) -> Order | bool:
+    """
+    Получает оплаченный заказ текущего пользователя.
+    Под запрос получения данных зависит от seller_id.
+
+    Параметры:
+        - order_id (int): ID заказа.
+        - user_id (int): ID текущего пользователя.
+        - seller_id (int | None): ID продавца (опционально).
+
+    Возвращает:
+        - Order | bool: Объект заказа, если пользователь имеет доступ, иначе False.
+    """
     if seller_id is None:
         queryset = (
             OrderItem.objects
