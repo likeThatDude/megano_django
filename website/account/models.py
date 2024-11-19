@@ -51,7 +51,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """Возвращаем никнейм пользователя, если он имеется"""
-        return self.username or self.email if self.is_active else "Anonymous"
+        return self.login if self.login else "Anonymous"
 
 
 class Profile(models.Model):

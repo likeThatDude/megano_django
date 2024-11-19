@@ -1,8 +1,0 @@
-{% extends "admin/index.html" %}
-
-{% block content %}
-    <div style="margin: 20px;">
-        <a href="{% url 'core:import_view' %}" class="button">Запустить импорта продукта</a>
-    </div>
-    {{ block.super }}
-{% endblock %}

@@ -1,6 +1,7 @@
 from django.urls import path
 from core.views import IndexView
 from core.imports.views import import_products_view
+from django.urls import path
 
 app_name = "core"
 

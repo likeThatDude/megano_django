@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+
+{% block title %}
+    Оплата не прошла
+{% endblock %}
+
+{% block description %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="Middle Middle_top">
+        <div class="central_check_block">
+            <div class="paper_block">
+                <div class="receipt_header">
+                    <p>Оплата не прошла!</p>
+                    <p>Попробуйте повторить оплату!</p>
+                </div>
+                <div class="receipt_info_block">
+                    <p>Номер заказа: {{ order_id }}</p>
+                </div>
+                <div class="receipt_product_list">
+                    <div class="receipt_navigate">
+                        <p>
+                            <a href="{% url 'order:order_detail' pk=order_id %}">
+                                На страницу заказа
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

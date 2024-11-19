@@ -16,6 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
     """
+
     email = forms.EmailField(label="Email", required=True)
     password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
     password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
@@ -168,5 +169,6 @@ class ProfileRegistrationForm(ProfileChangeForm):
     Форма для регистрации профиля, включающая только ФИО и номер телефона.
     Наследуется от ProfileChangeForm и используется только для начальной регистрации профиля.
     """
+
     class Meta(ProfileChangeForm.Meta):
         fields = ["first_name", "last_name", "patronymic", "phone"]
