@@ -13,10 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-from environ import Env
+from dotenv import load_dotenv
 
-env = Env()
-env.read_env()
+load_dotenv()
 
 from django.urls import reverse_lazy
 
@@ -96,7 +95,7 @@ ROOT_URLCONF = "website.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "static")],
+        "DIRS": [os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -173,6 +172,12 @@ LOGOUT_URL = reverse_lazy("account:logout")
 LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
+EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
 
 # Session settings
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
@@ -214,9 +219,3 @@ import os
 SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY")
 
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.yandex.com"
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
-# EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
