@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index
+from core.views import IndexView
 from core.imports.views import import_products_view
 
 # from .views import (about_view, index,
@@ -10,7 +10,7 @@ from core.imports.views import import_products_view
 app_name = "core"
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path('import/', import_products_view, name='import_view'),
     # path("about/", about_view, name="about"),
     # path("catalog/", catalog, name="catalog"),

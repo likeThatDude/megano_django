@@ -326,6 +326,7 @@ class Price(models.Model):
         db_index=True,
     )
     quantity = models.PositiveIntegerField(default=0, verbose_name=_("Quantity"))
+    sold_quantity = models.PositiveIntegerField(default=0, verbose_name=_("Sold Quantity"))
     price = models.DecimalField(default=0, max_digits=10, decimal_places=2, verbose_name=_("Price"))
     created_at = models.DateField(auto_now_add=True, verbose_name=_("Created at"), null=True)
 
