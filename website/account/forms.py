@@ -8,10 +8,22 @@ from .models import Profile
 
 
 class CustomUserCreationForm(UserCreationForm):
+    """
+    Форма для регистрации профиля пользователя
+
+    Атрибуты:
+        email: электронная почта пользователя (обязательное поле)
+        password1: пароль (обязательное поле)
+        password2: подтверждение предыдущего пароля (обязательное поле)
+    """
+
+    email = forms.EmailField(label="Email", required=True)
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
+    password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
 
     class Meta:
         model = CustomUser
-        fields = ["email", "password1", "password2"]
+        fields = ["login", "email", "password1", "password2"]
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -150,3 +162,13 @@ class ProfileChangeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+class ProfileRegistrationForm(ProfileChangeForm):
+    """
+    Форма для регистрации профиля, включающая только ФИО и номер телефона.
+    Наследуется от ProfileChangeForm и используется только для начальной регистрации профиля.
+    """
+
+    class Meta(ProfileChangeForm.Meta):
+        fields = ["first_name", "last_name", "patronymic", "phone"]

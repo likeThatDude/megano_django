@@ -146,7 +146,7 @@
                                         <div class="Card-hover">
                                             <form method="post" action="{% url 'comparison:comparison_add'%}">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="product" value="1">
+                                                <input type="hidden" name="product" value="{{top_product.id}}">
                                                 <button class="Card-btn-comp" type="submit"></button>
                                             </form>
                                             <a class="Card-btn" href="#">
@@ -174,15 +174,17 @@
                             </div>
                         </header>
                         <div class="Slider-box Cards">
+
                             {% for hot_product in hot_offers %}
+
                                 <div class="Slider-item">
                                     <div class="Slider-content">
                                         <div class="Card">
                                             <a class="Card-picture" href="{% url 'catalog:product_detail' pk=hot_product.id %}">
-                                                <img src="{{ hot_product.preview.url }}" alt={{ hot_product.preview.url|get_filename:"" }}/></a>
+                                                <img src="{{ hot_product.preview.url }}" alt=""/></a>
                                             <div class="Card-content">
                                                 <strong class="Card-title">
-                                                    <a href="{% url 'catalog:product_detail' pk=hot_product.id %}">
+                                                    <a href="{% url 'catalog:product_detail' hot_product.id %}">
                                                         {{ hot_product.name }}
                                                     </a>
                                                 </strong>
@@ -196,7 +198,7 @@
                                                     <div class="Card-hover">
                                                         <form method="post" action="{% url 'comparison:comparison_add'%}">
                                                             {% csrf_token %}
-                                                            <input type="hidden" name="product" value="1">
+                                                            <input type="hidden" name="product" value="{{hot_product.id}}">
                                                             <button class="Card-btn-comp" type="submit"></button>
                                                         </form>
                                                         <a class="Card-btn" href="#">
@@ -208,6 +210,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             {% endfor %}
                         </div>
                     </div>
@@ -231,11 +234,11 @@
                                 <div class="Slider-item">
                                     <div class="Slider-content">
                                         <div class="Card">
-                                            <a class="Card-picture" href="{% url 'catalog:product_detail' pk=item.product.id %}">
+                                            <a class="Card-picture" href="{% url 'catalog:product_detail' item.product.id %}">
                                                 <img src="{{ item.product.preview.url }}" alt=""/></a>
                                             <div class="Card-content">
                                                 <strong class="Card-title">
-                                                    <a href="{% url 'catalog:product_detail' pk=item.product.id %}">
+                                                    <a href="{% url 'catalog:product_detail' item.product.id %}">
                                                         {{item.product.name}}
                                                     </a>
                                                 </strong>
@@ -249,7 +252,7 @@
                                                     <div class="Card-hover">
                                                         <form method="post" action="{% url 'comparison:comparison_add'%}">
                                                             {% csrf_token %}
-                                                            <input type="hidden" name="product" value="1">
+                                                            <input type="hidden" name="product" value="{{item.product.id}}">
                                                             <button class="Card-btn-comp" type="submit"></button>
                                                         </form>
                                                         <a class="Card-btn" href="#">

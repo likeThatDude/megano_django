@@ -148,6 +148,11 @@
                                         <div class="Card-category">{{ product.category }}
                                         </div>
                                         <div class="Card-hover">
+                                            <form method="post" action="{% url 'comparison:comparison_add'%}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product" value="{{product.pk}}">
+                                                <button class="Card-btn-comp" type="submit"></button>
+                                            </form>
                                             <a class="Card-btn" data-product_id="{{ product.pk }}" data-price_id="{{ product.price_pk }}">
                                                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
 
@@ -159,22 +164,33 @@
                         {% endfor %}
                     </div>
 
-                    <div class="Pagination">
-                        <div class="Pagination-ins">
-                            <a class="Pagination-element Pagination-element_prev" href="#">
-                                <img src="{% static 'assets/img/icons/prevPagination.svg' %}"
-                                alt="prevPagination.svg"/>
-                            </a>
-                            <a class="Pagination-element Pagination-element_current" href="#">
-                                <span class="Pagination-text">1</span>
-                            </a>
-                            <a class="Pagination-element" href="#"><span class="Pagination-text">2</span></a>
-                            <a class="Pagination-element" href="#"><span class="Pagination-text">3</span></a>
-                            <a class="Pagination-element Pagination-element_prev" href="#">
-                                <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
-                            </a>
-                        </div>
-                    </div>
+                     <div class="Pagination">
+                            <div class="Pagination-ins">
+                                {% if is_paginated %}
+                                    {% if page_obj.has_previous %}
+                                        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
+                                            <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
+                                        </a>
+                                    {% endif %}
+                                    {% for num in page_obj.paginator.page_range %}
+                                        {% if page_obj.number == num %}
+                                            <a class="Pagination-element Pagination-element_current" href="#">
+                                                <span class="Pagination-text">{{ num }}</span>
+                                            </a>
+                                        {% else %}
+                                            <a class="Pagination-element" href="?page={{ num }}">
+                                                <span class="Pagination-text">{{ num }}</span>
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <a class="Pagination-element Pagination-element_next" href="?page={{ page_obj.next_page_number }}">
+                                            <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                     </div>
 
                 </div>
             </div>

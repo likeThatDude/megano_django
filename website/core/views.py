@@ -12,9 +12,6 @@ from django.db.models import (
     Sum,
 )
 from django.db.models import Q
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import TemplateView
 
@@ -22,6 +19,7 @@ from website.settings import BANNERS_KEY
 from website.settings import CATEGORY_CASHING_TIME
 from website.settings import CATEGORY_KEY
 from website.settings import OFFER_KEY
+from website.settings import HOT_OFFER_KEY
 
 from .models import Banner
 from discount.utils import get_discounted_products
@@ -138,9 +136,8 @@ class IndexView(TemplateView):
     def get_hot_offers(self):
         """ В слайдер с горячими предложениями попадает до девяти случайных товаров,
         на которые действует какая-нибудь акция"""
-        hot_offers = cache.get(OFFER_KEY)
+        hot_offers = cache.get(HOT_OFFER_KEY)
         if hot_offers is None:
             hot_offers = get_discounted_products(8)
-            cache.set(OFFER_KEY, hot_offers, timeout=10)
+            cache.set(HOT_OFFER_KEY, hot_offers, timeout=10)
         return hot_offers
-
