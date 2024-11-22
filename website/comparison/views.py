@@ -1,9 +1,7 @@
+from django.http import HttpRequest
+from django.views.generic import TemplateView
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
-
-from django.http import HttpRequest
-
-from django.views.generic import TemplateView
 
 from . import utils
 from .srevices import ComparisonServices
@@ -72,6 +70,7 @@ class ComparisonDeleteApiView(APIView):
             - Сообщение об ошибке, если удаление завершилось неудачно.
             - Сообщение о фатальной ошибке в случае исключения.
     """
+
     permission_classes = (AllowAny,)
 
     def delete(self, request: HttpRequest, *args, **kwargs):
@@ -108,6 +107,7 @@ class ComparisonAddApiView(APIView):
             - Сообщение об ошибке, если добавление завершилось неудачно.
             - Сообщение о фатальной ошибке в случае исключения.
     """
+
     permission_classes = (AllowAny,)
 
     def post(self, request: HttpRequest, *args, **kwargs):

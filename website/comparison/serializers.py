@@ -1,8 +1,7 @@
+from catalog.models import Product
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
-
-from catalog.models import Product
 
 
 class ComparisonAddSerializer(serializers.Serializer):
@@ -12,14 +11,14 @@ class ComparisonAddSerializer(serializers.Serializer):
         """
         Проверяем, существует ли продукт с данным ID.
         """
-        print('ВАЛИДИРУЮ')
+        print("ВАЛИДИРУЮ")
         try:
             product = Product.objects.get(pk=value)
-            print('Проукт есть')
+            print("Проукт есть")
             return product
         except Product.DoesNotExist:
-            print('продукта нет')
-            raise ValidationError(_(f'Продукта с id {value} нету в базе'))
+            print("продукта нет")
+            raise ValidationError(_(f"Продукта с id {value} нету в базе"))
 
 
 class AnswerAddSerializer(serializers.Serializer):

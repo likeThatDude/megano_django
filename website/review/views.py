@@ -2,7 +2,8 @@ import bleach
 from catalog.models import Review
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import ValidationError
 from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
 from rest_framework.generics import ListAPIView
@@ -89,7 +90,7 @@ class ReviewCreateView(CreateAPIView):
             # logger.error(f"Unexpected error: {e}")
             return Response(
                 {"detail": "Internal server error. Please contact support."},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
 

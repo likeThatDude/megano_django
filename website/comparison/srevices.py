@@ -1,15 +1,18 @@
+from catalog.models import Product
+from comparison.models import Comparison
+from comparison.serializers import AnswerAddSerializer
+from comparison.serializers import ComparisonAddSerializer
 from django.core.cache import cache
-from django.core.exceptions import SuspiciousOperation, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import SuspiciousOperation
 from django.db import DatabaseError
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.response import Response
 
-from catalog.models import Product
-from comparison.models import Comparison
-from comparison.serializers import ComparisonAddSerializer, AnswerAddSerializer
-from website.settings import user_comparison_key, anonymous_comparison_key
-from django.utils.translation import gettext_lazy as _
+from website.settings import anonymous_comparison_key
+from website.settings import user_comparison_key
 
 
 class ComparisonServices:
@@ -22,11 +25,7 @@ class ComparisonServices:
         Returns:
             Response: JSON-ответ с сообщением об ошибке и статусом HTTP 500.
         """
-        data = {
-            'status': False,
-            'title': _('Возникла ошибка'),
-            'text': _('Не удалось добавить к сравнению')
-        }
+        data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось добавить к сравнению")}
         serializer = AnswerAddSerializer(data=data)
         return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -127,19 +126,15 @@ class ComparisonServices:
         """
         if flag or flag is None:
             data = {
-                'status': None if flag is None else True,
-                'title': _('Конфликт') if flag is None else _('Успешно'),
-                'text': _('Товар уже добавлен к сравнению') if flag is None else _('Товар добавлен к сравнению')
+                "status": None if flag is None else True,
+                "title": _("Конфликт") if flag is None else _("Успешно"),
+                "text": _("Товар уже добавлен к сравнению") if flag is None else _("Товар добавлен к сравнению"),
             }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            data = {
-                'status': False,
-                'title': _('Возникла ошибка'),
-                'text': _('Не удалось добавить к сравнению')
-            }
+            data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось добавить к сравнению")}
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -163,24 +158,14 @@ class ComparisonServices:
         if product.is_valid():
             product_data = product.validated_data["product_id"]
             if request.user.is_authenticated:
-                service_answer = (
-                    ComparisonServices
-                    .__delete_product_to_auth_user_comparison(
-                        request.user.pk,
-                        product_data
-                    )
+                service_answer = ComparisonServices.__delete_product_to_auth_user_comparison(
+                    request.user.pk, product_data
                 )
                 return None if service_answer is None else (True if service_answer else False)
             else:
-                service_answer = (
-                    ComparisonServices
-                    .__delete_product_to_unauth_user_comparison(
-                        request,
-                        product_data.pk
-                    )
-                )
+                service_answer = ComparisonServices.__delete_product_to_unauth_user_comparison(request, product_data.pk)
                 return None if service_answer is None else (True if service_answer else False)
-        print('НИХУЯ БЛТЯЬ')
+        print("НИХУЯ БЛТЯЬ")
         return False
 
     @staticmethod
@@ -199,7 +184,7 @@ class ComparisonServices:
                 - None: Товар не найден в сравнении.
         """
         try:
-            data_from_db = Comparison.objects.only('pk').get(user_id=user_id, product=product)
+            data_from_db = Comparison.objects.only("pk").get(user_id=user_id, product=product)
             data_from_db.delete()
             ComparisonServices.delete_cache(auth_flag=True, user_id=user_id)
             return True
@@ -209,7 +194,6 @@ class ComparisonServices:
             return False
         except Exception:
             return False
-
 
     @staticmethod
     def __delete_product_to_unauth_user_comparison(request: HttpRequest, product_id: int) -> bool | None:
@@ -229,7 +213,7 @@ class ComparisonServices:
         try:
             product_session_id: list[int] = request.session.get("products_ids", [])
             if product_id not in product_session_id:
-                print('Я НЕ НАШЁЛ КЛЮЧ')
+                print("Я НЕ НАШЁЛ КЛЮЧ")
                 return None
             else:
                 product_session_id.remove(product_id)
@@ -257,19 +241,15 @@ class ComparisonServices:
         """
         if flag or flag is None:
             data = {
-                'status': None if flag is None else True,
-                'title': _('Конфликт') if flag is None else _('Успешно'),
-                'text': _('Товар уже удалён из сравнения') if flag is None else _('Товар удалён из сравнения')
+                "status": None if flag is None else True,
+                "title": _("Конфликт") if flag is None else _("Успешно"),
+                "text": _("Товар уже удалён из сравнения") if flag is None else _("Товар удалён из сравнения"),
             }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            data = {
-                'status': False,
-                'title': _('Возникла ошибка'),
-                'text': _('Не удалось удалить товар из сравнения')
-            }
+            data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось удалить товар из сравнения")}
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
