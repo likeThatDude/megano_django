@@ -140,7 +140,6 @@ class IndexView(TemplateView):
                 }
             cache.set(OFFER_KEY, offers, timeout=CATEGORY_CASHING_TIME)
 
-        print(offers["daily_offer"])
         return offers
 
     def get_hot_offers(self):
@@ -149,6 +148,5 @@ class IndexView(TemplateView):
         hot_offers = cache.get(HOT_OFFER_KEY)
         if hot_offers is None:
             hot_offers = get_discounted_products(8)
-            print(hot_offers)
         cache.set(HOT_OFFER_KEY, hot_offers, timeout=CATEGORY_CASHING_TIME)
         return hot_offers

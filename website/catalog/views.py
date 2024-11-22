@@ -81,7 +81,6 @@ class CatalogListView(ListView):
         for spec in specifications:
             grouped_specifications[spec.name.name].append(spec.value)
 
-        print('spec grouped:', grouped_specifications.items)
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
 
