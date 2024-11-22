@@ -5,8 +5,10 @@ from django.urls import reverse_lazy
 from .views import LogInView
 from .views import LogOutView
 from .views import PersonalCabinet
+from .views import ProfileOrdersView
 from .views import ProfileView
 from .views import RegisterView
+from .views import UserPasswordResetConfirmView
 
 app_name = "account"
 
@@ -16,6 +18,7 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path("personal_cabinet/", PersonalCabinet.as_view(), name="personal-cabinet"),
+    path("profile_orders/", ProfileOrdersView.as_view(), name="profile-orders"),
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(
@@ -32,10 +35,7 @@ urlpatterns = [
     ),
     path(
         "password_reset_confirm/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="account/password_reset_confirm.html",
-            success_url=reverse_lazy("account:password_reset_complete"),
-        ),
+        UserPasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
     path(

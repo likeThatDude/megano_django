@@ -59,6 +59,7 @@ class CatalogListView(ListView):
     template_name = "catalog/catalog.html"
     model = Product
     context_object_name = "products"
+    paginate_by = 12
 
     def get_context_data(self, **kwargs):
         """
@@ -322,12 +323,7 @@ class ProductDetailView(DetailView):
                         "name",
                     ),
                 ),
-                Prefetch(
-                    "images",
-                    queryset=ProductImage.objects.all().only(
-                        "image",
-                    ),
-                ),
+                Prefetch("images", queryset=ProductImage.objects.all()),
                 Prefetch(
                     "specifications",
                     queryset=Specification.objects.select_related(
