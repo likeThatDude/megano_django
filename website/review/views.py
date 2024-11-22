@@ -2,7 +2,7 @@ import bleach
 from catalog.models import Review
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.generics import CreateAPIView
 from rest_framework.generics import DestroyAPIView
 from rest_framework.generics import ListAPIView
@@ -75,12 +75,22 @@ class ReviewCreateView(CreateAPIView):
         Возвращает:
             Response: Ответ с данными созданного отзыва и статусом 201.
         """
-        request.data["text"] = bleach.clean(request.data["text"], tags=[], strip=True)
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        response_serializer = serializers.ReviewCreateResponseSerializer(serializer.instance)
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            request.data["text"] = bleach.clean(request.data["text"], tags=[], strip=True)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            response_serializer = serializers.ReviewCreateResponseSerializer(serializer.instance)
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return Response({"detail": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Логируем ошибку для дебага
+            # logger.error(f"Unexpected error: {e}")
+            return Response(
+                {"detail": "Internal server error. Please contact support."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ReviewUpdateViewSet(UpdateAPIView):

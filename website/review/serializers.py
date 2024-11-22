@@ -17,7 +17,10 @@ class ReviewCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ["product", "text"]
+        fields = (
+            "product",
+            "text"
+        )
 
 
 class ReviewCreateResponseSerializer(serializers.ModelSerializer):
@@ -32,11 +35,11 @@ class ReviewCreateResponseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = [
+        fields = (
             "pk",
             "text",
             "created_at",
-        ]
+        )
 
 
 class ReviewUpdateSerializer(serializers.ModelSerializer):
@@ -50,7 +53,10 @@ class ReviewUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ("pk", "text")
+        fields = (
+            "pk",
+            "text"
+        )
 
 
 class ReviewDeleteSerializer(serializers.ModelSerializer):
@@ -63,7 +69,9 @@ class ReviewDeleteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ("pk",)
+        fields = (
+            "pk",
+        )
 
 
 class UserReviewSerializer(serializers.ModelSerializer):
@@ -77,10 +85,10 @@ class UserReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = [
+        fields = (
             "pk",
             "login",
-        ]
+        )
 
 
 class ReviewListSerializer(serializers.ModelSerializer):
@@ -100,12 +108,14 @@ class ReviewListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = [
+        fields = (
             "pk",
             "user",
             "text",
             "created_at",
             "update_at",
             "updating",
-        ]
-        ordering = ("-created_at",)
+        )
+        ordering = (
+            "-created_at",
+        )

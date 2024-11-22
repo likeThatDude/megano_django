@@ -1,21 +1,12 @@
-from catalog.models import Product
-from django.core.cache import cache
-from django.db import IntegrityError
-from django.http import HttpRequest
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.template.context_processors import request
-from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import DeleteView
-from django.views.generic import TemplateView
-from rest_framework.generics import DestroyAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 
-from website.settings import anonymous_comparison_key
-from website.settings import user_comparison_key
+from django.http import HttpRequest
+
+from django.views.generic import TemplateView
 
 from . import utils
-from .models import Comparison
+from .srevices import ComparisonServices
 from .utils import create_categorization
 
 
@@ -55,132 +46,73 @@ class ComparisonView(TemplateView):
         return context
 
 
-class ComparisonDeleteView(DeleteView):
+class ComparisonDeleteApiView(APIView):
     """
-    View для удаления товара из списка сравнения.
+    API View для удаления товара из списка сравнения.
 
-    Этот класс обрабатывает POST-запросы для удаления товара из списка
-    сравнения как для аутентифицированных, так и для неаутентифицированных
-    пользователей.
+    Этот класс обрабатывает DELETE-запросы и вызывает сервисный метод
+    для удаления товара из списка сравнения. Доступ к методу разрешен всем
+    пользователям, включая неаутентифицированных.
 
     Атрибуты:
-        model (Comparison): Модель, связанная с данной View для удаления.
-        success_url (str): URL-адрес, на который будет перенаправлен
-        пользователь после успешного удаления товара.
+        permission_classes (tuple): Указывает, что доступ разрешен любому пользователю (AllowAny).
 
-    Параметры:
-        request (HttpRequest): Объект HTTP-запроса, содержащий информацию о запросе.
-        *args: Неименованные аргументы, переданные в метод.
-        **kwargs: Именованные аргументы, переданные в метод, включая идентификатор товара.
+    Методы:
+        delete(request, *args, **kwargs):
+            Обрабатывает DELETE-запрос для удаления товара из списка сравнения.
+
+    Параметры метода delete:
+        request (HttpRequest): Объект HTTP-запроса.
+        *args: Дополнительные позиционные аргументы.
+        **kwargs: Дополнительные именованные аргументы.
 
     Возвращает:
-        HttpResponseRedirect: Перенаправление на страницу успешного удаления или
-        на страницу сравнения, в зависимости от статуса аутентификации пользователя.
+        Response: HTTP-ответ с результатом операции:
+            - Успешный результат удаления.
+            - Сообщение об ошибке, если удаление завершилось неудачно.
+            - Сообщение о фатальной ошибке в случае исключения.
     """
+    permission_classes = (AllowAny,)
 
-    model = Comparison
-    success_url = reverse_lazy("comparison:comparison_page")
+    def delete(self, request: HttpRequest, *args, **kwargs):
+        try:
+            service_answer = ComparisonServices.delete_product_final(request)
+            return ComparisonServices.delete_product_answer(service_answer)
+        except Exception:
+            return ComparisonServices.return_fatal_error()
+
+
+class ComparisonAddApiView(APIView):
+    """
+    API View для добавления товара в список сравнения.
+
+    Этот класс обрабатывает POST-запросы и вызывает сервисный метод
+    для добавления товара в список сравнения. Доступ к методу разрешен всем
+    пользователям, включая неаутентифицированных.
+
+    Атрибуты:
+        permission_classes (tuple): Указывает, что доступ разрешен любому пользователю (AllowAny).
+
+    Методы:
+        post(request, *args, **kwargs):
+            Обрабатывает POST-запрос для добавления товара в список сравнения.
+
+    Параметры метода post:
+        request (HttpRequest): Объект HTTP-запроса.
+        *args: Дополнительные позиционные аргументы.
+        **kwargs: Дополнительные именованные аргументы.
+
+    Возвращает:
+        Response: HTTP-ответ с результатом операции:
+            - Успешный результат добавления.
+            - Сообщение об ошибке, если добавление завершилось неудачно.
+            - Сообщение о фатальной ошибке в случае исключения.
+    """
+    permission_classes = (AllowAny,)
 
     def post(self, request: HttpRequest, *args, **kwargs):
-        """
-        Обрабатывает POST-запрос на удаление товара из списка сравнения.
-
-        Если пользователь аутентифицирован, товар удаляется из базы данных,
-        и кэш для этого пользователя очищается. Если пользователь не аутентифицирован,
-        товар удаляется из сессии пользователя, и соответствующий кэш очищается.
-
-        Параметры:
-            request (HttpRequest): Объект HTTP-запроса, содержащий информацию о запросе.
-            *args: Неименованные аргументы, переданные методу.
-            **kwargs: Именованные аргументы, переданные методу, включая идентификатор товара.
-
-        Возвращает:
-            HttpResponseRedirect: Перенаправление на страницу успешного удаления
-            или на страницу сравнения.
-        """
-        if request.user.is_authenticated:
-            self.object = self.get_object()
-            self.object.delete()
-
-            cache_key = f"{user_comparison_key}{request.user.id}"
-            cache.delete(cache_key)
-
-            return HttpResponseRedirect(self.get_success_url())
-        else:
-            product_session_id = request.session.get("products_ids", [])
-            if product_session_id:
-                product_session_id.remove(str(kwargs["pk"]))
-            request.session["products_ids"] = product_session_id
-
-            cache_key = f"{anonymous_comparison_key}{request.session.session_key}"
-            cache.delete(cache_key)
-
-        return HttpResponseRedirect(reverse_lazy("comparison:comparison_page"))
-
-
-class ComparisonAddView(View):
-    """
-    View для обработки добавления товара в список сравнения.
-
-    Этот класс обрабатывает POST-запросы для добавления товара в
-    список сравнения как для аутентифицированных, так и для
-    неаутентифицированных пользователей.
-
-    Параметры:
-    ----------
-        request (HttpRequest): Объект HTTP-запроса, содержащий данные о
-        пользователе и продукте.
-        *args: Неименованные аргументы, переданные в метод.
-        **kwargs: Именованные аргументы, переданные в метод.
-
-    Возвращает:
-    ----------
-        HttpResponseRedirect: Перенаправление на предыдущую страницу,
-        указанную в заголовке "HTTP_REFERER", или на главную страницу ("/")
-        по умолчанию.
-    """
-
-    def post(self, request, *args, **kwargs):
-        """
-        Обрабатывает POST-запрос на добавление товара в сравнение.
-
-        Если пользователь аутентифицирован, товар добавляется в базу данных, и
-        кэш для этого пользователя очищается. Если пользователь не аутентифицирован,
-        товар добавляется в сессию пользователя, и соответствующий кэш очищается.
-
-        Параметры:
-        ----------
-            request (HttpRequest): Объект HTTP-запроса, содержащий информацию о запросе.
-            *args: Неименованные аргументы, переданные методу.
-            **kwargs: Именованные аргументы, переданные методу.
-
-        Возвращает:
-        ----------
-            HttpResponseRedirect: Перенаправление на предыдущую страницу, указанную
-            в заголовке "HTTP_REFERER", или на главную страницу ("/") по умолчанию.
-        """
-        if request.user.is_authenticated:
-            product_id = request.POST.get("product")
-            product = get_object_or_404(Product, pk=product_id)
-            try:
-                Comparison.objects.create(user=request.user, product=product)
-
-                cache_key = f"{user_comparison_key}{request.user.id}"
-                cache.delete(cache_key)
-
-            except IntegrityError:
-                pass
-            return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
-        else:
-            product_id = request.POST.get("product")
-            product_session_id = request.session.get("products_ids", [])
-
-            if product_id not in product_session_id:
-                product_session_id.append(product_id)
-
-            request.session["products_ids"] = product_session_id
-
-            cache_key = f"{anonymous_comparison_key}{request.session.session_key}"
-            cache.delete(cache_key)
-
-            return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+        try:
+            service_answer = ComparisonServices.add_product_final(request)
+            return ComparisonServices.add_product_answer(service_answer)
+        except Exception:
+            return ComparisonServices.return_fatal_error()
