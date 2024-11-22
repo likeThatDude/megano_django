@@ -152,7 +152,7 @@
                                                 <input type="hidden" name="product" value="{{top_product.id}}">
                                                 <button class="Card-btn-comp" type="submit"></button>
                                             </form>
-                                            <a class="Card-btn" href="#">
+                                            <a class="Card-btn" data-product_id="{{top_product.id}}" data-price_id="{{ top_product.price_pk }}">
                                                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                                             </a>
                                         </div>
@@ -202,7 +202,7 @@
                                                             <input type="hidden" name="product" value="{{hot_product.id}}">
                                                             <button class="Card-btn-comp" type="submit"></button>
                                                         </form>
-                                                        <a class="Card-btn" href="#">
+                                                        <a class="Card-btn" >
                                                             <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                                                         </a>
                                                     </div>
@@ -253,7 +253,7 @@
                                                             <input type="hidden" name="product" value="{{item.product.id}}">
                                                             <button class="Card-btn-comp" type="submit"></button>
                                                         </form>
-                                                        <a class="Card-btn" href="#">
+                                                        <a class="Card-btn" data-product_id="{{item.product.id}}" data-price_id="{{item.pk}}">
                                                             <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                                                         </a>
                                                     </div>
@@ -283,4 +283,6 @@
     <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
     <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
     <script src="{% static 'assets/js/scripts.js' %}"></script>
+    <script src="{% static 'assets/js/cart/collect_data_cart.js' %}"></script>
+    <script src="{% static 'assets/js/cart/add_product_cart.js' %}"></script>
 {% endblock %}

@@ -10,6 +10,8 @@ from django.db.models import (
     Count,
     Min,
     Sum,
+    OuterRef,
+    Subquery,
 )
 from django.db.models import Q
 from django.utils import timezone
@@ -97,16 +99,17 @@ class IndexView(TemplateView):
 
     def get_top_products(self):
         """Получает топ-товары из базы данных.(первые 8 товаров по индексу сортировки)"""
+        price_subquery = Price.objects.filter(product=OuterRef("pk")).values("pk")
         top_products = (
             Product.objects
             .filter(archived=False)
             .annotate(
                 price=Min("prices__price"),
                 total_sold=Sum('prices__sold_quantity'),
+                price_pk=Subquery(price_subquery),
             )
             .order_by('sorting_index', '-total_sold')[:8]
         )
-
         return top_products
 
     def get_daily_offer_and_limited_editions(self):
@@ -136,6 +139,8 @@ class IndexView(TemplateView):
                     "today": today_formatted,
                 }
             cache.set(OFFER_KEY, offers, timeout=CATEGORY_CASHING_TIME)
+
+        print(offers["daily_offer"])
         return offers
 
     def get_hot_offers(self):
