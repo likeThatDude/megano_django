@@ -92,7 +92,7 @@ class IndexView(TemplateView):
                 .order_by("?")[:3]
                 .only("product__name", "product__preview", "product__short_description", "text")
             )
-            cache.set(BANNERS_KEY, random_banners, timeout=3)
+            cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
         return random_banners
 
     def get_top_products(self):
@@ -122,15 +122,20 @@ class IndexView(TemplateView):
             )
             if limited_edition_products.exists():
                 daily_offer = limited_edition_products.order_by("?").first()
+                daily_offer_product = daily_offer.product
+                daily_offer_product_with_new_price = daily_offer_product.prices.order_by("price").first()
+                daily_offer_new_price = daily_offer_product_with_new_price.price
+
                 last_limited_editions_products = limited_edition_products.exclude(id=daily_offer.id)[:16]
                 today = datetime.datetime.now() + datetime.timedelta(days=2)
                 today_formatted = today.strftime("%d.%m.%Y %H:%M")
                 offers = {
                     "daily_offer": daily_offer,
+                    "daily_offer_new_price": daily_offer_new_price,
                     "last_limited_editions_products": last_limited_editions_products,
                     "today": today_formatted,
                 }
-            cache.set(OFFER_KEY, offers, timeout=10)
+            cache.set(OFFER_KEY, offers, timeout=CATEGORY_CASHING_TIME)
         return offers
 
     def get_hot_offers(self):
@@ -139,5 +144,6 @@ class IndexView(TemplateView):
         hot_offers = cache.get(HOT_OFFER_KEY)
         if hot_offers is None:
             hot_offers = get_discounted_products(8)
-            cache.set(HOT_OFFER_KEY, hot_offers, timeout=10)
+            print(hot_offers)
+        cache.set(HOT_OFFER_KEY, hot_offers, timeout=CATEGORY_CASHING_TIME)
         return hot_offers

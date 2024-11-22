@@ -44,5 +44,4 @@ def get_discounted_products(amount: int) -> List[Product]:
         )
         .all()
     )
-
     return choices(discounted_products, k=amount)
