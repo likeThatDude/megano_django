@@ -165,7 +165,6 @@ class ComparisonServices:
             else:
                 service_answer = ComparisonServices.__delete_product_to_unauth_user_comparison(request, product_data.pk)
                 return None if service_answer is None else (True if service_answer else False)
-        print("НИХУЯ БЛТЯЬ")
         return False
 
     @staticmethod

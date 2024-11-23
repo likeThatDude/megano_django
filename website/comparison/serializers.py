@@ -11,13 +11,10 @@ class ComparisonAddSerializer(serializers.Serializer):
         """
         Проверяем, существует ли продукт с данным ID.
         """
-        print("ВАЛИДИРУЮ")
         try:
             product = Product.objects.get(pk=value)
-            print("Проукт есть")
             return product
         except Product.DoesNotExist:
-            print("продукта нет")
             raise ValidationError(_(f"Продукта с id {value} нету в базе"))
 
 
