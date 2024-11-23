@@ -211,6 +211,8 @@ CART_SESSION_ID = "cart"
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
+OFFER_KEY = "offers"
+HOT_OFFER_KEY = "hot_offer"
 from dotenv import load_dotenv
 
 load_dotenv()
