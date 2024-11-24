@@ -55,9 +55,9 @@
                                                     {% endif %}
 
                                                     <div class="DeleteButton">
-                                                        <form method="post"
-                                                              action="{% url 'comparison:comparison_delete' pk=comparison.pk %}">
-                                                            {% csrf_token %}
+                                                        <form class="delete_form">
+                                                            <input type="hidden" name="product_id"
+                                                                   value="{% if comparison.product.pk %}{{ comparison.product.pk }}{% else %}{{ comparison.pk }}{% endif %}">
                                                             <button type="submit" class="DeleteLink"></button>
                                                         </form>
                                                     </div>
@@ -139,6 +139,8 @@
 {% endblock %}
 
 {% block script %}
+    <script>const DELETE_PRODUCT = "{% url 'comparison:comparison_delete' %}";</script>
+    <script src="{% static 'comparison/js/comparison_product.js' %}"></script>
     <script>
         // Получаем элементы чекбокса и кнопки
         const checkBox = document.getElementById('unic_spec');

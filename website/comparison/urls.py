@@ -6,6 +6,6 @@ app_name = "comparison"
 
 urlpatterns = [
     path("", views.ComparisonView.as_view(), name="comparison_page"),
-    path("add/", views.ComparisonAddView.as_view(), name="comparison_add"),
-    path("delete/<int:pk>/", views.ComparisonDeleteView.as_view(), name="comparison_delete"),
+    path("add/", views.ComparisonAddApiView.as_view(), name="comparison_add"),
+    path("delete/", views.ComparisonDeleteApiView.as_view(), name="comparison_delete"),
 ]

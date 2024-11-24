@@ -34,10 +34,10 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "a7d2-37-213-170-123.ngrok-free.app",
+    "e6fd-37-214-93-45.ngrok-free.app",
 ]
 
-CSRF_TRUSTED_ORIGINS = ["https://a7d2-37-213-170-123.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -211,6 +211,8 @@ CART_SESSION_ID = "cart"
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
+OFFER_KEY = "offers"
+HOT_OFFER_KEY = "hot_offer"
 from dotenv import load_dotenv
 
 load_dotenv()

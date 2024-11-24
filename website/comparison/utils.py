@@ -97,6 +97,9 @@ def get_products_with_unauth_user(request: HttpRequest, unic_spec: None | str) -
     request : HttpRequest
         Объект запроса, содержащий информацию о сессии пользователя
         и идентификаторах товаров.
+    unic_spec : None | str
+        Передаёт состояние чекбокса в шаблоне, если пользователь не хочет видеть
+        одинаковые характеристики, то с бд загружаются только разные характеристики
 
     Возвращает:
     ----------
@@ -114,7 +117,6 @@ def get_products_with_unauth_user(request: HttpRequest, unic_spec: None | str) -
     """
     products_ids = request.session.get("products_ids", [])
     key = f"{anonymous_comparison_key}{request.session.session_key}{unic_spec}"
-
     products = cache.get(key)
 
     if products is None:
