@@ -162,3 +162,4 @@ cython_debug/
 .idea/
 website/task.txt
 website/.env
+website/db.json
