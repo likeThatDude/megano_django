@@ -7,10 +7,10 @@ if [[ "${1}" == "celery" ]]; then
 elif [[ "${1}" == "flower" ]]; then
   celery -A services.celery_src.celery_app flower
 elif [[ "${1}" == "app" ]]; then
-  python manage.py collectstatic
+  python manage.py collectstatic --noinput
   python manage.py makemigrations
+  python manage.py migrate auth
   python manage.py migrate
 
-  gunicorn website.wsgi:application --bind=0.0.0.0:8000
-  gunicorn main:app --reload --workers=4 --worker-class=uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
+  gunicorn --config ./config/gunicorn.conf.py website.wsgi:application
  fi

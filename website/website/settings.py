@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "e6fd-37-214-93-45.ngrok-free.app",
+    '172.18.0.0',
 ]
 
 CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
@@ -113,7 +114,7 @@ WSGI_APPLICATION = "website.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-USE_POSTGRES = os.environ.get('DEBUG', '0') == '1'
+USE_POSTGRES = os.environ.get('USE_POSTGRES', '0') == '1'
 DB_NAME = os.environ.get('DB_NAME')
 DB_USER = os.environ.get('DB_USER')
 DB_PASS = os.environ.get('DB_PASS')
@@ -122,15 +123,22 @@ DB_PORT = os.environ.get('DB_PORT')
 
 if USE_POSTGRES:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": DB_NAME,
-            "USER": DB_USER,
-            "PASSWORD": DB_PASS,
-            "HOST": DB_HOST,
-            "PORT": DB_PORT,
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME', 'megano'),
+            'USER': os.environ.get('DB_USER', 'megano_admin'),
+            'PASSWORD': os.environ.get('DB_PASS', 'qwerty'),
+            'HOST': 'megano_pgbouncer',
+            'PORT': '6432',
+            'CONN_MAX_AGE': 0,
+            'OPTIONS': {
+                'sslmode': 'disable',
+                # 'prepare': False,
+            },
         }
     }
+    ATOMIC_REQUESTS = True
+    CONN_HEALTH_CHECKS = False
 else:
     DATABASES = {
         "default": {
@@ -172,6 +180,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -220,6 +230,20 @@ REST_FRAMEWORK = {
     },
 }
 
+# Базовые настройки безопасности, работающие без HTTPS
+SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS атак в браузере
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Защита от MIME-type sniffing
+X_FRAME_OPTIONS = 'DENY'  # Защита от clickjacking
+
+# Отключаем настройки, требующие HTTPS
+CSRF_COOKIE_SECURE = False  # Разрешаем передачу CSRF токена по HTTP
+SESSION_COOKIE_SECURE = False  # Разрешаем передачу сессионных куки по HTTP
+SECURE_SSL_REDIRECT = False  # Отключаем редирект на HTTPS
+SECURE_HSTS_SECONDS = 0  # Отключаем HSTS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Отключаем HSTS для поддоменов
+SECURE_HSTS_PRELOAD = False  # Отключаем предзагрузку HSTS
+
+
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV
 BANNERS_KEY = "banners"
@@ -230,44 +254,5 @@ CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
 
-SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY")
-
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
-    },
-}
+SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)
+STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY", None)

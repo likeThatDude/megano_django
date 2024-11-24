@@ -82,7 +82,7 @@ ca_certs = None
 # Полезно, если приложение должно работать из определенной директории.
 import os
 current_dir = os.path.dirname(os.path.abspath(__file__))
-chdir = os.path.abspath(os.path.join(current_dir, '..', '..', 'website'))
+chdir = os.path.abspath(os.path.join(current_dir, '..', '..', 'app'))
 
 # Список переменных окружения, которые будут установлены перед запуском приложения.
 # Полезно для настройки окружения приложения.
@@ -120,6 +120,6 @@ access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
 # Если рабочий процесс не завершится в течение этого времени, он будет принудительно завершен.
 graceful_timeout = 30
 
-# Отладка
-reload = True
-reload_extra_files = ['/home/ivan/Desktop/djangowebsite/website']
+# # Отладка
+# reload = True
+# reload_extra_files = ['']

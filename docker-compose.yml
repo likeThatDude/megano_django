@@ -1,15 +1,30 @@
 services:
   server:
     build:
-      context: website
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: website/Dockerfile
+    env_file:
+      - .env
+    container_name: ${CONTAINER_APP_NAME}
+    command: [ "app" ]
+    ports:
+      - "8000:8000"
+    depends_on:
+      megano_db:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_healthy
+    restart: always
+    networks:
+      - my_network
+
 
 
   megano_db:
     image: postgres:15.7-alpine
     env_file:
-      - website/.env
-    container_name: ${DOCKER_DATABASE_NAME}
+      - .env
+    container_name: ${CONTAINER_DATABASE_NAME}
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
@@ -20,18 +35,59 @@ services:
       timeout: 10s
       retries: 30
     volumes:
-#      - ../db/:/var/lib/postgresql/data
+      #      - ../db/:/var/lib/postgresql/data
       - ./docker_settings/PostgreSQL/:/etc/postgresql/conf
-#      - ./docker_set_files/init.sql:/docker-entrypoint-initdb.d/init.sql
+    #      - ./docker_set_files/init.sql:/docker-entrypoint-initdb.d/init.sql
     command:
       - postgres
       - -c
       - config_file=/etc/postgresql/conf/postgresql.conf
-      - -p ${DB_PORT}
     networks:
       - my_network
     restart: always
 
+  pgbouncer:
+    build:
+      context: ./docker_settings/PgBouncer
+      dockerfile: Dockerfile
+    container_name: ${CONTAINER_BOUNCER_NAME}
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASS}
+      - DB_HOST=${CONTAINER_DATABASE_NAME}
+      - DB_NAME=${DB_NAME}
+      - POOL_MODE=${POOL_MODE}
+      - MAX_CLIENT_CONN=${MAX_CLIENT_CONN}
+      - DEFAULT_POOL_SIZE=${DEFAULT_POOL_SIZE}
+    expose:
+      - "6432"
+    depends_on:
+      megano_db:
+        condition: service_healthy
+    networks:
+      - my_network
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -h localhost -p 6432 -U ${DB_USER} || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    env_file:
+      - .env
+    container_name: ${DOCKER_REDIS}
+    expose:
+      - ${REDIS_PORT}
+    depends_on:
+      megano_db:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_healthy
+    networks:
+      - my_network
+    restart: always
 
 
 

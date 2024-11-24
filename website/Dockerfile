@@ -4,7 +4,8 @@ WORKDIR /app
 COPY ../requirements.txt requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-COPY . /app
-COPY ../docker_settings/Backend/app.sh /sh_files/app.sh
-RUN chmod +x /sh_files/app.sh
-ENTRYPOINT ["/sh_files/app.sh"]
+COPY ./website /app
+COPY ../docker_settings/Backend/app.sh /app/config/app.sh
+COPY ../docker_settings/Backend/gunicorn.conf.py /app/config/gunicorn.conf.py
+RUN chmod +x ./config/app.sh
+ENTRYPOINT ["/app/config/app.sh"]
