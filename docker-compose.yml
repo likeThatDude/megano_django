@@ -1,0 +1,43 @@
+services:
+  server:
+    build:
+      context: website
+      dockerfile: Dockerfile
+
+
+  megano_db:
+    image: postgres:15.7-alpine
+    env_file:
+      - website/.env
+    container_name: ${DOCKER_DATABASE_NAME}
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ${DB_NAME} -U ${DB_USER}" ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+    volumes:
+#      - ../db/:/var/lib/postgresql/data
+      - ./docker_settings/PostgreSQL/:/etc/postgresql/conf
+#      - ./docker_set_files/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/conf/postgresql.conf
+      - -p ${DB_PORT}
+    networks:
+      - my_network
+    restart: always
+
+
+
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
