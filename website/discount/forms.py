@@ -11,7 +11,7 @@ class DiscountCreationForm(forms.ModelForm):
         max_length=100,
         widget=forms.TextInput(
             attrs={"class": "form-control", "placeholder": _("Название к скидке, например, \"Распродажа 11.11.\""),
-            },
+                   },
         ),
         error_messages={
             "max_length": _("Допустимо только 100 символов"),
@@ -44,7 +44,7 @@ class DiscountCreationForm(forms.ModelForm):
         required=False,
         widget=forms.NumberInput(
             attrs={"class": "form-control", "placeholder": _("Максимальное количество"),
-            },
+                   },
         ),
         label=_("Максимальное количество"),
     )
@@ -52,7 +52,7 @@ class DiscountCreationForm(forms.ModelForm):
         required=False,
         widget=forms.NumberInput(
             attrs={"class": "form-control", "placeholder": _("Минимальное количество")
-            },
+                   },
         ),
         label=_("Минимальное количество"),
     )
@@ -61,7 +61,7 @@ class DiscountCreationForm(forms.ModelForm):
         decimal_places=2,
         widget=forms.NumberInput(
             attrs={"class": "form-control", "placeholder": _("Введите значение скидки")
-            },
+                   },
         ),
         label=_("Значение скидки"),
     )
@@ -150,3 +150,15 @@ class DiscountCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['end_date'].widget.attrs['value'] = now().date()
         self.fields['start_date'].widget.attrs['value'] = now().date()
+
+    def clean_end_date(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get("start_date")
+        end_date = cleaned_data.get("end_date")
+
+        if start_date and end_date and end_date < start_date:
+            raise forms.ValidationError(
+                _("Дата окончания действия скидки не может быть раньше даты начала.")
+            )
+
+        return end_date
