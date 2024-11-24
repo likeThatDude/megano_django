@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.db import transaction
+from django.urls import reverse_lazy
+
 from django.views.generic import CreateView
+from django.views.generic import UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import get_object_or_404
 
 from .forms import DiscountCreationForm
+from .models import Discount
 
 
 class DiscountCreateView(UserPassesTestMixin, CreateView):
@@ -29,15 +34,58 @@ class DiscountCreateView(UserPassesTestMixin, CreateView):
 
         return True
 
-    def post(self, request, *args, **kwargs):
+    def form_valid(self, form):
         """
-        Создаем запись в таблице Discount в случае, если форма валидна,
-        иначе возвращаем пользователя к текущей странице
+        Если форма валидна, сохраняем объект и выполняем перенаправление.
         """
-        form = self.form_class(self.request.POST)
-        if form.is_valid():
-            with transaction.atomic():
-                form.save()
-                return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+        with transaction.atomic():
+            self.object = form.save()
 
-        return self.form_invalid(form)
+        return super().form_valid(form)
+
+
+class DiscountUpdateView(UserPassesTestMixin, UpdateView):
+    """
+    Представление для обновления записи скидки
+
+    Атрибуты:
+        template_name - шаблон для отображения формы обновления скидки
+        model - модель, которую обновляем
+        form_class - форма для обновления записи о скидке
+        success_url - путь для перенаправления после успешного обновления
+
+    Применяем UserPassesTestMixin для того, чтобы только админ
+    мог обновлять запись о скидке
+    """
+    template_name = "discount/discount_update.html"
+    model = Discount
+    form_class = DiscountCreationForm
+    success_url = reverse_lazy("discount:discount-list")
+
+    def get_object(self, queryset=None):
+        """
+        Получаем запись модели Discount из базы данных по полю slug
+        """
+        queryset = get_object_or_404(
+            Discount,
+            slug=self.kwargs["slug"]
+        )
+        return queryset
+
+    def test_func(self):
+        """
+        Метод test_func, чтобы не пропускать запросы
+        не аутентифицированного пользователя без прав администратора
+        """
+        return self.request.user.is_staff
+
+    def get_success_url(self):
+        """
+        Определяем путь для перенаправления после успешного обновления записи.
+        """
+        return reverse_lazy(
+            "discount:discount-update",
+            kwargs={
+                "slug": self.object.slug
+            },
+        )
