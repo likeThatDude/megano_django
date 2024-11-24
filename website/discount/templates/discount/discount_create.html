@@ -19,11 +19,21 @@
 {% endblock %}
 
 {% block body %}
-  <div class="wrap">
+  <div class="wrap-container">
     <form method="post">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Создать скидку</button>
+      {% for field in form %}
+        <div class="form-group">
+          <label class="text-form">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <div class="highlight-field text-form">{{ error }}</div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="button-discount-form">Создать скидку</button>
     </form>
   </div>
 
