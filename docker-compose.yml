@@ -37,7 +37,7 @@ services:
       timeout: 10s
       retries: 30
     volumes:
-      - ./db/:/var/lib/postgresql/data
+#      - ./db/:/var/lib/postgresql/data
       - ./docker_settings/PostgreSQL/:/etc/postgresql/conf
     command:
       - postgres
