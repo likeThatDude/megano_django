@@ -40,7 +40,7 @@ else:
         "localhost",
         "127.0.0.1",
         "176.124.200.134",
-        "http://gorbatenkoiv.ru/"
+        "gorbatenkoiv.ru"
     ]
 
 CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
