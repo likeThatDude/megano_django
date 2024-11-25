@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# Create pgbouncer.ini dynamically
+# Генерим pgbouncer.ini
 cat > /etc/pgbouncer/pgbouncer.ini << EOF
 [databases]
 ${DB_NAME} = host=${DB_HOST} port=5432 auth_user=${DB_USER}
@@ -26,25 +26,13 @@ logfile = /var/log/pgbouncer/pgbouncer.log
 pidfile = /var/run/pgbouncer/pgbouncer.pid
 admin_users = ${DB_USER}
 EOF
-#
-## Print the generated configuration
-#echo "Generated pgbouncer.ini:"
-#echo "========================"
-#cat /etc/pgbouncer/pgbouncer.ini
-#echo "========================"
 
-# Create userlist.txt with SCRAM-SHA-256 authentication
+# Создаём userlist.txt
 echo "\"${DB_USER}\" \"${DB_PASSWORD}\"" > /etc/pgbouncer/userlist.txt
 # Ensure proper permissions
 chmod 600 /etc/pgbouncer/userlist.txt
 
-## Generate SCRAM-SHA-256 hash using pg_verifypass
-#echo "Generating SCRAM-SHA-256 hash for user ${DB_USER}"
-#DB_PASSWORD_HASH=$(psql -h ${DB_HOST} -U ${DB_USER} -d ${DB_NAME} -Atc "SELECT passwd FROM pg_shadow WHERE usename='${DB_USER}'")
-#echo "Hash generated successfully"
-#echo "\"${DB_USER}\" \"${DB_PASSWORD_HASH}\""
-
-# Wait for PostgreSQL to be ready
+# Ожидание постгреса
 until pg_isready -h ${DB_HOST} -p 5432 -U ${DB_USER} -d ${DB_NAME}; do
     echo "Waiting for PostgreSQL to be ready..."
     sleep 2

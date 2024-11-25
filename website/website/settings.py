@@ -29,25 +29,27 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure--tj#@x^aa%5f_dfu56dfx
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
+SERVER_DOMAIN = os.environ.get('SERVER_DOMAIN')
 
 if DEBUG:
     ALLOWED_HOSTS = [
         "127.0.0.1",
         "localhost",
     ]
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
 else:
+
     ALLOWED_HOSTS = [
         "localhost",
         "127.0.0.1",
-        "176.124.200.134",
-        "gorbatenkoiv.ru"
+        SERVER_DOMAIN,
     ]
 
-CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
 
 USE_REDIS = os.environ.get('USE_REDIS', '1') == '1'
 
