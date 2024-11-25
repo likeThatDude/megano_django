@@ -30,13 +30,16 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure--tj#@x^aa%5f_dfu56dfx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "0.0.0.0",
-    "e6fd-37-214-93-45.ngrok-free.app",
-    '172.18.0.0',
-]
+if DEBUG:
+    ALLOWED_HOSTS = [
+        "127.0.0.1",
+        "localhost",
+    ]
+else:
+    ALLOWED_HOSTS = [
+        "localhost",
+        "127.0.0.1",
+    ]
 
 CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
 
@@ -44,12 +47,31 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+USE_REDIS = os.environ.get('USE_REDIS', '1') == '1'
+
+if USE_REDIS:
+    REDIS_HOST = os.environ.get('CONTAINER_REDIS_NAME', None)
+    REDIS_PORT = os.environ.get('REDIS_PORT', None)
+    REDIS_DB = os.environ.get('REDIS_DB', None)
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
+            'OPTIONS': {
+                'db': REDIS_DB,
+                'retry_on_timeout': True,
+                'socket_connect_timeout': 5,
+                'socket_timeout': 5,
+            }
+        }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-snowflake",
+        }
+    }
 
 # Application definition
 
@@ -128,12 +150,11 @@ if USE_POSTGRES:
             'NAME': os.environ.get('DB_NAME', 'megano'),
             'USER': os.environ.get('DB_USER', 'megano_admin'),
             'PASSWORD': os.environ.get('DB_PASS', 'qwerty'),
-            'HOST': 'megano_pgbouncer',
+            'HOST': os.environ.get('CONTAINER_BOUNCER_NAME', 'megano_pgbouncer'),
             'PORT': '6432',
             'CONN_MAX_AGE': 0,
             'OPTIONS': {
                 'sslmode': 'disable',
-                # 'prepare': False,
             },
         }
     }
@@ -242,7 +263,6 @@ SECURE_SSL_REDIRECT = False  # Отключаем редирект на HTTPS
 SECURE_HSTS_SECONDS = 0  # Отключаем HSTS
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Отключаем HSTS для поддоменов
 SECURE_HSTS_PRELOAD = False  # Отключаем предзагрузку HSTS
-
 
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV

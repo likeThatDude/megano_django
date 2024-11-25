@@ -7,8 +7,8 @@ services:
       - .env
     container_name: ${CONTAINER_APP_NAME}
     command: [ "app" ]
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     depends_on:
       megano_db:
         condition: service_healthy
@@ -16,9 +16,11 @@ services:
         condition: service_healthy
     restart: always
     networks:
-      - my_network
-
-
+      my_network:
+        ipv4_address: 172.18.0.4
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
 
   megano_db:
     image: postgres:15.7-alpine
@@ -35,15 +37,15 @@ services:
       timeout: 10s
       retries: 30
     volumes:
-      #      - ../db/:/var/lib/postgresql/data
+      - ./db/:/var/lib/postgresql/data
       - ./docker_settings/PostgreSQL/:/etc/postgresql/conf
-    #      - ./docker_set_files/init.sql:/docker-entrypoint-initdb.d/init.sql
     command:
       - postgres
       - -c
       - config_file=/etc/postgresql/conf/postgresql.conf
     networks:
-      - my_network
+      my_network:
+        ipv4_address: 172.18.0.2
     restart: always
 
   pgbouncer:
@@ -65,10 +67,11 @@ services:
       megano_db:
         condition: service_healthy
     networks:
-      - my_network
+      my_network:
+        ipv4_address: 172.18.0.3
     restart: always
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -h localhost -p 6432 -U ${DB_USER} || exit 1" ]
+      test: [ "CMD-SHELL", "pg_isready -h localhost -p 6432 -U ${DB_USER} -d ${DB_NAME} || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -77,7 +80,7 @@ services:
     image: redis:latest
     env_file:
       - .env
-    container_name: ${DOCKER_REDIS}
+    container_name: ${CONTAINER_REDIS_NAME}
     expose:
       - ${REDIS_PORT}
     depends_on:
@@ -86,10 +89,34 @@ services:
       pgbouncer:
         condition: service_healthy
     networks:
+      my_network:
+        ipv4_address: 172.18.0.6
+    restart: always
+    volumes:
+      - redis_data:/data
+
+  nginx:
+    build:
+      context: ./docker_settings/Nginx
+      dockerfile: Dockerfile
+    container_name: ${CONTAINER_NGINX_NAME}
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
       - my_network
     restart: always
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
 
-
+volumes:
+  static_volume:
+  media_volume:
+  redis_data:
 
 networks:
   my_network:
