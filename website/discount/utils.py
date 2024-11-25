@@ -44,4 +44,7 @@ def get_discounted_products(amount: int) -> List[Product]:
         )
         .all()
     )
-    return choices(discounted_products, k=amount)
+    try:
+        return choices(discounted_products, k=amount)
+    except IndexError:
+        return []
