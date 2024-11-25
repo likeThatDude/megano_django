@@ -36,6 +36,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
         "name",
+        "slug",
         "kind",
         "short_description",
         "start_date",

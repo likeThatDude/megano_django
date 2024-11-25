@@ -2407,6 +2407,21 @@ a.Cart-title {
     margin-top: 40px
 }
 
+.button-discount-form {
+    width: 100%;
+    margin-top: 16px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
 .text-ml {
     margin-left: 25px
 }
@@ -7372,4 +7387,27 @@ input[type="submit"] {
     left: 0;
     bottom: 0rem;
     right: 0;
+}
+
+.wrap-container {
+    padding: 40px 15px;
+    max-width: 1630px;
+    min-width: 320px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    position: relative;
+}
+
+.text-form {
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.highlight-field {
+  background-color: #fc2828;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

@@ -273,6 +273,9 @@ CART_SESSION_ID = "cart"
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
+OFFER_KEY = "offers"
+HOT_OFFER_KEY = "hot_offer"
+from dotenv import load_dotenv
 
 SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)
 STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY", None)
