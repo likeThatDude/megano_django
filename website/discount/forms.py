@@ -1,17 +1,21 @@
+from catalog.models import Category
+from catalog.models import Product
 from django import forms
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from .models import Discount, ProductGroup
-from catalog.models import Category, Product
+from .models import Discount
+from .models import ProductGroup
 
 
 class DiscountCreationForm(forms.ModelForm):
     name = forms.CharField(
         max_length=100,
         widget=forms.TextInput(
-            attrs={"class": "form-control", "placeholder": _("Название к скидке, например, \"Распродажа 11.11.\""),
-                   },
+            attrs={
+                "class": "form-control",
+                "placeholder": _('Название к скидке, например, "Распродажа 11.11."'),
+            },
         ),
         error_messages={
             "max_length": _("Допустимо только 100 символов"),
@@ -43,16 +47,17 @@ class DiscountCreationForm(forms.ModelForm):
     quantity_gt = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "placeholder": _("Максимальное количество"),
-                   },
+            attrs={
+                "class": "form-control",
+                "placeholder": _("Максимальное количество"),
+            },
         ),
         label=_("Максимальное количество"),
     )
     quantity_lt = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "placeholder": _("Минимальное количество")
-                   },
+            attrs={"class": "form-control", "placeholder": _("Минимальное количество")},
         ),
         label=_("Минимальное количество"),
     )
@@ -60,8 +65,7 @@ class DiscountCreationForm(forms.ModelForm):
         max_digits=10,
         decimal_places=2,
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "placeholder": _("Введите значение скидки")
-                   },
+            attrs={"class": "form-control", "placeholder": _("Введите значение скидки")},
         ),
         label=_("Значение скидки"),
     )
@@ -148,8 +152,8 @@ class DiscountCreationForm(forms.ModelForm):
         текущей даты
         """
         super().__init__(*args, **kwargs)
-        self.fields['end_date'].widget.attrs['value'] = now().date()
-        self.fields['start_date'].widget.attrs['value'] = now().date()
+        self.fields["end_date"].widget.attrs["value"] = now().date()
+        self.fields["start_date"].widget.attrs["value"] = now().date()
 
     def clean_end_date(self):
         cleaned_data = super().clean()
@@ -157,8 +161,6 @@ class DiscountCreationForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
 
         if start_date and end_date and end_date < start_date:
-            raise forms.ValidationError(
-                _("Дата окончания действия скидки не может быть раньше даты начала.")
-            )
+            raise forms.ValidationError(_("Дата окончания действия скидки не может быть раньше даты начала."))
 
         return end_date

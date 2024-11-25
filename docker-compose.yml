@@ -2,7 +2,7 @@ services:
   server:
     build:
       context: .
-      dockerfile: website/Dockerfile
+      dockerfile: docker_settings/Backend/Dockerfile
     env_file:
       - .env
     container_name: ${CONTAINER_APP_NAME}

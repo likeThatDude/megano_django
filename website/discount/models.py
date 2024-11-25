@@ -1,10 +1,10 @@
 from catalog.models import Category
 from catalog.models import Product
 from django.db import models
-from django.utils import timezone
-from pytils.translit import slugify
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from pytils.translit import slugify
 
 
 class ProductGroup(models.Model):

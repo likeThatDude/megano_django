@@ -13,9 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
 from django.urls import reverse_lazy
+from dotenv import load_dotenv
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz")
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', '1') == '1'
-SERVER_DOMAIN = os.environ.get('SERVER_DOMAIN')
-print(f'--------------------------------{SERVER_DOMAIN=}')
+DEBUG = os.environ.get("DEBUG", "1") == "1"
+SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN")
+print(f"--------------------------------{SERVER_DOMAIN=}")
 
 if DEBUG:
     ALLOWED_HOSTS = [
@@ -52,22 +51,22 @@ else:
 CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
 
 
-USE_REDIS = os.environ.get('USE_REDIS', '1') == '1'
+USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
 
 if USE_REDIS:
-    REDIS_HOST = os.environ.get('CONTAINER_REDIS_NAME', None)
-    REDIS_PORT = os.environ.get('REDIS_PORT', None)
-    REDIS_DB = os.environ.get('REDIS_DB', None)
+    REDIS_HOST = os.environ.get("CONTAINER_REDIS_NAME", None)
+    REDIS_PORT = os.environ.get("REDIS_PORT", None)
+    REDIS_DB = os.environ.get("REDIS_DB", None)
     CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}',
-            'OPTIONS': {
-                'db': REDIS_DB,
-                'retry_on_timeout': True,
-                'socket_connect_timeout': 5,
-                'socket_timeout': 5,
-            }
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
+            "OPTIONS": {
+                "db": REDIS_DB,
+                "retry_on_timeout": True,
+                "socket_connect_timeout": 5,
+                "socket_timeout": 5,
+            },
         }
     }
 else:
@@ -141,25 +140,25 @@ WSGI_APPLICATION = "website.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-USE_POSTGRES = os.environ.get('USE_POSTGRES', '0') == '1'
-DB_NAME = os.environ.get('DB_NAME')
-DB_USER = os.environ.get('DB_USER')
-DB_PASS = os.environ.get('DB_PASS')
-DB_HOST = os.environ.get('CONTAINER_DATABASE_NAME')
-DB_PORT = os.environ.get('DB_PORT')
+USE_POSTGRES = os.environ.get("USE_POSTGRES", "0") == "1"
+DB_NAME = os.environ.get("DB_NAME")
+DB_USER = os.environ.get("DB_USER")
+DB_PASS = os.environ.get("DB_PASS")
+DB_HOST = os.environ.get("CONTAINER_DATABASE_NAME")
+DB_PORT = os.environ.get("DB_PORT")
 
 if USE_POSTGRES:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('DB_NAME', 'megano'),
-            'USER': os.environ.get('DB_USER', 'megano_admin'),
-            'PASSWORD': os.environ.get('DB_PASS', 'qwerty'),
-            'HOST': os.environ.get('CONTAINER_BOUNCER_NAME', 'megano_pgbouncer'),
-            'PORT': '6432',
-            'CONN_MAX_AGE': 0,
-            'OPTIONS': {
-                'sslmode': 'disable',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "megano"),
+            "USER": os.environ.get("DB_USER", "megano_admin"),
+            "PASSWORD": os.environ.get("DB_PASS", "qwerty"),
+            "HOST": os.environ.get("CONTAINER_BOUNCER_NAME", "megano_pgbouncer"),
+            "PORT": "6432",
+            "CONN_MAX_AGE": 0,
+            "OPTIONS": {
+                "sslmode": "disable",
             },
         }
     }
@@ -206,7 +205,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -259,7 +258,7 @@ REST_FRAMEWORK = {
 # Базовые настройки безопасности, работающие без HTTPS
 SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS атак в браузере
 SECURE_CONTENT_TYPE_NOSNIFF = True  # Защита от MIME-type sniffing
-X_FRAME_OPTIONS = 'DENY'  # Защита от clickjacking
+X_FRAME_OPTIONS = "DENY"  # Защита от clickjacking
 
 # Отключаем настройки, требующие HTTPS
 CSRF_COOKIE_SECURE = False  # Разрешаем передачу CSRF токена по HTTP
