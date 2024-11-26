@@ -29,7 +29,7 @@ async function updateCostProduct(productCard) {
 // Добавление функционала обновления товаров кнопке "перейти к оформлению"
 const buttonPlaceOrder = document.querySelector('.btn_place_an_order')
 buttonPlaceOrder.addEventListener('click', async function(event) {
-    event.preventDefault();
+
     const productCards = document.querySelectorAll('.ProductCard');
     for (const productCard of productCards) {
     const data = await getDataProductInCart(productCard); // Получаем инфу со страницы

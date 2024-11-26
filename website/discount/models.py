@@ -12,6 +12,8 @@ from django.db.models import Max
 from django.db.models import Q
 from django.db.models import QuerySet
 from django.utils import timezone
+from pytils.translit import slugify
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 
@@ -172,6 +174,14 @@ class Discount(models.Model):
             "'Фиксированная стоимость'. "
         ),
     )
+    slug = models.SlugField(
+        max_length=200,
+        unique=True,
+        blank=True,
+        db_index=True,
+        verbose_name=_("Слаг"),
+        help_text=_("Автоматически генерируется от имени, но может быть изменено"),
+    )
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     start_date = models.DateField(default=timezone.now, verbose_name=_("Start Date"))
     end_date = models.DateField(verbose_name=_("End Date"))
@@ -214,6 +224,12 @@ class Discount(models.Model):
 
     def __str__(self) -> str:
         return f"{self.pk}. {self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug or self.name != Discount.objects.filter(pk=self.pk).first().name:
+            self.slug = slugify(self.name)
+
+        super().save(*args, **kwargs)
 
     @classmethod
     def __get_discounts_queryset(cls, products: Sequence[Product] | Product) -> QuerySet:
