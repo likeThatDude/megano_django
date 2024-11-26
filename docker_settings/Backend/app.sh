@@ -1,10 +1,5 @@
 #!/bin/bash
 
-echo "Superuser email: ${DJANGO_SUPERUSER_EMAIL}"
-echo "Superuser password: ${DJANGO_SUPERUSER_PASSWORD}"
-echo "Superuser login: ${DJANGO_SUPERUSER_LOGIN}"
-
-
 if [[ "${1}" == "celery" ]]; then
   apt update
   apt install -y postgresql postgresql-contrib
