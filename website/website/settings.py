@@ -29,7 +29,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure--tj#@x^aa%5f_dfu56dfx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "1") == "1"
 SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN")
-print(f"--------------------------------{SERVER_DOMAIN=}")
 
 if DEBUG:
     ALLOWED_HOSTS = [
