@@ -120,7 +120,7 @@ class Product(models.Model):
         verbose_name_plural = "products"
 
     def __str__(self) -> str:
-        return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
+        return f"Product(id={self.pk}, name={self.name[:20]} {'...' if len(self.name) > 20 else ''})"
 
 
 class ProductImage(models.Model):
