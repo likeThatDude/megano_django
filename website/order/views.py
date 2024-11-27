@@ -4,7 +4,8 @@ from cart.cart import Cart
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from django.db.models import Prefetch
-from django.http import HttpRequest, Http404
+from django.http import Http404
+from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -90,12 +91,11 @@ class OrderCreateView(View):
                 errors_list = create_errors_list(data_errors)
                 context["errors"] = errors_list
                 return render(request, "order/order_error_list.html", context=context)
-            return redirect(
-                reverse(
-                    "order:order_detail",
-                    kwargs={"pk": order_data}
-                )
-            ) if not order_data is None else Http404
+            return (
+                redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
+                if not order_data is None
+                else Http404
+            )
         else:
             return redirect(reverse("account:login"))
 

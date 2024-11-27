@@ -1,18 +1,17 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 
-from django.core.exceptions import ObjectDoesNotExist
-
 from account.models import CustomUser
-from django.utils.translation import gettext_lazy as _
-
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Price
-from django.db import transaction, DatabaseError
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import DatabaseError
+from django.db import transaction
 from django.db.models import Q
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from order.models import DeliveryPrice
 from order.models import Order
 from order.models import OrderItem
