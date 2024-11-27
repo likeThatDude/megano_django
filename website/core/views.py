@@ -1,7 +1,11 @@
 import datetime
 
+from django.db import DatabaseError
+from rest_framework.exceptions import ValidationError
+
 from catalog.models import Category
 from catalog.models import Price
+from django.utils.translation import gettext_lazy as _
 from catalog.models import Product
 from discount.utils import get_discounted_products
 from django.core.cache import cache
@@ -87,13 +91,18 @@ class IndexView(TemplateView):
         """Получает 3 случайных баннеров из кэша или базы данных."""
         random_banners = cache.get(BANNERS_KEY)
         if random_banners is None:
-            random_banners = (
-                Banner.objects.select_related("product")
-                .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
-                .order_by("?")[:3]
-                .only("product__name", "product__preview", "product__short_description", "text")
-            )
-            cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
+            try:
+                random_banners = (
+                    Banner.objects.select_related("product")
+                    .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
+                    .order_by("?")[:3]
+                    .only("product__name", "product__preview", "product__short_description", "text")
+                )
+                cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
+            except DatabaseError:
+                raise ValidationError(_("Ошибка получения данных для баннеров"))
+            except Exception as e:
+                raise ValidationError(_(f"Непредвиденная ошибка получения баннеров:{e}"))
         return random_banners
 
     def get_top_products(self):
