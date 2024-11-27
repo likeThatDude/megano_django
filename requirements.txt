@@ -18,9 +18,11 @@ django-celery-results==2.5.1
 django-debug-toolbar==4.4.6
 django-environ==0.11.2
 django-extensions==3.2.3
+django-redis==5.4.0
 djangorestframework==3.15.2
 drf-spectacular==0.27.2
 executing==2.1.0
+gunicorn==23.0.0
 idna==3.10
 inflection==0.5.1
 ipython==8.29.0
@@ -38,6 +40,7 @@ pexpect==4.9.0
 pillow==10.4.0
 platformdirs==4.3.6
 prompt_toolkit==3.0.48
+psycopg2==2.9.10
 ptyprocess==0.7.0
 pure_eval==0.2.3
 Pygments==2.18.0
@@ -45,6 +48,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 pytils==0.4.1
 PyYAML==6.0.2
+redis==5.2.0
 referencing==0.35.1
 requests==2.32.3
 rpds-py==0.20.0

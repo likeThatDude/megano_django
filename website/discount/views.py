@@ -1,12 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse_lazy
-
 from django.views.generic import CreateView
 from django.views.generic import UpdateView
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import get_object_or_404
 
 from .forms import DiscountCreationForm
 from .models import Discount
@@ -21,6 +20,7 @@ class DiscountCreateView(UserPassesTestMixin, CreateView):
 
     Доступно только аутентифицированному пользователя, у которого есть права админа.
     """
+
     template_name = "discount/discount_create.html"
     form_class = DiscountCreationForm
 
@@ -57,6 +57,7 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
     Применяем UserPassesTestMixin для того, чтобы только админ
     мог обновлять запись о скидке
     """
+
     template_name = "discount/discount_update.html"
     model = Discount
     form_class = DiscountCreationForm
@@ -66,10 +67,7 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
         """
         Получаем запись модели Discount из базы данных по полю slug
         """
-        queryset = get_object_or_404(
-            Discount,
-            slug=self.kwargs["slug"]
-        )
+        queryset = get_object_or_404(Discount, slug=self.kwargs["slug"])
         return queryset
 
     def test_func(self):
@@ -85,7 +83,5 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
         """
         return reverse_lazy(
             "discount:discount-update",
-            kwargs={
-                "slug": self.object.slug
-            },
+            kwargs={"slug": self.object.slug},
         )

@@ -13,12 +13,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 load_dotenv()
-
-from django.urls import reverse_lazy
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,29 +24,57 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz"
+SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "1") == "1"
+SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN")
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    "e6fd-37-214-93-45.ngrok-free.app",
-]
+if DEBUG:
+    ALLOWED_HOSTS = [
+        "127.0.0.1",
+        "localhost",
+    ]
 
-CSRF_TRUSTED_ORIGINS = ["https://e6fd-37-214-93-45.ngrok-free.app"]
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+else:
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+    ALLOWED_HOSTS = [
+        "localhost",
+        "127.0.0.1",
+        SERVER_DOMAIN,
+    ]
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
+CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
+
+
+USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
+
+if USE_REDIS:
+    REDIS_HOST = os.environ.get("CONTAINER_REDIS_NAME", None)
+    REDIS_PORT = os.environ.get("REDIS_PORT", None)
+    REDIS_DB = os.environ.get("REDIS_DB", None)
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}",
+            "OPTIONS": {
+                "db": REDIS_DB,
+                "retry_on_timeout": True,
+                "socket_connect_timeout": 5,
+                "socket_timeout": 5,
+            },
+        }
     }
-}
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-snowflake",
+        }
+    }
 
 # Application definition
 
@@ -103,7 +129,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "account.context_processors.user_is_auth",
             ],
         },
     },
@@ -114,12 +139,37 @@ WSGI_APPLICATION = "website.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+USE_POSTGRES = os.environ.get("USE_POSTGRES", "0") == "1"
+DB_NAME = os.environ.get("DB_NAME")
+DB_USER = os.environ.get("DB_USER")
+DB_PASS = os.environ.get("DB_PASS")
+DB_HOST = os.environ.get("CONTAINER_DATABASE_NAME")
+DB_PORT = os.environ.get("DB_PORT")
+
+if USE_POSTGRES:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("DB_NAME", "megano"),
+            "USER": os.environ.get("DB_USER", "megano_admin"),
+            "PASSWORD": os.environ.get("DB_PASS", "qwerty"),
+            "HOST": os.environ.get("CONTAINER_BOUNCER_NAME", "megano_pgbouncer"),
+            "PORT": "6432",
+            "CONN_MAX_AGE": 0,
+            "OPTIONS": {
+                "sslmode": "disable",
+            },
+        }
     }
-}
+    ATOMIC_REQUESTS = True
+    CONN_HEALTH_CHECKS = False
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -154,6 +204,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -202,6 +254,19 @@ REST_FRAMEWORK = {
     },
 }
 
+# Базовые настройки безопасности, работающие без HTTPS
+SECURE_BROWSER_XSS_FILTER = True  # Защита от XSS атак в браузере
+SECURE_CONTENT_TYPE_NOSNIFF = True  # Защита от MIME-type sniffing
+X_FRAME_OPTIONS = "DENY"  # Защита от clickjacking
+
+# Отключаем настройки, требующие HTTPS
+CSRF_COOKIE_SECURE = False  # Разрешаем передачу CSRF токена по HTTP
+SESSION_COOKIE_SECURE = False  # Разрешаем передачу сессионных куки по HTTP
+SECURE_SSL_REDIRECT = False  # Отключаем редирект на HTTPS
+SECURE_HSTS_SECONDS = 0  # Отключаем HSTS
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False  # Отключаем HSTS для поддоменов
+SECURE_HSTS_PRELOAD = False  # Отключаем предзагрузку HSTS
+
 # Временное хранилище для ключей кеша, НЕ УДАЛЯТЬ !
 # Позже перенесется в ENV
 BANNERS_KEY = "banners"
@@ -215,8 +280,5 @@ OFFER_KEY = "offers"
 HOT_OFFER_KEY = "hot_offer"
 from dotenv import load_dotenv
 
-load_dotenv()
-import os
-
-SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY")
+SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)
+STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY", None)

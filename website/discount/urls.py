@@ -3,7 +3,6 @@ from django.urls import path
 from .views import DiscountCreateView
 from .views import DiscountUpdateView
 
-
 app_name = "discount"
 
 urlpatterns = [

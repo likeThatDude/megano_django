@@ -1,18 +1,17 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
-from multiprocessing.connection import deliver_challenge
-from struct import error
-from typing import Any
-from typing import List
 
 from account.models import CustomUser
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Price
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import DatabaseError
 from django.db import transaction
 from django.db.models import Q
 from django.db.models import QuerySet
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 from order.models import DeliveryPrice
 from order.models import Order
 from order.models import OrderItem
@@ -38,7 +37,7 @@ def get_full_username(user: CustomUser) -> str:
     return full_name
 
 
-def get_user_data(request: HttpRequest) -> dict[str, str]:
+def get_user_data(request: HttpRequest) -> dict[str, str] | None:
     """
     Извлекает данные пользователя из базы данных и формирует словарь с информацией о пользователе.
 
@@ -51,7 +50,12 @@ def get_user_data(request: HttpRequest) -> dict[str, str]:
     Возвращает:
         dict[str, str]: Словарь, содержащий полное имя пользователя, его номер телефона и email.
     """
-    user = CustomUser.objects.select_related("profile").get(pk=request.user.id)
+    try:
+        user = CustomUser.objects.select_related("profile").get(pk=request.user.id)
+    except CustomUser.DoesNotExist:
+        return None
+    except Exception:
+        return None
     full_user_name = get_full_username(user)
     correct_user_data = {
         "name": full_user_name,
@@ -103,7 +107,7 @@ def create_query(product_seller_ids: list[tuple[int, int]]) -> Q:
     return query
 
 
-def get_data_from_database(query: Q) -> QuerySet:
+def get_data_from_database(query: Q) -> QuerySet | None:
     """
     Извлекает данные из базы данных на основе переданного запроса.
 
@@ -117,11 +121,17 @@ def get_data_from_database(query: Q) -> QuerySet:
     Возвращает:
         QuerySet: Набор объектов `Price`, соответствующих заданным условиям.
     """
-    prices = (
-        Price.objects.select_related("product", "seller")
-        .prefetch_related("seller__delivery_methods", "seller__payment_methods")
-        .filter(query)
-    )
+    try:
+        prices = (
+            Price.objects.select_related("product", "seller")
+            .prefetch_related("seller__delivery_methods", "seller__payment_methods")
+            .filter(query)
+        )
+    except Price.DoesNotExist:
+        return None
+    except Exception:
+        return None
+
     return prices
 
 
@@ -151,7 +161,7 @@ def data_preparation_and_recording(
     correct_valid_data: dict[str, str],
     products_list: dict[str, dict[str, int | bool]],
     user_id: int,
-) -> int:
+) -> int | None:
     """
     Подготавливает и сохраняет данные о заказе в базе данных.
 
@@ -171,26 +181,30 @@ def data_preparation_and_recording(
     """
     total_price = get_total_price(products_list)
     deliver_price = set_delivery_price(correct_valid_data, products_list, total_price)
+    if deliver_price is None:
+        return None
+    try:
+        with transaction.atomic():
+            order = Order.objects.create(
+                user_id=user_id,
+                name=correct_valid_data["name"],
+                delivery_city=correct_valid_data["city"],
+                delivery_address=correct_valid_data["address"],
+                recipient_phone=correct_valid_data["phone"],
+                recipient_email=correct_valid_data["mail"],
+                status=Order.PENDING,
+                comment=correct_valid_data["comment"],
+                total_price=total_price,
+                delivery_price=deliver_price,
+            )
 
-    with transaction.atomic():
-        order = Order.objects.create(
-            user_id=user_id,
-            name=correct_valid_data["name"],
-            delivery_city=correct_valid_data["city"],
-            delivery_address=correct_valid_data["address"],
-            recipient_phone=correct_valid_data["phone"],
-            recipient_email=correct_valid_data["mail"],
-            status=Order.PENDING,
-            comment=correct_valid_data["comment"],
-            total_price=total_price,
-            delivery_price=deliver_price,
-        )
+            data = create_order_items_data(correct_valid_data, products_list, order)
 
-        data = create_order_items_data(correct_valid_data, products_list, order)
-
-        OrderItem.objects.bulk_create(data)
-        order.order_items.add(*data)
-        order.save()
+            OrderItem.objects.bulk_create(data)
+            order.order_items.add(*data)
+            order.save()
+    except Exception:
+        return None
     return order.pk
 
 
@@ -224,8 +238,13 @@ def create_order_items_data(
     """
     order_items = []
 
-    payment_queryset = Payment.objects.all()
-    delivery_queryset = Delivery.objects.all()
+    try:
+        payment_queryset = Payment.objects.all()
+        delivery_queryset = Delivery.objects.all()
+    except DatabaseError as e:
+        raise ValidationError(_(f"Ошибка базы данных при выполнении запроса: {e}"))
+    except Exception as e:
+        raise ValidationError(_(f"Произошла непредвиденная ошибка: {e}"))
 
     payment_dict = {payment.name: payment for payment in payment_queryset}
     delivery_dict = {delivery.name: delivery for delivery in delivery_queryset}
@@ -339,17 +358,25 @@ def set_delivery_price(
         в магазин, а также стоимость заказа и количество продавцов.
     """
     deliver_price = None
-    if correct_valid_data["choice_delivery_type"] == "seller":
-        deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
-    elif correct_valid_data["choice_delivery_type"] == "store":
-        if correct_valid_data["delivery"] == Delivery.SHOP_STANDARD:
-            seller_ids = {product["seller_id"] for product in products_list.values()}
-            if total_price < 2000 or len(seller_ids) > 1:
-                deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.STANDARD_DELIVERY)
-            else:
+    try:
+        if correct_valid_data["choice_delivery_type"] == "seller":
+            try:
                 deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
-        elif correct_valid_data["delivery"] == Delivery.SHOP_EXPRESS:
-            deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.EXPRESS_DELIVERY)
+            except DeliveryPrice.DoesNotExist:
+                raise ObjectDoesNotExist(_(f"Ошибка получения данных о доставке."))
+        elif correct_valid_data["choice_delivery_type"] == "store":
+            if correct_valid_data["delivery"] == Delivery.SHOP_STANDARD:
+                seller_ids = {product["seller_id"] for product in products_list.values()}
+                if total_price < 2000 or len(seller_ids) > 1:
+                    deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.STANDARD_DELIVERY)
+                else:
+                    deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
+            elif correct_valid_data["delivery"] == Delivery.SHOP_EXPRESS:
+                deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.EXPRESS_DELIVERY)
+    except DeliveryPrice.DoesNotExist:
+        return None
+    except Exception:
+        return None
     return deliver_price
 
 

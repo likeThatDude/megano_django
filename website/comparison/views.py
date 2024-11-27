@@ -4,7 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from . import utils
-from .srevices import ComparisonServices
+from .services import ComparisonServices
 from .utils import create_categorization
 
 
