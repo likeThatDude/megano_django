@@ -4,7 +4,7 @@ from catalog.models import Category
 from catalog.models import Price
 from catalog.models import Product
 from discount.models import Discount
-from discount.utils import get_discounted_products
+
 from django.core.cache import cache
 from django.db import DatabaseError
 from django.db.models import Count
