@@ -96,7 +96,7 @@ class OrderCreateView(View):
             else:
                 raise Http404(_("Ошибка создания заказа"))
         else:
-            return redirect(reverse("account:login"))
+            return redirect(reverse("custom_auth:login"))
 
 
 class OrderDetailView(DetailView):
