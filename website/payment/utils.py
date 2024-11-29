@@ -1,6 +1,5 @@
 from datetime import datetime
 from decimal import Decimal
-from itertools import product
 
 import stripe
 from django.db import transaction
@@ -10,8 +9,10 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from order.models import Order
 from order.models import OrderItem
-from rest_framework.reverse import reverse_lazy
 from stripe.checkout import Session
+from django.core.cache import cache
+
+from website.settings import ORDERS_KEY
 
 """
 Функции для работы с оплатой заказов через Stripe.
@@ -222,6 +223,7 @@ def change_order_payment_status(session: Session) -> None:
             order.status = Order.PROCESSING
             order.save()
             order.order_items.update(payment_status=True, receipt_url=current_receipt_url)
+            cache.delete(f"{ORDERS_KEY}{order_id}")
 
 
 def change_certain_items_payment_status(session: Session) -> None:
@@ -275,6 +277,7 @@ def change_certain_items_payment_status(session: Session) -> None:
             order.paid_status = Order.PAID if current_payment_status else Order.PARTLY_PAID
             order.status = Order.PROCESSING
             order.save()
+            cache.delete(f"{ORDERS_KEY}{order_id}")
 
 
 def create_recipes_url_for_db(session: Session) -> str:

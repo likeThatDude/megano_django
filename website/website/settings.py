@@ -34,9 +34,9 @@ if DEBUG:
     ALLOWED_HOSTS = [
         "127.0.0.1",
         "localhost",
-        "30e2-37-214-103-7.ngrok-free.app"
+        "d04a-37-214-103-7.ngrok-free.app"
     ]
-    CSRF_TRUSTED_ORIGINS = ["https://30e2-37-214-103-7.ngrok-free.app"]
+    CSRF_TRUSTED_ORIGINS = ["https://d04a-37-214-103-7.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
@@ -278,6 +278,7 @@ CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
 OFFER_KEY = "offers"
 HOT_OFFER_KEY = "hot_offer"
+ORDERS_KEY = "Order-"
 from dotenv import load_dotenv
 
 SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)

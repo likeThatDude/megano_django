@@ -1,5 +1,7 @@
 from typing import Any
 
+from django.core.cache import cache
+
 from cart.cart import Cart
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
@@ -16,6 +18,7 @@ from django.views import View
 from django.views.generic import DetailView
 from order import utils
 from order.forms import OrderForm
+from website.settings import ORDERS_KEY
 
 from .models import Order
 from .models import OrderItem
@@ -139,53 +142,58 @@ class OrderDetailView(DetailView):
             Этот метод использует `select_related` и `prefetch_related` для оптимизации запросов, загружая только
             нужные поля и избегая ненужных запросов к базе данных.
         """
-        order = get_object_or_404(
-            Order.objects.select_related(
-                "user",
-                "delivery_price",
-            )
-            .prefetch_related(
-                Prefetch(
-                    "order_items",
-                    queryset=OrderItem.objects.select_related(
-                        "seller",
-                        "product",
-                        "delivery",
-                        "payment_type",
-                    )
-                    .filter(active=True)
-                    .only(
-                        "seller__name",
-                        "product__preview",
-                        "product__name",
-                        "product__short_description",
-                        "delivery__name",
-                        "payment_type__name",
-                        "order__id",
-                        "quantity",
-                        "price",
-                        "payment_status",
-                    ),
+        pk = self.kwargs["pk"]
+        order = cache.get(f"{ORDERS_KEY}{pk}")
+        if order is None:
+            order = get_object_or_404(
+                Order.objects.select_related(
+                    "user",
+                    "delivery_price",
                 )
+                .prefetch_related(
+                    Prefetch(
+                        "order_items",
+                        queryset=OrderItem.objects.select_related(
+                            "seller",
+                            "product",
+                            "delivery",
+                            "payment_type",
+                        )
+                        .filter(active=True)
+                        .only(
+                            "seller__name",
+                            "product__preview",
+                            "product__name",
+                            "product__short_description",
+                            "delivery__name",
+                            "payment_type__name",
+                            "order__id",
+                            "quantity",
+                            "price",
+                            "payment_status",
+                        ),
+                    )
+                )
+                .annotate(unique_delivery_types=Count("order_items__delivery", distinct=True))
+                .annotate(unique_payment_types=Count("order_items__payment_type", distinct=True))
+                .only(
+                    "user__id",
+                    "order_items",
+                    "name",
+                    "delivery_city",
+                    "delivery_address",
+                    "recipient_phone",
+                    "recipient_email",
+                    "status",
+                    "archived",
+                    "created_at",
+                    "total_price",
+                    "delivery_price",
+                    "paid_status",
+                ),
+                pk=pk,
             )
-            .annotate(unique_payment_types=Count("order_items__payment_type", distinct=True))
-            .only(
-                "user__id",
-                "order_items",
-                "name",
-                "delivery_city",
-                "delivery_address",
-                "recipient_phone",
-                "recipient_email",
-                "status",
-                "archived",
-                "created_at",
-                "total_price",
-                "delivery_price",
-                "paid_status",
-            ),
-            pk=self.kwargs["pk"],
-        )
+            cache.set(f"{ORDERS_KEY}{pk}", order, timeout=300)
         if order.user.pk == self.request.user.pk or self.request.user.is_staff:
             return order
         else:
