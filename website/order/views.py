@@ -69,11 +69,11 @@ class OrderCreateView(View):
                     context["product_data"] = product_data
                     return render(request, "order/order.html", context=context)
                 else:
-                    return Http404
+                    raise Http404(_("Ошибка создания заказа"))
             else:
                 return redirect(reverse("core:index"))
         else:
-            return Http404
+            raise Http404(_("Ошибка создания заказа"))
 
     def post(self, request: HttpRequest) -> HttpResponse | Any:
         if request.user.is_authenticated:
@@ -91,11 +91,10 @@ class OrderCreateView(View):
                 errors_list = create_errors_list(data_errors)
                 context["errors"] = errors_list
                 return render(request, "order/order_error_list.html", context=context)
-            return (
-                redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
-                if not order_data is None
-                else Http404
-            )
+            if not order_data is None:
+                return redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
+            else:
+                raise Http404(_("Ошибка создания заказа"))
         else:
             return redirect(reverse("account:login"))
 

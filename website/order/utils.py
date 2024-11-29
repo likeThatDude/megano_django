@@ -203,7 +203,7 @@ def data_preparation_and_recording(
             OrderItem.objects.bulk_create(data)
             order.order_items.add(*data)
             order.save()
-    except Exception:
+    except Exception as e:
         return None
     return order.pk
 

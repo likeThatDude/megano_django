@@ -1,8 +1,9 @@
 from collections import defaultdict
+from itertools import product
 
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Min
+from django.db.models import Min, Q
 from django.db.models import OuterRef
 from django.db.models import Prefetch
 from django.db.models import Subquery
@@ -260,14 +261,14 @@ class ProductDetailView(DetailView):
                 Prefetch(
                     "price",
                     queryset=Price.objects.select_related("product")
-                    .all()
+                    .filter(Q(product__id=pk))
                     .only("product__id", "product__name", "seller", "price"),
                 ),
                 "delivery_methods",
                 "payment_methods",
             )
-            .only("name", "price")
-            .filter(price__product__pk=1)
+            .only("name", "price",)
+            .filter(Q(price__product__pk=pk))
             .order_by("price__price"),
             timeout=240,
         )
