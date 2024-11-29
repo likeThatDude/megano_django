@@ -104,6 +104,7 @@ class Product(models.Model):
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
     views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
+    sorting_index = models.PositiveIntegerField(default=0, verbose_name=_("Sorting Index"))
     preview = models.ImageField(
         null=True,
         blank=True,
@@ -120,7 +121,7 @@ class Product(models.Model):
         verbose_name_plural = "products"
 
     def __str__(self) -> str:
-        return f"Product(id={self.pk}, name={self.name[:20]} {"..." if len(self.name) > 20 else ""})"
+        return f"Product(id={self.pk}, name={self.name[:20]} {'...' if len(self.name) > 20 else ''})"
 
 
 class ProductImage(models.Model):

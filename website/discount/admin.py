@@ -36,6 +36,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_display = (
         "pk",
         "name",
+        "slug",
         "kind",
         "short_description",
         "start_date",
@@ -47,6 +48,7 @@ class DiscountAdmin(admin.ModelAdmin):
     list_filter = (
         "kind",
         "method",
+        "priority",
         "is_active",
         "archived",
     )
@@ -67,6 +69,7 @@ class DiscountAdmin(admin.ModelAdmin):
                     "name",
                     "kind",
                     "method",
+                    "priority",
                     "description",
                 )
             },
@@ -75,9 +78,11 @@ class DiscountAdmin(admin.ModelAdmin):
             _("Conditions and/or applicable deduction"),
             {
                 "fields": (
-                    "value",
-                    "quantity_gt",
-                    "quantity_lt",
+                    "percent",
+                    "price",
+                    "quantity_l",
+                    "quantity_g",
+                    "total_cost_l",
                     "start_date",
                     "end_date",
                     "is_active",

@@ -28,7 +28,7 @@ from drf_spectacular.views import SpectacularSwaggerView
 
 urlpatterns = [
     # Standard URL
-    path("", include("core.urls", namespace='default')),
+    path("", include("core.urls", namespace="default")),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
     path("order/", include("order.urls")),
@@ -46,4 +46,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
     urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
-    # urlpatterns.append(path("__debug__/", include("debug_toolbar.urls")))
