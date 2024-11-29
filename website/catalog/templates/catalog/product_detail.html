@@ -208,9 +208,8 @@
                                                                 <div class="Order-infoType">Стоимость:
                                                                 </div>
                                                                 <div class="Order-infoContent">
-                                                                    {% for price in seller.price.all %}
-                                                                        <span class="Order-price">{{ price.price }}$</span>
-                                                                    {% endfor %}
+                                                                    {% get_seller_price seller product.pk as seller_price %}
+                                                                    <span class="Order-price">{{ seller_price }}$</span>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -212,7 +212,6 @@ class ComparisonServices:
         try:
             product_session_id: list[int] = request.session.get("products_ids", [])
             if product_id not in product_session_id:
-                print("Я НЕ НАШЁЛ КЛЮЧ")
                 return None
             else:
                 product_session_id.remove(product_id)

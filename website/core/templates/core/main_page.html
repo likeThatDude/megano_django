@@ -400,7 +400,7 @@
                                                     <div class="Card-hover">
                                                         <form method="post" action="{% url 'comparison:comparison_add'%}">
                                                             {% csrf_token %}
-                                                            <input type="hidden" name="product" value="{{item.product.id}}">
+                                                            <input type="hidden" name="product_id" value="{{item.product.id}}">
                                                             <button class="Card-btn-comp" type="submit"></button>
                                                         </form>
                                                         <a class="Card-btn" data-product_id="{{item.product.id}}" data-price_id="{{item.pk}}">
@@ -433,6 +433,4 @@
     <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
     <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
     <script src="{% static 'assets/js/scripts.js' %}"></script>
-    <script src="{% static 'comparison/js/comparison_product.js' %}"></script>
-    <script>const COMPARISON_ADD_URL = "{% url 'comparison:comparison_add' %}";</script>
 {% endblock %}

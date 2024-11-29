@@ -1,7 +1,7 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 
-from account.models import CustomUser
+from custom_auth.models import CustomUser
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Price
@@ -203,7 +203,7 @@ def data_preparation_and_recording(
             OrderItem.objects.bulk_create(data)
             order.order_items.add(*data)
             order.save()
-    except Exception:
+    except Exception as e:
         return None
     return order.pk
 

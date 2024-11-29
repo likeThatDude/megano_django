@@ -1,19 +1,15 @@
-from datetime import datetime
-
 import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.http import HttpResponseForbidden
-from django.shortcuts import redirect
-from django.shortcuts import render
+
+from django.http import HttpResponseForbidden, HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from cart.cart import Cart
 from website import settings
 
 from . import utils
@@ -83,6 +79,7 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
     """
 
     def get(self, request: HttpRequest, order_id: int, seller_id: int) -> HttpResponse:
+        print('CreateCheckoutCurrentView')
         order = utils.get_order_from_db(order_id=order_id, all_product=False)
 
         if order.user.pk == request.user.pk:
@@ -208,5 +205,18 @@ class StripeWebhookAPIView(APIView):
                 utils.change_order_payment_status(session=session)
             elif all_order == 0:
                 utils.change_certain_items_payment_status(session=session)
+            data = session['metadata']['products_ids']
+
+
+
+            print(data)
+            print(data.split(","))
+            data0=data.split(",")
+            cart = Cart(request)
+            for i in data0:
+                print(f'{i=}')
+                print(f'{type(i)=}')
+                cart.remove(i)
+
 
         return Response({"status": "success"}, status=200)
