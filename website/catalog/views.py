@@ -7,6 +7,7 @@ from django.db.models import (
     Min,
     Count,
     Max,
+    Sum,
 )
 from django.db.models import Min, Q
 from django.db.models import OuterRef
@@ -131,12 +132,13 @@ class CatalogListView(ListView):
 
         # Получаем все спецификации для всех продуктов в категории
         specifications = (
-            Specification.objects.filter(product__in=products_with_related).select_related("name").distinct()
+            Specification.objects.filter(product__in=products_with_related).distinct()
         )
+
         # Группируем спецификации по имени
-        grouped_specifications = defaultdict(list)
+        grouped_specifications = defaultdict(set)
         for spec in specifications:
-            grouped_specifications[spec.name.name].append(spec.value)
+            grouped_specifications[spec.name.name].add(spec.value)
 
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
@@ -175,7 +177,7 @@ class CatalogListView(ListView):
                 .annotate(
                     price=Round(Min("prices__price"), precision=2),
                     price_pk=Subquery(price_subquery),
-                    quantity=Count("prices__sold_quantity"),
+                    quantity=Sum("prices__sold_quantity"),
                     date=Max("prices__created_at"),
                     rating=Count("review__created_at"),
                 )
