@@ -10,7 +10,7 @@ from .views import ProfileView
 from .views import RegisterView
 from .views import UserPasswordResetConfirmView
 
-app_name = "account"
+app_name = "custom_auth"
 
 urlpatterns = [
     path("login/", LogInView.as_view(), name="login"),
@@ -22,7 +22,7 @@ urlpatterns = [
     path(
         "password_reset/",
         auth_views.PasswordResetView.as_view(
-            template_name="account/password_reset.html",
+            template_name="custom_auth/password_reset.html",
             email_template_name="account/password_reset_email.html",
             success_url=reverse_lazy("account:password_reset_done"),
         ),
@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     path(
         "password_reset/done/",
-        auth_views.PasswordResetDoneView.as_view(template_name="account/password_reset_done.html"),
+        auth_views.PasswordResetDoneView.as_view(template_name="custom_auth/password_reset_done.html"),
         name="password_reset_done",
     ),
     path(
@@ -40,7 +40,7 @@ urlpatterns = [
     ),
     path(
         "password_reset_complete/",
-        auth_views.PasswordResetCompleteView.as_view(template_name="account/password_reset_complete.html"),
+        auth_views.PasswordResetCompleteView.as_view(template_name="custom_auth/password_reset_complete.html"),
         name="password_reset_complete",
     ),
 ]

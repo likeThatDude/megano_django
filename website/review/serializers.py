@@ -1,4 +1,4 @@
-from account.models import CustomUser
+from custom_auth.models import CustomUser
 from catalog.models import Review
 from django.db.models import Q
 from rest_framework import serializers
