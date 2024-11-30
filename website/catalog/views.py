@@ -168,7 +168,7 @@ class CatalogListView(ListView):
         price_subquery = Price.objects.filter(product=OuterRef("pk")).values("pk")
         if not queryset:
             queryset = (
-                Product.objects.filter(category__id=category_id)
+                Product.objects.filter(category__id=category_id, archived=False)
                 .select_related("category")
                 .annotate(
                     price=Round(Min("prices__price"), precision=2),
@@ -209,7 +209,7 @@ class CatalogListView(ListView):
         selected_title = request.POST.get("title")
         selected_specifications = request.POST.getlist("specification")
         selected_tags = request.POST.getlist("tags")
-        last_sort = self.get_last_sort(self.request.session)
+
 
         # Фильтрация по диапазону цен
         if selected_range_price:
@@ -243,6 +243,7 @@ class CatalogListView(ListView):
         if selected_tags:
             products = products.filter(tags__id__in=selected_tags).distinct()
 
+        last_sort = self.get_last_sort(self.request.session)
         # Сортировка
         if last_sort:
             products = products.order_by(last_sort)
@@ -288,6 +289,7 @@ class CatalogListView(ListView):
         self.clear_cache(category_id)  # Очищаем кэш для данной категории
 
         context = self.get_param()
+
         context["products"] = products
         return render(request, self.template_name, context)
 

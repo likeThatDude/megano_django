@@ -142,7 +142,6 @@ class IndexView(TemplateView):
                     "today": today_formatted,
                 }
             cache.set(OFFER_KEY, offers, timeout=CATEGORY_CASHING_TIME)
-
         return offers
 
     def get_hot_offers(self):
