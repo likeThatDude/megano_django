@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, ListView
 from django.utils import timezone
-
+import logging
 
 from .forms import DiscountCreationForm
 from .models import Discount
@@ -88,9 +88,16 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
             kwargs={"slug": self.object.slug},
         )
 
+
+logger = logging.getLogger(__name__)
+
+
 class ActiveDiscountsView(ListView):
     """
-    Представление для отображения активных скидок.
+    Представление для  получения и отображения списка активных скидок.
+    Активные скидки определяются как те, которые имеют значение active=True
+    и находятся в пределах заданного временного интервала (между start_date и
+    end_date, если они указаны)
     """
 
     model = Discount
@@ -98,7 +105,11 @@ class ActiveDiscountsView(ListView):
     context_object_name = 'discounts'
 
     def get_queryset(self):
-        """Получает только активные скидки."""
+        """Получает QuerySet активных скидок.
+        Метод фильтрует скидки по следующим критериям:
+        - Скидка должна быть активной (active=True).
+        - Дата начала скидки должна быть либо не указана, либо меньше или равна текущей дате.
+        - Дата окончания скидки должна быть либо не указана, либо больше или равна текущей дате."""
         try:
             return Discount.objects.filter(active=True).filter(
                 Q(start_date__isnull=True) | Q(start_date__lte=timezone.now())
@@ -106,5 +117,6 @@ class ActiveDiscountsView(ListView):
                 Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())
             )
         except Exception as e:
-            print(f"Ошибка при получении скидок: {e}")
+            logger.error("Ошибка при получении скидок: %s", e, exc_info=True)
             return Discount.objects.none()
+
