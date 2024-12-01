@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.views.generic import UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
+from django.utils import timezone
+import logging
 
 from .forms import DiscountCreationForm
 from .models import Discount
@@ -85,3 +87,36 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
             "discount:discount-update",
             kwargs={"slug": self.object.slug},
         )
+
+
+logger = logging.getLogger(__name__)
+
+
+class ActiveDiscountsView(ListView):
+    """
+    Представление для  получения и отображения списка активных скидок.
+    Активные скидки определяются как те, которые имеют значение active=True
+    и находятся в пределах заданного временного интервала (между start_date и
+    end_date, если они указаны)
+    """
+
+    model = Discount
+    template_name = 'discount/active_discounts.html'
+    context_object_name = 'discounts'
+
+    def get_queryset(self):
+        """Получает QuerySet активных скидок.
+        Метод фильтрует скидки по следующим критериям:
+        - Скидка должна быть активной (active=True).
+        - Дата начала скидки должна быть либо не указана, либо меньше или равна текущей дате.
+        - Дата окончания скидки должна быть либо не указана, либо больше или равна текущей дате."""
+        try:
+            return Discount.objects.filter(active=True).filter(
+                Q(start_date__isnull=True) | Q(start_date__lte=timezone.now())
+            ).filter(
+                Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())
+            )
+        except Exception as e:
+            logger.error("Ошибка при получении скидок: %s", e, exc_info=True)
+            return Discount.objects.none()
+
