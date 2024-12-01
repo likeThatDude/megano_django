@@ -8,8 +8,8 @@ from django.views import View
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from payment.tasks import send_html_email
 
-from cart.cart import Cart
 from website import settings
 
 from . import utils
@@ -56,7 +56,7 @@ class CreateCheckoutView(LoginRequiredMixin, View):
         order = utils.get_order_from_db(order_id=order_id)
         if order.user.pk == request.user.pk:
             correct_urls = utils.get_current_urls_for_payment_response(request)
-            session = utils.checkout_process(order=order, redirect_urls=correct_urls)
+            session = utils.checkout_process(order=order, redirect_urls=correct_urls, user_login=request.user.login)
             return redirect(session.url, code=303)
         return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
 
@@ -79,15 +79,14 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
     """
 
     def get(self, request: HttpRequest, order_id: int, seller_id: int) -> HttpResponse:
-        print('CreateCheckoutCurrentView')
         order = utils.get_order_from_db(order_id=order_id, all_product=False)
-
         if order.user.pk == request.user.pk:
             total_price = utils.get_order_total_price(order, seller_id)
             correct_urls = utils.get_current_urls_for_payment_response(request)
 
             session = utils.checkout_process(
-                order=order, redirect_urls=correct_urls, all_product=False, seller_id=seller_id, total_price=total_price
+                order=order, redirect_urls=correct_urls, all_product=False,
+                seller_id=seller_id, total_price=total_price,
             )
             return redirect(session.url, code=303)
         return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
@@ -189,6 +188,7 @@ class StripeWebhookAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         payload = request.body
+        print(payload)
         signature = request.META.get("HTTP_STRIPE_SIGNATURE")
         try:
             event = stripe.Webhook.construct_event(payload, signature, settings.STRIPE_WEBHOOK_SECRET_KEY)
@@ -196,27 +196,16 @@ class StripeWebhookAPIView(APIView):
             raise ValidationError("Invalid payload")
         except stripe.error.SignatureVerificationError:
             raise ValidationError("Invalid signature")
-        #
+
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
+            user_login = session["metadata"]["user_login"]
             all_order = session["metadata"]["all_order"]
             all_order = int(all_order)
             if all_order == 1:
                 utils.change_order_payment_status(session=session)
             elif all_order == 0:
                 utils.change_certain_items_payment_status(session=session)
-            data = session['metadata']['products_ids']
-
-
-
-            print(data)
-            print(data.split(","))
-            data0=data.split(",")
-            cart = Cart(request)
-            for i in data0:
-                print(f'{i=}')
-                print(f'{type(i)=}')
-                cart.remove(i)
-
-
+            from payment.tasks import send_html_email
+            send_html_email.delay(user_login, session['customer_details']['email'])
         return Response({"status": "success"}, status=200)

@@ -4,14 +4,9 @@ from django.core.cache import cache
 
 from cart.cart import Cart
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count
-from django.db.models import Prefetch
-from django.http import Http404
-from django.http import HttpRequest
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.shortcuts import render
+from django.db.models import Count, Prefetch
+from django.http import Http404, HttpResponseNotFound, HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -20,10 +15,8 @@ from order import utils
 from order.forms import OrderForm
 from website.settings import ORDERS_KEY
 
-from .models import Order
-from .models import OrderItem
-from .utils import create_errors_list
-from .utils import get_order_products
+from .models import Order, OrderItem
+from .utils import create_errors_list, delete_product_from_cart, get_order_products
 
 
 class OrderCreateView(View):
@@ -87,7 +80,9 @@ class OrderCreateView(View):
             if validate_data.is_valid():
                 correct_data = validate_data.cleaned_data
                 products_correct_list = get_order_products(products_list)
+                delete_product_from_cart(products_correct_list, request)
                 order_data = utils.data_preparation_and_recording(correct_data, products_correct_list, request.user.pk)
+
             else:
                 context = {}
                 data_errors = validate_data.errors.items()

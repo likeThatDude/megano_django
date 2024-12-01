@@ -174,9 +174,17 @@
                                                 <div class="Order-personal">
                                                     <div class="row">
                                                         <div class="row-block">
-                                                            <a class="Order-title" href="oneorder.html">
-                                                                {{ seller.name }}
-                                                            </a>
+                                                            <div class="Order-title">
+                                                                <div class="seller_info_block">
+                                                                    <div class="seller_image"
+                                                                         style="background-image: url({{ seller.image.url }})">
+
+                                                                    </div>
+                                                                    <div class="seller_name">
+                                                                        <span>{{ seller.name|truncatechars:25 }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="ProductCard-cartElement"
                                                                  style="margin-top: 10px;">
                                                                 <a class="btn btn_primary" href="#modal_open">

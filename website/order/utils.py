@@ -1,6 +1,7 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 
+from cart.cart import Cart
 from custom_auth.models import CustomUser
 from catalog.models import Delivery
 from catalog.models import Payment
@@ -158,9 +159,9 @@ def get_correct_queryset(products_list: dict[str, dict[str, int | bool]]) -> Que
 
 
 def data_preparation_and_recording(
-    correct_valid_data: dict[str, str],
-    products_list: dict[str, dict[str, int | bool]],
-    user_id: int,
+        correct_valid_data: dict[str, str],
+        products_list: dict[str, dict[str, int | bool]],
+        user_id: int,
 ) -> int | None:
     """
     Подготавливает и сохраняет данные о заказе в базе данных.
@@ -209,9 +210,9 @@ def data_preparation_and_recording(
 
 
 def create_order_items_data(
-    correct_valid_data: dict[str, str],
-    products_list: dict[str, dict[str, int | bool]],
-    order: Order,
+        correct_valid_data: dict[str, str],
+        products_list: dict[str, dict[str, int | bool]],
+        order: Order,
 ) -> list[OrderItem]:
     """
     Создает список объектов OrderItem для добавления в заказ.
@@ -276,7 +277,7 @@ def create_order_items_data(
 
 
 def create_product_context_data(
-    products_list: dict[str, dict[str, int | bool]]
+        products_list: dict[str, dict[str, int | bool]]
 ) -> dict[int | str, dict[str, int] | Decimal]:
     """
     Создает контекст данных для продуктов, который включает информацию о цене, количестве
@@ -333,9 +334,9 @@ def get_total_price(products_list: dict[str, dict[str, int | bool]]) -> Decimal:
 
 
 def set_delivery_price(
-    correct_valid_data: dict[str, str],
-    products_list: dict[str, dict[str, int | bool]],
-    total_price: Decimal,
+        correct_valid_data: dict[str, str],
+        products_list: dict[str, dict[str, int | bool]],
+        total_price: Decimal,
 ):
     """
     Определяет цену доставки для заказа в зависимости от выбранного способа доставки.
@@ -429,3 +430,40 @@ def create_errors_list(errors) -> list[tuple[int, str]]:
     for number, error in enumerate(errors, start=1):
         errors_data.append((number, *error[1]))
     return errors_data
+
+
+def delete_product_from_cart(product_dict: dict[str, dict[str, int | bool]], request: HttpRequest) -> None:
+    """
+    Удаляет товары из корзины на основе переданного словаря.
+
+    Эта функция принимает словарь, где каждый элемент представляет собой товар,
+    который необходимо удалить из корзины. Для каждого товара вызывается метод
+    удаления из корзины.
+
+    Параметры:
+        product_dict (dict): Словарь, где ключи — это идентификаторы товаров,
+                             а значения содержат информацию о товаре, включая
+                             поле 'product_id', которое указывает на идентификатор
+                             товара, подлежащего удалению.
+
+        request (HttpRequest): Объект запроса, содержащий информацию о текущем
+                               сеансе пользователя и его корзине.
+
+    Возвращает:
+        None: Функция не возвращает никаких значений. Она изменяет состояние
+              корзины напрямую.
+
+    Примечание:
+        Функция предполагает, что в словаре product_dict присутствует поле
+        'product_id' для каждого товара, которое используется для удаления
+        соответствующего товара из корзины.
+    """
+    cart = Cart(request)
+    for key in product_dict.values():
+        try:
+            product_id = str(key['product_id'])
+            cart.remove(product_id=product_id)
+        except KeyError:
+            print(f"Ошибка: отсутствует ключ 'product_id' для товара {key}.")
+        except Exception as e:
+            print(f"Ошибка при удалении товара {product_id}: {str(e)}")

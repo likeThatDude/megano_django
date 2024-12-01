@@ -28,15 +28,16 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure--tj#@x^aa%5f_dfu56dfx
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "1") == "1"
-SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN")
+SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN", "localhost")
+HTTP_PROTOCOL = os.environ.get("HTTP_PROTOCOL", "http")
 
 if DEBUG:
     ALLOWED_HOSTS = [
         "127.0.0.1",
         "localhost",
-        "d04a-37-214-103-7.ngrok-free.app"
+        "bc8d-37-214-103-7.ngrok-free.app"
     ]
-    CSRF_TRUSTED_ORIGINS = ["https://d04a-37-214-103-7.ngrok-free.app"]
+    CSRF_TRUSTED_ORIGINS = ["https://bc8d-37-214-103-7.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
@@ -224,9 +225,11 @@ LOGOUT_URL = reverse_lazy("custom_auth:logout")
 LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
+# Email variables
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
@@ -260,6 +263,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True  # Защита от MIME-type sniffing
 X_FRAME_OPTIONS = "DENY"  # Защита от clickjacking
 
 # Отключаем настройки, требующие HTTPS
+# Сервер удалённый работает по HTTP
 CSRF_COOKIE_SECURE = False  # Разрешаем передачу CSRF токена по HTTP
 SESSION_COOKIE_SECURE = False  # Разрешаем передачу сессионных куки по HTTP
 SECURE_SSL_REDIRECT = False  # Отключаем редирект на HTTPS
@@ -279,7 +283,19 @@ PRODUCTS_KEY = "category_{category_id}"
 OFFER_KEY = "offers"
 HOT_OFFER_KEY = "hot_offer"
 ORDERS_KEY = "Order-"
-from dotenv import load_dotenv
 
+# Stripe variables
 SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)
 STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY", None)
+
+# Celery variables
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_BROKER_URL = "redis://172.17.0.2:6379/1"
+CELERY_RESULT_BACKEND = "redis://172.17.0.2:6379/1"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BEAT_SCHEDULE = {
+
+}
