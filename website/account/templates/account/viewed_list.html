@@ -17,8 +17,8 @@
     <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-
 {% endblock %}
+
 
 {% block body %}
     <div class="Middle Middle_top">
@@ -40,11 +40,11 @@
                                     <li class="menu-item">
                                         <a class="menu-link" href="{% url 'account:profile' %}">Профиль</a>
                                     </li>
-                                    <li class="menu-item_ACTIVE menu-item">
+                                    <li class="menu-item">
                                         <a class="menu-link" href="{% url 'account:profile-orders' %}">История
                                             заказов</a>
                                     </li>
-                                    <li class="menu-item">
+                                    <li class="menu-item_ACTIVE menu-item">
                                         <a class="menu-link" href="{% url 'account:viewed-list' %}">История просмотров</a>
                                     </li>
                                 </ul>
@@ -57,39 +57,30 @@
                         <div class="Order Order_anons custom_left_margin">
                             <div class="Order-personal">
                                 <div class="col">
-                                    {% if not orders %}
+                                    {% if not viewed_list %}
                                         <div class="row-block custom_margin modal_center modal-window elem_center">
-                                            <h2>У вас пустая история заказов</h2>
+                                            <h2>У вас пустая история просмотров</h2>
                                         </div>
                                     {% endif %}
-            
-                                    {% for order in orders %}
-                                        <div class="row-block col-mt"><a class="Order-title" href="{{ order.get_absolute_url }}">Заказ&#32;<span
-                                                class="Order-numberOrder">№{{ order.pk }}</span>&#32;от&#32;<span
-                                                class="Order-dateOrder">{{ order.created_at }}</span></a></div>
+
+                                    {% for viewed in viewed_list %}
+                                        <div class="row-block col-mt"><a class="Order-title"
+                                                                         href="{{ viewed.product.get_absolute_url }}"><span
+                                                class="Order-numberOrder">{{ viewed.product.id }}. {{ viewed.product.name }}</span></a>
+                                        </div>
                                         <div>
                                             <div class="row-block">
-                                                <div class="Order-info Order-info_delivery text-ml">
-                                                    <div class="Order-infoType">Тип доставки:</div>
-                                                    <div class="Order-infoContent">{{ order.delivery_price.get_name_display }}</div>
-                                                </div>
-                                                <div class="Order-info Order-info_pay text-ml">
-                                                    <div class="Order-infoType">Оплата:</div>
-                                                    <div class="Order-infoContent">{{ order.get_paid_status_display }}</div>
+                                                <div class="Order-info text-ml">
+                                                    <div class="Order-infoType">Дата просмотра:</div>
+                                                    <div class="Order-infoContent"><span
+                                                            class="Order-price">{{ viewed.created_at.date }}</span>
+                                                    </div>
                                                 </div>
                                                 <div class="Order-info text-ml">
-                                                    <div class="Order-infoType">Стоимость заказа:</div>
+                                                    <div class="Order-infoType">Время просмотра:</div>
                                                     <div class="Order-infoContent"><span
-                                                            class="Order-price">{{ order.total_price }}</span></div>
-                                                </div>
-                                                <div class="Order-info text-ml">
-                                                    <div class="Order-infoType">Стоимость доставки:</div>
-                                                    <div class="Order-infoContent"><span
-                                                            class="Order-price">{{ order.delivery_price.price }}</span></div>
-                                                </div>
-                                                <div class="Order-info Order-info_status text-ml">
-                                                    <div class="Order-infoType">Статус:</div>
-                                                    <div class="Order-infoContent">{{ order.get_status_display }}</div>
+                                                            class="Order-price">{{ viewed.created_at.time }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -102,7 +93,7 @@
             </div>
         </div>
     </div>
-    
+
     {% block script %}
         <!--+Middle-->
         <!--    +div.-top-->

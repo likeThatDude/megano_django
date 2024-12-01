@@ -16,6 +16,7 @@ from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
+from catalog.models import Viewed
 from order.models import Order
 from order.models import OrderItem
 
@@ -174,6 +175,7 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
             context["last_order"] = last_order
 
         context["profile"] = profile
+        context["viewed_list"] = Viewed.viewed_list(self.request.user, limit=3)
         return context
 
     def get_object(self, queryset=None):
@@ -285,3 +287,34 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
     template_name = "account/password_reset_confirm.html"
     success_url = reverse_lazy("account:password_reset_complete")
     form_class = SetPasswordForm
+
+
+class ViewedListView(LoginRequiredMixin, ListView):
+    """
+    View для управления профилем пользователя.
+
+    Этот класс позволяет пользователю изменять свои данные профиля и пароль.
+    Доступ к этому представлению возможен только для аутентифицированных пользователей.
+    """
+
+    template_name = "account/viewed_list.html"
+    context_object_name = "viewed_list"
+
+    def get_queryset(self):
+        """
+        Получаем queryset заказов пользователя
+
+        Этот метод используется в представлении для загрузки всех заказов пользователя.
+        Подгружается связанная модель DeliveryPrice, связанная FK с моделью Order.
+        Также, подгружаем связанные сущности модели OrderItem
+
+        Возвращает:
+            список заказов пользователя с информацией о ценах: цена доставки, общая стоимость заказа,
+            статус, оплачен заказ или нет.
+
+        Примечание:
+            Этот метод использует `select_related` и `prefetch_related` для оптимизации запросов, загружая только
+            нужные поля и избегая ненужных запросов к базе данных.
+
+        """
+        return Viewed.viewed_list(self.request.user)
