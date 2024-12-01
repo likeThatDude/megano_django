@@ -1,5 +1,5 @@
-from django.db import models
-from django.db.models import ManyToManyField
+from django.db import models, transaction
+from django.db.models import ManyToManyField, QuerySet
 from django.db.models.constraints import UniqueConstraint
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -429,7 +429,7 @@ class Viewed(models.Model):
 
     Attributes:
         user: пользователь, который посмотрел товар;
-        product: товар, который был просмотрен пользователем;
+        product: товар, просмотренный пользователем;
         created_at: дата/время просмотра товара.
     """
 
@@ -452,3 +452,59 @@ class Viewed(models.Model):
         verbose_name_plural = _("Viewed")
         ordering = ("-created_at",)
         constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
+
+    @classmethod
+    def add(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> None:
+        """
+        Добавляет или обновляет товар в списке просмотренных текущим пользователем.
+        Если товар просматривается текущим пользователем в первый раз,
+        то увеличивается его количество просмотров.
+        """
+
+        with transaction.atomic():
+            new_view, created = Viewed.objects.update_or_create(user=user, product_id=product_id)
+
+            if created:
+                product = Product.objects.select_for_update().get(id=product_id)
+                product.views += 1
+                product.save()
+
+    @classmethod
+    def viewed_list(cls, user: settings.AUTH_USER_MODEL, limit=20) -> QuerySet:
+        """
+        Возвращает список просмотренных текущим пользователем товаров (по умолчанию 20)
+        """
+
+        return (
+            Viewed.objects.filter(user=user)
+            .select_related("product")
+            .only("product_id", "product__name")
+            .order_by("-created_at")[:limit]
+            .all()
+        )
+
+    @classmethod
+    def viewed_count(cls, user: settings.AUTH_USER_MODEL) -> int:
+        """
+        Возвращает целочисленное значение количества просмотренных текущим
+        пользователем товаров
+        """
+
+        return Viewed.objects.filter(user=user).count()
+
+    @classmethod
+    def exists(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> bool:
+        """
+        Проверяет есть ли указанный товар в списке просмотренных
+        текущим пользователем
+        """
+        return Viewed.objects.filter(user=user, product_id=product_id).exists()
+
+    @classmethod
+    def remove(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> bool:
+        """
+        Удаляет товар из списка просмотренных текущим пользователем.
+        Возвращает логическое значение результата операции.
+        """
+        deleted_rows, deleted_dict = Viewed.objects.filter(user=user, product_id=product_id).delete()
+        return deleted_rows != 0

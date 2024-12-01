@@ -273,6 +273,7 @@ BANNERS_KEY = "banners"
 user_comparison_key = "user_comparison_"
 anonymous_comparison_key = "anonymous_user_comparison_"
 CART_SESSION_ID = "cart"
+VIEWED_SESSION_ID = "viewed"
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
