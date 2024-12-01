@@ -297,7 +297,7 @@ class ViewedListView(LoginRequiredMixin, ListView):
     Доступ к этому представлению возможен только для аутентифицированных пользователей.
     """
 
-    template_name = "account/viewed_list.html"
+    template_name = "custom_auth/viewed_list.html"
     context_object_name = "viewed_list"
 
     def get_queryset(self):
