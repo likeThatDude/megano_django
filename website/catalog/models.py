@@ -454,7 +454,7 @@ class Viewed(models.Model):
         constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
 
     @classmethod
-    def add(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> None:
+    def add_viewed_product(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> None:
         """
         Добавляет или обновляет товар в списке просмотренных текущим пользователем.
         Если товар просматривается текущим пользователем в первый раз,

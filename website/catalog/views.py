@@ -276,7 +276,7 @@ class ProductDetailView(DetailView):
 
         # Если пользователь авторизован, добавляется запись просмотра в БД
         if self.request.user.is_authenticated:
-            Viewed.add(product_id=pk, user=self.request.user)
+            Viewed.add_viewed_product(product_id=pk, user=self.request.user)
         else:
             # иначе, запись о просмотре добавляется в сессию
             viewed = ViewedSession(self.request)
