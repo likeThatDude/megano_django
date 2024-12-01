@@ -28,7 +28,7 @@ from .models import Profile
 
 
 class LogInView(LoginView):
-    template_name = "account/login.html"
+    template_name = "custom_auth/login.html"
     redirect_authenticated_user = True
 
     def get_success_url(self):
@@ -47,7 +47,7 @@ class RegisterView(CreateView):
     CBV регистрации профиля пользователя
     """
 
-    template_name = "account/register.html"
+    template_name = "custom_auth/register.html"
     form_class = CustomUserCreationForm
     context_object_name = "register_form"
 
@@ -99,7 +99,7 @@ class ProfileView(LoginRequiredMixin, View):
     Доступ к этому представлению возможен только для аутентифицированных пользователей.
     """
 
-    template_name = "account/profile.html"
+    template_name = "custom_auth/profile.html"
 
     def get(self, request, *args, **kwargs):
         """
@@ -141,7 +141,7 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, self.template_name, context)
 
     def get_success_url(self):
-        return reverse_lazy("account:profile")
+        return reverse_lazy("custom_auth:profile")
 
 
 class PersonalCabinet(LoginRequiredMixin, DetailView):
@@ -157,7 +157,7 @@ class PersonalCabinet(LoginRequiredMixin, DetailView):
 
     """
 
-    template_name = "account/personal_cabinet.html"
+    template_name = "custom_auth/personal_cabinet.html"
     context_object_name = "profile"
     model = Profile
 
@@ -228,7 +228,7 @@ class ProfileOrdersView(LoginRequiredMixin, ListView):
 
     """
 
-    template_name = "account/profile_orders.html"
+    template_name = "custom_auth/profile_orders.html"
     context_object_name = "orders"
 
     def get_queryset(self):
@@ -284,8 +284,8 @@ class UserPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
         form_class - используемая форма в шаблоне
     """
 
-    template_name = "account/password_reset_confirm.html"
-    success_url = reverse_lazy("account:password_reset_complete")
+    template_name = "custom_auth/password_reset_confirm.html"
+    success_url = reverse_lazy("custom_auth:password_reset_complete")
     form_class = SetPasswordForm
 
 

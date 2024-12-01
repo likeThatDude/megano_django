@@ -68,6 +68,14 @@ def checkout_process(
     Возвращает:
         - Session: Объект Stripe Checkout Session.
     """
+    products_ids = list()
+    print(f'{order=}')
+    for i in order.order_items.all():
+        print(f'{i=}')
+        products_ids.append(i.product_id)
+    print(f'{products_ids=}')
+    products_ids = ','.join((str(num) for num in products_ids))
+    print(f'{products_ids=}')
     now = datetime.now()
     formatted_date = now.strftime("%H:%M %d.%m.%Y")
     date_to_db = "%20".join(formatted_date.split(" "))
@@ -98,8 +106,10 @@ def checkout_process(
                 "order_id": order.id,
                 "total_price": url_total_price,
                 "date": formatted_date,
-                "url": f"?order_id={order.id}&total_price={total_price_all}&date={date_to_db}",
+                "url": f"?order_id={order.id}&total_price={url_total_price}&date={date_to_db}"
+                       f"&delivery_price={order.delivery_price.price}",
                 "delivery_price": order.delivery_price.price,
+                "products_ids": products_ids,
             },
         )
     else:
@@ -128,6 +138,7 @@ def checkout_process(
                 "total_price": total_price,
                 "date": formatted_date,
                 "url": f"?order_id={order.id}&seller_id={seller_id}" f"&total_price={total_price}&date={date_to_db}",
+                "products_ids": products_ids,
             },
         )
 

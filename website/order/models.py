@@ -1,4 +1,4 @@
-from account.models import Profile
+from custom_auth.models import Profile
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Product

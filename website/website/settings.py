@@ -34,8 +34,9 @@ if DEBUG:
     ALLOWED_HOSTS = [
         "127.0.0.1",
         "localhost",
+        "30e2-37-214-103-7.ngrok-free.app"
     ]
-
+    CSRF_TRUSTED_ORIGINS = ["https://30e2-37-214-103-7.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
@@ -46,8 +47,7 @@ else:
         "127.0.0.1",
         SERVER_DOMAIN,
     ]
-
-CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
+    CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
 
 
 USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
@@ -93,7 +93,7 @@ INSTALLED_APPS = [
     "django_celery_results",
     "django_extensions",
     # Django apps
-    "account.apps.AccountConfig",
+    "custom_auth.apps.CustomAuthConfig",
     "cart.apps.CartConfig",
     "catalog.apps.CatalogConfig",
     "core.apps.CoreConfig",
@@ -217,10 +217,10 @@ MEDIA_URL = "/media/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "auth.CustomUser"
+AUTH_USER_MODEL = "custom_auth.CustomUser"
 
-LOGIN_URL = reverse_lazy("account:login")
-LOGOUT_URL = reverse_lazy("account:logout")
+LOGIN_URL = reverse_lazy("custom_auth:login")
+LOGOUT_URL = reverse_lazy("custom_auth:logout")
 LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 

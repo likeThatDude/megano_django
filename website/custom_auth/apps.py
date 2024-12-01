@@ -1,10 +1,10 @@
 from django.apps import AppConfig
 
 
-class AccountConfig(AppConfig):
+class CustomAuthConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "account"
+    name = "custom_auth"
 
     def ready(self):
         """Для работы сигналов"""
-        import account.signals
+        import custom_auth.signals
