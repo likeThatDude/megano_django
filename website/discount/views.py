@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from django.views.generic import UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
+from django.utils import timezone
+
 
 from .forms import DiscountCreationForm
 from .models import Discount
@@ -85,3 +87,24 @@ class DiscountUpdateView(UserPassesTestMixin, UpdateView):
             "discount:discount-update",
             kwargs={"slug": self.object.slug},
         )
+
+class ActiveDiscountsView(ListView):
+    """
+    Представление для отображения активных скидок.
+    """
+
+    model = Discount
+    template_name = 'discount/active_discounts.html'
+    context_object_name = 'discounts'
+
+    def get_queryset(self):
+        """Получает только активные скидки."""
+        try:
+            return Discount.objects.filter(active=True).filter(
+                Q(start_date__isnull=True) | Q(start_date__lte=timezone.now())
+            ).filter(
+                Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())
+            )
+        except Exception as e:
+            print(f"Ошибка при получении скидок: {e}")
+            return Discount.objects.none()
