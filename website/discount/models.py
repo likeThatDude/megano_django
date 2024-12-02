@@ -13,7 +13,7 @@ from django.db.models import Max
 from django.db.models import Min
 from django.db.models import Q
 from django.db.models import QuerySet
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from pytils.translit import slugify
@@ -232,6 +232,9 @@ class Discount(models.Model):
             self.slug = slugify(self.name)
 
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("discount:discount-detail", kwargs={"slug": self.slug})
 
     @classmethod
     def __get_discounts_queryset(cls, products: Sequence[Product] | Product) -> QuerySet:

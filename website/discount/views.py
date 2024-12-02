@@ -4,12 +4,28 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.utils.translation import gettext_lazy as _
 
 from .forms import DiscountCreationForm
 from .models import Discount
 from cart.cart import Cart
+
+
+class DiscountListView(UserPassesTestMixin, ListView):
+    model = Discount
+    template_name = "discount/discount_list.html"
+    context_object_name = "discounts"
+
+    def test_func(self) -> bool:
+        """
+        Метод test_func, чтобы не пропускать запросы
+        не аутентифицированного пользователя без прав администратора
+        """
+        if not self.request.user.is_staff:
+            return False
+
+        return True
 
 
 class DiscountDetailView(UserPassesTestMixin, DetailView):
