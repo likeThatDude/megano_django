@@ -16,6 +16,10 @@ from cart.cart import Cart
 
 
 class DiscountListView(UserPassesTestMixin, ListView):
+    """
+    Представление для отображения всех скидок:
+    Доступно только аутентифицированному пользователя, у которого есть права админа.
+    """
     model = Discount
     template_name = "discount/discount_list.html"
     context_object_name = "discounts"
@@ -32,6 +36,10 @@ class DiscountListView(UserPassesTestMixin, ListView):
 
 
 class DiscountDetailView(UserPassesTestMixin, DetailView):
+    """
+    Представление для отображения формы деталей скидки:
+    Доступно только аутентифицированному пользователя, у которого есть права админа.
+    """
     model = Discount
     context_object_name = 'discount'
     template_name = "discount/discount_detail.html"
