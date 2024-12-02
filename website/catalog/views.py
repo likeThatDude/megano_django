@@ -30,7 +30,7 @@ from .models import Specification
 from .models import Tag
 from .models import Viewed
 from .serializers import ViewedSerializer
-from .viewed import ViewedSession
+from .models import ViewedSession
 
 
 def catalog_view(request: HttpRequest):

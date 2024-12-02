@@ -1,7 +1,9 @@
 from django.db import models, transaction
 from django.db.models import ManyToManyField, QuerySet
 from django.db.models.constraints import UniqueConstraint
+from django.http import HttpRequest
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -508,3 +510,38 @@ class Viewed(models.Model):
         """
         deleted_rows, deleted_dict = Viewed.objects.filter(user=user, product_id=product_id).delete()
         return deleted_rows != 0
+
+
+class ViewedSession:
+
+    def __init__(self, request: HttpRequest):
+        """
+        Инициализация модели просмотренных неавторизованным пользователем товаров
+        """
+        self.session = request.session
+        viewed = self.session.get(settings.VIEWED_SESSION_ID)
+
+        if not viewed:
+            viewed = self.session[settings.VIEWED_SESSION_ID] = {}
+
+        self.viewed: dict = viewed
+
+    def add(self, product_id: int) -> None:
+        """
+        Добавляет или обновляет товар в списке просмотренных неавторизованным пользователем.
+        Если товар просматривается неавторизованным пользователем в первый раз,
+        то увеличивается его количество просмотров.
+        """
+
+        if str(product_id) not in self.viewed:
+            with transaction.atomic():
+                product = Product.objects.select_for_update().get(id=product_id)
+                product.views += 1
+                product.save()
+
+        self.viewed[product_id] = timezone.now().__str__()
+        self.__save()
+
+    def __save(self) -> None:
+        self.session[settings.VIEWED_SESSION_ID] = self.viewed
+        self.session.modified = True
