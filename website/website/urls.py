@@ -30,7 +30,7 @@ urlpatterns = [
     # Standard URL
     path("", include("core.urls", namespace="default")),
     path("admin/", admin.site.urls),
-    path("account/", include("account.urls")),
+    path("account/", include("custom_auth.urls")),
     path("order/", include("order.urls")),
     path("catalog/", include("catalog.urls")),
     path("cart/", include("cart.urls")),

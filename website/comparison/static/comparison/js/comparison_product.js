@@ -88,12 +88,14 @@ document.querySelector('.delete_button_status').addEventListener('click', functi
 document.querySelectorAll('.Card-btn-comp').forEach(function (button) {
     button.addEventListener('click', function (e) {
         e.preventDefault(); // Предотвращаем стандартное поведение кнопки (перезагрузку страницы)
-
+        console.log('КНОПКА НАЖАТА')
         // Получаем csrf токен
         const csrfToken = getCookie('csrftoken');
 
         // Получаем product_id из родительской формы, в которой находится кнопка
         const productId = button.closest('form').querySelector('input[name="product_id"]').value;
+        console.log('ID:', productId)
+        console.log('КНОПКА НАЖАТА')
 
         // Формируем запрос
         fetch(COMPARISON_ADD_URL, {
