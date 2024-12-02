@@ -1,3 +1,6 @@
+import logging
+
+from cart.cart import Cart
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db import transaction
 from django.db.models import Q
@@ -6,13 +9,14 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.utils import timezone
-import logging
-from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView
+from django.views.generic import DetailView
+from django.views.generic import ListView
+from django.views.generic import UpdateView
 
 from .forms import DiscountCreationForm
 from .models import Discount
-from cart.cart import Cart
 
 
 class DiscountListView(UserPassesTestMixin, ListView):
@@ -20,6 +24,7 @@ class DiscountListView(UserPassesTestMixin, ListView):
     Представление для отображения всех скидок:
     Доступно только аутентифицированному пользователя, у которого есть права админа.
     """
+
     model = Discount
     template_name = "discount/discount_list.html"
     context_object_name = "discounts"
@@ -40,8 +45,9 @@ class DiscountDetailView(UserPassesTestMixin, DetailView):
     Представление для отображения формы деталей скидки:
     Доступно только аутентифицированному пользователя, у которого есть права админа.
     """
+
     model = Discount
-    context_object_name = 'discount'
+    context_object_name = "discount"
     template_name = "discount/discount_detail.html"
 
     def test_func(self) -> bool:
@@ -108,7 +114,7 @@ class DiscountDetailView(UserPassesTestMixin, DetailView):
             }
 
         if self.object.method == "PT":
-            context['percent'] = self.object.percent
+            context["percent"] = self.object.percent
         elif self.object.method == "SM":
             context["sum_discount"] = self.object.price
         elif self.object.method == "FD":
@@ -213,8 +219,8 @@ class ActiveDiscountsView(ListView):
     """
 
     model = Discount
-    template_name = 'discount/active_discounts.html'
-    context_object_name = 'discounts'
+    template_name = "discount/active_discounts.html"
+    context_object_name = "discounts"
 
     def get_queryset(self):
         """Получает QuerySet активных скидок.
@@ -223,12 +229,11 @@ class ActiveDiscountsView(ListView):
         - Дата начала скидки должна быть либо не указана, либо меньше или равна текущей дате.
         - Дата окончания скидки должна быть либо не указана, либо больше или равна текущей дате."""
         try:
-            return Discount.objects.filter(active=True).filter(
-                Q(start_date__isnull=True) | Q(start_date__lte=timezone.now())
-            ).filter(
-                Q(end_date__isnull=True) | Q(end_date__gte=timezone.now())
+            return (
+                Discount.objects.filter(active=True)
+                .filter(Q(start_date__isnull=True) | Q(start_date__lte=timezone.now()))
+                .filter(Q(end_date__isnull=True) | Q(end_date__gte=timezone.now()))
             )
         except Exception as e:
             logger.error("Ошибка при получении скидок: %s", e, exc_info=True)
             return Discount.objects.none()
-
