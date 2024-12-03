@@ -172,3 +172,17 @@ class ProfileRegistrationForm(ProfileChangeForm):
 
     class Meta(ProfileChangeForm.Meta):
         fields = ["first_name", "last_name", "patronymic", "phone"]
+
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
