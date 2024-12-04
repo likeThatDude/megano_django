@@ -1,15 +1,9 @@
 from http import HTTPStatus
-from random import choices
-from string import ascii_letters
+from itertools import product
 
-from catalog.models import Category
-from catalog.models import Delivery
-from catalog.models import Payment
 from catalog.models import Price
 from catalog.models import Product
-from catalog.models import Seller
 from custom_auth.models import CustomUser
-from django.core.files.base import ContentFile
 from django.http import HttpResponseNotFound
 from django.template.response import TemplateResponse
 from django.test import TestCase
@@ -17,38 +11,23 @@ from django.urls import reverse
 
 
 class ProductDetailTestCase(TestCase):
+    fixtures = ['catalog-fixtures.json']
 
     @classmethod
     def setUpClass(cls):
-        CustomUser.objects.all().delete()
-        Category.objects.all().delete()
-        Product.objects.all().delete()
-        cls.user = CustomUser.objects.create_user(username="testuser", password="testpassword", email="test@test.com")
-        cls.icon_content = ContentFile(b"dummy content", name="test_icon.png")
-        cls.product_name = "".join(choices(ascii_letters, k=10))
-        cls.category_name = "".join(choices(ascii_letters, k=10))
-        cls.seller_name = "".join(choices(ascii_letters, k=10))
-        cls.category = Category.objects.create(name=cls.category_name)
-        cls.product = Product.objects.create(
-            name=cls.product_name,
-            product_type="Смартфон",
-            manufacture="Китай",
-            category=cls.category,
-            preview=cls.icon_content,
-        )
-        cls.delivery = Delivery.objects.create(name=Delivery.PICKUP_POINT)
-        cls.payment = Payment.objects.create(name=Payment.CARD_COURIER)
-        cls.seller = Seller.objects.create(
-            name=cls.seller_name,
-            phone="9809379992",
-            email="seller@seller.com",
-            image=cls.icon_content,
-        )
-        cls.seller.delivery_methods.set([cls.delivery])
-        cls.seller.payment_methods.set([cls.payment])
-        cls.price = Price.objects.create(
-            seller=cls.seller, product=cls.product, quantity=1, sold_quantity=12, price=2500
-        )
+        cls.user = CustomUser.objects.create_user(username="testuser", password="testpassword",
+                                                  email="test@test.com", login='test')
+        for i in range(1, 10):
+            cls.user = CustomUser.objects.create_user(username=f"testuser{i}", password=f"testpasswordi{i}",
+                                                      email=f"test{i}@test.com", login=f'test{i}')
+        super().setUpClass()
+        cls.product = Product.objects.get(pk=1)
+        cls.price = (Price.objects
+                     .select_related('product', 'seller')
+                     .filter(product_id=cls.product.id)
+                     .only('product__id', 'product__name', 'seller__name', 'price')
+                     )
+        cls.min_price = min(cls.price, key=lambda x: x.price).price
 
     def create_get_request(self, pk: int) -> TemplateResponse | HttpResponseNotFound:
         response = self.client.get(reverse("catalog:product_detail", kwargs={"pk": pk}))
@@ -71,38 +50,26 @@ class ProductDetailTestCase(TestCase):
             self.assertContains(response, login_link)
             self.assertNotContains(response, "Отправить отзыв")
 
-    def check_login(self, login: bool) -> None:
-        response = self.client.get(reverse("custom_auth:login"))
-        if login:
-            self.assertRedirects(response, reverse("core:index"))
-        else:
-            self.assertEqual(response.status_code, HTTPStatus.OK)
-            self.client.logout()
-
     def test_get_product_detail_page(self):
         self.check_product_detail(1, HTTPStatus.OK)
-        self.check_product_detail(2, HTTPStatus.NOT_FOUND)
+        self.check_product_detail(999, HTTPStatus.NOT_FOUND)
 
     def test_get_product_on_page(self):
         self.check_product_on_page(1, self.product.name)
-
+    #
     def test_check_review_create(self):
-        self.check_login(False)
         self.check_review_on_product_page(1, False)
-        response = self.client.login(email="test@test.com", password="testpassword")
-        self.check_login(True)
+        response = self.client.force_login(self.user)
         self.check_review_on_product_page(1, True)
-
+        self.client.logout()
+    #
     def test_seller_on_product_page(self) -> None:
-        response = self.create_get_request(1)
-        self.assertContains(response, self.seller_name)
-        self.assertContains(response, self.price.price)
+        for all_data in self.price:
+            response = self.create_get_request(all_data.product.pk)
+            self.assertContains(response, all_data.seller.name)
+            self.assertContains(response, self.min_price)
+
 
     @classmethod
     def tearDownClass(cls):
-        cls.seller.delete()
-        cls.payment.delete()
-        cls.delivery.delete()
-        cls.product.delete()
-        cls.category.delete()
-        cls.user.delete()
+        CustomUser.objects.all().delete()
