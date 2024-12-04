@@ -1,14 +1,16 @@
 import stripe
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-from django.http import HttpResponseForbidden, HttpRequest, HttpResponse
-from django.shortcuts import redirect, render
+from django.http import HttpRequest
+from django.http import HttpResponse
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views import View
+from payment.tasks import send_html_email
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from payment.tasks import send_html_email
 
 from website import settings
 
@@ -85,8 +87,11 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
             correct_urls = utils.get_current_urls_for_payment_response(request)
 
             session = utils.checkout_process(
-                order=order, redirect_urls=correct_urls, all_product=False,
-                seller_id=seller_id, total_price=total_price,
+                order=order,
+                redirect_urls=correct_urls,
+                all_product=False,
+                seller_id=seller_id,
+                total_price=total_price,
             )
             return redirect(session.url, code=303)
         return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
@@ -207,5 +212,6 @@ class StripeWebhookAPIView(APIView):
             elif all_order == 0:
                 utils.change_certain_items_payment_status(session=session)
             from payment.tasks import send_html_email
-            send_html_email.delay(user_login, session['customer_details']['email'])
+
+            send_html_email.delay(user_login, session["customer_details"]["email"])
         return Response({"status": "success"}, status=200)

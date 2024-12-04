@@ -32,11 +32,7 @@ SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN", "localhost")
 HTTP_PROTOCOL = os.environ.get("HTTP_PROTOCOL", "http")
 
 if DEBUG:
-    ALLOWED_HOSTS = [
-        "127.0.0.1",
-        "localhost",
-        "bc8d-37-214-103-7.ngrok-free.app"
-    ]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "bc8d-37-214-103-7.ngrok-free.app"]
     CSRF_TRUSTED_ORIGINS = ["https://bc8d-37-214-103-7.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
@@ -296,6 +292,4 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-CELERY_BEAT_SCHEDULE = {
-
-}
+CELERY_BEAT_SCHEDULE = {}

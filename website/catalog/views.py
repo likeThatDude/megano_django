@@ -3,9 +3,10 @@ from itertools import product
 
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Min, Q
+from django.db.models import Min
 from django.db.models import OuterRef
 from django.db.models import Prefetch
+from django.db.models import Q
 from django.db.models import Subquery
 from django.db.models.functions import Round
 from django.http import HttpRequest
@@ -267,7 +268,11 @@ class ProductDetailView(DetailView):
                 "delivery_methods",
                 "payment_methods",
             )
-            .only("name", "price", "image", )
+            .only(
+                "name",
+                "price",
+                "image",
+            )
             .filter(Q(price__product__pk=pk))
             .order_by("price__price"),
             timeout=240,
@@ -285,7 +290,7 @@ class ViewedListActionsView(APIView):
         tags=[_("views")],
         summary="Есть ли товар в списке просмотренных",
         description="Проверяет есть ли указанный товар в списке просмотренных"
-                    " и возвращает true если есть, иначе - false.",
+        " и возвращает true если есть, иначе - false.",
     )
     def get(self, request: Request, product_id: int) -> Response:
         exists = Viewed.objects.filter(user=request.user, product_id=product_id).exists()
@@ -295,7 +300,7 @@ class ViewedListActionsView(APIView):
         tags=[_("views")],
         summary="Добавление/обновление товара в просмотренных",
         description="Добавляет или обновляет товар в списке просмотренных текущим пользователем."
-                    " Если товар еще не существует в списке, то увеличивается его количество просмотров.",
+        " Если товар еще не существует в списке, то увеличивается его количество просмотров.",
     )
     def post(self, request: Request, product_id: int) -> Response:
         with transaction.atomic():
@@ -316,7 +321,7 @@ class ViewedListActionsView(APIView):
         tags=[_("views")],
         summary="Удаление товара из просмотренных",
         description="Удаляет товар из списка просмотренных пользователем, "
-                    "возвращает логическое значение результата операции.",
+        "возвращает логическое значение результата операции.",
     )
     def delete(self, request: Request, product_id: int) -> Response:
         deleted_rows, deleted_dict = Viewed.objects.filter(user=request.user, product_id=product_id).delete()

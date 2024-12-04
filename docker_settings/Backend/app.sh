@@ -9,7 +9,6 @@ elif [[ "${1}" == "flower" ]]; then
 elif [[ "${1}" == "app" ]]; then
   python manage.py collectstatic --noinput
   python manage.py makemigrations
-  python manage.py migrate auth
   python manage.py migrate
 
   echo "Creating superuser..."

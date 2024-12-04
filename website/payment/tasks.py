@@ -1,10 +1,15 @@
 import os
 from datetime import datetime
 from email.mime.image import MIMEImage
+
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from website.settings import EMAIL_HOST_USER, BASE_DIR, SERVER_DOMAIN, HTTP_PROTOCOL
+
+from website.settings import BASE_DIR
+from website.settings import EMAIL_HOST_USER
+from website.settings import HTTP_PROTOCOL
+from website.settings import SERVER_DOMAIN
 
 
 @shared_task
@@ -30,23 +35,23 @@ def send_html_email(login: str, email: str):
     http_protocol = HTTP_PROTOCOL
 
     context = {
-        'username': login,
-        'year': datetime.now().year,
-        'domain': SERVER_DOMAIN,
-        'order_id': 8,
-        'email': from_email,
-        'protocol': HTTP_PROTOCOL,
+        "username": login,
+        "year": datetime.now().year,
+        "domain": SERVER_DOMAIN,
+        "order_id": 8,
+        "email": from_email,
+        "protocol": HTTP_PROTOCOL,
     }
 
-    html_content = render_to_string('payment/email_payment.html', context)
+    html_content = render_to_string("payment/email_payment.html", context)
     plain_message = "Это текстовая версия вашего письма."
 
     email = EmailMultiAlternatives(subject, plain_message, from_email, [to_email])
     email.attach_alternative(html_content, "text/html")
 
-    attach_image(email, 'logo.png', 'image1', 'static/assets/img/logo.png')
-    attach_image(email, 'support_email.gif', 'gif_support', 'static/assets/img/support_email.gif')
-    attach_image(email, 'dog_courier.gif', 'dog_support', 'static/assets/img/dog_courier.gif')
+    attach_image(email, "logo.png", "image1", "static/assets/img/logo.png")
+    attach_image(email, "support_email.gif", "gif_support", "static/assets/img/support_email.gif")
+    attach_image(email, "dog_courier.gif", "dog_support", "static/assets/img/dog_courier.gif")
 
     try:
         email.send()
@@ -83,10 +88,10 @@ def attach_image(email, filename: str, content_id: str, file_path: str):
         if not os.path.exists(file_full_path):
             raise FileNotFoundError(f"Файл не найден: {file_full_path}")
 
-        with open(file_full_path, 'rb') as img:
+        with open(file_full_path, "rb") as img:
             image = MIMEImage(img.read())
-            image.add_header('Content-ID', f'<{content_id}>')
-            image.add_header('Content-Disposition', 'inline', filename=filename)
+            image.add_header("Content-ID", f"<{content_id}>")
+            image.add_header("Content-Disposition", "inline", filename=filename)
 
             email.attach(image)
 

@@ -2,6 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 
 import stripe
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Prefetch
 from django.http import HttpRequest
@@ -10,7 +11,6 @@ from django.urls import reverse
 from order.models import Order
 from order.models import OrderItem
 from stripe.checkout import Session
-from django.core.cache import cache
 
 from website.settings import ORDERS_KEY
 
@@ -50,12 +50,12 @@ def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, st
 
 
 def checkout_process(
-        order: Order,
-        redirect_urls: tuple[str, str],
-        user_login: str,
-        all_product: bool = True,
-        seller_id: None | int = None,
-        total_price: None | Decimal = None,
+    order: Order,
+    redirect_urls: tuple[str, str],
+    user_login: str,
+    all_product: bool = True,
+    seller_id: None | int = None,
+    total_price: None | Decimal = None,
 ) -> Session:
     """
     Создает Stripe Checkout сессию для оплаты заказа.
@@ -73,7 +73,7 @@ def checkout_process(
     products_ids = list()
     for i in order.order_items.all():
         products_ids.append(i.product_id)
-    products_ids = ','.join((str(num) for num in products_ids))
+    products_ids = ",".join((str(num) for num in products_ids))
     now = datetime.now()
     formatted_date = now.strftime("%H:%M %d.%m.%Y")
     date_to_db = "%20".join(formatted_date.split(" "))
@@ -97,7 +97,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&total_price={url_total_price}"
-                                           f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
+            f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}",
             metadata={
                 "all_order": 1,
@@ -105,7 +105,7 @@ def checkout_process(
                 "total_price": url_total_price,
                 "date": formatted_date,
                 "url": f"?order_id={order.id}&total_price={url_total_price}&date={date_to_db}"
-                       f"&delivery_price={order.delivery_price.price}",
+                f"&delivery_price={order.delivery_price.price}",
                 "delivery_price": order.delivery_price.price,
                 "products_ids": products_ids,
                 "user_login": user_login,
@@ -128,7 +128,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&seller_id={seller_id}"
-                                           f"&total_price={total_price}&date={formatted_date}",
+            f"&total_price={total_price}&date={formatted_date}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}&seller_id={seller_id}",
             metadata={
                 "all_order": 0,
