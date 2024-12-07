@@ -186,3 +186,10 @@ class ProfileRegistrationForm(ProfileChangeForm):
             raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
 
         return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic
