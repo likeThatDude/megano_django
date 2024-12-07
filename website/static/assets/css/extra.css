@@ -7443,3 +7443,22 @@ input[type="submit"] {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+.Discount-description {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+.wrap-discount-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.Discount-description span {
+    margin-bottom: 10px;
+}
+
+.Discount-description a {
+    margin-bottom: 10px;
+}
