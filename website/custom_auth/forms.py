@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 from .models import Profile
@@ -16,10 +17,35 @@ class CustomUserCreationForm(UserCreationForm):
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
     """
-
-    email = forms.EmailField(label="Email", required=True)
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
+    login = forms.CharField(
+        label=_("Label"),
+        error_messages={
+            "login": _("Заполните поле login"),
+        },
+    )
+    email = forms.EmailField(
+        required=True,
+        label=_("Email"),
+        error_messages={
+            "email": _("Заполните поле email"),
+        },
+    )
+    password1 = forms.CharField(
+        required=True,
+        label=_("Password"),
+        widget=forms.PasswordInput,
+        error_messages={
+            "password1": _("Заполните поле password"),
+        },
+    )
+    password2 = forms.CharField(
+        required=True,
+        label=_("Password Confirm"),
+        widget=forms.PasswordInput,
+        error_messages={
+            "password2": _("Заполните поле password"),
+        },
+    )
 
     class Meta:
         model = CustomUser
@@ -35,9 +61,9 @@ class CustomUserChangeForm(UserChangeForm):
     и проверяет, что новый пароль соответствует требованиям безопасности.
     """
 
-    old_password = forms.CharField(label="Old password", widget=forms.PasswordInput, required=False)
-    new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput, required=False)
-    new_password2 = forms.CharField(label="New password confirmation", widget=forms.PasswordInput, required=False)
+    old_password = forms.CharField(label=_("Old password"), widget=forms.PasswordInput, required=False)
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput, required=False)
+    new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = CustomUser
