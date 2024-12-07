@@ -160,6 +160,27 @@ class ProfileChangeForm(forms.ModelForm):
                 raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
         return phone
 
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
