@@ -88,7 +88,6 @@ document.querySelector('.delete_button_status').addEventListener('click', functi
 document.querySelectorAll('.Card-btn-comp').forEach(function (button) {
     button.addEventListener('click', function (e) {
         e.preventDefault(); // Предотвращаем стандартное поведение кнопки (перезагрузку страницы)
-
         // Получаем csrf токен
         const csrfToken = getCookie('csrftoken');
 
@@ -122,7 +121,8 @@ document.querySelectorAll('.Card-btn-comp').forEach(function (button) {
             .catch(error => {
                 console.error('Ошибка:', error);
                 // В случае ошибки запроса
-                updateStatus('Ошибка', 'Произошла ошибка при добавлении товара.'); // Обновляем статус для ошибки
+                updateStatus('Ошибка', 'Произошла ошибка при добавлении товара.',
+                    'red_status', 'delete_button_status_red'); // Обновляем статус для ошибки
                 alert("Произошла ошибка при добавлении товара.");
             });
     });

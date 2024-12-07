@@ -3,8 +3,9 @@ import datetime
 from catalog.models import Category
 from catalog.models import Price
 from catalog.models import Product
-from discount.utils import get_discounted_products
+from discount.models import Discount
 from django.core.cache import cache
+from django.db import DatabaseError
 from django.db.models import Count
 from django.db.models import Min
 from django.db.models import OuterRef
@@ -12,7 +13,9 @@ from django.db.models import Q
 from django.db.models import Subquery
 from django.db.models import Sum
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
+from rest_framework.exceptions import ValidationError
 
 from website.settings import BANNERS_KEY
 from website.settings import CATEGORY_CASHING_TIME
@@ -87,13 +90,18 @@ class IndexView(TemplateView):
         """Получает 3 случайных баннеров из кэша или базы данных."""
         random_banners = cache.get(BANNERS_KEY)
         if random_banners is None:
-            random_banners = (
-                Banner.objects.select_related("product")
-                .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
-                .order_by("?")[:3]
-                .only("product__name", "product__preview", "product__short_description", "text")
-            )
-            cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
+            try:
+                random_banners = (
+                    Banner.objects.select_related("product")
+                    .filter(Q(active=True) & Q(deadline_data__gt=timezone.now().date()))
+                    .order_by("?")[:3]
+                    .only("product__name", "product__preview", "product__short_description", "text")
+                )
+                cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
+            except DatabaseError:
+                raise ValidationError(_("Ошибка получения данных для баннеров"))
+            except Exception as e:
+                raise ValidationError(_(f"Непредвиденная ошибка получения баннеров:{e}"))
         return random_banners
 
     def get_top_products(self):
@@ -141,6 +149,6 @@ class IndexView(TemplateView):
         на которые действует какая-нибудь акция"""
         hot_offers = cache.get(HOT_OFFER_KEY)
         if hot_offers is None:
-            hot_offers = get_discounted_products(8)
+            hot_offers = Discount.get_discounted_products(amount=8)
         cache.set(HOT_OFFER_KEY, hot_offers, timeout=CATEGORY_CASHING_TIME)
         return hot_offers

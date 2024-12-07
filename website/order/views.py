@@ -1,12 +1,14 @@
+from typing import Any
+
 from cart.cart import Cart
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
-from django.db.models import F
 from django.db.models import Prefetch
-from django.db.models import Q
-from django.db.models import Sum
+from django.http import Http404
 from django.http import HttpRequest
 from django.http import HttpResponse
+from django.http import HttpResponseNotFound
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -14,21 +16,16 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import DetailView
-from django.views.generic import ListView
-from kombu.exceptions import HttpError
 from order import utils
 from order.forms import OrderForm
+
+from website.settings import ORDERS_KEY
 
 from .models import Order
 from .models import OrderItem
 from .utils import create_errors_list
+from .utils import delete_product_from_cart
 from .utils import get_order_products
-
-# products_list = {
-#     "product1": {"quantity": 2, "product_id": 1, "price": 1200.25, "seller_id": 2, "to_order": True},
-#     "product2": {"quantity": 1, "product_id": 2, "price": 1300.75, "seller_id": 1, "to_order": True},
-#     "product3": {"quantity": 1, "product_id": 3, "price": 1500.10, "seller_id": 1, "to_order": False},
-# }
 
 
 class OrderCreateView(View):
@@ -61,23 +58,29 @@ class OrderCreateView(View):
         или перенаправление на страницу подтверждения создания заказа.
     """
 
-    def get(self, request: HttpRequest) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse | Any:
         context = {}
         user = utils.get_user_data(request)
-        context.update(user)
-        cart = Cart(request)
-        products_list = cart.products
-        if products_list:
-            products_correct_list = get_order_products(products_list)
-            product_data = utils.create_product_context_data(products_correct_list)
-            prices = utils.get_correct_queryset(products_correct_list)
-            context["order_data"] = prices
-            context["product_data"] = product_data
-            return render(request, "order/order.html", context=context)
+        if not user is None:
+            context.update(user)
+            cart = Cart(request)
+            products_list = cart.products
+            if products_list:
+                products_correct_list = get_order_products(products_list)
+                product_data = utils.create_product_context_data(products_correct_list)
+                prices = utils.get_correct_queryset(products_correct_list)
+                if not prices is None:
+                    context["order_data"] = prices
+                    context["product_data"] = product_data
+                    return render(request, "order/order.html", context=context)
+                else:
+                    raise Http404(_("Ошибка создания заказа"))
+            else:
+                return redirect(reverse("core:index"))
         else:
-            return redirect(reverse("core:index"))
+            raise Http404(_("Ошибка создания заказа"))
 
-    def post(self, request: HttpRequest) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse | Any:
         if request.user.is_authenticated:
             cart = Cart(request)
             products_list = cart.products
@@ -86,16 +89,21 @@ class OrderCreateView(View):
             if validate_data.is_valid():
                 correct_data = validate_data.cleaned_data
                 products_correct_list = get_order_products(products_list)
+                delete_product_from_cart(products_correct_list, request)
                 order_data = utils.data_preparation_and_recording(correct_data, products_correct_list, request.user.pk)
+
             else:
                 context = {}
                 data_errors = validate_data.errors.items()
                 errors_list = create_errors_list(data_errors)
                 context["errors"] = errors_list
                 return render(request, "order/order_error_list.html", context=context)
-            return redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
+            if not order_data is None:
+                return redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
+            else:
+                raise Http404(_("Ошибка создания заказа"))
         else:
-            return redirect(reverse("account:login"))
+            return redirect(reverse("custom_auth:login"))
 
 
 class OrderDetailView(DetailView):
@@ -138,53 +146,58 @@ class OrderDetailView(DetailView):
             Этот метод использует `select_related` и `prefetch_related` для оптимизации запросов, загружая только
             нужные поля и избегая ненужных запросов к базе данных.
         """
-        order = get_object_or_404(
-            Order.objects.select_related(
-                "user",
-                "delivery_price",
-            )
-            .prefetch_related(
-                Prefetch(
-                    "order_items",
-                    queryset=OrderItem.objects.select_related(
-                        "seller",
-                        "product",
-                        "delivery",
-                        "payment_type",
-                    )
-                    .filter(active=True)
-                    .only(
-                        "seller__name",
-                        "product__preview",
-                        "product__name",
-                        "product__short_description",
-                        "delivery__name",
-                        "payment_type__name",
-                        "order__id",
-                        "quantity",
-                        "price",
-                        "payment_status",
-                    ),
+        pk = self.kwargs["pk"]
+        order = cache.get(f"{ORDERS_KEY}{pk}")
+        if order is None:
+            order = get_object_or_404(
+                Order.objects.select_related(
+                    "user",
+                    "delivery_price",
                 )
+                .prefetch_related(
+                    Prefetch(
+                        "order_items",
+                        queryset=OrderItem.objects.select_related(
+                            "seller",
+                            "product",
+                            "delivery",
+                            "payment_type",
+                        )
+                        .filter(active=True)
+                        .only(
+                            "seller__name",
+                            "product__preview",
+                            "product__name",
+                            "product__short_description",
+                            "delivery__name",
+                            "payment_type__name",
+                            "order__id",
+                            "quantity",
+                            "price",
+                            "payment_status",
+                        ),
+                    )
+                )
+                .annotate(unique_delivery_types=Count("order_items__delivery", distinct=True))
+                .annotate(unique_payment_types=Count("order_items__payment_type", distinct=True))
+                .only(
+                    "user__id",
+                    "order_items",
+                    "name",
+                    "delivery_city",
+                    "delivery_address",
+                    "recipient_phone",
+                    "recipient_email",
+                    "status",
+                    "archived",
+                    "created_at",
+                    "total_price",
+                    "delivery_price",
+                    "paid_status",
+                ),
+                pk=pk,
             )
-            .annotate(unique_payment_types=Count("order_items__payment_type", distinct=True))
-            .only(
-                "user__id",
-                "order_items",
-                "name",
-                "delivery_city",
-                "delivery_address",
-                "recipient_phone",
-                "recipient_email",
-                "status",
-                "archived",
-                "created_at",
-                "total_price",
-                "delivery_price",
-                "paid_status",
-            ),
-            pk=self.kwargs["pk"],
-        )
+            cache.set(f"{ORDERS_KEY}{pk}", order, timeout=300)
         if order.user.pk == self.request.user.pk or self.request.user.is_staff:
             return order
         else:

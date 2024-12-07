@@ -5,6 +5,7 @@ from rest_framework.status import HTTP_200_OK
 from rest_framework.status import HTTP_201_CREATED
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 
 from .cart import Cart
 
@@ -31,6 +32,7 @@ class APICart(APIView):
     """
     API для взаимодействия с корзиной
     """
+    permission_classes = [AllowAny]
 
     def get(self, request: Request) -> Response:
         """

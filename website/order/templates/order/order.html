@@ -232,6 +232,10 @@
                                                     class="Cart-price">{{ product_data.total_price }} $</span>
                                             </div>
                                             <div class="Cart-block">
+                                                <a class="btn btn_primary btn_lg" href="{% url 'cart:detail' %}">Отменить
+                                                </a>
+                                            </div>
+                                            <div class="Cart-block">
                                                 <button class="btn btn_primary btn_lg" type="submit">Подтвердить
                                                 </button>
                                             </div>
@@ -254,8 +258,8 @@
                     все ваши товары останутся в заказе после регистрации.
                 </p>
                 <div class="non-auth-block-buttons">
-                    <a class="non-auth-block-button" href="{% url 'account:login' %}?next={{ request.path }}">Войти</a>
-                    <a class="non-auth-block-button" href="{% url 'account:register' %}">Зарегистрироваться</a>
+                    <a class="non-auth-block-button" href="{% url 'custom_auth:login' %}?next={{ request.path }}">Войти</a>
+                    <a class="non-auth-block-button" href="{% url 'custom_auth:register' %}">Зарегистрироваться</a>
                 </div>
             </div>
         {% endif %}

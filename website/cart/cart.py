@@ -3,6 +3,7 @@ from decimal import Decimal
 from catalog.models import Price
 from catalog.models import Product
 from catalog.models import Seller
+from django.contrib.sessions.models import Session
 from django.http import HttpRequest
 from rest_framework.request import Request
 

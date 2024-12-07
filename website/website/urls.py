@@ -26,11 +26,14 @@ from django.urls import path
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 
+# def trigger_error(request):
+#     division_by_zero = 1 / 0
+
 urlpatterns = [
     # Standard URL
     path("", include("core.urls", namespace="default")),
     path("admin/", admin.site.urls),
-    path("account/", include("account.urls")),
+    path("account/", include("custom_auth.urls")),
     path("order/", include("order.urls")),
     path("catalog/", include("catalog.urls")),
     path("cart/", include("cart.urls")),
@@ -41,6 +44,7 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/v1/", include("review.urls")),
+    # path('sentry-debug/', trigger_error),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

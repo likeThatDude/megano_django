@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block title %}
-    Product:
+    Product: {{ product.name|truncatechars:30 }}
 {% endblock %}
 
 {% block body %}
@@ -174,9 +174,17 @@
                                                 <div class="Order-personal">
                                                     <div class="row">
                                                         <div class="row-block">
-                                                            <a class="Order-title" href="oneorder.html">
-                                                                {{ seller.name }}
-                                                            </a>
+                                                            <div class="Order-title">
+                                                                <div class="seller_info_block">
+                                                                    <div class="seller_image"
+                                                                         style="background-image: url({{ seller.image.url }})">
+
+                                                                    </div>
+                                                                    <div class="seller_name">
+                                                                        <span>{{ seller.name|truncatechars:25 }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="ProductCard-cartElement"
                                                                  style="margin-top: 10px;">
                                                                 <a class="btn btn_primary" href="#modal_open">
@@ -208,9 +216,8 @@
                                                                 <div class="Order-infoType">Стоимость:
                                                                 </div>
                                                                 <div class="Order-infoContent">
-                                                                    {% for price in seller.price.all %}
-                                                                        <span class="Order-price">{{ price.price }}$</span>
-                                                                    {% endfor %}
+                                                                    {% get_seller_price seller product.pk as seller_price %}
+                                                                    <span class="Order-price">{{ seller_price }}$</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -263,8 +270,8 @@
                                         <p>Для просмотра всех отзывов и возможности их оставлять</p>
                                         <p>вы должны зарегистрироваться</p>
                                         <div class="non-auth-block-buttons">
-                                            <a class="non-auth-block-button" href="{% url 'account:login' %}">Войти</a>
-                                            <a class="non-auth-block-button" href="{% url 'account:register' %}">Зарегистрироваться</a>
+                                            <a class="non-auth-block-button" href="{% url 'custom_auth:login' %}">Войти</a>
+                                            <a class="non-auth-block-button" href="{% url 'custom_auth:register' %}">Зарегистрироваться</a>
                                         </div>
                                     </div>
                                 {% endif %}

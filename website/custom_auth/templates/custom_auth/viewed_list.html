@@ -1,0 +1,116 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block links %}
+    <!--    <title>Megano</title>-->
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utils.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+{% endblock %}
+
+
+{% block body %}
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnLeft">
+            <div class="wrap">
+                <div class="Section-column">
+                    <div class="Section-columnSection">
+                        <header class="Section-header">
+                            <strong class="Section-title">Навигация
+                            </strong>
+                        </header>
+                        <div class="Section-columnContent">
+                            <div class="NavigateProfile">
+                                <ul class="menu menu_vt">
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">Личный
+                                            кабинет</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:profile' %}">Профиль</a>
+                                    </li>
+                                    <li class="menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">История
+                                            заказов</a>
+                                    </li>
+                                    <li class="menu-item_ACTIVE menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Section-content">
+                    <div class="Orders">
+                        <div class="Order Order_anons custom_left_margin">
+                            <div class="Order-personal">
+                                <div class="col">
+                                    {% if not viewed_list %}
+                                        <div class="row-block custom_margin modal_center modal-window elem_center">
+                                            <h2>У вас нет просмотренных товаров</h2>
+                                        </div>
+                                    {% endif %}
+
+                                    {% for viewed in viewed_list %}
+                                        <div class="row-block col-mt"><a class="Order-title"
+                                                                         href="{{ viewed.product.get_absolute_url }}"><span
+                                                class="Order-numberOrder">{{ viewed.product.id }}. {{ viewed.product.name }}</span></a>
+                                        </div>
+                                        <div>
+                                            <div class="row-block">
+                                                <div class="Order-info text-ml">
+                                                    <div class="Order-infoType">Дата просмотра:</div>
+                                                    <div class="Order-infoContent"><span
+                                                            class="Order-price">{{ viewed.created_at.date }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="Order-info text-ml">
+                                                    <div class="Order-infoType">Время просмотра:</div>
+                                                    <div class="Order-infoContent"><span
+                                                            class="Order-price">{{ viewed.created_at.time }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block script %}
+        <!--+Middle-->
+        <!--    +div.-top-->
+        <!--        +breadcrumbs('Главная','Портфолио')-->
+        <!--    +Article('portfolio')-->
+        <!---->
+        <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+        <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+        <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+        <script src="{% static 'assets/js/scripts.js' %}"></script>
+        <script>
+            $(document).ready(function () {
+                $('#phone').mask('+7 (999) 999-99-99');
+            });
+        </script>
+    {% endblock %}
+
+{% endblock %}
