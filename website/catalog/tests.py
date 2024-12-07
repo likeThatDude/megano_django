@@ -1,5 +1,4 @@
 from http import HTTPStatus
-from itertools import product
 
 from catalog.models import Price
 from catalog.models import Product
