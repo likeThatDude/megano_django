@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Profile
 from .forms import ProfileRegistrationForm
+from .forms import CustomUserChangeForm
 
 
 class UsersManagersTests(TestCase):
@@ -45,10 +47,80 @@ class UsersManagersTests(TestCase):
 
 
 class TestProfile(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        """
+        В начале, создаем пользователя
+        и проверяем создали ли мы профиль для него
+
+        """
+        super().setUpClass()
+        cls.credentials: dict[str, str] = {
+            "login": "admin",
+            "email": "admin@gmail.com",
+            "password": "admin"
+        }
+        cls.User = get_user_model()
+        cls.user = cls.User.objects.create_user(**cls.credentials)
+
+    def test_user_creation_form_profile(self):
+        """
+        Тест формы CustomUserCreationForm - создание профиля пользователя
+
+        Для теста требуется:
+            - запустить сервер Redis командой `redis-server`
+            - запустить асинхронную очередь задач Celery командой
+                `python -m celery -A website worker -l info` в папке проекта
+
+        """
+        data: dict[str, str] = {
+            "login": "user_nickname",
+            "email": "user_email@gmail.com",
+            "password1": "user_password",
+            "password2": "user_password",
+            "first_name": "Николай",
+            "last_name": "Николаенко",
+            "phone": "+79955553535",
+        }
+        self.client.post(
+            reverse("custom_auth:register"),
+            data=data
+        )
+        user = self.User.objects.get(email=data.get("email"))
+        self.assertTrue(
+            Profile.objects.filter(user=user).exists(),
+            "Успешно был создан профиль пользователя с помощью формы CustomUserCreationForm"
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        """ По завершении тестов удаляем пользователя """
+        cls.user.delete()
+
+    def test_profile_login(self):
+        """
+        Тест логина не аутентифицированного пользователя
+
+        1. Сначала проверяем, что пользователь не залогинен
+        2. Выполняем логин пользователя
+        3. Проверяем, что логин прошел успешно
+
+        """
+        response = self.client.get("/")
+        self.assertFalse(
+            response.context["user"].is_authenticated,
+            "Пользователь в данный момент не залогинен"
+        )
+        self.client.login(**self.credentials)
+        response = self.client.get("/")
+        self.assertTrue(
+            response.context["user"].is_authenticated,
+            "Пользователь успешно залогинился"
+        )
+
     def test_create_profile_with_superuser(self):
         """ Тест создания профиля суперпользователя """
-        User = get_user_model()
-        superuser = User.objects.create_superuser(
+        superuser = self.User.objects.create_superuser(
             email="admin@mail.ru",
             password="admin"
         )
@@ -142,4 +214,42 @@ class TestProfile(TestCase):
         self.assertIsNone(
             patronymic,
             "Поле patronymic не прошло валидацию!"
+        )
+
+    def test_user_change_password_form_success(self):
+        """
+        Тест формы CustomUserChangeForm - успешная смена пароля пользователя
+        """
+        form = CustomUserChangeForm(
+            data={
+                "email": self.user.email,
+                "password": self.user.password,
+                "new_password1": "new_admin_password",
+                "new_password2": "new_admin_password",
+            }
+        )
+        form.is_valid()
+        self.assertEqual(
+            form.cleaned_data.get("new_password1"),
+            form.cleaned_data.get("new_password2"),
+            "Успешно изменили пароль на новый в форме CustomUserChangeForm"
+        )
+
+    def test_user_change_password_form_fail(self):
+        """
+        Тест формы CustomUserChangeForm - неуспешная смена пароля пользователя
+        """
+        form = CustomUserChangeForm(
+            data={
+                "email": self.user.email,
+                "password": self.user.password,
+                "new_password1": "old_admin_password",
+                "new_password2": "new_admin_password",
+            }
+        )
+        form.is_valid()
+        self.assertNotEqual(
+            form.cleaned_data.get("new_password1"),
+            form.cleaned_data.get("new_password2"),
+            "При смене не совпали указанные пароли в форме CustomUserChangeForm"
         )
