@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block links %}
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+{% endblock %}
+
+{% block body %}
+  <div class="wrap-container">
+    <h2>{{ discount.name }}</h2>
+    <div class="Discount-description">
+      <div class="wrap-discount-description">
+        <span>{% trans 'Type discount' %}: {{ description_type }}</span>
+        {% if products %}
+          {% for product in products.all %}
+            <span>{{ product.name }}</span>
+            {% for price in product.prices.all %}
+                <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
+            {% endfor %}
+          {% endfor %}
+        {% elif product_groups %}
+          <span>{% trans 'Name group products' %}: {{ product_groups.name }}</span>
+          <span>{% trans 'Description group products' %}: {{ product_groups.description }}</span>
+          <span>{% trans 'Archived status' %}: {{ product_groups.archived }}</span>
+          {% for product in product_groups %}
+            <span>{{ product.name }}</span>
+            {% for price in product.prices.all %}
+                <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
+            {% endfor %}
+          {% endfor %}
+        {% elif cart_products %}
+          <span>{% trans 'Min quantity products in cart' %}: {{ cart_products.quantity_l }}</span>
+          <span>{% trans 'Max quantity products in cart' %}: {{ cart_products.quantity_g }}</span>
+          <span>{% trans 'Total cost products in cart' %}: {{ cart_products.total_cost_l }}</span>
+        {% endif %}
+
+        <span>{% trans 'Discount calculation method' %}: {{ description_method }}</span>
+        {% if percent %}
+          <span>{% trans 'Percent discount' %}: {{ percent }}%</span>
+        {% elif sum_discount %}
+          <span>{% trans 'The discount is valid for the amount of' %}: {{ sum_discount }}$</span>
+        {% elif fixed_price %}
+          <span>{% trans 'The discount has a fixed price' %}: {{ fixed_price }}$</span>
+        {% endif %}
+
+        <span>{% trans 'Discount priority' %}: {{ description_priority }}</span>
+      </div>
+    </div>
+    <a href="{% url 'discount:discounts' %}">{% trans 'Back to discounts' %}</a>
+  </div>
+
+
+  {% block script %}
+    <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+    <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+    <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+    <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
+  {% endblock %}
+
+{% endblock %}

@@ -7,6 +7,7 @@ from .views import LogOutView
 from .views import PersonalCabinet
 from .views import ProfileOrdersView
 from .views import ProfileView
+from .views import ViewedListView
 from .views import RegisterView
 from .views import UserPasswordResetConfirmView
 
@@ -17,6 +18,7 @@ urlpatterns = [
     path("logout/", LogOutView.as_view(), name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("profile/", ProfileView.as_view(), name="profile"),
+    path("viewed/", ViewedListView.as_view(), name="viewed-list"),
     path("personal_cabinet/", PersonalCabinet.as_view(), name="personal-cabinet"),
     path("profile_orders/", ProfileOrdersView.as_view(), name="profile-orders"),
     path(
