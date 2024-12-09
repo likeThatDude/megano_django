@@ -85,7 +85,7 @@
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ delivery|truncatechars:20 }}
-                                                {% if order.unique_payment_types > 1 %}
+                                                {% if order.unique_delivery_types > 1 %}
                                                     <div class="delivery_full_data">
                                                         {% get_full_delivery_payment_type order as seller_delivery %}
                                                         {% for seller, delivery_types in seller_delivery.items %}
@@ -211,7 +211,7 @@
                                                 <div class="Cart-block">
                                                     <a class="btn btn_primary btn_lg"
                                                        href="{% url 'payment:checkout' order.pk %}">
-                                                        Подтвердить
+                                                        Оплатить
                                                     </a>
                                                 </div>
                                             {% else %}

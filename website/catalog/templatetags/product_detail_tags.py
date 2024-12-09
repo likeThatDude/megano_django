@@ -1,10 +1,9 @@
 from decimal import Decimal
 from itertools import product
 
+from catalog.models import Seller
 from django import template
 from django.db.models import QuerySet
-
-from catalog.models import Seller
 
 register = template.Library()
 
@@ -27,7 +26,7 @@ def get_lower_price(sellers_list: QuerySet) -> str:
             if min_price is None:
                 min_price = price.price
             min_price = price.price if min_price > price.price else min_price
-    return f'{min_price}$'
+    return f"{min_price}$"
 
 
 @register.simple_tag()

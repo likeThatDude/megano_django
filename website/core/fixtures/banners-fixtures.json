@@ -1,0 +1,46 @@
+[
+  {
+    "model": "core.banner",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "text": "Лучший на рынке !",
+      "deadline_data": "2099-12-31",
+      "created_date": "2024-12-04T15:02:29.570Z",
+      "active": true
+    }
+  },
+  {
+    "model": "core.banner",
+    "pk": 2,
+    "fields": {
+      "product": 2,
+      "text": "Лучший в своём роде !",
+      "deadline_data": "2099-12-31",
+      "created_date": "2024-12-04T15:03:00.656Z",
+      "active": true
+    }
+  },
+  {
+    "model": "core.banner",
+    "pk": 3,
+    "fields": {
+      "product": 3,
+      "text": "Вот это да !",
+      "deadline_data": "2099-12-31",
+      "created_date": "2024-12-04T15:03:16.339Z",
+      "active": true
+    }
+  },
+  {
+    "model": "core.banner",
+    "pk": 4,
+    "fields": {
+      "product": 4,
+      "text": "Это что-то новенькое !",
+      "deadline_data": "2023-01-01",
+      "created_date": "2024-12-04T15:03:35.826Z",
+      "active": true
+    }
+  }
+]

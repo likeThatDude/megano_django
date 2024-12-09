@@ -1,0 +1,62 @@
+[
+  {
+    "model": "custom_auth.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$szjCIoPbAfRPOHXXJvxLK7$2tp/E9W9o8PsDehONivvjdDRfOwvOMsjqM1QJxT4jU8=",
+      "last_login": "2024-12-04T15:49:28.295Z",
+      "is_superuser": true,
+      "login": "test",
+      "email": "test@gmail.com",
+      "username": null,
+      "created_at": "2024-11-29T17:28:38.610Z",
+      "is_staff": true,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "custom_auth.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$870000$Ibw3rZqi3i2nHYHxdG8NQB$l29xTvP4foCza+67bTVPEhvTjnU0mkrAH/3T9szkSgI=",
+      "last_login": "2024-12-01T20:03:49.649Z",
+      "is_superuser": false,
+      "login": "Alex",
+      "email": "test@ya.ru",
+      "username": null,
+      "created_at": "2024-12-01T20:03:49.245Z",
+      "is_staff": false,
+      "is_active": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "custom_auth.profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "first_name": null,
+      "last_name": null,
+      "patronymic": null,
+      "address": null,
+      "phone": null,
+      "photo": ""
+    }
+  },
+  {
+    "model": "custom_auth.profile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "first_name": "Антонио",
+      "last_name": "Бандерас",
+      "patronymic": "Владимирович",
+      "address": null,
+      "phone": "9801551634",
+      "photo": ""
+    }
+  }
+]

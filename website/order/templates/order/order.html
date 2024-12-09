@@ -232,6 +232,10 @@
                                                     class="Cart-price">{{ product_data.total_price }} $</span>
                                             </div>
                                             <div class="Cart-block">
+                                                <a class="btn btn_primary btn_lg" href="{% url 'cart:detail' %}">Отменить
+                                                </a>
+                                            </div>
+                                            <div class="Cart-block">
                                                 <button class="btn btn_primary btn_lg" type="submit">Подтвердить
                                                 </button>
                                             </div>
