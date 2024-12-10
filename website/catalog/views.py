@@ -33,10 +33,6 @@ from .serializers import ViewedSerializer
 from .models import ViewedSession
 
 
-def catalog_view(request: HttpRequest):
-    return render(request, "catalog/catalog.html")
-
-
 class CatalogListView(ListView):
     """
     Представление для отображения списка продуктов в каталоге.
