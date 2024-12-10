@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваш заказ оформлен!</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #4caf50, #81c784);
+            padding: 30px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .header img {
+            width: 150px;
+            height: auto;
+            margin-bottom: 15px;
+            outline: 1px solid purple;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .content h2 {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555555;
+            margin-bottom: 25px;
+        }
+
+        .cta {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .cta a {
+            text-decoration: none;
+            background: #4caf50;
+            color: #ffffff;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta a:hover {
+            background: #388e3c;
+            box-shadow: 0 6px 15px rgba(56, 142, 60, 0.4);
+            transform: scale(1.2);
+        }
+
+        .cta .rgb-line {
+            height: 4px;
+            margin-top: 10px;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 400% 100%;
+            animation: rgb-gradient 3s linear infinite;
+            border-radius: 2px;
+        }
+
+        /* Анимация переливания RGB */
+        @keyframes rgb-gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .divider {
+            width: 100px;
+            height: 3px;
+            background: #81c784;
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+
+        .footer {
+            padding: 20px;
+            background: #f1f3f5;
+            text-align: center;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <img src="cid:image1" alt="Megano Logo">
+        <h1>Ваш заказ успешно принят!</h1>
+    </div>
+    <div class="content">
+        <h2>Спасибо за вашу покупку, {{ username }}!</h2>
+        <p>Мы рады, что вы выбрали нас. Ваш заказ уже в обработке и скоро будет доставлен.
+            Следите за статусом заказа, чтобы узнать актуальную информацию.</p>
+        <div class="cta">
+            <a href="{{ protocol }}{{ domain }}{% url 'order:order_detail' pk=order_id %}">
+                Проверить статус заказа
+            </a>
+            <div class="rgb-line"></div>
+        </div>
+        <p>Если у вас возникли вопросы, просто ответьте на это письмо.
+            Мы всегда готовы вам помочь!
+            <img src="cid:gif_support" style="width: 30px; height: 30px;">
+        </p>
+        <p>P.S. наш лучший сотрудник уже бежит заниматься вашим заказом =)!</p>
+        <img src="cid:dog_support" style="width: 100%; height: auto; margin-right: 10px;"
+             alt="Наш сотрудник">
+
+    </div>
+    <div class="footer">
+        &copy; {{ year }} Megano. Все права защищены. <br>
+        <a href="{{ protocol }}{{ domain }}">Посетить сайт</a> | <a href="mailto:{{ email }}">Связаться с
+        поддержкой</a>
+    </div>
+</div>
+</body>
+</html>

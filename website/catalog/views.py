@@ -3,9 +3,10 @@ from itertools import product
 
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Min, Q
+from django.db.models import Min
 from django.db.models import OuterRef
 from django.db.models import Prefetch
+from django.db.models import Q
 from django.db.models import Subquery
 from django.db.models.functions import Round
 from django.http import HttpRequest
@@ -268,7 +269,11 @@ class ProductDetailView(DetailView):
                 "delivery_methods",
                 "payment_methods",
             )
-            .only("name", "price",)
+            .only(
+                "name",
+                "price",
+                "image",
+            )
             .filter(Q(price__product__pk=pk))
             .order_by("price__price"),
             timeout=240,
