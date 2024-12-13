@@ -95,7 +95,7 @@ class RegisterView(CreateView):
             # Планируем выполнение задачи через 2 дня с момента регистрации пользователя
             notify_user_after_register.apply_async(
                 args=[user.pk],
-                countdown=20
+                countdown=2 * 24 * 3600
             )
             return redirect(self.get_success_url())
 
