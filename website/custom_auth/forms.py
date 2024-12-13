@@ -1,7 +1,10 @@
 from django import forms
+from django.utils.timezone import datetime
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
+
 
 from .models import CustomUser
 from .models import Profile
@@ -13,17 +16,68 @@ class CustomUserCreationForm(UserCreationForm):
 
     Атрибуты:
         email: электронная почта пользователя (обязательное поле)
+        birthday: день рождения пользователя (необязательное поле),
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
+
     """
 
-    email = forms.EmailField(label="Email", required=True)
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
+    email = forms.EmailField(
+        label="Email",
+        required=True
+    )
+    birthday = forms.DateField(
+        label=_("Birthday"),
+        widget=forms.DateInput(
+            attrs={"class": "form-control", "type": "date"},
+        ),
+        required=False,
+    )
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput,
+        required=True
+    )
+    password2 = forms.CharField(
+        label="Password Confirm",
+        widget=forms.PasswordInput,
+        required=True
+    )
 
     class Meta:
         model = CustomUser
-        fields = ["login", "email", "password1", "password2"]
+        fields = (
+            "login",
+            "email",
+            "password1",
+            "password2",
+            "birthday",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_birthday(self):
+        """
+        Проверяем дату рождения на корректность
+
+        Если дата рождения позже сегодняшней даты,
+        поднимаем исключение forms.ValidationError
+
+        Возвращаем:
+            birthday - указанный день рождения пользователя
+
+        Исключения:
+            forms.ValidationError - если день рождения позже по дате
+
+        """
+        birthday = self.cleaned_data.get("birthday")
+        today_date = datetime.today().date()
+
+        if birthday and birthday > today_date:
+            raise forms.ValidationError(_("Ваш день рождения не может быть позже сегодняшнего дня"))
+
+        return birthday
 
 
 class CustomUserChangeForm(UserChangeForm):
