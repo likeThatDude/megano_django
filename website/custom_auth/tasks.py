@@ -1,3 +1,6 @@
+import os
+import pathlib
+
 from celery import shared_task
 from datetime import timedelta
 from django.conf import settings
@@ -7,6 +10,7 @@ from django.utils.html import strip_tags
 from django.utils.timezone import datetime
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from email.mime.image import MIMEImage
 
 
 from custom_auth.models import CustomUser
@@ -115,3 +119,82 @@ def send_user_happy_birthday():
 
         except Exception as error:
             print(f"Произошла ошибка! | Error: {error}")
+
+
+@app.task
+def send_new_year_message():
+    subject: str = "С Новым Годом!"
+    from_email = EMAIL_HOST_USER
+    users: QuerySet[CustomUser] = CustomUser.objects.all()
+
+    for user in users:
+        try:
+            html_content = render_to_string(
+                "custom_auth/happy_new_year_email.html",
+                {
+                    "username": user.profile.first_name,
+                    "company": "MEGANO",
+                    "new_year": datetime.now().year + 1
+                }
+            )
+            plain_message = strip_tags(html_content)
+            email: EmailMultiAlternatives = EmailMultiAlternatives(
+                subject,
+                plain_message,
+                from_email,
+                [user.email]
+            )
+            email.attach_alternative(html_content, "text/html")
+            attach_images(email,"static/images/new_year_back.jpg","image")
+
+            try:
+                email.send()
+                print("Письмо успешно отправлено.")
+
+            except Exception as error:
+                print(f"Ошибка при отправке письма: {error}")
+
+        except Exception as error:
+            print(f"Произошла ошибка! | Error: {error}")
+
+
+def attach_images(email, filepath: str, cid: str = "image"):
+    """
+    Прикрепляем изображения к электронному письму с использованием Content-ID.
+
+    Эта функция читает изображение по указанному пути и прикрепляет его к
+    объекту письма с заданным Content-ID. Изображение может быть использовано
+    в HTML-контенте письма.
+
+    Параметры:
+        email (EmailMultiAlternatives): Объект письма, к которому будет прикреплено изображение.
+        filepath (str) - путь до изображения, которое мы отправим
+        cid (str): Content-ID для привязки изображения в HTML-коде.
+
+    Возвращает:
+        None: Функция не возвращает никаких значений.
+
+    """
+    file_full_path: pathlib.Path = pathlib.Path(__file__).parent / filepath
+    filename: str = file_full_path.name
+    content_id: str = f"{cid}_1"
+
+    try:
+        if not os.path.exists(file_full_path):
+            raise FileNotFoundError(f"Файл не найден: {file_full_path}")
+
+        with open(file_full_path, "rb") as img:
+            image = MIMEImage(img.read())
+            image.add_header("Content-ID", f"<{content_id}>")
+            image.add_header("Content-Disposition", "inline", filename=filename)
+
+            email.attach(image)
+
+    except FileNotFoundError as error:
+        print(f"Файл не был найден | Error: {error}")
+
+    except IOError as error:
+        print(f"Ошибка при чтении файла {file_full_path} | Error: {error}")
+
+    except Exception as error:
+        print(f"Произошла ошибка | Error: {error}")
