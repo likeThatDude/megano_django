@@ -1,10 +1,11 @@
 from decimal import ROUND_HALF_UP
 from decimal import Decimal
 
-from custom_auth.models import CustomUser
+from cart.cart import Cart
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Price
+from custom_auth.models import CustomUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import DatabaseError
 from django.db import transaction
@@ -429,3 +430,40 @@ def create_errors_list(errors) -> list[tuple[int, str]]:
     for number, error in enumerate(errors, start=1):
         errors_data.append((number, *error[1]))
     return errors_data
+
+
+def delete_product_from_cart(product_dict: dict[str, dict[str, int | bool]], request: HttpRequest) -> None:
+    """
+    Удаляет товары из корзины на основе переданного словаря.
+
+    Эта функция принимает словарь, где каждый элемент представляет собой товар,
+    который необходимо удалить из корзины. Для каждого товара вызывается метод
+    удаления из корзины.
+
+    Параметры:
+        product_dict (dict): Словарь, где ключи — это идентификаторы товаров,
+                             а значения содержат информацию о товаре, включая
+                             поле 'product_id', которое указывает на идентификатор
+                             товара, подлежащего удалению.
+
+        request (HttpRequest): Объект запроса, содержащий информацию о текущем
+                               сеансе пользователя и его корзине.
+
+    Возвращает:
+        None: Функция не возвращает никаких значений. Она изменяет состояние
+              корзины напрямую.
+
+    Примечание:
+        Функция предполагает, что в словаре product_dict присутствует поле
+        'product_id' для каждого товара, которое используется для удаления
+        соответствующего товара из корзины.
+    """
+    cart = Cart(request)
+    for key in product_dict.values():
+        try:
+            product_id = str(key["product_id"])
+            cart.remove(product_id=product_id)
+        except KeyError:
+            print(f"Ошибка: отсутствует ключ 'product_id' для товара {key}.")
+        except Exception as e:
+            print(f"Ошибка при удалении товара {product_id}: {str(e)}")

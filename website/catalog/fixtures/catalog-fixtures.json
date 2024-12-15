@@ -1,0 +1,1050 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Телефоны",
+      "icon": "products/category_Телефоны/images/b909da8ce744d7e21662a4e67916e3d9.webp",
+      "archived": false,
+      "parent_category": null,
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Видеокарты",
+      "icon": "products/category_Видеокарты/images/71653a3f86077ed4a14421cd8f1fcd31.webp",
+      "archived": false,
+      "parent_category": null,
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 1,
+    "fields": {
+      "name": "Новинки 2024"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 2,
+    "fields": {
+      "name": "Новинки 2023"
+    }
+  },
+  {
+    "model": "catalog.tag",
+    "pk": 3,
+    "fields": {
+      "name": "Хит продаж"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "HONOR X7b 6GB/128GB международная версия (мерцающий серебристый)",
+      "description": "✅ Дизайн HONOR X7b — поклонение минимализму. Ни одной лишней детали, только строгие формы, особенно в черном корпусе. Зеленый вариант также минималистичен, а серебристый добавляет игривости, напоминая рисунок мороза. Все цвета матовые, тактильно приятные и не поддаются маркировке.\r\n\r\n✅ Мощный восьмиядерный чип Qualcomm Snapdragon 680 обеспечивает достаточную производительность для ежедневных задач, фильмов и игр. Оперативной памяти 6 ГБ, встроенной — 128 ГБ, с возможностью расширения картой памяти.\r\n\r\n✅ Камеры ловко интегрированы в две круглые площадки. Стереодинамики с высоким запасом громкости делают телефон заменой для небольших колонок. HONOR X7b поддерживает использование двух SIM-карт или одной SIM и карты памяти. Аудиофилы, предпочитающие проводные наушники, будут рады наличию аудиоразъема. Благодаря закругленной крышке, смартфон приятно лежит в руке.\r\n\r\n✅ Большой и яркий 6,8-дюймовый дисплей с высоким разрешением создает великолепную картинку. Матрица обеспечивает высокую яркость до 850 нит, что гарантирует четкость изображения даже на ярком солнце. Традиционные технологии защиты зрения, включая снижение яркости в темноте, режим с уменьшением синего свечения и циркадный ночной экран, присутствуют.\r\n\r\n✅ Фотографии на 108 Мп камеру всегда выходят четкими. Три камеры, включая сверхширокоугольную и датчик глубины, обеспечивают разнообразие в съемке. Основная камера с высокой светочувствительностью делает отличные снимки даже ночью. Возможность записи видео одновременно с двух камер добавляет интересных возможностей.\r\n\r\n⚡️ Огромный аккумулятор на 6000 мАч обеспечивает три дня работы при любой интенсивности. Дополнительные 35 Вт для быстрой зарядки делают его еще более удобным в повседневном использовании.",
+      "short_description": "Новинка от HONOR, лучший за сою цену !",
+      "product_type": "Смартфон",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T14:09:37.058Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_1/images/d2a05bbf2aebfdb9adb24c474eab38cd.webp",
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "Apple iPhone 16 Pro Max Dual SIM 512GB (черный титан)",
+      "description": "✅ Смартфоны Apple iPhone 16 Pro и iPhone 16 Pro Max оснащены чипом A18 Pro, системой управления камерой и, как утверждает Apple, \"значительно улучшенной автономностью\". Основная камера тоже обновлена, как и ультраширокая камера, а на версии Pro появился 5-кратный телеобъектив. Корпус из титана остался, и компания обещает самые тонкие рамки за всю историю своих устройств.\r\n\r\n✅ Доступны модели iPhone 16 Pro и Pro Max в четырех цветах: черный титан, натуральный титан, белый титан и титановый цвет \"пустыни\".\r\n\r\n⚠️ Встроенный Apple Intelligence с первых дней не будет доступен, но его можно будет получить в следующем месяце в виде бесплатного обновления программного обеспечения. Первыми функциями будут инструменты для написания текста, запись, расшифровка и создание кратких аудиозаписей, сокращенные уведомления, приоритетные сообщения в почте, а также обновленная Siri с расширенными возможностями понимания и возможностью ввода текста.\r\n\r\n✅ Siri сможет использовать ваш личный контекст для предоставления индивидуальной информации и реагировать на то, что вы видите на экране, автоматически предпринимая соответствующие действия. Кстати, в будущем планируется интеграция ChatGPT, но конкретных сроков пока не названо.\r\n\r\n✅ iPhone 16 Pro получил 6.3-дюймовый экран, а Pro Max — 6.9-дюймовый, что делает его самым большим iPhone в истории. Устройство защищено новым поколением Ceramic Shield, который вдвое прочнее любого стекла на других смартфонах, по словам Apple.\r\n\r\n✅ Apple обещает до 20% прироста производительности по сравнению с предыдущей моделью благодаря улучшенной системе теплоотвода и повышенной энергоэффективности. Чип A18 Pro создан на 3-нм техпроцессе и оснащен новым 16-ядерным нейронным чипом. Объем системной памяти увеличен на 17%, что также помогает 6-ядерному графическому процессору работать на 20% быстрее, чем в предыдущей модели.\r\n\r\n✅ 6-ядерный центральный процессор, по заявлению Apple, \"самый быстрый среди смартфонов\". Два производительных ядра и четыре эффективных выполняют задачи на 15% быстрее, чем в iPhone 15 Pro, при этом потребляя на 20% меньше энергии.\r\n\r\n✅ Как и другие модели iPhone 16, версия Pro оснащена системой управления камерой — это кнопка, которая, на самом деле, не является кнопкой. Она использует сенсоры, обеспечивающие нажатие, жесты легкого нажатия и взаимодействие через прикосновения и прокрутку.\r\n\r\n✅ Касаясь камер, у устройства теперь новая основная камера на 48 МП с более эффективным сенсором, способным снимать видео в 4K со скоростью 120 кадров в секунду с поддержкой Dolby Vision, что является первым случаем для смартфонов. Apple обещает отсутствие задержки срабатывания затвора для снимков в 48 МП ProRAW и HEIF. Обе версии iPhone 16 Pro теперь могут создавать пространственные фотографии наряду с видео. Также добавлены четыре новых микрофона студийного качества.\r\n\r\n✅ Смартфоны iPhone 16 Pro и Pro Max поддерживают подключение к ближайшим спутникам для отправки и получения текстов, эмодзи и Tapbacks через iMessage и SMS, когда недоступны сотовая связь и Wi-Fi.",
+      "short_description": "Apple iOS, экран 6.9\" OLED (1320x2868) 120 Гц, Apple A18 Pro, ОЗУ 8 ГБ, память 5",
+      "product_type": "Смартфон",
+      "manufacture": "США",
+      "created_at": "2024-11-28T14:31:03.407Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_None/images/5d0fefb8a83a86378cd32d97d8fb95ae.webp",
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Samsung Galaxy S24 8GB/128GB SM-S921B Exynos (черный)",
+      "description": "⚠️ Вот некоторые основные отличия между Galaxy S24 и Galaxy S23:\r\n\r\n❤️ Galaxy S24 работает на новом процессоре Snapdragon 8 Gen 3 или Exynos 2400, в зависимости от региона, в то время как Galaxy S23 имеет Snapdragon 8 Gen 2 во всех рынках. Новый процессор обеспечивает более высокую производительность и энергоэффективность.\r\n\r\n❤️ Galaxy S24 имеет более яркий и прочный экран с технологией Gorilla Glass Victus 2 и пиковой яркостью 2600 нит. Galaxy S23 имеет экран с Gorilla Glass Victus 2 и пиковой яркостью 1750 нит.\r\n\r\n❤️ Galaxy S24 и S24 Plus имеют немного большие экраны и батареи, чем Galaxy S23 и S23 Plus, но при этом имеют почти такой же размер и вес.\r\n\r\n❤️ Galaxy S24 имеет новые функции, основанные на искусственном интеллекте, такие как уникальное редактирование фотографий и живые переводы, которые отсутствуют у Galaxy S23.\r\n\r\n\r\n✅ Samsung Galaxy S24 — это новый смартфон с искусственным интеллектом, который открывает новые возможности для творчества и продуктивности. Вот некоторые из его особенностей:\r\n\r\n✅ Экран: 6,2-дюймовый дисплей Dynamic AMOLED 2X с разрешением QHD+ и частотой обновления 120 Гц, который обеспечивает яркость, четкость и плавность изображения.\r\n\r\n✅ Камера с искусственным интеллектом, которая позволяет снимать высококачественные фото и видео в любых условиях освещения. Основная камера имеет разрешение 50 МП, а ультраширокоугольная — 12 МП. Также есть возможность использовать оптический зум до 3-кратного увеличения.\r\n\r\n✅ Процессор: мощный 10-ядерный процессор Exynos 2400 с поддержкой 5G, который обеспечивает высокую скорость, эффективность и производительность смартфона.\r\n\r\n✅ Аккумулятор: 4000 мАч с функцией быстрой зарядки, которая позволяет зарядить смартфон до 50% за 30 минут, а также функцией беспроводной зарядки и обратной беспроводной зарядки, которая позволяет заряжать другие устройства от смартфона.\r\n\r\n✅ Дизайн: изящный и прочный корпус с матовым покрытием с эффектом сатина, который приятен на ощупь и не оставляет отпечатков пальцев, а также усиленный алюминием космического класса, который защищает смартфон от повреждений. Смартфон доступен в четырех цветах: фиолетовом, желтом, черном и сером.\r\n\r\n✅ Дополнительные функции: смартфон поддерживает защиту данных Samsung Knox, биометрическую аутентификацию с помощью сканера отпечатков пальцев в экране или распознавания лица, а также синхронизацию с другими устройствами Samsung, такими как наушники, часы или планшеты.",
+      "short_description": "Android, экран 6.2\" AMOLED (1080x2340) 120 Гц, Exynos 2400, ОЗУ 8 ГБ, память 128",
+      "product_type": "Смартфон",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T14:33:13.702Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_None/images/cc59150d93a3dbc29c66fa006da86d27.webp",
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 4,
+    "fields": {
+      "name": "Xiaomi MIX Flip 12GB/512GB международная версия (фиолетовый)",
+      "description": "✅ Xiaomi MIX Flip впечатляет своим дизайном, где около 75% поверхности занимают экраны. Самое заметное — это тонкие рамки вокруг внешнего дисплея, создающие ощущение, что вся эта часть устройства — сплошной экран. Остальная задняя панель выполнена из алюминия, и доступно два цветовых варианта: черный и фиолетовый. В данном случае мы рассматриваем классическую черную модель. Чехол в комплекте также черный, из прочного пластика, который обеспечивает надежную защиту корпуса и камер благодаря специальным бортикам.\r\n\r\n✅ Габариты устройства также заслуживают внимания: в разложенном состоянии толщина Xiaomi MIX Flip составляет 7,8 мм, а размеры — 167,5 на 74 мм, что делает его более компактным по сравнению со многими флагманами. Но не забывайте, что это раскладушка: в сложенном виде его размеры уменьшаются до 74 на 74 мм при толщине 15,99 мм, и он легко помещается в карман. Вес составляет всего 192 г, что значительно легче некоторых других моделей, таких как Xiaomi 13 Ultra (227 г) и Fold 4 (226 г), делая его удобным для ежедневного использования.\r\n\r\n✅ Внешний дисплей — это AMOLED с диагональю 4,01 дюйма, обеспечивающий глубокие черные тона, высокую яркость и точную цветопередачу. Этот экран поддерживает более 90 приложений, что позволяет выполнять многие действия, не раскрывая смартфон. Например, можно отвечать на сообщения, принимать звонки, редактировать видео, вызывать такси или заказывать доставку. Кроме того, доступны анимированные обои с милыми животными, такими как капибары и кошки, что является приятным дополнением.\r\n\r\n✅ Основной экран также выполнен по технологии AMOLED и имеет диагональ 6,86 дюйма с разрешением 1224×2912 пикселей. Благодаря технологии LTPO смартфон поддерживает динамическую смену частоты обновления от 1 до 120 Гц, что позволяет экономить заряд батареи, когда на экране отображаются статичные изображения, и повышать частоту при активных действиях.\r\n\r\n✅ Внутри устройства установлен один из самых мощных процессоров — Snapdragon 8 Gen 3, который в сочетании с 12 ГБ оперативной памяти LPDDR5X и 512 ГБ внутреннего хранилища UFS 4.0 обеспечивает Xiaomi MIX Flip отличную производительность. В тестах Geekbench 6 устройство демонстрирует выдающиеся результаты: 2114 баллов в одноядерном режиме и 6175 в многоядерном. Для повседневных задач и современных игр этот смартфон подходит идеально.\r\n\r\n✅ Камеры Xiaomi MIX Flip встроены во внешний дисплей и представлены двумя модулями: широкоугольным на 50 МП и телефотомодулем с двукратным увеличением, также на 50 МП. Отсутствие макромодулей и других ненужных датчиков радует, поскольку акцент сделан на качество съёмки.\r\n\r\n✅ Для селфи используется фронтальная камера на 32 МП с функцией бьютификации и двумя углами съёмки (0,8x и 1x). Однако благодаря возможности использования основных камер для селфи, фронтальная камера может отойти на второй план.",
+      "short_description": "Android, экран 6.86\" AMOLED (1224x2912) 120 Гц, Qualcomm Snapdragon 8 Gen 3, ОЗУ",
+      "product_type": "Смартфон",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T14:36:48.723Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_None/images/92e6d294bdd24641eb434c4beba84a77.webp",
+      "tags": [
+        1,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "Google Pixel 9 12GB/256GB (обсидиан)",
+      "description": "✅ Мощь искусственного интеллекта\r\nGoogle Tensor G4 - самый мощный чип в Pixel на сегодняшний день. Он создан для взаимодействия с Gemini непосредственно на самом устройстве.\r\n\r\n✅ Удивительный дисплей\r\n6.24-дюймовый Actua-дисплей - яркий, плавный и насыщенный. Работает на частоте 120 Гц и идеален как для игр, так и использования в повседневных задачах.\r\n\r\n✅ Камера высокого уровня.\r\nПередовая камера Pixel включает 50-мегапиксельный основной сенсор и новую 48-мегапиксельную ультраширокоугольную камеру с поддержкой макросъемки.\r\n\r\n✅ Великолепные фотографии от заката до рассвета.\r\nNight Sight делает четкие, яркие фотографии, портреты и панорамы в условиях слабого освещения, таких как концерты и городские пейзажи.\r\n\r\n✅ Переосмыслите свои фотографии прямо на своем телефоне.\r\nMagic Editor в Google Photos делает сложные правки легкими. Всего лишь несколькими касаниями искусственный интеллект может изменить фон, переместить объекты и многое другое.\r\n\r\n✅ Групповые фотографии, которые полюбят все\r\nПолучите удивительную групповую фотографию, объединяя похожие снимки с помощью функции AddMe.\r\n\r\n✅ Исправьте размытые фотографии.\r\nВсего лишь несколькими касаниями Photo Unblur в Google Photos помогает улучшить размытые снимки - новые или старые.",
+      "short_description": "Android, экран 6.24\" OLED (1080x2424) 120 Гц, Google Tensor G4, ОЗУ 12 ГБ, памят",
+      "product_type": "Смартфон",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T14:40:22.884Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_5/images/b9693838517b8f04cad007831c1adccd.webp",
+      "tags": [
+        1,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 6,
+    "fields": {
+      "name": "Huawei Pura 70 Pro HBN-LX9 12GB/512GB (белый)",
+      "description": "✅ Новые нестандартные формы, разрушающие привычные представления о дизайне смартфона. Погрузитесь в яркую симфонию цветов, воплощающих в себе простоту и элегантность.\r\n\r\n✅ Основная камера с большим захватом света, поддержкой регулируемой диафрагмы f/1.4–f/4.0 и большим сенсором 1/1,3 дюйма позволяет легко создавать яркие и четкие снимки. Благодаря инновационному телемакрообъективу, оснащенному большой диафрагмой f/2.1 и 35-кратным макрозумом,1 вы сможете создавать красивые кадры и рассматривать детали, которые не видны невооруженным глазом.\r\n\r\n✅ Ловите вдохновляющие неповторимые моменты с помощью камеры с захватом большого количества света и алгоритмов HUAWEI XD Motion Engine (Процессор для съёмки в движении). Успевайте запечатлеть, как волна разбивается о скалы, как спортсмен виртуозно выполняет упражнения или как мчится гоночный болид.\r\n\r\n✅ Откройте для себя загадочный микромир при помощи 35-кратного макрозума с поддержкой фокусного расстояния 5 см. Большая диафрагма f/2.1 позволит запечатлеть детали, скрытые от ваших глаз, даже при тусклом освещении!\r\n\r\n✅ Все далекое станет ближе с 200-кратным диапазоном зума и движком XD Fusion Pro Engine.\r\n\r\n✅ Погрузитесь в загадочный танец света и тени с режимом HDR-видеосъемки и создавайте видео высокой четкости в любых условиях. Снимайте профессиональные видео даже на ходу, о плавности кадра позаботится интеллектуальная технология стабилизации изображения.\r\n\r\n✅ Наслаждайтесь всеми преимуществами яркого экрана с точной цветопередачей. Даже на улице в дневное время вы сможете не напрягаясь увидеть на экране всю нужную информацию.\r\n\r\n✅ Высокоемкая батарея 5050 мАч и технология быстрой беспроводной зарядки HUAWEI SuperCharge 80 Вт позволяют зарядить смартфон до 50% всего за 15 минут. Вы даже можете зарядить другое устройство от вашего смартфона с помощью функции обратной зарядки 20 Вт.",
+      "short_description": "Android, экран 6.8\" OLED (1260x2844) 120 Гц, HiSilicon Kirin 9010, ОЗУ 12 ГБ, па",
+      "product_type": "Смартфон",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T14:57:40.555Z",
+      "category": 1,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_None/images/b0f3c88cb5957070d50a1e747ea8f786.webp",
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 7,
+    "fields": {
+      "name": "Palit GeForce RTX 4060 Dual OC NE64060T19P1-1070D",
+      "description": "GeForce RTX 4060 серии Dual имеет гладкое черное покрытие. Благодаря двум большим 95-мм вентиляторам и отверстиям повышенной площади на задней панели видеокарты, видеокарта обеспечивает конкурентоспособные эффективность охлаждения и акустические характеристики. Тонкая RGB-подсветка на задней панели также добавляет компьютеру визуальный стиль, не отвлекая при этом слишком много внимания.\r\n\r\nRGB-подсветка\r\nЦвет светодиодной RGB-подсветки может изменяться в зависимости от температуры видеокарты. Так владелец легко определит степень её нагрева «на глаз». Кроме того, для индивидуальной настройки подсветки пользователям доступно 16,8 миллионов цветов и оттенков.",
+      "short_description": "8 ГБ GDDR6, 1830 МГц / 2670 МГц, 3072sp, 24 RT-ядер, трассировка лучей, 128 бит,",
+      "product_type": "Видеокарта",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T15:33:13.986Z",
+      "category": 2,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_7/images/64a665a4da3659c9e10c099defda9215.webp",
+      "tags": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 8,
+    "fields": {
+      "name": "Gigabyte GeForce RTX 4060 Eagle OC 8G GV-N4060EAGLE OC-8GD",
+      "description": "Уже больше года интернет спорит о том, какая видеокарта лучше: RTX 4060 с 8 ГБ или RTX 3060 c 12 ГБ? У видеокарты RTX 3060 больше ядер, шире шина, больше объем памяти и долгое время была ниже цена. По всем признакам у RTX 4060 не было шансов в этом противостоянии. Однако в таком сравнении упускают несколько очень важных технических деталей. Читайте в новом обзоре Onlíner Lab, какая народная видеокарта лучше, сколько памяти надо для Full-HD-игр и при чем тут кэш.",
+      "short_description": "8 ГБ GDDR6, 1830 МГц / 2505 МГц, 3072sp, 24 RT-ядер, трассировка лучей, 128 бит,",
+      "product_type": "Видеокарта",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T15:34:33.252Z",
+      "category": 2,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_8/images/ef79577bfa3de7fd2bff3849617f11b2.webp",
+      "tags": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Palit GeForce RTX 4070 Super JetStream OC 12GB NED407ST19K9-1043J",
+      "description": "RTX 4070 Super — одно из самых значимых обновлений в видеокартах за последнее время. У новинки выросла производительность за счет увеличения количества ядер по сравнению с RTX 4070. При этом разница в цене между ними — всего 150 рублей. Мы протестировали RTX 4070 Super, чтобы выяснить, насколько оправданна эта доплата и что в реальности дал прирост в вычислительной мощи.",
+      "short_description": "12 ГБ GDDR6X, 1980 МГц / 2640 МГц, 7168sp, 56 RT-ядер, трассировка лучей, 192 би",
+      "product_type": "Видеокарта",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T15:35:30.185Z",
+      "category": 2,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_9/images/8322ac20de1c0cb813b2583758b46fd6.webp",
+      "tags": [
+        1,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 10,
+    "fields": {
+      "name": "Gigabyte GeForce RTX 4070 Super Eagle OC Ice 12G GV-N407SEAGLEOC",
+      "description": "RTX 4070 Super — одно из самых значимых обновлений в видеокартах за последнее время. У новинки выросла производительность за счет увеличения количества ядер по сравнению с RTX 4070. При этом разница в цене между ними — всего 150 рублей. Мы протестировали RTX 4070 Super, чтобы выяснить, насколько оправданна эта доплата и что в реальности дал прирост в вычислительной мощи.",
+      "short_description": "12 ГБ GDDR6X, 1980 МГц / 2535 МГц, 7168sp, 56 RT-ядер, трассировка лучей, 192 би",
+      "product_type": "Видеокарта",
+      "manufacture": "Китай",
+      "created_at": "2024-11-28T15:36:16.707Z",
+      "category": 2,
+      "archived": false,
+      "limited_edition": false,
+      "views": 0,
+      "sorting_index": 0,
+      "preview": "products/product_10/images/dae283a002548f65e323eedb8086eb14.webp",
+      "tags": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 1,
+    "fields": {
+      "product": 1,
+      "image": "products/product_Product(id=1, name=HONOR X7b 6GB/128GB  ...)/images/e6785106f67586417e_PSjlhPd.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 2,
+    "fields": {
+      "product": 1,
+      "image": "products/product_Product(id=1, name=HONOR X7b 6GB/128GB  ...)/images/c062e66c23a7366467_MBLW9ar.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 3,
+    "fields": {
+      "product": 1,
+      "image": "products/product_Product(id=1, name=HONOR X7b 6GB/128GB  ...)/images/8e5a2bb0b1414b1e72_8C2VdXs.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 4,
+    "fields": {
+      "product": 2,
+      "image": "products/product_Product(id=2, name=Apple iPhone 16 Pro  ...)/images/f5e1d6b954e8d55e9b_c3C3BQq.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 5,
+    "fields": {
+      "product": 2,
+      "image": "products/product_Product(id=2, name=Apple iPhone 16 Pro  ...)/images/c6931baddd4b3b7ae1_23ihEHA.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 6,
+    "fields": {
+      "product": 2,
+      "image": "products/product_Product(id=2, name=Apple iPhone 16 Pro  ...)/images/bb77625fd8d9bfee1f_COZrKOK.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 7,
+    "fields": {
+      "product": 2,
+      "image": "products/product_Product(id=2, name=Apple iPhone 16 Pro  ...)/images/8e4765d0bf054b526a_Ikef9UL.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 8,
+    "fields": {
+      "product": 3,
+      "image": "products/product_Product(id=3, name=Samsung Galaxy S24 8 ...)/images/9be913a92e870bbf9d_XaR1sDI.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 9,
+    "fields": {
+      "product": 3,
+      "image": "products/product_Product(id=3, name=Samsung Galaxy S24 8 ...)/images/816dd3bec012857f10_6kG5fcO.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 10,
+    "fields": {
+      "product": 3,
+      "image": "products/product_Product(id=3, name=Samsung Galaxy S24 8 ...)/images/afa65f6f9e15393849_8KAmx5p.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 11,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/6497c5fab356cd45f9_ylWO2vC.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 12,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/5da4394cd6ccbb995a_02R1flE.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 13,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/9bd636638cbc160a83_RebUI9A.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 14,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/d77e7dc886a617b13d_qEeTAWl.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 15,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/71653a3f86077ed4a1_NoBKPX6.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 16,
+    "fields": {
+      "product": 4,
+      "image": "products/product_Product(id=4, name=Xiaomi MIX Flip 12GB ...)/images/51c1c4218ffdd12ec7_LS7x0B7.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 17,
+    "fields": {
+      "product": 5,
+      "image": "products/product_Product(id=5, name=Google Pixel 9 12GB/ ...)/images/b909da8ce744d7e216_DpQOCXy.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 18,
+    "fields": {
+      "product": 5,
+      "image": "products/product_Product(id=5, name=Google Pixel 9 12GB/ ...)/images/520692f62b70666a15_SKMbaqH.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 19,
+    "fields": {
+      "product": 5,
+      "image": "products/product_Product(id=5, name=Google Pixel 9 12GB/ ...)/images/f9289418a63798d959_EWuRxp1.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 20,
+    "fields": {
+      "product": 5,
+      "image": "products/product_Product(id=5, name=Google Pixel 9 12GB/ ...)/images/bd9c13f449a2d73f61_8YHfeqc.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 21,
+    "fields": {
+      "product": 6,
+      "image": "products/product_Product(id=6, name=Huawei Pura 70 Pro H ...)/images/2f97a8747dbb2bbb03_5Y4lfGV.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 22,
+    "fields": {
+      "product": 6,
+      "image": "products/product_Product(id=6, name=Huawei Pura 70 Pro H ...)/images/180e201d74846c694a_WQ2kqnn.webp"
+    }
+  },
+  {
+    "model": "catalog.productimage",
+    "pk": 23,
+    "fields": {
+      "product": 6,
+      "image": "products/product_Product(id=6, name=Huawei Pura 70 Pro H ...)/images/86790815cb89634e1b_98xpyjW.webp"
+    }
+  },
+  {
+    "model": "catalog.seller",
+    "pk": 1,
+    "fields": {
+      "name": "5 Элемент",
+      "description": "«5 элемент» - сеть магазинов по продаже электроники и бытовой техники. Сегодня компания «5 элемент» - это 70 магазинов в 40 городах Беларуси. А также онлайн-магазин 5element.by с ассортиментом из 20 000 товаров. Персонал магазинов – профессиональные консультанты, которые предоставят полную информацию о товарах и помогут определиться с выбором. Также «5 элемент» предоставляет широкий спектр дополнительных услуг, позволяющих делать процесс покупки и пользования техникой комфортным.",
+      "image": "sellers/seller_5 Элемент/images/Снимок_экрана_от_2024-11-28_17-04-40.png",
+      "phone": "+7375296482561",
+      "address": "ул. Гагарина, 79-1 (ТЦ «Евроопт Hyper»)",
+      "email": "kameron@example.com",
+      "created_at": "2024-11-28T14:05:01.662Z",
+      "archived": false,
+      "delivery_methods": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "payment_methods": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.seller",
+    "pk": 2,
+    "fields": {
+      "name": "Newton",
+      "description": "Общество с ограниченной ответственностью \"Сейл Холл\"",
+      "image": "sellers/seller_Newton/images/Снимок_экрана_от_2024-11-28_19-19-43.png",
+      "phone": "+7375296482561",
+      "address": "ул. Гагарина, 79-1 (ТЦ «Евроопт Hyper»)",
+      "email": "kameron@example.com",
+      "created_at": "2024-11-28T16:20:20.269Z",
+      "archived": false,
+      "delivery_methods": [
+        1,
+        2
+      ],
+      "payment_methods": [
+        1,
+        2,
+        3
+      ]
+    }
+  },
+  {
+    "model": "catalog.seller",
+    "pk": 3,
+    "fields": {
+      "name": "STOX",
+      "description": "ООО \"СтоксБай\"",
+      "image": "sellers/seller_STOX/images/Снимок_экрана_от_2024-11-28_19-21-54.png",
+      "phone": "+7375296482561",
+      "address": "ул. Гагарина, 79-1 (ТЦ «Евроопт Hyper»)",
+      "email": "kameron@example.com",
+      "created_at": "2024-11-28T16:23:43.513Z",
+      "archived": false,
+      "delivery_methods": [
+        1,
+        4
+      ],
+      "payment_methods": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "catalog.seller",
+    "pk": 4,
+    "fields": {
+      "name": "ТЕСТОВЫЙ С КРИВЫМИ ДАННЫМИ",
+      "description": "ОГО ОПИСАНИЕ !",
+      "image": "sellers/seller_ТЕСТОВЫЙ С КРИВЫМИ ДАННЫМИ/images/f9289418a63798d9592757270630b653.webp",
+      "phone": "+375292678495",
+      "address": "212002, Республика Беларусь, г. Могилёв, ул. Островского, д. 54, кв. 73",
+      "email": "kameron@example.com",
+      "created_at": "2024-11-29T19:21:16.384Z",
+      "archived": false,
+      "delivery_methods": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "payment_methods": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "model": "catalog.payment",
+    "pk": 1,
+    "fields": {
+      "name": "CH"
+    }
+  },
+  {
+    "model": "catalog.payment",
+    "pk": 2,
+    "fields": {
+      "name": "CO"
+    }
+  },
+  {
+    "model": "catalog.payment",
+    "pk": 3,
+    "fields": {
+      "name": "CC"
+    }
+  },
+  {
+    "model": "catalog.payment",
+    "pk": 4,
+    "fields": {
+      "name": "SO"
+    }
+  },
+  {
+    "model": "catalog.payment",
+    "pk": 5,
+    "fields": {
+      "name": "SR"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 1,
+    "fields": {
+      "name": "PP"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 2,
+    "fields": {
+      "name": "CR"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 3,
+    "fields": {
+      "name": "LK"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 4,
+    "fields": {
+      "name": "SL"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 5,
+    "fields": {
+      "name": "SS"
+    }
+  },
+  {
+    "model": "catalog.delivery",
+    "pk": 6,
+    "fields": {
+      "name": "SE"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 1,
+    "fields": {
+      "seller": 1,
+      "product": 1,
+      "quantity": 12,
+      "sold_quantity": 0,
+      "price": "1200.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 2,
+    "fields": {
+      "seller": 1,
+      "product": 2,
+      "quantity": 45,
+      "sold_quantity": 0,
+      "price": "1254.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 3,
+    "fields": {
+      "seller": 1,
+      "product": 3,
+      "quantity": 4542,
+      "sold_quantity": 0,
+      "price": "4504.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 4,
+    "fields": {
+      "seller": 1,
+      "product": 4,
+      "quantity": 12,
+      "sold_quantity": 0,
+      "price": "12453.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 5,
+    "fields": {
+      "seller": 1,
+      "product": 5,
+      "quantity": 45,
+      "sold_quantity": 0,
+      "price": "4524.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 6,
+    "fields": {
+      "seller": 1,
+      "product": 6,
+      "quantity": 4254,
+      "sold_quantity": 0,
+      "price": "4524.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 7,
+    "fields": {
+      "seller": 1,
+      "product": 7,
+      "quantity": 12,
+      "sold_quantity": 0,
+      "price": "34212.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 8,
+    "fields": {
+      "seller": 1,
+      "product": 8,
+      "quantity": 24,
+      "sold_quantity": 0,
+      "price": "42423.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 9,
+    "fields": {
+      "seller": 1,
+      "product": 9,
+      "quantity": 342,
+      "sold_quantity": 0,
+      "price": "3434.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 10,
+    "fields": {
+      "seller": 1,
+      "product": 10,
+      "quantity": 423,
+      "sold_quantity": 0,
+      "price": "4234.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 11,
+    "fields": {
+      "seller": 2,
+      "product": 7,
+      "quantity": 243,
+      "sold_quantity": 0,
+      "price": "7532.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 12,
+    "fields": {
+      "seller": 2,
+      "product": 1,
+      "quantity": 423,
+      "sold_quantity": 0,
+      "price": "43243.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 13,
+    "fields": {
+      "seller": 2,
+      "product": 4,
+      "quantity": 0,
+      "sold_quantity": 0,
+      "price": "42342.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 14,
+    "fields": {
+      "seller": 2,
+      "product": 6,
+      "quantity": 423,
+      "sold_quantity": 0,
+      "price": "42342.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 15,
+    "fields": {
+      "seller": 2,
+      "product": 10,
+      "quantity": 234,
+      "sold_quantity": 0,
+      "price": "243.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 16,
+    "fields": {
+      "seller": 3,
+      "product": 1,
+      "quantity": 23,
+      "sold_quantity": 0,
+      "price": "4234.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 17,
+    "fields": {
+      "seller": 3,
+      "product": 6,
+      "quantity": 234,
+      "sold_quantity": 0,
+      "price": "4234.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 18,
+    "fields": {
+      "seller": 3,
+      "product": 2,
+      "quantity": 423,
+      "sold_quantity": 0,
+      "price": "24342.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 19,
+    "fields": {
+      "seller": 3,
+      "product": 8,
+      "quantity": 423,
+      "sold_quantity": 0,
+      "price": "243.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 20,
+    "fields": {
+      "seller": 3,
+      "product": 9,
+      "quantity": 4234,
+      "sold_quantity": 0,
+      "price": "4234.00",
+      "created_at": "2024-11-28"
+    }
+  },
+  {
+    "model": "catalog.price",
+    "pk": 21,
+    "fields": {
+      "seller": 4,
+      "product": 2,
+      "quantity": 1,
+      "sold_quantity": 1,
+      "price": "124.00",
+      "created_at": "2024-11-29"
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 2,
+    "fields": {
+      "product": 2,
+      "user": 1,
+      "text": "Ну очень круто ! Советую всем =)",
+      "created_at": "2024-11-28T17:22:07.690Z",
+      "update_at": "2024-11-28T17:22:42.462Z",
+      "updating": true
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 3,
+    "fields": {
+      "product": 2,
+      "user": 1,
+      "text": "Nice!",
+      "created_at": "2024-11-28T17:22:59.161Z",
+      "update_at": "2024-11-28T17:22:59.161Z",
+      "updating": false
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 4,
+    "fields": {
+      "product": 1,
+      "user": 1,
+      "text": "asda",
+      "created_at": "2024-11-28T17:24:17.691Z",
+      "update_at": "2024-11-28T17:24:17.691Z",
+      "updating": false
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 5,
+    "fields": {
+      "product": 1,
+      "user": 1,
+      "text": "sad",
+      "created_at": "2024-11-28T17:24:21.073Z",
+      "update_at": "2024-11-28T17:24:21.073Z",
+      "updating": false
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 6,
+    "fields": {
+      "product": 1,
+      "user": 1,
+      "text": "asd",
+      "created_at": "2024-11-28T17:24:23.394Z",
+      "update_at": "2024-11-28T17:24:23.394Z",
+      "updating": false
+    }
+  },
+  {
+    "model": "catalog.review",
+    "pk": 7,
+    "fields": {
+      "product": 2,
+      "user": 2,
+      "text": "Очень круто !!!!",
+      "created_at": "2024-12-01T20:09:56.025Z",
+      "update_at": "2024-12-01T20:10:10.040Z",
+      "updating": true
+    }
+  },
+  {
+    "model": "catalog.namespecification",
+    "pk": 1,
+    "fields": {
+      "name": "Операционная система"
+    }
+  },
+  {
+    "model": "catalog.namespecification",
+    "pk": 2,
+    "fields": {
+      "name": "Размер экрана"
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 1,
+    "fields": {
+      "value": "Android",
+      "name": 1,
+      "product": 1
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 2,
+    "fields": {
+      "value": "Android",
+      "name": 1,
+      "product": 3
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 4,
+    "fields": {
+      "value": "Android",
+      "name": 1,
+      "product": 4
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 5,
+    "fields": {
+      "value": "Android",
+      "name": 1,
+      "product": 5
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 6,
+    "fields": {
+      "value": "Android",
+      "name": 1,
+      "product": 6
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 7,
+    "fields": {
+      "value": "Apple iOS",
+      "name": 1,
+      "product": 2
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 8,
+    "fields": {
+      "value": "6.1\"",
+      "name": 2,
+      "product": 2
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 9,
+    "fields": {
+      "value": "6.2\"",
+      "name": 2,
+      "product": 1
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 10,
+    "fields": {
+      "value": "6.1\"",
+      "name": 2,
+      "product": 3
+    }
+  },
+  {
+    "model": "catalog.specification",
+    "pk": 11,
+    "fields": {
+      "value": "6.5\"",
+      "name": 2,
+      "product": 6
+    }
+  }
+]

@@ -1,8 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
-from itertools import product
 
 import stripe
+from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Prefetch
 from django.http import HttpRequest
@@ -10,8 +10,9 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from order.models import Order
 from order.models import OrderItem
-from rest_framework.reverse import reverse_lazy
 from stripe.checkout import Session
+
+from website.settings import ORDERS_KEY
 
 """
 Функции для работы с оплатой заказов через Stripe.
@@ -51,6 +52,7 @@ def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, st
 def checkout_process(
     order: Order,
     redirect_urls: tuple[str, str],
+    user_login: str,
     all_product: bool = True,
     seller_id: None | int = None,
     total_price: None | Decimal = None,
@@ -69,13 +71,9 @@ def checkout_process(
         - Session: Объект Stripe Checkout Session.
     """
     products_ids = list()
-    print(f'{order=}')
     for i in order.order_items.all():
-        print(f'{i=}')
         products_ids.append(i.product_id)
-    print(f'{products_ids=}')
-    products_ids = ','.join((str(num) for num in products_ids))
-    print(f'{products_ids=}')
+    products_ids = ",".join((str(num) for num in products_ids))
     now = datetime.now()
     formatted_date = now.strftime("%H:%M %d.%m.%Y")
     date_to_db = "%20".join(formatted_date.split(" "))
@@ -107,9 +105,10 @@ def checkout_process(
                 "total_price": url_total_price,
                 "date": formatted_date,
                 "url": f"?order_id={order.id}&total_price={url_total_price}&date={date_to_db}"
-                       f"&delivery_price={order.delivery_price.price}",
+                f"&delivery_price={order.delivery_price.price}",
                 "delivery_price": order.delivery_price.price,
                 "products_ids": products_ids,
+                "user_login": user_login,
             },
         )
     else:
@@ -139,6 +138,7 @@ def checkout_process(
                 "date": formatted_date,
                 "url": f"?order_id={order.id}&seller_id={seller_id}" f"&total_price={total_price}&date={date_to_db}",
                 "products_ids": products_ids,
+                "user_login": user_login,
             },
         )
 
@@ -222,6 +222,7 @@ def change_order_payment_status(session: Session) -> None:
             order.status = Order.PROCESSING
             order.save()
             order.order_items.update(payment_status=True, receipt_url=current_receipt_url)
+            cache.delete(f"{ORDERS_KEY}{order_id}")
 
 
 def change_certain_items_payment_status(session: Session) -> None:
@@ -275,6 +276,7 @@ def change_certain_items_payment_status(session: Session) -> None:
             order.paid_status = Order.PAID if current_payment_status else Order.PARTLY_PAID
             order.status = Order.PROCESSING
             order.save()
+            cache.delete(f"{ORDERS_KEY}{order_id}")
 
 
 def create_recipes_url_for_db(session: Session) -> str:
