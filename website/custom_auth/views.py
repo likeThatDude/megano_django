@@ -7,6 +7,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
 from django.core.cache import cache
@@ -326,7 +327,17 @@ class ViewedListView(LoginRequiredMixin, ListView):
         return Viewed.viewed_list(self.request.user)
 
 
-class SettingsPageView(View):
+class AdminRequiredMixin(UserPassesTestMixin):
+    """
+    Миксин, предоставляющий доступ к ресурсу только пользователям
+    с правами администратора.
+    """
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class SettingsPageView(AdminRequiredMixin, View):
     template_name = "custom_auth/settings.html"
 
     def get(self, request: HttpRequest):
@@ -342,7 +353,7 @@ class SettingsPageView(View):
         return render(request, self.template_name, context=context)
 
 
-class SettingsChangeView(View):
+class SettingsChangeView(AdminRequiredMixin, View):
     """
     View для операций с настройками проекта
     """
@@ -379,7 +390,7 @@ class SettingsChangeView(View):
         return redirect(reverse_lazy("custom_auth:settings"))
 
 
-class ResetCashView(View):
+class ResetCashView(AdminRequiredMixin, View):
     """
     View для операций сброса кэша как отдельных разделов,
     так и очистки всего кэша.
