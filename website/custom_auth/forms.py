@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 from .models import Profile
@@ -16,10 +17,35 @@ class CustomUserCreationForm(UserCreationForm):
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
     """
-
-    email = forms.EmailField(label="Email", required=True)
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
+    login = forms.CharField(
+        label=_("Label"),
+        error_messages={
+            "login": _("Заполните поле login"),
+        },
+    )
+    email = forms.EmailField(
+        required=True,
+        label=_("Email"),
+        error_messages={
+            "email": _("Заполните поле email"),
+        },
+    )
+    password1 = forms.CharField(
+        required=True,
+        label=_("Password"),
+        widget=forms.PasswordInput,
+        error_messages={
+            "password1": _("Заполните поле password"),
+        },
+    )
+    password2 = forms.CharField(
+        required=True,
+        label=_("Password Confirm"),
+        widget=forms.PasswordInput,
+        error_messages={
+            "password2": _("Заполните поле password"),
+        },
+    )
 
     class Meta:
         model = CustomUser
@@ -35,9 +61,9 @@ class CustomUserChangeForm(UserChangeForm):
     и проверяет, что новый пароль соответствует требованиям безопасности.
     """
 
-    old_password = forms.CharField(label="Old password", widget=forms.PasswordInput, required=False)
-    new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput, required=False)
-    new_password2 = forms.CharField(label="New password confirmation", widget=forms.PasswordInput, required=False)
+    old_password = forms.CharField(label=_("Old password"), widget=forms.PasswordInput, required=False)
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput, required=False)
+    new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = CustomUser
@@ -160,6 +186,27 @@ class ProfileChangeForm(forms.ModelForm):
                 raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
         return phone
 
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -172,3 +219,24 @@ class ProfileRegistrationForm(ProfileChangeForm):
 
     class Meta(ProfileChangeForm.Meta):
         fields = ["first_name", "last_name", "patronymic", "phone"]
+
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic
