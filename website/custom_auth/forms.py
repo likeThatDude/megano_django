@@ -1,7 +1,9 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
 from .models import Profile
@@ -172,3 +174,31 @@ class ProfileRegistrationForm(ProfileChangeForm):
 
     class Meta(ProfileChangeForm.Meta):
         fields = ["first_name", "last_name", "patronymic", "phone"]
+
+
+class SettingsForm(forms.Form):
+    RUSSIAN = "ru"
+    ENGLISH = "en"
+    LANGUAGES = [
+        (RUSSIAN, _("Русский")),
+        (ENGLISH, _("Английский")),
+    ]
+
+    UTC = "UTC"
+    MOSCOW = "Europe/Moscow"
+    NEW_YORK = "America/New_York"
+    LONDON = "Europe/London"
+    TIME_ZONES = [
+        (MOSCOW, _("Москва")),
+        (UTC, _("Всемирное время")),
+        (NEW_YORK, _("Нью-Йорк")),
+        (LONDON, _("Лондон")),
+    ]
+
+    debug = forms.BooleanField(label=_("Режим отладки"), initial=settings.DEBUG, required=False)
+    language = forms.ChoiceField(choices=LANGUAGES, initial=settings.LANGUAGE_CODE)
+    timezone = forms.ChoiceField(choices=TIME_ZONES, initial=settings.TIME_ZONE)
+    session_age = forms.IntegerField(label=_("Время жизни сессии"), initial=settings.SESSION_COOKIE_AGE)
+    email_host = forms.CharField(label=_("HOST электронной почты"), initial=settings.EMAIL_HOST)
+    email_tls = forms.BooleanField(label=_("Использование TLS"), initial=settings.EMAIL_USE_TLS, required=False)
+    email_port = forms.IntegerField(label=_("PORT электронной почты"), initial=settings.EMAIL_PORT)
