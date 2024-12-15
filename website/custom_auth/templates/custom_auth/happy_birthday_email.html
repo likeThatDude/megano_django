@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        margin: 2em;
+        padding: 0;
+        background-color: blanchedalmond;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: lavender;
+        padding: 5px 20px;
+        border: 2px solid #ffd000;
+        border-radius: 8px;
+      }
+      .confetti {
+        max-width: 100%;
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+        border-radius: 8px;
+      }
+      .confetti img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .happy-sign {
+        display: inline-block;
+      }
+      .happy-sign h1 {
+        color: brown;
+      }
+      .footer {
+        text-align: center;
+        font-size: 14px;
+        color: #888888;
+      }
+      .footer a {
+          color: peru;
+          text-decoration: none;
+      }
+      .footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h6>{{ company }}</h6>
+      </div>
+      <div class="confetti">
+        <img src="https://i.imgur.com/BMgUaEl.png" alt="Поздравление">
+      </div>
+      <div class="happy-sign">
+        <h1>{{ username }}, поздравляем Вас с Днем Рождения!</h1>
+      </div>
+      <div>
+        <h4>Искренне желаем стабильности, головокружительного успеха, невероятных проектов, креативных идей, крутых достижений, уверенности, настойчивости и достойных побед!</h4>
+        <h4>Загадывайте желание, задувайте свечи и принимайте подарки.</h4>
+        <h4>А {{ company }} упростит вам жизнь, подберет нужную технику и сэкономит время.</h4>
+      </div>
+      <div class="footer">
+        &copy; {{ year }} Megano. Все права защищены. <br>
+        <a href="{{ protocol }}{{ domain }}">Посетить сайт</a> | <a href="mailto:{{ email }}">Связаться с
+        поддержкой</a>
+    </div>
+    </div>
+  </body>
+</html>
