@@ -32,6 +32,7 @@ from .forms import ProfileChangeForm
 from .forms import ProfileRegistrationForm
 from .forms import SettingsForm
 from .models import Profile
+from .tasks import notify_user_after_register
 
 
 class LogInView(LoginView):
@@ -52,6 +53,12 @@ class LogOutView(LogoutView):
 class RegisterView(CreateView):
     """
     CBV регистрации профиля пользователя
+    Используем 2 формы для создания пользователя и профиля пользователя.
+
+    Формы:
+        CustomUserCreationForm - форма для создания пользователя
+        ProfileRegistrationForm - форма для создания профиля пользователя
+
     """
 
     template_name = "custom_auth/register.html"
@@ -73,7 +80,9 @@ class RegisterView(CreateView):
         """
         Получаем экземпляр формы ProfileRegistrationForm, проверяем две формы на валидность
         Если проверку прошли: то сохраняем основную форму, привязываем пользователя к профилю,
-        аутентифицируем пользователя, логиним
+        аутентифицируем пользователя, логиним.
+        Планируем выполнение задачи через 2 дня после регистрации профиля пользователя.
+
         """
         profile_form = ProfileRegistrationForm(self.request.POST)
 
@@ -90,9 +99,28 @@ class RegisterView(CreateView):
             if user:
                 login(self.request, user=user)
 
+            # Планируем выполнение задачи через 2 дня с момента регистрации пользователя
+            notify_user_after_register.apply_async(
+                args=[user.pk],
+                countdown=2 * 24 * 3600
+            )
             return redirect(self.get_success_url())
 
-        return self.form_invalid(form)
+        return self.form_invalid(form, profile_form)
+
+    def form_invalid(self, form, profile_form=None):
+        """
+        Обработка форм при ошибке, вызванной в процессе валидации
+        В случае появления ошибки на одной из двух форм,
+        пользователь увидит ошибку на форме.
+
+        Атрибуты:
+            form - форма, указанная в form_class
+
+        """
+        return self.render_to_response(
+            self.get_context_data(register_form=form, profile_registration_form=profile_form)
+        )
 
     def get_success_url(self):
         return reverse_lazy("core:index")
