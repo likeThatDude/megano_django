@@ -82,35 +82,53 @@
 
                 <div class="CartBlock">
                     <div class="dropdown">
-                        <button class="dropbtn"><img class="CartBlock-img"
-                                                     src="{% static 'assets/img/icons/loon-icon.svg' %}"
-                                                     alt="loon-icon.svg"/></button>
-                        <div class="dropdown-content">
-                            {#                            {% if user_is_auth %}#}
-                            {% if user.is_authenticated %}
+                        {% if user.is_authenticated %}
+                            <button class="dropbtn"><img class="CartBlock-img"
+                                                         src="{% static 'assets/img/icons/loon-icon.svg' %}"
+                                                         alt="loon-icon.svg"/></button>
+                            <div class="dropdown-content">
+                                {% if user.is_staff %}
+                                    <a class="dropdown-content-a" href="{% url 'custom_auth:settings' %}">Административный
+                                        раздел</a>
+                                {% endif %}
                                 <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">Личный
                                     кабинет</a>
-                            {% endif %}
-                            <a class="dropdown-content-a" href="{% static 'account.html' %}">Административный
-                                раздел</a>
-                            <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
-                                  style="display: none;">
-                                {% csrf_token %}
-                            </form>
-                            {#                            {% if user_is_auth %}#}
-                            {% if user.is_authenticated %}
                                 <a href="#"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Выход
                                 </a>
-                            {% endif %}
-                        </div>
+                                <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
+                                      style="display: none;">
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                            <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
+                                  style="display: none;">
+                                {% csrf_token %}
+                            </form>
+                        {% else %}
+                            <a href="{% url 'custom_auth:login' %}">
+                                <button class="dropbtn"><img class="CartBlock-img"
+                                                             src="{% static 'assets/img/icons/loon-icon.svg' %}"
+                                                             alt="loon-icon.svg"/></button>
+                            </a>
+                            <div class="dropdown-content">
+                                <form id="login-form" method="post" action="{% url 'custom_auth:login' %}"
+                                      style="display: none;">
+                                    {% csrf_token %}
+                                </form>
+                                <a href="#"
+                                   onclick="event.preventDefault(); document.getElementById('login-form').submit();">
+                                    Войти
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                     <a class="CartBlock-block" href="{% url 'cart:detail' %}"><img class="CartBlock-img"
                                                                                    src="{% static 'assets/img/icons/cart.svg' %}"
                                                                                    alt="cart.svg"/><span
                             class="CartBlock-amount">0</span></a>
-                    <div class="CartBlock-block"><span class="CartBlock-cost">0.00</span>
+                    <div class="CartBlock-block"><span class="CartBlock-cost">0</span>
 
 
                     </div>
@@ -166,9 +184,10 @@
                                                     <a class="CategoriesButton-link"
                                                        href="{% url 'catalog:catalog' sub_category.id %}">
                                                         <div class="CategoriesButton-icon">
-                                                        {% if subcategory.icon %}
-                                                            <img src="{{ sub_category.icon.url }}" alt="{{ sub_category.name }}"/>
-                                                        {% endif %}
+                                                            {% if subcategory.icon %}
+                                                                <img src="{{ sub_category.icon.url }}"
+                                                                     alt="{{ sub_category.name }}"/>
+                                                            {% endif %}
                                                         </div>
                                                         <span class="CategoriesButton-text">{{ sub_category.name }}</span></a>
                                                 </div>

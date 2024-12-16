@@ -1,3 +1,5 @@
+from catalog.models import Viewed
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
@@ -5,18 +7,22 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
+from django.core.cache import cache
 from django.db.models import Prefetch
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from catalog.models import Viewed
 from order.models import Order
 from order.models import OrderItem
 
@@ -24,6 +30,7 @@ from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
 from .forms import ProfileRegistrationForm
+from .forms import SettingsForm
 from .models import Profile
 from .tasks import notify_user_after_register
 
@@ -346,3 +353,109 @@ class ViewedListView(LoginRequiredMixin, ListView):
 
         """
         return Viewed.viewed_list(self.request.user)
+
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    """
+    Миксин, предоставляющий доступ к ресурсу только пользователям
+    с правами администратора.
+    """
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class SettingsPageView(AdminRequiredMixin, View):
+    template_name = "custom_auth/settings.html"
+
+    def get(self, request: HttpRequest):
+        context = {
+            "debug": _("Включен") if settings.DEBUG else _("Отключен"),
+            "language": settings.LANGUAGE_CODE,
+            "timezone": settings.TIME_ZONE,
+            "session_age": settings.SESSION_COOKIE_AGE,
+            "email_host": settings.EMAIL_HOST,
+            "email_tls": _("Включен") if settings.EMAIL_USE_TLS else _("Отключен"),
+            "email_port": settings.EMAIL_PORT,
+        }
+        return render(request, self.template_name, context=context)
+
+
+class SettingsChangeView(AdminRequiredMixin, View):
+    """
+    View для операций с настройками проекта
+    """
+
+    template_name = "custom_auth/settings_change.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает GET-запрос
+        на получение страницы с настройками проекта
+        """
+
+        form = SettingsForm()
+        context = {"form": form}
+        return render(request, self.template_name, context=context)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает POST-запрос
+        на изменение указанных клиентом настроек проекта
+        """
+
+        form = SettingsForm(request.POST)
+
+        if form.is_valid():
+            settings.DEBUG = form.cleaned_data["debug"]
+            settings.LANGUAGE_CODE = form.cleaned_data["language"]
+            settings.TIME_ZONE = form.cleaned_data["timezone"]
+            settings.SESSION_COOKIE_AGE = form.cleaned_data["session_age"]
+            settings.EMAIL_HOST = form.cleaned_data["email_host"]
+            settings.EMAIL_USE_TLS = form.cleaned_data["email_tls"]
+            settings.EMAIL_PORT = form.cleaned_data["email_port"]
+
+        return redirect(reverse_lazy("custom_auth:settings"))
+
+
+class ResetCashView(AdminRequiredMixin, View):
+    """
+    View для операций сброса кэша как отдельных разделов,
+    так и очистки всего кэша.
+    """
+
+    template_name = "custom_auth/cashing.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает GET-запрос
+        на получение страницы с кнопками сброса кэша
+        """
+        return render(request, self.template_name)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает POST-запрос
+        на сброс кэша и возвращает страницу с результатом
+        """
+
+        context = dict()
+        button_names = request.POST.dict()
+
+        if "reset_all" in button_names:
+            cache.clear()
+            context["result"] = _("Кэш всех сервисов сброшен успешно!")
+        if "banners" in button_names:
+            cache.delete(settings.BANNERS_KEY)
+            context["result"] = _("Кэш сервиса баннеров сброшен успешно!")
+        if "category" in button_names:
+            cache.delete(settings.CATEGORY_KEY)
+            context["result"] = _("Кэш меню категорий сброшен успешно!")
+        if "daily_offer" in button_names:
+            cache.delete(settings.OFFER_KEY)
+            context["result"] = _("Кэш сервиса предложение дня сброшен успешно!")
+        if "hot_offer" in button_names:
+            cache.delete(settings.HOT_OFFER_KEY)
+            context["result"] = _("Кэш сервиса горячих предложений сброшен успешно!")
+
+        return render(request, self.template_name, context=context)
