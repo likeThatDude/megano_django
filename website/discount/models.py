@@ -97,9 +97,9 @@ class Discount(models.Model):
     CART = "CT"
 
     KIND_CHOICES = [
-        (PRODUCT, _("Скидка на товар")),
-        (SET, _("Скидка на наборы")),
-        (CART, _("Скидка на корзину")),
+        (PRODUCT, _("Product discount")),
+        (SET, _("Discount on kits")),
+        (CART, _("Discount on cart")),
     ]
 
     # типы механизмов расчёта скидки
@@ -108,9 +108,9 @@ class Discount(models.Model):
     FIXED = "FD"
 
     METHOD_CHOICES = [
-        (PERCENT, _("Процент скидки")),
-        (SUMM, _("Сумма скидки")),
-        (FIXED, _("Фиксированная стоимость")),
+        (PERCENT, _("Discount percentage")),
+        (SUMM, _("Discount amount")),
+        (FIXED, _("Fixed cost")),
     ]
 
     # приоритеты скидок
@@ -121,59 +121,60 @@ class Discount(models.Model):
     THE_HIGHEST = 5
 
     PRIORITY_CHOICES = [
-        (THE_LOWEST, _("Самый низкий")),
-        (LOW, _("Низкий")),
-        (MIDDLE, _("Средний")),
-        (HIGH, _("Высокий")),
-        (THE_HIGHEST, _("Самый высокий")),
+        (THE_LOWEST, _("Lowest")),
+        (LOW, _("Low")),
+        (MIDDLE, _("Middle")),
+        (HIGH, _("High")),
+        (THE_HIGHEST, _("Highest")),
     ]
 
     name = models.CharField(unique=True, max_length=100, verbose_name=_("Name"))
-    kind = models.CharField(max_length=2, choices=KIND_CHOICES, verbose_name=_("Вид скидки"))
-    method = models.CharField(max_length=2, choices=METHOD_CHOICES, verbose_name=_("Механизм скидки"))
+    kind = models.CharField(max_length=2, choices=KIND_CHOICES, verbose_name=_("Type of discount"))
+    method = models.CharField(max_length=2, choices=METHOD_CHOICES, verbose_name=_("Discount mechanism"))
     priority = models.PositiveSmallIntegerField(
         default=MIDDLE,
         choices=PRIORITY_CHOICES,
-        verbose_name=_("Приоритет скидки"),
-        help_text=_("Если на товар действует несколько скидок, то применяется самая тяжёлая (приоритетная) скидка. "),
+        verbose_name=_("Discount priority"),
+        help_text=_(
+            "If there are several discounts on the product, then the heaviest (priority) discount is applied. "
+        ),
     )
     quantity_l = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name=_("Наименьшее количество"),
-        help_text=_("Установите нижнюю границу количества товара/ов, если выбран вид 'Скидка на корзину'. "),
+        verbose_name=_("The least amount"),
+        help_text=_("Set the lower limit of the quantity of goods/s if the 'Discount on cart' type is selected. "),
     )
     quantity_g = models.PositiveBigIntegerField(
         null=True,
         blank=True,
-        verbose_name=_("Наибольшее количество"),
-        help_text=_("Установите верхнюю границу количества товара/ов, если выбран вид 'Скидка на корзину'. "),
+        verbose_name=_("The largest number"),
+        help_text=_("Set the upper limit of the quantity of goods/s if the 'Discount on cart' type is selected. "),
     )
     total_cost_l = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0,
-        verbose_name=_("Общая стоимость"),
+        verbose_name=_("Total cost"),
         help_text=_(
-            "Введите значение общей стоимости товаров в корзине, "
-            "при превышении которой будет действовать скидка на корзину. "
+            "Enter the value of the total cost of the items in the cart, "
+            "if exceeded, the discount on the basket will apply. "
         ),
     )
     percent = models.DecimalField(
         max_digits=5,
         decimal_places=2,
         default=0,
-        verbose_name=_("Процент скидки"),
-        help_text=_("Введите процент скидки, если используется механизм 'Процент скидки'. "),
+        verbose_name=_("Discount percentage"),
+        help_text=_("Enter the discount percentage if the 'Discount Percentage' mechanism is used. "),
     )
     price = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         default=0,
-        verbose_name=_("Значение скидки в используемой валюте"),
+        verbose_name=_("The discount value in the currency used"),
         help_text=_(
-            "Введите значение скидки в используемой валюте, если используется механизм 'Сумма скидки' или "
-            "'Фиксированная стоимость'. "
+            "Enter the discount value in the currency used if the 'Discount Amount' or 'Fixed Cost' mechanism is used."
         ),
     )
     slug = models.SlugField(
@@ -181,8 +182,8 @@ class Discount(models.Model):
         unique=True,
         blank=True,
         db_index=True,
-        verbose_name=_("Слаг"),
-        help_text=_("Автоматически генерируется от имени, но может быть изменено"),
+        verbose_name="Slug",
+        help_text=_("It is automatically generated on behalf of, but can be changed"),
     )
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     start_date = models.DateField(default=timezone.now, verbose_name=_("Start Date"))
@@ -196,7 +197,7 @@ class Discount(models.Model):
         related_name="discounts",
         verbose_name=_("Products"),
         db_table="discounts_products",
-        help_text=_("Добавьте продукты, если выбран вид 'Скидка на товар'. "),
+        help_text=_("Add products if the 'Product Discount' type is selected. "),
     )
     categories = models.ManyToManyField(
         Category,
@@ -204,7 +205,7 @@ class Discount(models.Model):
         related_name="discounts",
         verbose_name=_("Categories"),
         db_table="discounts_categories",
-        help_text=_("Добавьте категории, если выбран вид 'Скидка на товар'. "),
+        help_text=_("Add categories if the 'Product Discount' type is selected. "),
     )
     product_groups = models.ManyToManyField(
         ProductGroup,
@@ -212,7 +213,7 @@ class Discount(models.Model):
         related_name="discounts",
         verbose_name=_("Product groups"),
         db_table="discounts_groups",
-        help_text=_("Добавьте группы, если выбран вид 'Скидка на наборы'. "),
+        help_text=_("Add groups if the 'Discount on Sets' view is selected. "),
     )
 
     class Meta:

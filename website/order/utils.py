@@ -242,9 +242,9 @@ def create_order_items_data(
         payment_queryset = Payment.objects.all()
         delivery_queryset = Delivery.objects.all()
     except DatabaseError as e:
-        raise ValidationError(_(f"Ошибка базы данных при выполнении запроса: {e}"))
+        raise ValidationError(_(f"Database error during query execution: {e}"))
     except Exception as e:
-        raise ValidationError(_(f"Произошла непредвиденная ошибка: {e}"))
+        raise ValidationError(_(f"An unexpected error has occurred: {e}"))
 
     payment_dict = {payment.name: payment for payment in payment_queryset}
     delivery_dict = {delivery.name: delivery for delivery in delivery_queryset}
@@ -363,7 +363,7 @@ def set_delivery_price(
             try:
                 deliver_price = DeliveryPrice.objects.get(name=DeliveryPrice.FREE_DELIVERY)
             except DeliveryPrice.DoesNotExist:
-                raise ObjectDoesNotExist(_(f"Ошибка получения данных о доставке."))
+                raise ObjectDoesNotExist(_(f"Error receiving delivery data."))
         elif correct_valid_data["choice_delivery_type"] == "store":
             if correct_valid_data["delivery"] == Delivery.SHOP_STANDARD:
                 seller_ids = {product["seller_id"] for product in products_list.values()}

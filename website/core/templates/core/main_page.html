@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block title %}
-    Megano - Главная страница
+    Megano - {% trans 'Main page' %}
 {% endblock %}
 
 {% block body %}
@@ -67,7 +67,7 @@
                 <div class="Section-column">
                     <div class="Section-columnSection Section-columnSection_mark">
                         <header class="Section-columnHeader">
-                            <strong class="Section-columnTitle">ОГРАНИЧЕННЫЕ ПРЕДЛОЖЕНИЯ</strong>
+                            <strong class="Section-columnTitle">{% trans 'LIMITED OFFERS' %}</strong>
                         </header>
                         <div class="Card">
                             {% if offers %}
@@ -93,28 +93,28 @@
                                         <div class="CountDown-wrap">
                                             <div class="CountDown-days">
                                             </div>
-                                            <span class="CountDown-label">days</span>
+                                            <span class="CountDown-label">{% trans 'days' %}</span>
                                         </div>
                                     </div>
                                     <div class="CountDown-block">
                                         <div class="CountDown-wrap">
                                             <div class="CountDown-hours">
                                             </div>
-                                            <span class="CountDown-label">hours</span>
+                                            <span class="CountDown-label">{% trans 'hours' %}</span>
                                         </div>
                                     </div>
                                     <div class="CountDown-block">
                                         <div class="CountDown-wrap">
                                             <div class="CountDown-minutes">
                                             </div>
-                                            <span class="CountDown-label">mins</span>
+                                            <span class="CountDown-label">{% trans 'mins' %}</span>
                                         </div>
                                     </div>
                                     <div class="CountDown-block">
                                         <div class="CountDown-wrap">
                                             <div class="CountDown-secs">
                                             </div>
-                                            <span class="CountDown-label">secs</span>
+                                            <span class="CountDown-label">{% trans 'secs' %}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="Section-content">
                     <header class="Section-header">
-                        <h2 class="Section-title">Популярные товары</h2>
+                        <h2 class="Section-title">{% trans 'Popular products' %}</h2>
                     </header>
                     <div class="Cards">
                         <div class="Card">
@@ -319,7 +319,7 @@
                 <div class="Section-content">
                     <div class="Slider Slider_carousel">
                         <header class="Section-header Section-header_close">
-                            <h2 class="Section-title">Горячие предложения</h2>
+                            <h2 class="Section-title">{% trans 'Hot offers' %}</h2>
                             <div class="Section-control">
                                 <div class="Slider-navigate"></div>
                             </div>
@@ -340,7 +340,7 @@
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
                                                         <span class="Card-price">
-                                                            ${% firstof hot_product.price " нет в наличии" %}
+                                                            ${% firstof hot_product.price "out of stock"|trans %}
                                                         </span>
                                                     </div>
                                                     <div class="Card-category">
@@ -372,7 +372,7 @@
                 <div class="Section-content">
                     <div class="Slider Slider_carousel">
                         <header class="Section-header Section-header_close">
-                            <h2 class="Section-title">Ограниченный тираж</h2>
+                            <h2 class="Section-title">{% trans 'Limited edition' %}</h2>
                             <div class="Section-control">
                                 <div class="Slider-navigate"></div>
                             </div>

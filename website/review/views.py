@@ -125,7 +125,7 @@ class ReviewUpdateViewSet(UpdateAPIView):
             obj.updating = True
             obj.save(update_fields=["updating"])
         else:
-            raise PermissionDenied("Ты не владелец этого объекта.")
+            raise PermissionDenied("You are not the owner of this facility.")
         return super().update(request, *args, **kwargs)
 
 

@@ -1,6 +1,5 @@
 {% extends 'core/base.html' %}
 {% load static %}
-{% load i18n %}
 
 {% block description %}
     <meta name="description" content="Описание страницы">
@@ -99,7 +98,7 @@
                     {% endfor %}
                     {% else %}
                     <div class="ProductCard-look">
-                        <h2 class="ProductCard-title"> {% trans 'The basket is empty so far' %}</h2>
+                        <h2 class="ProductCard-title"> {% trans 'The cart is empty so far' %}</h2>
                         <a href="{% url 'catalog:catalog' %}">{% trans 'Go back to the selection of products' %}</a>
                     </div>
                     {% endif %}
