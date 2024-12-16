@@ -95,17 +95,17 @@ class Product(models.Model):
         null=False,
         blank=False,
     )
-    manufacture = models.CharField(max_length=100, db_index=True, verbose_name=_("Manufacture"))
+    manufacture = models.CharField(max_length=100, db_index=True, verbose_name=_("Manufacturer"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name=_("PK category"),
+        verbose_name=_("Category"),
         related_name="products",
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
-    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
+    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Viewed"))
     sorting_index = models.PositiveIntegerField(default=0, verbose_name=_("Sorting Index"))
     preview = models.ImageField(
         null=True,
@@ -136,7 +136,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_("PK product"),
+        verbose_name=_("Product"),
         related_name="images",
     )
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
@@ -186,10 +186,6 @@ class Seller(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
-    class Meta:
-        verbose_name = "seller"
-        verbose_name_plural = "sellers"
-
     def __str__(self) -> str:
         return str(self.name)
 
@@ -224,11 +220,11 @@ class Payment(models.Model):
     STORE_RANDOM = "SR"
 
     PAYMENT_CHOICES = (
-        (CASH, _("Наличными")),
-        (CARD_ONLINE, _("Картой онлайн")),
-        (CARD_COURIER, _("Картой курьеру")),
-        (STORE_ONLINE, _("Картой магазину")),
-        (STORE_RANDOM, _("Случайной картой магазину")),
+        (CASH, _("Cash")),
+        (CARD_ONLINE, _("By card online")),
+        (CARD_COURIER, _("By card to the courier")),
+        (STORE_ONLINE, _("By card to the store")),
+        (STORE_RANDOM, _("A random card to the store")),
     )
 
     name = models.CharField(
@@ -279,12 +275,12 @@ class Delivery(models.Model):
     SHOP_EXPRESS = "SE"
 
     DELIVERY_CHOICES = [
-        (PICKUP_POINT, _("В пункт выдачи")),
-        (COURIER, _("Курьером")),
-        (LOCKER, _("В постамат")),
-        (SELLER, _("Силами продавца")),
-        (SHOP_STANDARD, _("Магазином обычная")),
-        (SHOP_EXPRESS, _("Магазином экспресс")),
+        (PICKUP_POINT, _("To the pick-up point")),
+        (COURIER, _("By courier")),
+        (LOCKER, _("To the post office")),
+        (SELLER, _("By the seller's forces")),
+        (SHOP_STANDARD, _("The store is a regular one")),
+        (SHOP_EXPRESS, _("By the express store")),
     ]
 
     name = models.CharField(
@@ -364,9 +360,9 @@ class Review(models.Model):
     updating = models.BooleanField(default=False, verbose_name=_("Updating"))
 
     class Meta:
-        ordering = ("-created_at",)
-        verbose_name = "review"
-        verbose_name_plural = "reviews"
+        ordering = ("name",)
+        verbose_name = _("Review")
+        verbose_name_plural = _("Reviews")
 
 
 class NameSpecification(models.Model):
@@ -384,9 +380,6 @@ class NameSpecification(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    class Meta:
-        ordering = ("name",)
 
 
 class Specification(models.Model):
@@ -413,13 +406,13 @@ class Specification(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_("PK Product"),
+        verbose_name=_("Product"),
         related_name="specifications",
     )
 
     class Meta:
-        verbose_name = "specification"
-        verbose_name_plural = "specifications"
+        verbose_name = _("Specification")
+        verbose_name_plural = _("Specifications")
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
@@ -447,7 +440,7 @@ class Viewed(models.Model):
         verbose_name=_("Product"),
         related_name="viewed",
     )
-    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created_at"))
+    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created at"))
 
     class Meta:
         verbose_name = _("Viewed")

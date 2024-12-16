@@ -34,16 +34,16 @@
                 {% if discount.start_date or discount.end_date %}
                     <div>
                         {% if discount.start_date %}
-                            <span>Начало: {{ discount.start_date|date:"Y-m-d H:i" }}</span>
+                            <span>{% trans 'Start' %}: {{ discount.start_date|date:"Y-m-d H:i" }}</span>
                         {% endif %}
                         {% if discount.end_date %}
-                            <span>Конец: {{ discount.end_date|date:"Y-m-d H:i" }}</span>
+                            <span>{% trans 'End' %}: {{ discount.end_date|date:"Y-m-d H:i" }}</span>
                         {% endif %}
                     </div>
                 {% endif %}
             </li>
         {% empty %}
-            <li>Нет активных скидок.</li>
+            <li>{% trans 'There are no active discounts' %}.</li>
         {% endfor %}
     </ul>
 {% endblock %}

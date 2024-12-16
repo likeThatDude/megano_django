@@ -33,7 +33,7 @@
         <main class="Middle">
             <div class="wrapper">
                 <div class="header">
-                    <h3 class="sign-in">Вход</h3>
+                    <h3 class="sign-in">{% trans 'Login' %}</h3>
                 </div>
                 <div class="clear"></div>
 
@@ -49,9 +49,9 @@
                     <div>
                         <input type="submit" value="Войти" />
                     </div>
-                    <a class="forgot-label" href="{% url 'custom_auth:password_reset' %}">Забыли пароль?</a>
+                    <a class="forgot-label" href="{% url 'custom_auth:password_reset' %}">{% trans 'Forgot your password' %}?</a>
                     <a class="registr" href="registr.html">
-                        Регистрация
+                        {% trans 'Registration' %}
                     </a>
                 </form>
             </div>

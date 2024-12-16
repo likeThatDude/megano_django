@@ -74,11 +74,11 @@ class OrderCreateView(View):
                     context["product_data"] = product_data
                     return render(request, "order/order.html", context=context)
                 else:
-                    raise Http404(_("Ошибка создания заказа"))
+                    raise Http404(_("Order creation error"))
             else:
                 return redirect(reverse("core:index"))
         else:
-            raise Http404(_("Ошибка создания заказа"))
+            raise Http404(_("Order creation error"))
 
     def post(self, request: HttpRequest) -> HttpResponse | Any:
         if request.user.is_authenticated:
@@ -101,7 +101,7 @@ class OrderCreateView(View):
             if not order_data is None:
                 return redirect(reverse("order:order_detail", kwargs={"pk": order_data}))
             else:
-                raise Http404(_("Ошибка создания заказа"))
+                raise Http404(_("Order creation error"))
         else:
             return redirect(reverse("custom_auth:login"))
 
@@ -201,7 +201,7 @@ class OrderDetailView(DetailView):
         if order.user.pk == self.request.user.pk or self.request.user.is_staff:
             return order
         else:
-            raise PermissionDenied(_("У вас нет доступа к этому заказу."))
+            raise PermissionDenied(_("You do not have access to this order."))
 
     def get_context_data(self, **kwargs):
 

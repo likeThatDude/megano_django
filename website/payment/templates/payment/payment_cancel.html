@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block title %}
-    Оплата не прошла
+    {% trans 'Payment failed' %}
 {% endblock %}
 
 {% block description %}
@@ -13,17 +13,17 @@
         <div class="central_check_block">
             <div class="paper_block">
                 <div class="receipt_header">
-                    <p>Оплата не прошла!</p>
-                    <p>Попробуйте повторить оплату!</p>
+                    <p>{% trans 'Payment failed' %}!</p>
+                    <p>{% trans 'Try to repeat the payment' %}!</p>
                 </div>
                 <div class="receipt_info_block">
-                    <p>Номер заказа: {{ order_id }}</p>
+                    <p>{% trans 'Order number' %}: {{ order_id }}</p>
                 </div>
                 <div class="receipt_product_list">
                     <div class="receipt_navigate">
                         <p>
                             <a href="{% url 'order:order_detail' pk=order_id %}">
-                                На страницу заказа
+                                {% trans 'To the order page' %}
                             </a>
                         </p>
                     </div>

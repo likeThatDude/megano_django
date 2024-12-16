@@ -1,14 +1,15 @@
 {% extends 'core/base.html' %}
 {% load custom_filters %}
 {% load static %}
+{% load i18n %}
 
 
 {% block description %}
-    <meta name="description" content="Описание страницы">
+    <meta name="description" content="{% trans 'Page Description' %}">
 {% endblock %}
 
 {% block title %}
-    Сравнение товаров
+    {% trans 'Product Comparison' %}
 {% endblock %}
 
 {% block body %}
@@ -22,13 +23,13 @@
                                 <label for="unic_spec" class="unic_spec_label">
                                     <input id="unic_spec" name="unic_spec" type="checkbox"
                                            {% if unic_spec %}checked{% endif %}>
-                                    Убрать одинаковые характеристики
+                                    {% trans 'Remove the same characteristics' %}
                                 </label>
                                 <button id="myButton"></button>
                             </form>
                         </div>
                         {% for category, comparisons in comparison_products.items %}
-                            <h1>Сравниваемая категория: {{ category.name }}</h1>
+                            <h1>{% trans 'The category being compared' %}: {{ category.name }}</h1>
                             <div class="CategoryComparison">
                                 {% for comparison in comparisons %}
                                     <div class="ProductCard-desc">
@@ -70,11 +71,11 @@
                                                         <div class="table">
                                                             <table>
                                                                 <tr>
-                                                                    <th class="hed">Характеристика</th>
-                                                                    <th class="hed">Значение</th>
+                                                                    <th class="hed">{% trans 'Characteristic' %}</th>
+                                                                    <th class="hed">{% trans 'Value' %}</th>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><b>Общие параметры</b></td>
+                                                                    <td><b>{% trans 'General parameters' %}</b></td>
                                                                     <td></td>
                                                                 </tr>
                                                                 <tr>
@@ -109,7 +110,7 @@
                                                     {% if comparison.min_price %}
                                                         $ {{ comparison.min_price }}
                                                     {% else %}
-                                                        Нету в продаже
+                                                        {% trans 'Not available for sale' %}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -121,7 +122,7 @@
                                                     class="btn-icon"
                                                     src="../../../static/assets/img/icons/card/cart_white.svg"
                                                     alt="cart_white.svg"/><span
-                                                    class="btn-content">Добавить в корзину</span></a>
+                                                    class="btn-content">{% trans 'Add to cart' %}</span></a>
                                             </div>
                                         </div>
 
@@ -130,7 +131,7 @@
                             </div>
                         {% endfor %}
                     {% else %}
-                        <p>Нет товаров для сравнения.</p>
+                        <p>{% trans 'There are no products to compare' %}.</p>
                     {% endif %}
                 </div>
             </div>
