@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-16 14:29+0300\n"
+"POT-Creation-Date: 2024-12-16 17:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,7 +152,7 @@ msgstr "Изображение"
 msgid "Phone"
 msgstr "Телефон"
 
-#: catalog/models.py:175 custom_auth/models.py:80
+#: catalog/models.py:175 custom_auth/models.py:85
 #: order/templates/order/order-detail.html:108
 #: order/templates/order/order.html:153 order/templates/order/order.html:212
 #: order/templates/order/order_details.html:82
@@ -199,7 +199,7 @@ msgstr "Случайной картой в магазине"
 msgid "Payment method"
 msgstr "Способ оплаты"
 
-#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:200
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:208
 #: order/templates/order/order-detail.html:117
 #: order/templates/order/order.html:218
 #: order/templates/order/order_details.html:88
@@ -260,13 +260,13 @@ msgid "Sold Quantity"
 msgstr "Проданное количество"
 
 #: catalog/models.py:329 catalog/templates/catalog/catalog.html:43
-#: catalog/templates/catalog/product_detail.html:208 order/models.py:113
+#: catalog/templates/catalog/product_detail.html:216 order/models.py:113
 #: order/models.py:157 order/templates/order/order-detail.html:203
 msgid "Price"
 msgstr "Цена"
 
 #: catalog/models.py:356 catalog/models.py:434 comparison/models.py:25
-#: custom_auth/models.py:48 custom_auth/models.py:74 order/models.py:65
+#: custom_auth/models.py:53 custom_auth/models.py:79 order/models.py:65
 msgid "User"
 msgstr "Пользователь"
 
@@ -307,7 +307,7 @@ msgid "Specifications"
 msgstr "Характеристики"
 
 #: catalog/templates/catalog/catalog.html:25 core/templates/core/footer.html:14
-#: core/templates/core/header.html:61 order/templates/order/payment.html:102
+#: core/templates/core/header.html:73 order/templates/order/payment.html:102
 #: order/templates/order/payment.html:283
 #: order/templates/order/paymentsomeone.html:102
 #: order/templates/order/paymentsomeone.html:286
@@ -323,7 +323,7 @@ msgid "Title"
 msgstr "Заголовок"
 
 #: catalog/templates/catalog/product_detail.html:90
-#: catalog/templates/catalog/product_detail.html:186
+#: catalog/templates/catalog/product_detail.html:194
 msgid "Buy"
 msgstr "Купить"
 
@@ -350,40 +350,40 @@ msgstr "Значение"
 msgid "Device Type"
 msgstr "Тип устройства"
 
-#: catalog/templates/catalog/product_detail.html:192
+#: catalog/templates/catalog/product_detail.html:200
 msgid "Type delivery"
 msgstr "Тип доставки"
 
-#: catalog/templates/catalog/product_detail.html:237
+#: catalog/templates/catalog/product_detail.html:245
 msgid "There are no characteristics yet"
 msgstr "Сейчас нет характеристик"
 
-#: catalog/templates/catalog/product_detail.html:247
+#: catalog/templates/catalog/product_detail.html:255
 msgid "Add a review"
 msgstr "Добавить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:256
+#: catalog/templates/catalog/product_detail.html:264
 msgid "Send review"
 msgstr "Отправить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:262
+#: catalog/templates/catalog/product_detail.html:270
 msgid "To view all the reviews and be able to leave them"
 msgstr "Для просмотра всех отзывов и возможности их оставлять"
 
-#: catalog/templates/catalog/product_detail.html:263
+#: catalog/templates/catalog/product_detail.html:271
 msgid "you must register"
 msgstr "вы должны зарегистрироваться"
 
-#: catalog/templates/catalog/product_detail.html:265
-#: core/templates/core/header.html:31 custom_auth/models.py:25
+#: catalog/templates/catalog/product_detail.html:273
+#: core/templates/core/header.html:34 custom_auth/models.py:25
 #: custom_auth/templates/custom_auth/login.html:36
-#: order/templates/order/order.html:262 order/templates/order/payment.html:75
+#: order/templates/order/order.html:266 order/templates/order/payment.html:75
 #: order/templates/order/paymentsomeone.html:75
 msgid "Login"
 msgstr "Войти"
 
-#: catalog/templates/catalog/product_detail.html:266
-#: order/templates/order/order.html:264
+#: catalog/templates/catalog/product_detail.html:274
+#: order/templates/order/order.html:268
 msgid "Register"
 msgstr "Зарегистрироваться"
 
@@ -488,12 +488,12 @@ msgstr "Активно"
 msgid "Navigation"
 msgstr "Наивгация"
 
-#: core/templates/core/footer.html:12 core/templates/core/header.html:58
+#: core/templates/core/footer.html:12 core/templates/core/header.html:70
 #: order/templates/order/payment.html:100
 msgid "Main"
 msgstr "Главная"
 
-#: core/templates/core/footer.html:16 core/templates/core/header.html:64
+#: core/templates/core/footer.html:16 core/templates/core/header.html:76
 #: order/templates/order/payment.html:104
 #: order/templates/order/payment.html:285
 #: order/templates/order/paymentsomeone.html:104
@@ -502,16 +502,17 @@ msgid "Comparison"
 msgstr "Сравнение"
 
 #: core/templates/core/footer.html:18 custom_auth/admin.py:14
-#: custom_auth/models.py:97 order/templates/order/payment.html:287
+#: custom_auth/models.py:102 order/templates/order/payment.html:287
 #: order/templates/order/paymentsomeone.html:290
 msgid "Profile"
 msgstr "Профиль"
 
-#: core/templates/core/footer.html:23
-msgid "Контакты"
-msgstr ""
+#: core/templates/core/footer.html:23 order/templates/order/payment.html:293
+#: order/templates/order/paymentsomeone.html:296
+msgid "Contacts"
+msgstr "Контакты"
 
-#: core/templates/core/header.html:32
+#: core/templates/core/header.html:36
 #: custom_auth/templates/custom_auth/login.html:54
 #: custom_auth/templates/custom_auth/password_reset.html:38
 #: order/templates/order/payment.html:76
@@ -519,27 +520,27 @@ msgstr ""
 msgid "Registration"
 msgstr "Регистрация"
 
-#: core/templates/core/header.html:60 core/templates/core/header.html:133
+#: core/templates/core/header.html:72 core/templates/core/header.html:145
 #: discount/models.py:221 order/templates/order/payment.html:102
 #: order/templates/order/paymentsomeone.html:102
 msgid "Discounts"
 msgstr "Скидки"
 
-#: core/templates/core/header.html:93 order/templates/order/payment.html:117
+#: core/templates/core/header.html:105 order/templates/order/payment.html:117
 #: order/templates/order/paymentsomeone.html:118
 msgid "Logout"
 msgstr "Выход"
 
-#: core/templates/core/header.html:109 order/templates/order/payment.html:128
+#: core/templates/core/header.html:121 order/templates/order/payment.html:128
 #: order/templates/order/paymentsomeone.html:129
 msgid "Show navigation"
 msgstr "Показать навигацию"
 
-#: core/templates/core/header.html:124 order/templates/order/payment.html:140
+#: core/templates/core/header.html:136 order/templates/order/payment.html:140
 msgid "All categories"
 msgstr "Все категории"
 
-#: core/templates/core/header.html:183 order/templates/order/payment.html:233
+#: core/templates/core/header.html:195 order/templates/order/payment.html:233
 msgid "Search"
 msgstr "Поиск"
 
@@ -606,6 +607,32 @@ msgstr "Разрешения"
 msgid "Important dates"
 msgstr "Важные даты"
 
+#: custom_auth/forms.py:30 custom_auth/models.py:43
+msgid "Birthday"
+msgstr "День рождения"
+
+#: custom_auth/forms.py:78
+msgid "Your birthday can't be later than today"
+msgstr "Ваш день рождения не может быть позже сегодняшнего дня"
+
+#: custom_auth/forms.py:92
+#, fuzzy
+#| msgid "save password"
+msgid "Old password"
+msgstr "сохранить пароль"
+
+#: custom_auth/forms.py:93
+#, fuzzy
+#| msgid "save password"
+msgid "New password"
+msgstr "сохранить пароль"
+
+#: custom_auth/forms.py:94
+#, fuzzy
+#| msgid "Step 4. Order confirmation"
+msgid "New password confirmation"
+msgstr "Шаг 4. Подтверждение заказа"
+
 #: custom_auth/managers.py:19
 msgid "The Email must be set"
 msgstr "Необходимо указать email"
@@ -622,27 +649,27 @@ msgstr "У суперпользователя должно быть значен
 msgid "Staff status"
 msgstr "Stuff статус"
 
-#: custom_auth/models.py:49
+#: custom_auth/models.py:54
 msgid "Users"
 msgstr "Пользователи"
 
-#: custom_auth/models.py:77
+#: custom_auth/models.py:82
 msgid "Firstname"
 msgstr "Имя"
 
-#: custom_auth/models.py:78
+#: custom_auth/models.py:83
 msgid "Lastname"
 msgstr "Фамилия"
 
-#: custom_auth/models.py:79
+#: custom_auth/models.py:84
 msgid "Patronymic"
 msgstr "Отчество"
 
-#: custom_auth/models.py:89
+#: custom_auth/models.py:94
 msgid "Photo"
 msgstr "Фото"
 
-#: custom_auth/models.py:98
+#: custom_auth/models.py:103
 msgid "Profiles"
 msgstr "Профили"
 
@@ -1266,20 +1293,16 @@ msgid "Total"
 msgstr "Общее"
 
 #: order/templates/order/order-detail.html:214
-#: order/templates/order/order.html:239
-msgid "Confirm"
-msgstr "Подтверждение"
-
-#: order/templates/order/order-detail.html:223
-#: order/templates/order/order-detail.html:295
-msgid "Receipt"
-msgstr "Чек"
-
 #: order/templates/order/order-detail.html:286
 #: order/templates/order/payment.html:266
 #: order/templates/order/paymentsomeone.html:269
 msgid "To pay"
 msgstr "Оплатить"
+
+#: order/templates/order/order-detail.html:223
+#: order/templates/order/order-detail.html:295
+msgid "Receipt"
+msgstr "Чек"
 
 #: order/templates/order/order-detail.html:305
 msgid "Online payment is not required"
@@ -1338,15 +1361,23 @@ msgstr "или будет найден ближайший пункт выдач�
 msgid "depending on your choice."
 msgstr "в зависимости от вашего выбора."
 
-#: order/templates/order/order.html:253
+#: order/templates/order/order.html:239
+msgid "Cancel"
+msgstr "Отменить"
+
+#: order/templates/order/order.html:243
+msgid "Confirm"
+msgstr "Подтверждение"
+
+#: order/templates/order/order.html:257
 msgid "Dear user, log in to place an order"
 msgstr "Уважаемый пользователь для оформления заказа войдите"
 
-#: order/templates/order/order.html:254
+#: order/templates/order/order.html:258
 msgid "log in to your profile or register,"
 msgstr "в свой профиль или зарегистрируйтесь,"
 
-#: order/templates/order/order.html:258
+#: order/templates/order/order.html:262
 msgid "all your products will remain in the order after registration."
 msgstr "все ваши товары останутся в заказе после регистрации."
 
@@ -1411,11 +1442,6 @@ msgstr "домой"
 msgid "Card number"
 msgstr "Номер карты"
 
-#: order/templates/order/payment.html:293
-#: order/templates/order/paymentsomeone.html:296
-msgid "Contacts"
-msgstr "Контакты"
-
 #: order/templates/order/payments_block.html:8
 msgid "Online card"
 msgstr "Картой онлайн"
@@ -1444,28 +1470,28 @@ msgstr "Номер счёта"
 msgid "Generate a random account"
 msgstr "Сгенирировать случайный счет"
 
-#: order/utils.py:245
+#: order/utils.py:246
 #, python-brace-format
 msgid "Database error during query execution: {e}"
 msgstr "Ошибка базы данных при выполнении запроса: {e}"
 
-#: order/utils.py:247
+#: order/utils.py:248
 #, fuzzy, python-brace-format
 #| msgid "An error has occurred"
 msgid "An unexpected error has occurred: {e}"
 msgstr "Произошла непредвиденная ошибка: {e}"
 
-#: order/utils.py:366
+#: order/utils.py:367
 #, fuzzy
 #| msgid "Error receiving data for banners"
 msgid "Error receiving delivery data."
 msgstr "Ошибка при получении данных о доставке."
 
-#: order/views.py:72 order/views.py:76 order/views.py:97
+#: order/views.py:77 order/views.py:81 order/views.py:104
 msgid "Order creation error"
 msgstr "Ошибка создания заказа"
 
-#: order/views.py:192
+#: order/views.py:204
 msgid "You do not have access to this order."
 msgstr "У вас нет доступа к этому заказу."
 
@@ -1511,19 +1537,19 @@ msgstr "Оплаченные товары"
 msgid "The cost of delivery"
 msgstr "Стоимость доставки"
 
-#: payment/views.py:61 payment/views.py:93 payment/views.py:132
-#: payment/views.py:138
+#: payment/views.py:63 payment/views.py:97 payment/views.py:136
+#: payment/views.py:142
 msgid "You do not have access to payment for this order"
 msgstr "У вас нет доступа к оплате этого заказа"
 
-#: payment/views.py:142
+#: payment/views.py:146
 msgid "Data error when forming the successful payment page"
 msgstr "Ошибка в данных при формировании страницы успешной оплаты"
 
-#: website/settings.py:198
+#: website/settings.py:208
 msgid "English"
 msgstr "Английский"
 
-#: website/settings.py:199
+#: website/settings.py:209
 msgid "Russia"
 msgstr "Русский"

@@ -75,7 +75,7 @@ class CustomUserCreationForm(UserCreationForm):
         today_date = datetime.today().date()
 
         if birthday and birthday > today_date:
-            raise forms.ValidationError(_("Ваш день рождения не может быть позже сегодняшнего дня"))
+            raise forms.ValidationError(_("Your birthday can't be later than today"))
 
         return birthday
 
