@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.utils.timezone import datetime
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
@@ -19,7 +20,6 @@ class CustomUserCreationForm(UserCreationForm):
         birthday: день рождения пользователя (необязательное поле),
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
-
     """
 
     email = forms.EmailField(
@@ -268,3 +268,31 @@ class ProfileRegistrationForm(ProfileChangeForm):
             raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
 
         return patronymic
+
+
+class SettingsForm(forms.Form):
+    RUSSIAN = "ru"
+    ENGLISH = "en"
+    LANGUAGES = [
+        (RUSSIAN, _("Русский")),
+        (ENGLISH, _("Английский")),
+    ]
+
+    UTC = "UTC"
+    MOSCOW = "Europe/Moscow"
+    NEW_YORK = "America/New_York"
+    LONDON = "Europe/London"
+    TIME_ZONES = [
+        (MOSCOW, _("Москва")),
+        (UTC, _("Всемирное время")),
+        (NEW_YORK, _("Нью-Йорк")),
+        (LONDON, _("Лондон")),
+    ]
+
+    debug = forms.BooleanField(label=_("Режим отладки"), initial=settings.DEBUG, required=False)
+    language = forms.ChoiceField(choices=LANGUAGES, initial=settings.LANGUAGE_CODE)
+    timezone = forms.ChoiceField(choices=TIME_ZONES, initial=settings.TIME_ZONE)
+    session_age = forms.IntegerField(label=_("Время жизни сессии"), initial=settings.SESSION_COOKIE_AGE)
+    email_host = forms.CharField(label=_("HOST электронной почты"), initial=settings.EMAIL_HOST)
+    email_tls = forms.BooleanField(label=_("Использование TLS"), initial=settings.EMAIL_USE_TLS, required=False)
+    email_port = forms.IntegerField(label=_("PORT электронной почты"), initial=settings.EMAIL_PORT)
