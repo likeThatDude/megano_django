@@ -3,6 +3,7 @@ from decimal import Decimal
 from catalog.models import Price
 from catalog.models import Product
 from catalog.models import Seller
+from django.contrib.sessions.models import Session
 from django.http import HttpRequest
 from rest_framework.request import Request
 
@@ -116,13 +117,9 @@ class Cart:
         Атрибуты:
             product_id (str) - id модели товара, который нужно удалить
         """
-        print(f'Удаляю product_id: {product_id}')
-        print(f'данные: {self.cart=}')
         if f"product{product_id}" in self.cart:
-            print('Условие выполнено')
             del self.cart[f"product{product_id}"]
             self.save()
-        print('Удалил')
 
     @property
     def total_quantity(self) -> int:

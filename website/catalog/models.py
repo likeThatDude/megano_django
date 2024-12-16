@@ -37,7 +37,7 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
-    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"))
+    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"), blank=True)
 
     class Meta:
         verbose_name = "category"
@@ -113,7 +113,7 @@ class Product(models.Model):
         upload_to=product_image_directory_path,
         verbose_name=_("Preview"),
     )
-    tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
+    tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"), blank=True)
 
     def get_absolute_url(self):
         return reverse("catalog:product_detail", kwargs={"pk": self.pk})

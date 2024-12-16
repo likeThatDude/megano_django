@@ -1,7 +1,10 @@
 from django import forms
+from django.utils.timezone import datetime
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.password_validation import validate_password
+from django.utils.translation import gettext_lazy as _
+
 
 from .models import CustomUser
 from .models import Profile
@@ -13,17 +16,68 @@ class CustomUserCreationForm(UserCreationForm):
 
     Атрибуты:
         email: электронная почта пользователя (обязательное поле)
+        birthday: день рождения пользователя (необязательное поле),
         password1: пароль (обязательное поле)
         password2: подтверждение предыдущего пароля (обязательное поле)
+
     """
 
-    email = forms.EmailField(label="Email", required=True)
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput, required=True)
-    password2 = forms.CharField(label="Password Confirm", widget=forms.PasswordInput, required=True)
+    email = forms.EmailField(
+        label="Email",
+        required=True
+    )
+    birthday = forms.DateField(
+        label=_("Birthday"),
+        widget=forms.DateInput(
+            attrs={"class": "form-control", "type": "date"},
+        ),
+        required=False,
+    )
+    password1 = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput,
+        required=True
+    )
+    password2 = forms.CharField(
+        label="Password Confirm",
+        widget=forms.PasswordInput,
+        required=True
+    )
 
     class Meta:
         model = CustomUser
-        fields = ["login", "email", "password1", "password2"]
+        fields = (
+            "login",
+            "email",
+            "password1",
+            "password2",
+            "birthday",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def clean_birthday(self):
+        """
+        Проверяем дату рождения на корректность
+
+        Если дата рождения позже сегодняшней даты,
+        поднимаем исключение forms.ValidationError
+
+        Возвращаем:
+            birthday - указанный день рождения пользователя
+
+        Исключения:
+            forms.ValidationError - если день рождения позже по дате
+
+        """
+        birthday = self.cleaned_data.get("birthday")
+        today_date = datetime.today().date()
+
+        if birthday and birthday > today_date:
+            raise forms.ValidationError(_("Ваш день рождения не может быть позже сегодняшнего дня"))
+
+        return birthday
 
 
 class CustomUserChangeForm(UserChangeForm):
@@ -35,9 +89,9 @@ class CustomUserChangeForm(UserChangeForm):
     и проверяет, что новый пароль соответствует требованиям безопасности.
     """
 
-    old_password = forms.CharField(label="Old password", widget=forms.PasswordInput, required=False)
-    new_password1 = forms.CharField(label="New password", widget=forms.PasswordInput, required=False)
-    new_password2 = forms.CharField(label="New password confirmation", widget=forms.PasswordInput, required=False)
+    old_password = forms.CharField(label=_("Old password"), widget=forms.PasswordInput, required=False)
+    new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput, required=False)
+    new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput, required=False)
 
     class Meta:
         model = CustomUser
@@ -160,6 +214,27 @@ class ProfileChangeForm(forms.ModelForm):
                 raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
         return phone
 
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -172,3 +247,24 @@ class ProfileRegistrationForm(ProfileChangeForm):
 
     class Meta(ProfileChangeForm.Meta):
         fields = ["first_name", "last_name", "patronymic", "phone"]
+
+    def clean_first_name(self):
+        first_name: str = self.cleaned_data.get("first_name")
+        if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
+            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+
+        return first_name
+
+    def clean_last_name(self):
+        last_name: str = self.cleaned_data.get("last_name")
+        if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
+            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+
+        return last_name
+
+    def clean_patronymic(self):
+        patronymic = self.cleaned_data.get("patronymic")
+        if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
+            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+
+        return patronymic

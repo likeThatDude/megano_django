@@ -99,6 +99,14 @@ class SellerAdmin(admin.ModelAdmin):
     )
     search_fields = ("name",)
 
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        if db_field.name == "payment_methods":
+            kwargs["queryset"] = Payment.objects.exclude(name__in=[Payment.STORE_ONLINE, Payment.STORE_RANDOM])
+        elif db_field.name == "delivery_methods":
+            kwargs["queryset"] = Delivery.objects.exclude(name__in=[Delivery.SHOP_STANDARD, Delivery.SHOP_EXPRESS])
+
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
 
 @admin.register(Price)
 class PriceAdmin(admin.ModelAdmin):

@@ -28,8 +28,20 @@
                 </div>
                 <nav class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="{% url 'custom_auth:login' %}">{% trans 'Login' %}</a>
+                        {% if not request.user.is_authenticated %}
+                            <div class="row-block">
+                                <a class="ControlPanel-title" href="{% url 'custom_auth:login' %}">
+                                    {% trans 'Login' %}
+                                </a>
                             <a class="ControlPanel-title" href="{% url 'custom_auth:register' %}">{% trans 'Registration' %}</a>
+                            </div>
+                        {% else %}
+                            <div class="row-block">
+                                <a class="ControlPanel-title" href="{% url 'custom_auth:personal-cabinet' %}">
+                                    {{ request.user.login }}
+                                </a>
+                            </div>
+                        {% endif %}
                         </div>
                     </div>
                 </nav>
