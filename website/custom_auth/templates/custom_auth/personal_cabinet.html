@@ -37,6 +37,8 @@
                                     </li>
                                     <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">История заказов</a>
                                     </li>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -48,7 +50,7 @@
                             <div class="Account-column">
                                 <div class="Account-avatar">
                                     {% if profile.photo %}
-                                        <img src="{{ profile.photo.url }}" alt="No photo avatar" />
+                                        <img src="{{ profile.photo.url }}" alt="No photo avatar"/>
                                     {% endif %}
                                 </div>
                             </div>
@@ -103,7 +105,52 @@
                                 </div>
                             {% else %}
                                 <div>
-                                    <h1>У вас отсутствуют заказы</h1>
+                                    <h2>У вас отсутствуют заказы</h2>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="Account-group">
+                            {% if viewed_list %}
+                                <div class="Account-column Account-column_full">
+                                    <div class="Order Order_anons">
+                                        <div class="Order-personal">
+                                            <div class="row"><h2>Недавние просмотры</h2></div>
+                                            <div class="row-block">
+                                                {% for viewed in viewed_list %}
+                                                    <div class="row-block col-mt"><a class="Order-title"
+                                                                                     href="{{ viewed.product.get_absolute_url }}"><span
+                                                            class="Order-numberOrder">{{ viewed.product.id }}. {{ viewed.product.name }}</span></a>
+                                                    </div>
+                                                    <div>
+                                                        <div class="row-block">
+                                                            <div class="Order-info text-ml">
+                                                                <div class="Order-infoType">Дата просмотра:</div>
+                                                                <div class="Order-infoContent"><span
+                                                                        class="Order-price">{{ viewed.created_at.date }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="Order-info text-ml">
+                                                                <div class="Order-infoType">Время просмотра:</div>
+                                                                <div class="Order-infoContent"><span
+                                                                        class="Order-price">{{ viewed.created_at.time }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="row">
+                                                <div class="Account-editLink">
+                                                    <br>
+                                                    <a href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <h2>У вас нет просмотренных товаров</h2>
                                 </div>
                             {% endif %}
                         </div>
@@ -114,7 +161,7 @@
     </div>
 
     {% block script %}
-            <!--+Middle-->
+        <!--+Middle-->
         <!--    +div.-top-->
         <!--        +breadcrumbs('Главная','Портфолио')-->
         <!--    +Article('portfolio')-->

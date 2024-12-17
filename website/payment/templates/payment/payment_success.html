@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 
 {% block title %}
-    Успешная оплата
+    {% trans 'Successful payment' %}
 {% endblock %}
 
 {% block description %}
@@ -13,26 +13,26 @@
         <div class="central_check_block">
             <div class="paper_block">
                 <div class="receipt_header">
-                    <p>Оплата прошла успешно!</p>
-                    <p>Спасибо за покупку!</p>
+                    <p>{% trans 'The payment was successful' %}!</p>
+                    <p>{% trans 'Thanks for the purchase' %}!</p>
                 </div>
                 <div class="receipt_info_block">
-                    <p>Номер заказа: {{ order.pk }}</p>
+                    <p>{% trans 'Order number' %}: {{ order.pk }}</p>
                     <p>
                         {% if all_order %}
-                            Заказ оплачен полностью
+                            {% trans 'The order has been paid in full' %}
                         {% else %}
-                            <b>Заказ оплачен частично</b>
+                            <b>{% trans 'The order has been partially paid for' %}</b>
                         {% endif %}
                     </p>
                     <p>
-                        Дата: {{ date }}
+                        {% trans 'Date' %}: {{ date }}
                     </p>
                 </div>
-                <p>Оплаченные товары:</p>
+                <p>{% trans 'Paid goods' %}:</p>
                 <div class="receipt_product_list">
                     {% for item in order.order_items.all %}
-                        <p>Продавец: {{ item.seller.name }}</p>
+                        <p>{% trans 'Seller' %}: {{ item.seller.name }}</p>
                         <div class="receipt_product_block">
                             <div class="receipt_product_name">
                                 <a href="{{ item.product.get_absolute_url }}">
@@ -46,14 +46,14 @@
                     {% endfor %}
                     <div class="receipt_total_price">
                         {% if delivery_price %}
-                            <p>Стоимость доставки: {{ delivery_price }}</p>
+                            <p>{% trans 'The cost of delivery' %}: {{ delivery_price }}</p>
                         {% endif %}
-                        <p>Общая стоймость: {{ total_price }}</p>
+                        <p>{% trans 'Total cost' %}: {{ total_price }}</p>
                     </div>
                     <div class="receipt_navigate">
                         <p>
                             <a href="{{ order.get_absolute_url }}">
-                                На страницу заказа
+                                {% trans 'To the order page' %}
                             </a>
                         </p>
                     </div>

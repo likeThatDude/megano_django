@@ -100,9 +100,9 @@ class IndexView(TemplateView):
                 )
                 cache.set(BANNERS_KEY, random_banners, timeout=CATEGORY_CASHING_TIME)
             except DatabaseError:
-                raise ValidationError(_("Ошибка получения данных для баннеров"))
+                raise ValidationError(_("Error receiving data for banners"))
             except Exception as e:
-                raise ValidationError(_(f"Непредвиденная ошибка получения баннеров:{e}"))
+                raise ValidationError(_(f"Unexpected error in receiving banners:{e}"))
         return random_banners
 
     def get_top_products(self):

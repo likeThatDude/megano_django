@@ -3775,6 +3775,7 @@ a.Cart-title {
     background-color: rgba(1, 161, 1, 0.61);
     box-shadow: 29px 29px 58px #6af63e,
     -29px -29px 58px #6af63e;
+    color: #ffffff;
 }
 
 .red_status {
@@ -4447,6 +4448,37 @@ a.Cart-title {
     font-size: 22px;
     color: #424650;
     display: block;
+}
+
+.seller_info_block {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    width: 100%;
+    height: 40px;
+    overflow: hidden;
+}
+
+.seller_name {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.seller_name span {
+    margin: 0 0 0 20px;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.seller_image {
+    width: 100px;
+    min-width: 90px;
+    height: 100%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .Order_anons .Order-numberOrder {
@@ -7416,8 +7448,27 @@ input[type="submit"] {
 }
 
 .highlight-field {
-  background-color: #fc2828;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    background-color: #fc2828;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.Discount-description {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}
+
+.wrap-discount-description {
+    display: flex;
+    flex-direction: column;
+}
+
+.Discount-description span {
+    margin-bottom: 10px;
+}
+
+.Discount-description a {
+    margin-bottom: 10px;
 }

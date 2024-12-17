@@ -8,7 +8,11 @@ from .views import PersonalCabinet
 from .views import ProfileOrdersView
 from .views import ProfileView
 from .views import RegisterView
+from .views import ResetCashView
+from .views import SettingsChangeView
+from .views import SettingsPageView
 from .views import UserPasswordResetConfirmView
+from .views import ViewedListView
 
 app_name = "custom_auth"
 
@@ -17,6 +21,10 @@ urlpatterns = [
     path("logout/", LogOutView.as_view(), name="logout"),
     path("register/", RegisterView.as_view(), name="register"),
     path("profile/", ProfileView.as_view(), name="profile"),
+    path("settings/", SettingsPageView.as_view(), name="settings"),
+    path("settings/change/", SettingsChangeView.as_view(), name="settings_change"),
+    path("cashing/", ResetCashView.as_view(), name="cashing"),
+    path("viewed/", ViewedListView.as_view(), name="viewed-list"),
     path("personal_cabinet/", PersonalCabinet.as_view(), name="personal-cabinet"),
     path("profile_orders/", ProfileOrdersView.as_view(), name="profile-orders"),
     path(

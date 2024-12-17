@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block title %}
-    Order №{{ order.pk }}
+    {% trans 'Order' %} №{{ order.pk }}
 {% endblock %}
 
 {% block body %}
@@ -29,7 +29,7 @@
         <div class="Middle-top">
             <div class="wrap">
                 <div class="Middle-header">
-                    <h1 class="Middle-title">Заказ №{{ order.pk }}
+                    <h1 class="Middle-title">{% trans 'Order' %} №{{ order.pk }}
                     </h1>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                                     <div class="row-block">
                                         <div class="Order-info Order-info_date">
                                             <div class="Order-infoType">
-                                                Дата заказа:
+                                                {% trans 'Order date' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.created_at }}
@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">
-                                                ФИО:
+                                                {% trans 'BIO' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.name }}
@@ -62,7 +62,7 @@
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">
-                                                Телефон:
+                                                {% trans 'Phone' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.recipient_phone }}
@@ -81,11 +81,11 @@
                                     <div class="row-block">
                                         <div class="Order-info Order-info_delivery">
                                             <div class="Order-infoType">
-                                                Тип доставки:
+                                                {% trans 'Type of delivery' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ delivery|truncatechars:20 }}
-                                                {% if order.unique_payment_types > 1 %}
+                                                {% if order.unique_delivery_types > 1 %}
                                                     <div class="delivery_full_data">
                                                         {% get_full_delivery_payment_type order as seller_delivery %}
                                                         {% for seller, delivery_types in seller_delivery.items %}
@@ -97,7 +97,7 @@
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">
-                                                Город:
+                                                {% trans 'City' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.delivery_city }}
@@ -105,7 +105,7 @@
                                         </div>
                                         <div class="Order-info">
                                             <div class="Order-infoType">
-                                                Адрес:
+                                                {% trans 'Address' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.delivery_address }}
@@ -114,7 +114,7 @@
                                         <div class="Order-info Order-info_pay">
                                             {% get_short_delivery_payment_type order True as payment %}
                                             <div class="Order-infoType">
-                                                Оплата:
+                                                {% trans 'Payment' %}:
                                             </div>
                                             <div class="Order-infoContent ">
                                                 {{ payment|truncatechars:20 }}
@@ -129,14 +129,14 @@
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_status">
-                                            <div class="Order-infoType">Статус оплаты:
+                                            <div class="Order-infoType">{% trans 'Payment status' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.get_paid_status_display }}
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_status">
-                                            <div class="Order-infoType">Статус заказа:
+                                            <div class="Order-infoType">{% trans 'Order status' %}:
                                             </div>
                                             <div class="Order-infoContent">
                                                 {{ order.get_status_display }}
@@ -175,7 +175,7 @@
                                                             {{ order_item.product.short_description }}
                                                         </div>
                                                         <div class="Cart-desc">
-                                                            Продавец: {{ order_item.seller.name }}
+                                                            {% trans 'Seller' %}: {{ order_item.seller.name }}
                                                         </div>
                                                     </div>
                                                     <div class="Cart-block Cart-block_price">
@@ -187,22 +187,22 @@
                                                 <div class="Cart-block Cart-block_row">
 
                                                     <div class="Cart-block Cart-block_amount">
-                                                        {{ order_item.quantity }} шт.
+                                                        {{ order_item.quantity }} {% trans 'qty' %}.
                                                     </div>
                                                 </div>
                                             </div>
                                         {% endfor %}
                                         <div class="Cart-total">
                                             <div class="Cart-block Cart-block_total">
-                                                <strong class="Cart-title">Итого:
+                                                <strong class="Cart-title">{% trans 'Total' %}:
                                                     <span class="Cart-price">
                                                 {% check_delivery_payment_type order.delivery_price.price order.total_price as delivery_price %}
                                                         {% if delivery_price is False %}
                                                             {{ order.total_price }}$
                                                         {% else %}
-                                                            <p>Цена товара: {{ order.total_price }}$ </p>
-                                                            <p>Доставка: {{ order.delivery_price.price }}</p>
-                                                            <p>Общая: {{ delivery_price }}</p>
+                                                            <p>{% trans 'Price' %}: {{ order.total_price }}$ </p>
+                                                            <p>{% trans 'Delivery' %}: {{ order.delivery_price.price }}</p>
+                                                            <p>{% trans 'Total' %}: {{ delivery_price }}</p>
                                                         {% endif %}
                                             </span>
                                                 </strong>
@@ -211,7 +211,7 @@
                                                 <div class="Cart-block">
                                                     <a class="btn btn_primary btn_lg"
                                                        href="{% url 'payment:checkout' order.pk %}">
-                                                        Подтвердить
+                                                        {% trans 'To pay' %}
                                                     </a>
                                                 </div>
                                             {% else %}
@@ -220,7 +220,7 @@
                                                     <div class="Cart-block">
                                                         <a class="btn btn_primary btn_lg"
                                                            href="{{ receipt_url }}">
-                                                            Чек
+                                                            {% trans 'Receipt' %}
                                                         </a>
                                                     </div>
                                                 {% endif %}
@@ -273,7 +273,7 @@
                                                 {% if payment_data %}
                                                     <div class="Cart-block Cart-block_total">
                                                         <strong class="Cart-title">
-                                                            Итого:
+                                                            {% trans 'Total' %}:
                                                             <span class="Cart-price">
                                                             {{ value.total_price }}$
                                                         </span>
@@ -283,7 +283,7 @@
                                                         <div class="Cart-block">
                                                             <a class="btn btn_primary btn_lg"
                                                                href="{% url 'payment:checkout_one' order.pk seller.pk %}">
-                                                                Оплатить
+                                                                {% trans 'To pay' %}
                                                             </a>
                                                         </div>
                                                     {% else %}
@@ -292,7 +292,7 @@
                                                             <div class="Cart-block">
                                                                 <a class="btn btn_primary btn_lg"
                                                                    href="{{ receipt_url }}">
-                                                                    Чек
+                                                                    {% trans 'Receipt' %}
                                                                 </a>
                                                             </div>
                                                         {% endif %}
@@ -300,9 +300,9 @@
                                                 {% else %}
                                                     <div class="Cart-block Cart-block_total">
                                                         <strong class="Cart-title">
-                                                            Итого:
+                                                            {% trans 'Total' %}:
                                                             <span class="Cart-price">
-                                                            Оплата онлайн не требуется
+                                                            {% trans 'Online payment is not required' %}
                                                         </span>
                                                         </strong>
                                                     </div>

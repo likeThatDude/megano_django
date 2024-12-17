@@ -1,8 +1,8 @@
-from custom_auth.models import Profile
 from catalog.models import Delivery
 from catalog.models import Payment
 from catalog.models import Product
 from catalog.models import Seller
+from custom_auth.models import Profile
 from django.db import models
 from django.db.models import PROTECT
 from django.urls import reverse
@@ -44,11 +44,11 @@ class Order(models.Model):
     CANCELLED = "CN"
 
     STATUS_CHOICES = (
-        (PENDING, _("Заказ ожидает обработки")),
-        (PROCESSING, _("Заказ в процессе выполнения")),
-        (SHIPPED, _("Заказ отправлен")),
-        (DELIVERED, _("Заказ доставлен")),
-        (CANCELLED, _("Заказ отменен")),
+        (PENDING, _("The order is awaiting processing")),
+        (PROCESSING, _("The order is in progress")),
+        (SHIPPED, _("The order has been sent")),
+        (DELIVERED, _("The order has been delivered")),
+        (CANCELLED, _("The order has been cancelled")),
     )
 
     PAID = "PD"
@@ -56,9 +56,9 @@ class Order(models.Model):
     UNPAID = "UN"
 
     PAID_CHOICES = (
-        (PAID, _("Заказ оплачен")),
-        (PARTLY_PAID, _("Заказ оплачен частично")),
-        (UNPAID, _("Заказ не оплачен")),
+        (PAID, _("The order has been paid for")),
+        (PARTLY_PAID, _("The order has been partially paid for")),
+        (UNPAID, _("The order has not been paid")),
     )
 
     user = models.ForeignKey(
@@ -141,9 +141,9 @@ class DeliveryPrice(models.Model):
     EXPRESS_DELIVERY = "ED"
 
     DELIVERY_PRICE_CHOICES = (
-        (FREE_DELIVERY, _("Бесплатная доставка")),
-        (STANDARD_DELIVERY, _("Стандартная доставка")),
-        (EXPRESS_DELIVERY, _("Экспресс доставка")),
+        (FREE_DELIVERY, _("Free delivery")),
+        (STANDARD_DELIVERY, _("Standard delivery")),
+        (EXPRESS_DELIVERY, _("Express delivery")),
     )
     name = models.CharField(
         max_length=2,

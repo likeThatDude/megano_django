@@ -25,7 +25,7 @@ class ComparisonServices:
         Returns:
             Response: JSON-ответ с сообщением об ошибке и статусом HTTP 500.
         """
-        data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось добавить к сравнению")}
+        data = {"status": False, "title": _("An error has occurred"), "text": _("Could not add to the comparison")}
         serializer = AnswerAddSerializer(data=data)
         return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -127,14 +127,22 @@ class ComparisonServices:
         if flag or flag is None:
             data = {
                 "status": None if flag is None else True,
-                "title": _("Конфликт") if flag is None else _("Успешно"),
-                "text": _("Товар уже добавлен к сравнению") if flag is None else _("Товар добавлен к сравнению"),
+                "title": _("Conflict") if flag is None else _("Successfully"),
+                "text": _(
+                    "The product has already been added to the comparison"
+                ) if flag is None else _(
+                    "The product has been added to the comparison"
+                ),
             }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось добавить к сравнению")}
+            data = {
+                "status": False,
+                "title": _("An error has occurred"),
+                "text": _("Could not add to the comparison")
+            }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -240,14 +248,22 @@ class ComparisonServices:
         if flag or flag is None:
             data = {
                 "status": None if flag is None else True,
-                "title": _("Конфликт") if flag is None else _("Успешно"),
-                "text": _("Товар уже удалён из сравнения") if flag is None else _("Товар удалён из сравнения"),
+                "title": _("Conflict") if flag is None else _("Successfully"),
+                "text": _(
+                    "The product has already been added to the comparison"
+                ) if flag is None else _(
+                    "The product has been added to the comparison"
+                ),
             }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            data = {"status": False, "title": _("Возникла ошибка"), "text": _("Не удалось удалить товар из сравнения")}
+            data = {
+                "status": False,
+                "title": _("An error has occurred"),
+                "text": _("Could not add to the comparison")
+            }
             serializer = AnswerAddSerializer(data=data)
             if serializer.is_valid():
                 return Response(serializer.data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

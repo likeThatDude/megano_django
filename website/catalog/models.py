@@ -1,7 +1,9 @@
-from django.db import models
-from django.db.models import ManyToManyField
+from django.db import models, transaction
+from django.db.models import ManyToManyField, QuerySet
 from django.db.models.constraints import UniqueConstraint
+from django.http import HttpRequest
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from website import settings
@@ -35,7 +37,7 @@ class Category(models.Model):
         related_name="sub_categories",
         verbose_name=_("Parent category"),
     )
-    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"))
+    tags = models.ManyToManyField("Tag", related_name="category_tags", verbose_name=_("Сategory tags"), blank=True)
 
     class Meta:
         verbose_name = "category"
@@ -93,17 +95,17 @@ class Product(models.Model):
         null=False,
         blank=False,
     )
-    manufacture = models.CharField(max_length=100, db_index=True, verbose_name=_("Manufacture"))
+    manufacture = models.CharField(max_length=100, db_index=True, verbose_name=_("Manufacturer"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        verbose_name=_("PK category"),
+        verbose_name=_("Category"),
         related_name="products",
     )
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     limited_edition = models.BooleanField(default=False, verbose_name=_("Limited edition"))
-    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Views"))
+    views = models.PositiveBigIntegerField(default=0, verbose_name=_("Viewed"))
     sorting_index = models.PositiveIntegerField(default=0, verbose_name=_("Sorting Index"))
     preview = models.ImageField(
         null=True,
@@ -111,7 +113,7 @@ class Product(models.Model):
         upload_to=product_image_directory_path,
         verbose_name=_("Preview"),
     )
-    tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"))
+    tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"), blank=True)
 
     def get_absolute_url(self):
         return reverse("catalog:product_detail", kwargs={"pk": self.pk})
@@ -134,7 +136,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_("PK product"),
+        verbose_name=_("Product"),
         related_name="images",
     )
     image = models.ImageField(upload_to=product_images_directory_path, verbose_name=_("Image product"))
@@ -184,10 +186,6 @@ class Seller(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
 
-    class Meta:
-        verbose_name = "seller"
-        verbose_name_plural = "sellers"
-
     def __str__(self) -> str:
         return str(self.name)
 
@@ -222,11 +220,11 @@ class Payment(models.Model):
     STORE_RANDOM = "SR"
 
     PAYMENT_CHOICES = (
-        (CASH, _("Наличными")),
-        (CARD_ONLINE, _("Картой онлайн")),
-        (CARD_COURIER, _("Картой курьеру")),
-        (STORE_ONLINE, _("Картой магазину")),
-        (STORE_RANDOM, _("Случайной картой магазину")),
+        (CASH, _("Cash")),
+        (CARD_ONLINE, _("By card online")),
+        (CARD_COURIER, _("By card to the courier")),
+        (STORE_ONLINE, _("By card to the store")),
+        (STORE_RANDOM, _("A random card to the store")),
     )
 
     name = models.CharField(
@@ -277,12 +275,12 @@ class Delivery(models.Model):
     SHOP_EXPRESS = "SE"
 
     DELIVERY_CHOICES = [
-        (PICKUP_POINT, _("В пункт выдачи")),
-        (COURIER, _("Курьером")),
-        (LOCKER, _("В постамат")),
-        (SELLER, _("Силами продавца")),
-        (SHOP_STANDARD, _("Магазином обычная")),
-        (SHOP_EXPRESS, _("Магазином экспресс")),
+        (PICKUP_POINT, _("To the pick-up point")),
+        (COURIER, _("By courier")),
+        (LOCKER, _("To the post office")),
+        (SELLER, _("By the seller's forces")),
+        (SHOP_STANDARD, _("The store is a regular one")),
+        (SHOP_EXPRESS, _("By the express store")),
     ]
 
     name = models.CharField(
@@ -362,9 +360,9 @@ class Review(models.Model):
     updating = models.BooleanField(default=False, verbose_name=_("Updating"))
 
     class Meta:
-        ordering = ("-created_at",)
-        verbose_name = "review"
-        verbose_name_plural = "reviews"
+        ordering = ("name",)
+        verbose_name = _("Review")
+        verbose_name_plural = _("Reviews")
 
 
 class NameSpecification(models.Model):
@@ -382,9 +380,6 @@ class NameSpecification(models.Model):
 
     def __str__(self) -> str:
         return self.name
-
-    class Meta:
-        ordering = ("name",)
 
 
 class Specification(models.Model):
@@ -411,13 +406,13 @@ class Specification(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_("PK Product"),
+        verbose_name=_("Product"),
         related_name="specifications",
     )
 
     class Meta:
-        verbose_name = "specification"
-        verbose_name_plural = "specifications"
+        verbose_name = _("Specification")
+        verbose_name_plural = _("Specifications")
 
     def __str__(self) -> str:
         return f"Specification(id={self.pk}, name={self.name!r}, pr)"
@@ -429,7 +424,7 @@ class Viewed(models.Model):
 
     Attributes:
         user: пользователь, который посмотрел товар;
-        product: товар, который был просмотрен пользователем;
+        product: товар, просмотренный пользователем;
         created_at: дата/время просмотра товара.
     """
 
@@ -445,10 +440,101 @@ class Viewed(models.Model):
         verbose_name=_("Product"),
         related_name="viewed",
     )
-    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created_at"))
+    created_at = models.DateTimeField(auto_now=True, verbose_name=_("Created at"))
 
     class Meta:
         verbose_name = _("Viewed")
         verbose_name_plural = _("Viewed")
         ordering = ("-created_at",)
         constraints = [UniqueConstraint(fields=["user", "product"], name="user_product_unique")]
+
+    @classmethod
+    def add_viewed_product(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> None:
+        """
+        Добавляет или обновляет товар в списке просмотренных текущим пользователем.
+        Если товар просматривается текущим пользователем в первый раз,
+        то увеличивается его количество просмотров.
+        """
+
+        with transaction.atomic():
+            new_view, created = Viewed.objects.update_or_create(user=user, product_id=product_id)
+
+            if created:
+                product = Product.objects.select_for_update().get(id=product_id)
+                product.views += 1
+                product.save()
+
+    @classmethod
+    def viewed_list(cls, user: settings.AUTH_USER_MODEL, limit=20) -> QuerySet:
+        """
+        Возвращает список просмотренных текущим пользователем товаров (по умолчанию 20)
+        """
+
+        return (
+            Viewed.objects.filter(user=user)
+            .select_related("product")
+            .only("product_id", "product__name")
+            .order_by("-created_at")[:limit]
+            .all()
+        )
+
+    @classmethod
+    def viewed_count(cls, user: settings.AUTH_USER_MODEL) -> int:
+        """
+        Возвращает целочисленное значение количества просмотренных текущим
+        пользователем товаров
+        """
+
+        return Viewed.objects.filter(user=user).count()
+
+    @classmethod
+    def exists(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> bool:
+        """
+        Проверяет есть ли указанный товар в списке просмотренных
+        текущим пользователем
+        """
+        return Viewed.objects.filter(user=user, product_id=product_id).exists()
+
+    @classmethod
+    def remove(cls, product_id: int, user: settings.AUTH_USER_MODEL) -> bool:
+        """
+        Удаляет товар из списка просмотренных текущим пользователем.
+        Возвращает логическое значение результата операции.
+        """
+        deleted_rows, deleted_dict = Viewed.objects.filter(user=user, product_id=product_id).delete()
+        return deleted_rows != 0
+
+
+class ViewedSession:
+
+    def __init__(self, request: HttpRequest):
+        """
+        Инициализация модели просмотренных неавторизованным пользователем товаров
+        """
+        self.session = request.session
+        viewed = self.session.get(settings.VIEWED_SESSION_ID)
+
+        if not viewed:
+            viewed = self.session[settings.VIEWED_SESSION_ID] = {}
+
+        self.viewed: dict = viewed
+
+    def add(self, product_id: int) -> None:
+        """
+        Добавляет или обновляет товар в списке просмотренных неавторизованным пользователем.
+        Если товар просматривается неавторизованным пользователем в первый раз,
+        то увеличивается его количество просмотров.
+        """
+
+        if str(product_id) not in self.viewed:
+            with transaction.atomic():
+                product = Product.objects.select_for_update().get(id=product_id)
+                product.views += 1
+                product.save()
+
+        self.viewed[product_id] = timezone.now().__str__()
+        self.__save()
+
+    def __save(self) -> None:
+        self.session[settings.VIEWED_SESSION_ID] = self.viewed
+        self.session.modified = True

@@ -1,0 +1,140 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block links %}
+    <!--    <title>Megano</title>-->
+    <link href="{% static 'favicon.ico' %}" rel="shortcut icon">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Regular.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Bold_Italic.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light.woff' %}" as="font">
+    <link rel="preload" href="{% static 'assets/fonts/Roboto/Roboto-Light_Italic.woff' %}" as="font">
+    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utils.css' %}">
+    <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <style>
+        .align_labels {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+{% endblock %}
+
+
+{% block body %}
+    <div class="Middle Middle_top">
+        <div class="Section Section_column Section_columnLeft">
+            <div class="wrap">
+                <div class="Section-column">
+                    <div class="Section-columnSection">
+                        <header class="Section-header">
+                            <strong class="Section-title">Навигация
+                            </strong>
+                        </header>
+                        <div class="Section-columnContent">
+                            <div class="NavigateProfile">
+                                <ul class="menu menu_vt">
+                                    <li class="menu-link menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:settings' %}">Настройки</a>
+                                    </li>
+                                </ul>
+                                <ul class="menu menu_vt">
+                                    <li class="menu-item_ACTIVE menu-item">
+                                        <a class="menu-link" href="{% url 'custom_auth:cashing' %}">Кэширование</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="Section-content">
+                    <div class="Orders">
+                        <div class="Order Order_anons custom_left_margin" style="width: 50%">
+                            <div class="Order-personal">
+                                <form method="post">
+                                    <div class="align_labels">
+                                        <div class="col">
+                                            <label>Сбросить кэш сервиса баннеров</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" name="banners" value="Сбросить">
+                                        </div>
+                                    </div>
+                                    <div class="align_labels">
+                                        <div class="col">
+                                            <label>Сбросить кэш меню категорий</label>
+
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" name="category" value="Сбросить">
+                                        </div>
+                                    </div>
+                                    <div class="align_labels">
+                                        <div class="col">
+                                            <label>Сбросить кэш сервиса предложение дня</label>
+
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" name="daily_offer" value="Сбросить">
+                                        </div>
+                                    </div>
+                                    <div class="align_labels">
+                                        <div class="col">
+                                            <label>Сбросить кэш сервиса горячих предложений</label>
+
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" name="hot_offer" value="Сбросить">
+                                        </div>
+                                    </div>
+                                    <div class="align_labels">
+                                        <div class="col">
+                                            <label>Сбросить кэш всех сервисов</label>
+                                        </div>
+                                        <div class="col">
+                                            <input type="submit" name="reset_all" value="Сбросить"
+                                                   style="background: #8f0000">
+                                        </div>
+                                        {% csrf_token %}
+                                    </div>
+                                    {% if result %}
+                                        <div class="align_labels"
+                                             style="background: #0062cf; color: white; justify-content: center">
+                                            {{ result }}
+                                        </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block script %}
+        <!--+Middle-->
+        <!--    +div.-top-->
+        <!--        +breadcrumbs('Главная','Портфолио')-->
+        <!--    +Article('portfolio')-->
+        <!---->
+        <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
+        <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>
+        <script src="{% static 'assets/plg/range/ion.rangeSlider.min.js' %}"></script>
+        <script src="{% static 'assets/plg/Slider/slick.min.js' %}"></script>
+        <script src="{% static 'assets/js/scripts.js' %}"></script>
+        <script>
+            $(document).ready(function () {
+                $('#phone').mask('+7 (999) 999-99-99');
+            });
+        </script>
+    {% endblock %}
+
+{% endblock %}

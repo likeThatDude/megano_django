@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -28,20 +29,30 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure--tj#@x^aa%5f_dfu56dfx
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "1") == "1"
-SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN")
+SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN", "localhost")
+HTTP_PROTOCOL = os.environ.get("HTTP_PROTOCOL", "http")
 
 if DEBUG:
-    ALLOWED_HOSTS = [
-        "127.0.0.1",
-        "localhost",
-        "30e2-37-214-103-7.ngrok-free.app"
-    ]
-    CSRF_TRUSTED_ORIGINS = ["https://30e2-37-214-103-7.ngrok-free.app"]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "bc8d-37-214-103-7.ngrok-free.app"]
+    CSRF_TRUSTED_ORIGINS = ["https://bc8d-37-214-103-7.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
 else:
-
+    import sentry_sdk
+    SENTRY_DSN = os.environ.get("SENTRY_DSN", None)
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        traces_sample_rate=1.0,
+        _experiments={
+            # Set continuous_profiling_auto_start to True
+            # to automatically start the profiler on when
+            # possible.
+            "continuous_profiling_auto_start": True,
+        },
+    )
     ALLOWED_HOSTS = [
         "localhost",
         "127.0.0.1",
@@ -192,7 +203,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "ru"
+LANGUAGE_CODE = "en-us"
+LANGUAGES = (
+    ('en-us', _('English')),
+    ('ru', _('Russia')),
+)
+
+LOCALE_PATHS = [
+    BASE_DIR / '/locale'
+]
 
 TIME_ZONE = "Europe/Moscow"
 
@@ -224,9 +243,11 @@ LOGOUT_URL = reverse_lazy("custom_auth:logout")
 LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
+# Email variables
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 EMAIL_PORT = 587
 EMAIL_HOST_USER = str(os.getenv("EMAIL_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_PASSWORD"))
@@ -260,6 +281,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True  # Защита от MIME-type sniffing
 X_FRAME_OPTIONS = "DENY"  # Защита от clickjacking
 
 # Отключаем настройки, требующие HTTPS
+# Сервер удалённый работает по HTTP
 CSRF_COOKIE_SECURE = False  # Разрешаем передачу CSRF токена по HTTP
 SESSION_COOKIE_SECURE = False  # Разрешаем передачу сессионных куки по HTTP
 SECURE_SSL_REDIRECT = False  # Отключаем редирект на HTTPS
@@ -273,12 +295,26 @@ BANNERS_KEY = "banners"
 user_comparison_key = "user_comparison_"
 anonymous_comparison_key = "anonymous_user_comparison_"
 CART_SESSION_ID = "cart"
+VIEWED_SESSION_ID = "viewed"
 CATEGORY_CASHING_TIME = 60 * 60 * 24
 CATEGORY_KEY = "categories"
 PRODUCTS_KEY = "category_{category_id}"
 OFFER_KEY = "offers"
 HOT_OFFER_KEY = "hot_offer"
-from dotenv import load_dotenv
+ORDERS_KEY = "Order-"
 
+# Stripe variables
 SECRET_KEY_STRIPE = os.getenv("STRIPE_SECRET_KEY", None)
 STRIPE_WEBHOOK_SECRET_KEY = os.getenv("STRIPE_WEBHOOK_SECRET_KEY", None)
+
+# Celery variables
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_BROKER_URL = "redis://172.17.0.2:6379/1"
+CELERY_RESULT_BACKEND = "redis://172.17.0.2:6379/1"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CELERY_BEAT_SCHEDULE = {
+
+}
