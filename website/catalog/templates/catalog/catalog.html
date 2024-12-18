@@ -89,7 +89,7 @@
                                         <div>
                                             {% for value in values %}
                                                 <label class="toggle">
-                                                    <input type="checkbox" name="specification">
+                                                    <input type="checkbox" name="specification" value="{{ value }}">
                                                     <span class="toggle-box"></span>
                                                     <span class="toggle-text">{{ value }}</span>
                                                 </label>
@@ -124,10 +124,10 @@
                         <div class="Sort-title">{% trans 'Sort by' %}:
                         </div>
                         <div class="Sort-variants">
-                            <a class="Sort-sortBy Sort-sortBy_dec" href="#">{% trans 'Popularity' %}</a>
-                            <a class="Sort-sortBy" href="#">{% trans 'Price' %}</a>
-                            <a class="Sort-sortBy" href="#">{% trans 'Reviews' %}</a>
-                            <a class="Sort-sortBy Sort-sortBy_inc" href="#">{% trans 'Novelty' %}</a>
+                            <a class="Sort-sortBy {{ sort.quantity.style }}" href="{% url 'catalog:catalog' category_id %}?sort={{ sort.quantity.param }}">{% trans 'Popularity' %}</a>
+                            <a class="Sort-sortBy {{ sort.price.style }}" href="{% url 'catalog:catalog' category_id %}?sort={{ sort.price.param }}">{% trans 'Price' %}</a>
+                            <a class="Sort-sortBy {{ sort.rating.style }}" href="{% url 'catalog:catalog' category_id %}?sort={{ sort.rating.param }}">{% trans 'Reviews' %}</a>
+                            <a class="Sort-sortBy {{ sort.date.style }}" href="{% url 'catalog:catalog' category_id %}?sort={{ sort.date.param }}">{% trans 'Novelty' %}</a>
                         </div>
                     </div>
                     <div class="Cards">

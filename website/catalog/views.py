@@ -3,10 +3,15 @@ from itertools import product
 
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Min
+from django.db.models import (
+    Min,
+    Count,
+    Max,
+    Sum,
+)
+from django.db.models import Min, Q
 from django.db.models import OuterRef
 from django.db.models import Prefetch
-from django.db.models import Q
 from django.db.models import Subquery
 from django.db.models.functions import Round
 from django.http import HttpRequest
@@ -31,6 +36,7 @@ from .models import Specification
 from .models import Tag
 from .models import Viewed
 from .serializers import ViewedSerializer
+from .utils import generate_sort_param, sort_convert
 from .models import ViewedSession
 
 
@@ -60,12 +66,63 @@ class CatalogListView(ListView):
     paginate_by = 12
 
     def get_context_data(self, **kwargs):
+        """
+            Получаем контекст для шаблона.
+
+            Объединяет контекст, предоставляемый родительским классом, с дополнительными
+            параметрами, полученными из метода get_param.
+
+            Параметры:
+                **kwargs: Дополнительные именованные аргументы.
+
+            Возвращает:
+                dict: Объединенный контекст для шаблона.
+        """
         context = super().get_context_data(**kwargs)
         context.update(self.get_param())
         return context
 
+    def sort_queryset(self, queryset, sort):
+        """
+            Сортирует набор данных по заданному параметру.
+
+            Обновляет параметры сортировки в сессии и сортирует переданный
+            queryset в соответствии с указанным параметром.
+
+            Параметры:
+                queryset (QuerySet): Набор данных, который необходимо отсортировать.
+                sort (str): Параметр сортировки.
+
+            Возвращает:
+                QuerySet: Отсортированный набор данных.
+        """
+        sort_convert(self.request.session, sort)
+        return queryset.order_by(sort)
+
+    def get_last_sort(self, session):
+        """
+            Получает последний использованный параметр сортировки из сессии.
+
+            Параметры:
+                session (dict): Словарь сессии, содержащий параметры сортировки.
+
+            Возвращает:
+                str: Параметр последней сортировки или None, если сортировка не была установлена.
+        """
+        for key, value in session["sort_catalog"].items():
+            if value["style"]:
+                return value["param"]
+
     def get_param(self):
-        """Получаем дополнительные параметры для контекста."""
+        """
+            Получаем дополнительные параметры для контекста.
+
+            Собирает информацию о продуктах, продавцах, производителях, спецификациях и тегах
+            для текущей категории и возвращает это в виде словаря.
+
+            Возвращает:
+                dict: Словарь с дополнительными параметрами для контекста.
+        """
 
         category_id = self.kwargs.get("pk")
 
@@ -76,41 +133,80 @@ class CatalogListView(ListView):
 
         # Получаем все спецификации для всех продуктов в категории
         specifications = (
-            Specification.objects.filter(product__in=products_with_related).select_related("name").distinct()
+            Specification.objects.filter(product__in=products_with_related).distinct()
         )
+
         # Группируем спецификации по имени
-        grouped_specifications = defaultdict(list)
+        grouped_specifications = defaultdict(set)
         for spec in specifications:
-            grouped_specifications[spec.name.name].append(spec.value)
+            grouped_specifications[spec.name.name].add(spec.value)
 
         # Получить уникальные теги
         tags = Tag.objects.filter(products__isnull=False).distinct()
+
+        if "sort_catalog" not in self.request.session:
+            self.request.session["sort_catalog"] = generate_sort_param()
+        sorting = self.request.session["sort_catalog"]
 
         return {
             "sellers": sellers,
             "manufactures": manufactures,
             "grouped_specifications": grouped_specifications.items(),
             "tags": tags,
+            "sort": sorting,
             "category_id": category_id,
         }
 
     def get_queryset(self):
-        """Получаем список продуктов с учетом кэширования."""
+        """
+            Получаем список продуктов с учетом кэширования.
+
+            Извлекает список продуктов для текущей категории, используя кэш для
+            повышения производительности. Если кэш пуст, выполняет запрос к базе данных.
+
+            Возвращает:
+                QuerySet: Набор данных с продуктами для текущей категории.
+        """
         category_id = self.kwargs.get("pk")
         cache_key = PRODUCTS_KEY.format(category_id=category_id)
         queryset = cache.get(cache_key)
         price_subquery = Price.objects.filter(product=OuterRef("pk")).values("pk")
         if not queryset:
             queryset = (
-                Product.objects.filter(category__id=category_id)
+                Product.objects.filter(category__id=category_id, archived=False)
                 .select_related("category")
-                .annotate(price=Round(Min("prices__price"), precision=2), price_pk=Subquery(price_subquery))
+                .annotate(
+                    price=Round(Min("prices__price"), precision=2),
+                    price_pk=Subquery(price_subquery),
+                    quantity=Sum("prices__sold_quantity"),
+                    date=Max("prices__created_at"),
+                    rating=Count("review__created_at"),
+                )
             )
+
         cache.set(cache_key, queryset, timeout=60)
+
+        sort = self.request.GET.get("sort")
+        if sort:
+            sort_convert(self.request.session, sort)
+            queryset = self.sort_queryset(queryset, sort)
         return queryset
 
     def filter_products(self, products, request):
-        """Фильтруем продукты по выбранным параметрам."""
+        """
+            Фильтруем продукты по выбранным параметрам.
+
+            Этот метод применяет фильтры к переданному набору продуктов на основе
+            выбранных пользователем параметров, таких как продавцы, производители,
+            диапазон цен, название, спецификации и теги.
+
+            Параметры:
+                products (QuerySet): Набор данных с продуктами, к которому будут применены фильтры.
+                request (HttpRequest): Объект запроса, содержащий параметры фильтрации.
+
+            Возвращает:
+                QuerySet: Отфильтрованный набор данных с продуктами.
+        """
         selected_sellers = request.POST.getlist("seller[]")
         selected_manufactures = request.POST.getlist("manufacture[]")
         selected_limited_edition = request.POST.get("limited_edition")
@@ -118,6 +214,7 @@ class CatalogListView(ListView):
         selected_title = request.POST.get("title")
         selected_specifications = request.POST.getlist("specification")
         selected_tags = request.POST.getlist("tags")
+
 
         # Фильтрация по диапазону цен
         if selected_range_price:
@@ -151,14 +248,53 @@ class CatalogListView(ListView):
         if selected_tags:
             products = products.filter(tags__id__in=selected_tags).distinct()
 
+        last_sort = self.get_last_sort(self.request.session)
+        # Сортировка
+        if last_sort:
+            products = products.order_by(last_sort)
+
         return products
 
+    def clear_cache(self, category_id):
+        """
+            Метод для очистки кэша по категории.
+
+            Этот метод удаляет кэшированные данные для заданной категории, что
+            позволяет обновить информацию о продуктах.
+
+            Параметры:
+                category_id (int): Идентификатор категории, для которой нужно очистить кэш.
+
+            Возвращает:
+                None
+        """
+        cache_key = PRODUCTS_KEY.format(category_id=category_id)
+        cache.delete(cache_key)  # Очистка кэша по ключу
+
     def post(self, request, *args, **kwargs):
-        """Обработка POST-запроса для фильтрации продуктов."""
+        """
+            Обработка POST-запроса для фильтрации продуктов.
+
+            Этот метод обрабатывает POST-запросы, применяет фильтры к продуктам
+            и обновляет кэш, если данные были изменены.
+
+            Параметры:
+                request (HttpRequest): Объект запроса, содержащий данные для фильтрации.
+                *args: Дополнительные позиционные аргументы.
+                **kwargs: Дополнительные именованные аргументы.
+
+            Возвращает:
+                HttpResponse: Ответ с отфильтрованными продуктами и контекстом для шаблона.
+        """
         products = self.get_queryset()
         products = self.filter_products(products, request)
 
+        # очистка кэша после изменения данных
+        category_id = self.kwargs.get("pk")  # Получаем ID категории из URL
+        self.clear_cache(category_id)  # Очищаем кэш для данной категории
+
         context = self.get_param()
+
         context["products"] = products
         return render(request, self.template_name, context)
 

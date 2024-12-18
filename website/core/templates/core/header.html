@@ -173,17 +173,21 @@
                                         <a class="CategoriesButton-arrow" href="#"></a>
                                         <div class="CategoriesButton-submenu">
                                             {% for sub_category in category.sub_categories.all %}
-                                                <div>
-                                                    <a class="CategoriesButton-link"
+                                                <a class="CategoriesButton-link"
                                                        href="{% url 'catalog:catalog' sub_category.id %}">
+                                                            <div class="CategoriesButton-icon">
+                                                                {% if sub_category.icon %}
+                                                                    <img src="{{ sub_category.icon.url }}" alt="{{ sub_category.name }}"/>
+                                                                {% endif %}
                                                         <div class="CategoriesButton-icon">
                                                             {% if subcategory.icon %}
                                                                 <img src="{{ sub_category.icon.url }}"
                                                                      alt="{{ sub_category.name }}"/>
                                                             {% endif %}
                                                         </div>
-                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span></a>
-                                                </div>
+                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span>
+                                                </a>
+
                                             {% endfor %}
                                         </div>
                                     {% endif %}
