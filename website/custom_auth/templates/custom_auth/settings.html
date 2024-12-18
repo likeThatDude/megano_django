@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -34,19 +35,19 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Навигация
+                            <strong class="Section-title">{% trans 'Navigation' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
                                     <li class="menu-item_ACTIVE menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:settings' %}">Настройки</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:settings' %}">{% trans 'Settings' %}</a>
                                     </li>
                                 </ul>
                                 <ul class="menu menu_vt">
                                     <li class="menu-link menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:cashing' %}">Кэширование</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:cashing' %}">{% trans 'Caching' %}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -60,7 +61,7 @@
                                 <div class="col">
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>Режим отладки</label>
+                                            <label>{% trans 'Debugging mode' %}</label>
                                         </div>
                                         <div class="col">
                                             {{ debug }}
@@ -68,7 +69,7 @@
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>Язык интерфейса</label>
+                                            <label>{% trans 'Interface language' %}</label>
                                         </div>
                                         <div class="col">
                                             {{ language }}
@@ -76,7 +77,7 @@
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>Часовой пояс</label>
+                                            <label>{% trans 'Time zone' %}</label>
                                         </div>
                                         <div class="col">
                                             {{ timezone }}
@@ -84,15 +85,15 @@
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>Время жизни сессии</label>
+                                            <label>{% trans 'Session lifetime' %}</label>
                                         </div>
                                         <div class="col">
-                                            {{ session_age }} сек.
+                                            {{ session_age }} {% trans 'sec' %}.
                                         </div>
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>HOST электронной почты</label>
+                                            <label>{% trans 'Email HOST' %}</label>
                                         </div>
                                         <div class="col">
                                             {{ email_host }}
@@ -100,7 +101,7 @@
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>Использование TLS</label>
+                                            <label>{% trans 'Using TLS' %]</label>
                                         </div>
                                         <div class="col">
                                             {{ email_tls }}
@@ -108,7 +109,7 @@
                                     </div>
                                     <div class="align_labels">
                                         <div class="col">
-                                            <label>PORT электронной почты</label>
+                                            <label>{% trans 'Email PORT' %}</label>
                                         </div>
                                         <div class="col">
                                             {{ email_port }}
@@ -120,7 +121,7 @@
                                         </div>
                                         <div class="col">
                                             <form action="{% url 'custom_auth:settings_change' %}" method="get">
-                                                <button type="submit">Изменить</button>
+                                                <button type="submit">{% trans 'To change' %}</button>
                                             </form>
                                         </div>
                                     </div>

@@ -40,6 +40,10 @@ from .utils import generate_sort_param, sort_convert
 from .models import ViewedSession
 
 
+def catalog_view(request: HttpRequest):
+    return render(request, "catalog/catalog.html")
+
+
 class CatalogListView(ListView):
     """
     Представление для отображения списка продуктов в каталоге.

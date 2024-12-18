@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -27,23 +28,23 @@
             <div class="Section-column">
                 <div class="Section-columnSection">
                     <header class="Section-header">
-                        <strong class="Section-title">Навигация
+                        <strong class="Section-title">{% trans 'Navigation' %}
                         </strong>
                     </header>
                 <div class="Section-columnContent">
                     <div class="NavigateProfile">
                         <ul class="menu menu_vt">
                             <li class="menu-item">
-                                <a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">Личный кабинет</a>
+                                <a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal cabinet' %}</a>
                             </li>
                             <li class="menu-item_ACTIVE menu-item">
-                                <a class="menu-link" href="{% url 'custom_auth:profile' %}">Профиль</a>
+                                <a class="menu-link" href="{% url 'custom_auth:profile' %}">{% trans 'Profile' %}</a>
                             </li>
                             <li class="menu-item">
-                                <a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">История заказов</a>
+                                <a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">{% trans 'Order history' %}</a>
                             </li>
                             <li class="menu-item">
-                                <a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                <a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">{% trans 'Browsing history' %}</a>
                             </li>
                         </ul>
                     </div>
@@ -59,7 +60,7 @@
                             <div class="row-block">
 
                                 <div class="form-group">
-                                    <label class="form-label" for="photo">Аватар</label>
+                                    <label class="form-label" for="photo">{% trans 'Avatar' %}</label>
                                     <div class="Profile-avatar Profile-avatar_noimg">
                                         {% if profile_form.instance.photo %}
                                             <img src="{{ profile_form.instance.photo.url }}" alt="profile photo"/>
@@ -67,7 +68,7 @@
                                         {% else %}
                                             <label class="Profile-fileLabel" for="photo">
                                                 <img src="{% static 'assets/img/icons/upload.png' %}" alt="#.png" />
-                                                Загрузить фото
+                                                {% trans 'Upload a photo' %}
                                             </label>
 
                                         {% endif %}
@@ -77,21 +78,21 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="last_name">Фамилия</label>
+                                    <label class="form-label" for="last_name">{% trans 'Surname' %}</label>
                                     <input class="form-input" id="last_name" type="text" name="last_name"
                                            value="{{ profile_form.instance.last_name }}">
                                     {% for error in profile_form.last_name.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
 
-                                    <label class="form-label" for="first_name">Имя</label>
+                                    <label class="form-label" for="first_name">{% trans 'Name' %}</label>
                                     <input class="form-input" id="first_name" type="text" name="first_name"
                                            value="{{ profile_form.instance.first_name }}">
                                     {% for error in profile_form.first_name.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
 
-                                    <label class="form-label" for="patronymic">Отчество</label>
+                                    <label class="form-label" for="patronymic">{% trans 'Patronymic' %}</label>
                                     <input class="form-input" id="patronymic" type="text" name="patronymic"
                                            value="{{ profile_form.instance.patronymic }}">
                                     {% for error in profile_form.patronymic.errors %}
@@ -103,7 +104,7 @@
 
                             <div class="row-block">
                                 <div class="form-group">
-                                    <label class="form-label" for="phone">Телефон</label>
+                                    <label class="form-label" for="phone">{% trans 'Phone' %}</label>
                                     <input class="form-input" id="phone" name="phone" type="text"
                                            value="{{ profile_form.instance.phone }}"
                                            placeholder="+7 (___) ___-__-__"/>
@@ -121,32 +122,32 @@
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="old_password">Текущий пароль</label>
+                                    <label class="form-label" for="old_password">{% trans 'Current password' %}</label>
                                     <input class="form-input" id="old_password" name="old_password" type="password"
-                                           placeholder="Старый пароль" />
+                                           placeholder="{% trans 'Old password' %}" />
                                     {% for error in password_form.old_password.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="new_password1">Новый пароль</label>
+                                    <label class="form-label" for="new_password1">{% trans 'New password' %}</label>
                                     <input class="form-input" id="new_password1" name="new_password1" type="password"
-                                           placeholder="Введите новый пароль" />
+                                           placeholder="{% trans 'Enter a new password' %}" />
                                     {% for error in password_form.new_password1.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label" for="new_password2">Подтверждение пароля</label>
+                                    <label class="form-label" for="new_password2">{% trans 'Password confirmation' %}</label>
                                     <input class="form-input" id="new_password2" name="new_password2" type="password"
-                                           placeholder="Введите новый пароль повторно" />
+                                           placeholder="{% trans 'Enter the new password again' %}" />
                                     {% for error in password_form.new_password2.errors %}
                                         <div class="error-input">{{ error }}</div>
                                     {% endfor %}
                                 </div>
                                 <div class="form-group">
                                     <div class="Profile-btn">
-                                        <button class="btn btn_success" type="submit">Сохранить
+                                        <button class="btn btn_success" type="submit">{% trans 'Save' %}
                                         </button>
                                     </div>
                                     {% for message in messages %}

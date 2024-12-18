@@ -274,8 +274,8 @@ class SettingsForm(forms.Form):
     RUSSIAN = "ru"
     ENGLISH = "en"
     LANGUAGES = [
-        (RUSSIAN, _("Русский")),
-        (ENGLISH, _("Английский")),
+        (RUSSIAN, _("Russia")),
+        (ENGLISH, _("English")),
     ]
 
     UTC = "UTC"
@@ -283,16 +283,16 @@ class SettingsForm(forms.Form):
     NEW_YORK = "America/New_York"
     LONDON = "Europe/London"
     TIME_ZONES = [
-        (MOSCOW, _("Москва")),
-        (UTC, _("Всемирное время")),
-        (NEW_YORK, _("Нью-Йорк")),
-        (LONDON, _("Лондон")),
+        (MOSCOW, _("Moscow")),
+        (UTC, _("World Time")),
+        (NEW_YORK, _("New-York")),
+        (LONDON, _("London")),
     ]
 
-    debug = forms.BooleanField(label=_("Режим отладки"), initial=settings.DEBUG, required=False)
+    debug = forms.BooleanField(label=_("Debugging mode"), initial=settings.DEBUG, required=False)
     language = forms.ChoiceField(choices=LANGUAGES, initial=settings.LANGUAGE_CODE)
     timezone = forms.ChoiceField(choices=TIME_ZONES, initial=settings.TIME_ZONE)
-    session_age = forms.IntegerField(label=_("Время жизни сессии"), initial=settings.SESSION_COOKIE_AGE)
-    email_host = forms.CharField(label=_("HOST электронной почты"), initial=settings.EMAIL_HOST)
-    email_tls = forms.BooleanField(label=_("Использование TLS"), initial=settings.EMAIL_USE_TLS, required=False)
-    email_port = forms.IntegerField(label=_("PORT электронной почты"), initial=settings.EMAIL_PORT)
+    session_age = forms.IntegerField(label=_("Session lifetime"), initial=settings.SESSION_COOKIE_AGE)
+    email_host = forms.CharField(label=_("Email HOST"), initial=settings.EMAIL_HOST)
+    email_tls = forms.BooleanField(label=_("Using TLS"), initial=settings.EMAIL_USE_TLS, required=False)
+    email_port = forms.IntegerField(label=_("Email PORT"), initial=settings.EMAIL_PORT)

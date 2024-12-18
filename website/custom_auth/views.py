@@ -370,12 +370,12 @@ class SettingsPageView(AdminRequiredMixin, View):
 
     def get(self, request: HttpRequest):
         context = {
-            "debug": _("Включен") if settings.DEBUG else _("Отключен"),
+            "debug": _("Enabled") if settings.DEBUG else _("Disabled"),
             "language": settings.LANGUAGE_CODE,
             "timezone": settings.TIME_ZONE,
             "session_age": settings.SESSION_COOKIE_AGE,
             "email_host": settings.EMAIL_HOST,
-            "email_tls": _("Включен") if settings.EMAIL_USE_TLS else _("Отключен"),
+            "email_tls": _("Enabled") if settings.EMAIL_USE_TLS else _("Disabled"),
             "email_port": settings.EMAIL_PORT,
         }
         return render(request, self.template_name, context=context)
@@ -444,18 +444,18 @@ class ResetCashView(AdminRequiredMixin, View):
 
         if "reset_all" in button_names:
             cache.clear()
-            context["result"] = _("Кэш всех сервисов сброшен успешно!")
+            context["result"] = _("The cache of all services has been successfully reset!")
         if "banners" in button_names:
             cache.delete(settings.BANNERS_KEY)
-            context["result"] = _("Кэш сервиса баннеров сброшен успешно!")
+            context["result"] = _("The cache of the banner service has been successfully reset!")
         if "category" in button_names:
             cache.delete(settings.CATEGORY_KEY)
-            context["result"] = _("Кэш меню категорий сброшен успешно!")
+            context["result"] = _("The category menu cache has been successfully reset!")
         if "daily_offer" in button_names:
             cache.delete(settings.OFFER_KEY)
-            context["result"] = _("Кэш сервиса предложение дня сброшен успешно!")
+            context["result"] = _("The cache of the day's offer service has been successfully reset!")
         if "hot_offer" in button_names:
             cache.delete(settings.HOT_OFFER_KEY)
-            context["result"] = _("Кэш сервиса горячих предложений сброшен успешно!")
+            context["result"] = _("The cache of the hot offers service has been successfully reset!")
 
         return render(request, self.template_name, context=context)

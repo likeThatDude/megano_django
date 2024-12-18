@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load catalog_extras %}
+{% load i18n %}
 
 {% block description %}
     <meta name="description" content="Описание страницы">
@@ -190,7 +191,8 @@
                                                 <div class="Card-description">
                                                     <div class="Card-cost">
                                                         <span class="Card-price">
-                                                            ${% firstof hot_product.price "out of stock"|trans %}
+                                                            {% trans 'out of stock' as out_of_stock %}
+                                                            ${% firstof hot_product.price out_of_stock %}
                                                         </span>
                                                     </div>
                                                     <div class="Card-category">
