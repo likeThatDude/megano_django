@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -34,19 +35,19 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Навигация
+                            <strong class="Section-title">{% trans 'Navigation' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
                                     <li class="menu-item_ACTIVE menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:settings' %}">Настройки</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:settings' %}">{% trans 'Settings' %}</a>
                                     </li>
                                 </ul>
                                 <ul class="menu menu_vt">
                                     <li class="menu-link menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:cashing' %}">Кэширование</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:cashing' %}">{% trans 'Caching' %}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -88,7 +89,7 @@
                                         <br>
                                         <div class="align_labels">
                                             <div class="col">
-                                                <label>{{ form.session_age.label }} в секундах</label>
+                                                <label>{{ form.session_age.label }} {% trans 'in seconds' %}</label>
                                             </div>
                                             <div class="col">
                                                 {{ form.session_age }}
@@ -126,7 +127,7 @@
                                             <div class="col">
                                             </div>
                                             <div class="col">
-                                                <input type="submit" name="save" value="Сохранить">
+                                                <input type="submit" name="save" value="{% trans 'Save' %}">
                                             </div>
                                         </div>
                                         {% csrf_token %}

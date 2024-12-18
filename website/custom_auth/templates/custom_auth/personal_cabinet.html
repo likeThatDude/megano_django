@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -25,19 +26,19 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Навигация
+                            <strong class="Section-title">{% trans 'Navigation' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
-                                    <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">Личный кабинет</a>
+                                    <li class="menu-item_ACTIVE menu-item"><a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal cabinet' %}</a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:profile' %}">Профиль</a>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:profile' %}">{% trans 'Profile' %}</a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">История заказов</a>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">{% trans 'Order history' %}</a>
                                     </li>
-                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                    <li class="menu-item"><a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">{% trans 'Browsing history' %}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -56,7 +57,7 @@
                             </div>
                             <div class="Account-column">
                                 <div class="Account-name">
-                                </div><a class="Account-editLink" href="{% url 'custom_auth:profile' %}">Редактировать профиль</a>
+                                </div><a class="Account-editLink" href="{% url 'custom_auth:profile' %}">{% trans 'Edit a profile' %}</a>
                             </div>
                         </div>
                         <div class="Account-group">
@@ -66,32 +67,32 @@
                                         <div class="Order-personal">
                                             <div class="row">
                                                 {% if last_order %}
-                                                    <div class="row-block"><a class="Order-title" href="{{ last_order.get_absolute_url }}">Заказ<span class="Order-numberOrder"> №{{ last_order.pk }} </span>от&#32;<span class="Order-dateOrder">{{ last_order.created_at|date:"d F Y" }}</span></a>
-                                                        <div class="Account-editLink"><a href="{% url 'custom_auth:profile-orders' %}">История заказов</a>
+                                                    <div class="row-block"><a class="Order-title" href="{{ last_order.get_absolute_url }}">{% trans 'Order' %}<span class="Order-numberOrder"> №{{ last_order.pk }} </span>{% trans 'from' %}&#32;<span class="Order-dateOrder">{{ last_order.created_at|date:"d F Y" }}</span></a>
+                                                        <div class="Account-editLink"><a href="{% url 'custom_auth:profile-orders' %}">{% trans 'Order history' %}</a>
                                                         </div>
                                                     </div>
                                                     <div class="row-block">
 
                                                         <div class="Order-info Order-info_delivery">
-                                                            <div class="Order-infoType">Тип доставки:
+                                                            <div class="Order-infoType">{% trans 'Type of delivery' %}:
                                                             </div>
                                                             <div class="Order-infoContent">{{ last_order.delivery_price.get_name_display }}
                                                             </div>
                                                         </div>
                                                         <div class="Order-info Order-info_pay">
-                                                            <div class="Order-infoType">Оплата:
+                                                            <div class="Order-infoType">{% trans 'Payment' %}:
                                                             </div>
                                                             <div class="Order-infoContent">{{ last_order.get_paid_status_display }}
                                                             </div>
                                                         </div>
                                                         <div class="Order-info">
-                                                            <div class="Order-infoType">Стоимость заказа:
+                                                            <div class="Order-infoType">{% trans 'The cost of the order' %}:
                                                             </div>
                                                             <div class="Order-infoContent">{{ last_order.total_price }}
                                                             </div>
                                                         </div>
                                                         <div class="Order-info Order-info_status">
-                                                            <div class="Order-infoType">Статус:
+                                                            <div class="Order-infoType">{% trans 'Status' %}:
                                                             </div>
                                                             <div class="Order-infoContent">{{ last_order.get_status_display }}
                                                             </div>
@@ -105,7 +106,7 @@
                                 </div>
                             {% else %}
                                 <div>
-                                    <h2>У вас отсутствуют заказы</h2>
+                                    <h2>{% trans "You don't have any orders" %}</h2>
                                 </div>
                             {% endif %}
                         </div>
@@ -114,7 +115,7 @@
                                 <div class="Account-column Account-column_full">
                                     <div class="Order Order_anons">
                                         <div class="Order-personal">
-                                            <div class="row"><h2>Недавние просмотры</h2></div>
+                                            <div class="row"><h2>{% trans 'Recent views' %}</h2></div>
                                             <div class="row-block">
                                                 {% for viewed in viewed_list %}
                                                     <div class="row-block col-mt"><a class="Order-title"
@@ -124,13 +125,13 @@
                                                     <div>
                                                         <div class="row-block">
                                                             <div class="Order-info text-ml">
-                                                                <div class="Order-infoType">Дата просмотра:</div>
+                                                                <div class="Order-infoType">{% trans 'Date of viewing' %}:</div>
                                                                 <div class="Order-infoContent"><span
                                                                         class="Order-price">{{ viewed.created_at.date }}</span>
                                                                 </div>
                                                             </div>
                                                             <div class="Order-info text-ml">
-                                                                <div class="Order-infoType">Время просмотра:</div>
+                                                                <div class="Order-infoType">{% trans 'Viewing time' %}:</div>
                                                                 <div class="Order-infoContent"><span
                                                                         class="Order-price">{{ viewed.created_at.time }}</span>
                                                                 </div>
@@ -142,7 +143,7 @@
                                             <div class="row">
                                                 <div class="Account-editLink">
                                                     <br>
-                                                    <a href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                                    <a href="{% url 'custom_auth:viewed-list' %}">{% trans 'Browsing history' %}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,7 +151,7 @@
                                 </div>
                             {% else %}
                                 <div>
-                                    <h2>У вас нет просмотренных товаров</h2>
+                                    <h2>{% trans "You don't have any viewed products" %}</h2>
                                 </div>
                             {% endif %}
                         </div>

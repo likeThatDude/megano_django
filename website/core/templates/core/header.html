@@ -1,6 +1,7 @@
 {% load core_tags %}
 {% load static %}
 {% load catalog_extras %}
+{% load i18n %}
 
 <header class="Header">
     <div class="ControlPanel">
@@ -31,7 +32,7 @@
                         {% if not request.user.is_authenticated %}
                             <div class="row-block">
                                 <a class="ControlPanel-title" href="{% url 'custom_auth:login' %}">
-                                    {% trans 'Login' %}
+                                    {% translate 'Login' %}
                                 </a>
                             <a class="ControlPanel-title" href="{% url 'custom_auth:register' %}">{% trans 'Registration' %}</a>
                             </div>
@@ -67,7 +68,7 @@
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="{% url 'core:index' %}">{% trans 'Main' %}</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'core:index' %}">{% translate 'Main' %}</a>
                         </li>
                         <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Discounts' %}</span><a
                                 class="menu-link" href="{% url 'catalog:catalog' %}">{% trans 'Catalog' %}</a>
@@ -90,7 +91,7 @@
                             {% if user.is_authenticated %}
                                 <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal
                                     account' %}</a>
-                            {% endif %}
+
                             <a class="dropdown-content-a" href="{% static 'account.html' %}">{% trans 'Administrative
                                 section' %}
                                 </a>
@@ -172,17 +173,21 @@
                                         <a class="CategoriesButton-arrow" href="#"></a>
                                         <div class="CategoriesButton-submenu">
                                             {% for sub_category in category.sub_categories.all %}
-                                                <div>
-                                                    <a class="CategoriesButton-link"
+                                                <a class="CategoriesButton-link"
                                                        href="{% url 'catalog:catalog' sub_category.id %}">
+                                                            <div class="CategoriesButton-icon">
+                                                                {% if sub_category.icon %}
+                                                                    <img src="{{ sub_category.icon.url }}" alt="{{ sub_category.name }}"/>
+                                                                {% endif %}
                                                         <div class="CategoriesButton-icon">
                                                             {% if subcategory.icon %}
                                                                 <img src="{{ sub_category.icon.url }}"
                                                                      alt="{{ sub_category.name }}"/>
                                                             {% endif %}
                                                         </div>
-                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span></a>
-                                                </div>
+                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span>
+                                                </a>
+
                                             {% endfor %}
                                         </div>
                                     {% endif %}

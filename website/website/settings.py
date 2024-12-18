@@ -125,6 +125,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "website.urls"
@@ -205,7 +206,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 LANGUAGES = (
-    ('en-us', _('English')),
+    ('en', _('English')),
     ('ru', _('Russia')),
 )
 
@@ -216,6 +217,7 @@ LOCALE_PATHS = [
 TIME_ZONE = "Europe/Moscow"
 
 USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
 

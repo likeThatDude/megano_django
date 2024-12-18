@@ -878,10 +878,11 @@
     overflow: hidden;
     display: flex;
     line-height: 0;
-    min-height: 226px;
+    height: 250px;
     align-items: center;
     justify-content: center;
 }
+
 
 @media screen and (min-width: 990px) {
     .Card-picture:hover {
@@ -894,8 +895,10 @@
 }
 
 .Card-picture img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
     margin: 0;
+    object-fit: cover; /* Обеспечивает сохранение пропорций изображения */
 }
 
 .Card-date {
@@ -2327,6 +2330,13 @@ a.Cart-title {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.CategoriesButton-icon img {
+    width: 100%; /* Занимает всю ширину родительского элемента */
+    height: auto; /* Сохраняет пропорции изображения */
+    max-width: 26px; /* Максимальная ширина */
+    max-height: 26px; /* Максимальная высота */
 }
 
 .CategoriesButton-content {

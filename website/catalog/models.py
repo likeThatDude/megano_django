@@ -360,7 +360,7 @@ class Review(models.Model):
     updating = models.BooleanField(default=False, verbose_name=_("Updating"))
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("-created_at",)
         verbose_name = _("Review")
         verbose_name_plural = _("Reviews")
 

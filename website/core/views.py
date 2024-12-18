@@ -4,6 +4,7 @@ from catalog.models import Category
 from catalog.models import Price
 from catalog.models import Product
 from discount.models import Discount
+
 from django.core.cache import cache
 from django.db import DatabaseError
 from django.db.models import Count
@@ -141,7 +142,6 @@ class IndexView(TemplateView):
                     "today": today_formatted,
                 }
             cache.set(OFFER_KEY, offers, timeout=CATEGORY_CASHING_TIME)
-
         return offers
 
     def get_hot_offers(self):
