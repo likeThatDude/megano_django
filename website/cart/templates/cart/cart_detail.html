@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
-
+{% load i18n %}
 {% block description %}
     <meta name="description" content="Описание страницы">
 {% endblock %}
@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block title %}
-    {% trans 'Cart' %}
+    {% translate 'Cart' %}
 {% endblock %}
 
 {% block body %}

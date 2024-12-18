@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block description %}
     <meta name="description" content="Описание страницы">
@@ -22,7 +23,7 @@
 {% endblock %}
 
 {% block title %}
-    {% trans 'Catalog' %}
+    {% translate 'Catalog' %}
 {% endblock %}
 
 {% block body %}
@@ -32,7 +33,7 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">{% trans 'Filter' %}</strong>
+                            <strong class="Section-title">{% translate 'Filter' %}</strong>
                         </header>
                         <div class="Section-columnContent">
                             <form class="form" action="#" method="post">
@@ -40,7 +41,7 @@
                                 <div class="form-group">
                                     <div class="range Section-columnRange">
                                         <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="1" data-max="500000" data-from="7" data-to="50000" />
-                                        <div class="range-price">{% trans 'Price' %}:&#32;
+                                        <div class="range-price">{% translate 'Price' %}:&#32;
                                             <div class="rangePrice">
                                             </div>
                                         </div>
@@ -52,7 +53,7 @@
                                            placeholder="{% trans 'Title' %}"/>
                                 </div>
                                 <div class="form-group">
-                                    <strong class="Section-title">Продавец</strong>
+                                    <strong class="Section-title">{% trans 'Seller' %}</strong>
                                     <select id="seller" name="seller[]" multiple>
                                         {% for seller in sellers %}
                                             <option value="{{ seller.id }}">
@@ -63,7 +64,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <strong class="Section-title">Производитель:</strong>
+                                    <strong class="Section-title">{% trans 'Manufacture' %}:</strong>
                                     <select id="manufacture" name="manufacture[]" multiple>
                                         {% for manufacture in manufactures %}
                                             <option value="{{ manufacture }}">
@@ -76,11 +77,11 @@
                                     <label class="toggle">
                                         <input type="checkbox" name="limited_edition">
                                         <span class="toggle-box"></span>
-                                        <span class="toggle-text">Только ограниченные серии</span>
+                                        <span class="toggle-text">{% trans 'Limited series only' %}</span>
                                     </label>
                                 </div>
                                 <div class="form-group">
-                                    <strong class="Section-title">Характеристики</strong>
+                                    <strong class="Section-title">{% trans 'Specifications' %}</strong>
                                     {% for name, values in grouped_specifications %}
                                         <label class="toggle">
                                             <span class="toggle-text">{{ name }}</span>
@@ -99,7 +100,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="buttons">
-                                        <button type="submit" class="btn btn_square btn_dark btn_narrow">Фильтр</button>
+                                        <button type="submit" class="btn btn_square btn_dark btn_narrow">{% trans 'Filter' %}</button>
                                     </div>
                                 </div>
                             </form>
@@ -107,7 +108,7 @@
                     </div>
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Популярные тэги</strong>
+                            <strong class="Section-title">{% trans 'Popular tags' %}</strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="buttons">
@@ -120,13 +121,13 @@
                 </div>
                 <div class="Section-content">
                     <div class="Sort">
-                        <div class="Sort-title">Сортировать по:
+                        <div class="Sort-title">{% trans 'Sort by' %}:
                         </div>
                         <div class="Sort-variants">
-                            <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности</a>
-                            <a class="Sort-sortBy" href="#">Цене</a>
-                            <a class="Sort-sortBy" href="#">Отзывам</a>
-                            <a class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне</a>
+                            <a class="Sort-sortBy Sort-sortBy_dec" href="#">{% trans 'Popularity' %}</a>
+                            <a class="Sort-sortBy" href="#">{% trans 'Price' %}</a>
+                            <a class="Sort-sortBy" href="#">{% trans 'Reviews' %}</a>
+                            <a class="Sort-sortBy Sort-sortBy_inc" href="#">{% trans 'Novelty' %}</a>
                         </div>
                     </div>
                     <div class="Cards">
