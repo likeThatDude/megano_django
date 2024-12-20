@@ -1,30 +1,31 @@
 {% load create_correct_delivery_data %}
+{% load i18n %}
 {% with order_data|get_delivery_data as my_order_data %}
     <div class="form-group">
         <div class="store_payment">
             <div>
                 <label class="toggle">
                     <input type="radio" name="pay" value="SO" checked="checked" onclick="selectShopPaymentType()"/><span
-                        class="toggle-box"></span><span class="toggle-text">Онлайн картой</span>
+                        class="toggle-box"></span><span class="toggle-text">{% trans 'Online card' %}</span>
                 </label>
             </div>
             <div>
                 <label class="toggle">
                     <input type="radio" name="pay" value="SR" onclick="selectShopPaymentType()"/><span
-                        class="toggle-box"></span><span class="toggle-text">Онлайн со случайного чужого счета</span>
+                        class="toggle-box"></span><span class="toggle-text">{% trans 'Online from a random account of someone else' %}</span>
                 </label>
             </div>
         </div>
         <div class="sellers_payments">
             <div class="seller_info">
-                <p>Вы выбрали доставку силами продавца.</p>
-                <p>Выберете доступные способы оплаты у каждого продавца</p>
+                <p>{% trans 'You have chosen the delivery by the seller' %}.</p>
+                <p>{% trans 'Select the available payment methods from each seller' %}</p>
             </div>
             {% for seller in my_order_data %}
                 <div class="current_seller">
                     <div class="current_seller_info">
-                        <p>Продавец: {{ seller.name|truncatechars:80 }}</p>
-                        <p>Доступные способы оплаты:</p>
+                        <p>{% trans 'Seller' %}: {{ seller.name|truncatechars:80 }}</p>
+                        <p>{% trans 'Available payment methods' %}:</p>
                     </div>
                     <div class="current_seller_payments">
                         {% for payment_method in seller.payment_methods.all %}

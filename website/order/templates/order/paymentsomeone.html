@@ -19,7 +19,7 @@
 <!--[if gt IE 11]><!-->
 <html lang="ru">
 <!--<![endif]-->
-
+{% load i18n %}
 <head>
     <title>Megano</title>
     <meta name="description" content="Описание страницы">
@@ -72,8 +72,8 @@
                     </div>
                     <nav class="row-block">
                         <div class="row ControlPanel-rowSplit">
-                            <div class="row-block"><a class="ControlPanel-title" href="../../../static/login.html">Вход</a>
-                                <a class="ControlPanel-title" href="../../../static/registr.html">Регистрация</a>
+                            <div class="row-block"><a class="ControlPanel-title" href="../../../static/login.html">{% trans 'Login' %}</a>
+                                <a class="ControlPanel-title" href="../../../static/registr.html">{% trans 'Registration' %}</a>
                             </div>
                         </div>
                     </nav>
@@ -97,11 +97,11 @@
                 <nav class="row-block row-block_right Header-menu">
                     <div class="menuModal" id="navigate">
                         <ul class="menu menu_main">
-                            <li class="menu-item"><a class="menu-link" href="../../../static/index.html">Главная</a>
+                            <li class="menu-item"><a class="menu-link" href="../../../static/index.html">{% trans 'Main page' %}</a>
                             </li>
-                            <li class="menu-item"><span class="menu-label menu-label_success">Скидки</span><a class="menu-link" href="../../../static/catalog.html">Каталог</a>
+                            <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Discounts' %}</span><a class="menu-link" href="../../../static/catalog.html">{% trans 'Catalog' %}</a>
                             </li>
-                            <li class="menu-item"><a class="menu-link" href="../../../comparison/templates/comparison/comparison.html">Сравнение</a>
+                            <li class="menu-item"><a class="menu-link" href="../../../comparison/templates/comparison/comparison.html">{% trans 'Comparison' %}</a>
                             </li>
 
                         </ul>
@@ -113,9 +113,9 @@
                         <div class="dropdown">
                             <button class="dropbtn"><img class="CartBlock-img" src="../../../static/assets/img/icons/loon-icon.svg" alt="loon-icon.svg" /></button>
                             <div class="dropdown-content">
-                                <a class="dropdown-content-a" href="../../../static/account.html">Личный кабинет</a>
-                                <a class="dropdown-content-a" href="../../../static/account.html">Административный раздел</a>
-                                <a class="dropdown-content-a" href="../../../static/account.html">Выход</a>
+                                <a class="dropdown-content-a" href="../../../static/account.html">{% trans 'Personal account' %}</a>
+                                <a class="dropdown-content-a" href="../../../static/account.html">{% trans 'Administrative section' %}</a>
+                                <a class="dropdown-content-a" href="../../../static/account.html">{% trans 'Logout' %}</a>
                             </div>
                         </div>
                         <a class="CartBlock-block" href="../../../static/cart.html"><img class="CartBlock-img" src="../../../static/assets/img/icons/cart.svg" alt="cart.svg" /><span class="CartBlock-amount">0</span></a>
@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
-                        <div class="menuTrigger-content">Показать навигацию
+                        <div class="menuTrigger-content">{% trans 'Show navigation' %}
                         </div><span></span><span></span><span></span>
                     </a>
                 </div>
@@ -138,7 +138,7 @@
                     <div class="CategoriesButton">
                         <div class="CategoriesButton-title">
                             <div class="CategoriesButton-icon"><img src="../../../static/assets/img/icons/allDep.svg" alt="allDep.svg" />
-                            </div><span class="CategoriesButton-text">Все категории</span>
+                            </div><span class="CategoriesButton-text">{% tran 'All categories' %}</span>
                             <div class="CategoriesButton-arrow">
                             </div>
                         </div>
@@ -243,12 +243,12 @@
         <div class="Middle-top">
             <div class="wrap">
                 <div class="Middle-header">
-                    <h1 class="Middle-title">Оплата
+                    <h1 class="Middle-title">{% trans 'Payment' %}
                     </h1>
                     <ul class="breadcrumbs Middle-breadcrumbs">
-                        <li class="breadcrumbs-item"><a href="../../../static/index.html">home</a>
+                        <li class="breadcrumbs-item"><a href="../../../static/index.html">{% trans 'home' %}</a>
                         </li>
-                        <li class="breadcrumbs-item breadcrumbs-item_current"><span>Оплата</span>
+                        <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans 'Payment' %}</span>
                         </li>
                     </ul>
                 </div>
@@ -259,14 +259,14 @@
                 <form class="form Payment" action="#" method="post">
                     <div class="Payment-card">
                         <div class="form-group">
-                            <label class="form-label">Номер счета
+                            <label class="form-label">{% trans 'Account number' %}
                             </label>
                             <input class="form-input Payment-bill" id="numero1" name="numero1" type="text" placeholder="9999 9999" data-mask="9999 9999" data-validate="require pay" />
                         </div>
-                        <div class="form-group"><a class="btn btn_success Payment-generate" href="#">Сгенирировать случайный счет</a>
+                        <div class="form-group"><a class="btn btn_success Payment-generate" href="#">{% trans 'Generate a random account' %}</a>
                         </div>
                     </div>
-                    <div class="Payment-pay"><a class="btn btn_primary" href="../../../static/progressPayment.html">Оплатить</a>
+                    <div class="Payment-pay"><a class="btn btn_primary" href="../../../static/progressPayment.html">{% trans 'To pay' %}</a>
                     </div>
                 </form>
             </div>
@@ -278,24 +278,24 @@
                 <div class="row-block"><a class="logo Footer-logo" href="../../../static/index.html"><img class="logo-image" src="../../../static/assets/img/logo_footer.png" alt="logo_footer.png" /></a>
                 </div>
                 <div class="row-block">
-                    <strong class="Footer-title">Навигация
+                    <strong class="Footer-title">{% trans 'Navigation' %}
                     </strong>
                     <ul class="menu menu_vt Footer-menu">
-                        <li class="menu-item"><a class="menu-link" href="../../../static/index.html">Главная</a>
+                        <li class="menu-item"><a class="menu-link" href="../../../static/index.html">{% trans 'Main page' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="../../../static/catalog.html">Каталог</a>
+                        <li class="menu-item"><a class="menu-link" href="../../../static/catalog.html">{% trans 'Catalog' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="../../../comparison/templates/comparison/comparison.html">Сравнение</a>
+                        <li class="menu-item"><a class="menu-link" href="../../../comparison/templates/comparison/comparison.html">{% trans 'Comparison' %}</a>
                         </li>
-                        <li class="menu-item"><a class="menu-link" href="../../../static/account.html">Профиль</a>
+                        <li class="menu-item"><a class="menu-link" href="../../../static/account.html">{% trans 'Profile' %}</a>
                         </li>
 
                     </ul>
                 </div>
                 <div class="row-block">
-                    <strong class="Footer-title">Контакты
+                    <strong class="Footer-title">{% trans 'Contacts' %}
                     </strong>
-                    <p>Phone: 8.800.200.600<br>Email: xxx@meg.com<br>
+                    <p>{% trans 'Phone' %}: 8.800.200.600<br>Email: xxx@meg.com<br>
                     </p>
                     <ul class="menu menu_img menu_smallImg Footer-menuSoc">
                         <li class="menu-item"><a class="menu-link" href="#"><img src="../../../static/assets/img/icons/socialFooter/fb.svg" alt="fb.svg" /></a>

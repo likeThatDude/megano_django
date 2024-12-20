@@ -60,7 +60,7 @@ class CreateCheckoutView(LoginRequiredMixin, View):
             correct_urls = utils.get_current_urls_for_payment_response(request)
             session = utils.checkout_process(order=order, redirect_urls=correct_urls, user_login=request.user.login)
             return redirect(session.url, code=303)
-        return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
+        return HttpResponseForbidden(_("You do not have access to payment for this order"))
 
 
 class CreateCheckoutCurrentView(LoginRequiredMixin, View):
@@ -94,7 +94,7 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
                 total_price=total_price,
             )
             return redirect(session.url, code=303)
-        return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
+        return HttpResponseForbidden(_("You do not have access to payment for this order"))
 
 
 class PaymentSuccessView(LoginRequiredMixin, View):
@@ -133,17 +133,17 @@ class PaymentSuccessView(LoginRequiredMixin, View):
         if not seller_id is None:
             order = get_paid_order(order_id, request.user.pk, seller_id)
             if not order:
-                return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
+                return HttpResponseForbidden(_("You do not have access to payment for this order"))
             context["order"] = order
 
         elif seller_id is None:
             order = get_paid_order(order_id, request.user.pk)
             if not order:
-                return HttpResponseForbidden(_("У вас нету доступа к оплате данного заказа"))
+                return HttpResponseForbidden(_("You do not have access to payment for this order"))
             context["order"] = order
             context["delivery_price"] = delivery_price
         else:
-            return HttpResponse(_("Ошибка данных при формировании страницы успешной оплаты"), status=502)
+            return HttpResponse(_("Data error when forming the successful payment page"), status=502)
         return render(request, "payment/payment_success.html", context=context)
 
 

@@ -23,13 +23,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
+from django.conf.urls.i18n import i18n_patterns
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
 
 # def trigger_error(request):
 #     division_by_zero = 1 / 0
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
     # Standard URL
     path("", include("core.urls", namespace="default")),
     path("admin/", admin.site.urls),
@@ -45,7 +46,7 @@ urlpatterns = [
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/v1/", include("review.urls")),
     # path('sentry-debug/', trigger_error),
-] + debug_toolbar_urls()
+) + debug_toolbar_urls()
 
 if settings.DEBUG:
     urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))

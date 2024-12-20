@@ -14,13 +14,13 @@ class DiscountCreationForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
-                "placeholder": _('Название к скидке, например, "Распродажа 11.11."'),
+                "placeholder": _('The name of the discount, for example, "Sale 11.11."'),
             },
         ),
         error_messages={
-            "max_length": _("Допустимо только 100 символов"),
+            "max_length": _("Only 100 characters are allowed"),
         },
-        label=_("Название скидки"),
+        label=_("Name of the discount"),
     )
     kind = forms.ChoiceField(
         required=True,
@@ -29,9 +29,9 @@ class DiscountCreationForm(forms.ModelForm):
             attrs={"class": "form-select"},
         ),
         error_messages={
-            "required": _("Заполните обязательное поле"),
+            "required": _("Fill in the required field"),
         },
-        label=_("Тип скидки"),
+        label=_("Type discount"),
     )
     method = forms.ChoiceField(
         required=True,
@@ -40,67 +40,67 @@ class DiscountCreationForm(forms.ModelForm):
             attrs={"class": "form-select"},
         ),
         error_messages={
-            "required": _("Заполните обязательное поле"),
+            "required": _("Fill in the required field"),
         },
-        label=_("Механизм скидки"),
+        label=_("Discount method"),
     )
     quantity_gt = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(
             attrs={
                 "class": "form-control",
-                "placeholder": _("Максимальное количество"),
+                "placeholder": _("Maximum quantity"),
             },
         ),
-        label=_("Максимальное количество"),
+        label=_("Maximum quantity"),
     )
     quantity_lt = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "placeholder": _("Минимальное количество")},
+            attrs={"class": "form-control", "placeholder": _("Minimum quantity")},
         ),
-        label=_("Минимальное количество"),
+        label=_("Minimum quantity"),
     )
     value = forms.DecimalField(
         max_digits=10,
         decimal_places=2,
         widget=forms.NumberInput(
-            attrs={"class": "form-control", "placeholder": _("Введите значение скидки")},
+            attrs={"class": "form-control", "placeholder": _("Enter the discount value")},
         ),
-        label=_("Значение скидки"),
+        label=_("Discount value"),
     )
     description = forms.CharField(
         required=False,
         widget=forms.Textarea(
-            attrs={"class": "form-control", "placeholder": _("Описание скидки..."), "rows": 3},
+            attrs={"class": "form-control", "placeholder": _("Description of the discount..."), "rows": 3},
         ),
-        label=_("Описание"),
+        label=_("Description"),
     )
     start_date = forms.DateField(
         widget=forms.DateInput(
             attrs={"class": "form-control", "type": "date"},
         ),
-        label=_("Дата начала действия скидки"),
+        label=_("Discount start date"),
     )
     end_date = forms.DateField(
         widget=forms.DateInput(
             attrs={"class": "form-control", "type": "date"},
         ),
-        label=_("Дата окончания действия скидки"),
+        label=_("Discount end date"),
     )
     is_active = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(
             attrs={"class": "form-check-input"},
         ),
-        label=_("Активно"),
+        label=_("Active"),
     )
     archived = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput(
             attrs={"class": "form-check-input"},
         ),
-        label=_("Архивировано"),
+        label=_("Archived"),
     )
     products = forms.ModelMultipleChoiceField(
         queryset=Product.objects.all(),
@@ -108,7 +108,7 @@ class DiscountCreationForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "form-check-input"},
         ),
-        label=_("Выберите товары, к которым применить скидку"),
+        label=_("Select the products to apply the discount to"),
     )
     categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.all(),
@@ -116,7 +116,7 @@ class DiscountCreationForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "form-check-input"},
         ),
-        label=_("Выберите категории товаров, в которым применить скидку"),
+        label=_("Select the product categories in which to apply the discount"),
     )
     products_group = forms.ModelMultipleChoiceField(
         queryset=ProductGroup.objects.all(),
@@ -124,7 +124,7 @@ class DiscountCreationForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple(
             attrs={"class": "form-check-input"},
         ),
-        label=_("Выберите группу товаров, к которой применим скидку"),
+        label=_("Select the product group to which the discount applies"),
     )
 
     class Meta:
@@ -161,6 +161,6 @@ class DiscountCreationForm(forms.ModelForm):
         end_date = cleaned_data.get("end_date")
 
         if start_date and end_date and end_date < start_date:
-            raise forms.ValidationError(_("Дата окончания действия скидки не может быть раньше даты начала."))
+            raise forms.ValidationError(_("The discount expiration date cannot be earlier than the start date."))
 
         return end_date

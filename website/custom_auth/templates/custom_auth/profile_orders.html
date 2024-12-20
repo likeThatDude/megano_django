@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -27,25 +28,23 @@
                 <div class="Section-column">
                     <div class="Section-columnSection">
                         <header class="Section-header">
-                            <strong class="Section-title">Навигация
+                            <strong class="Section-title">{% trans 'Navigation' %}
                             </strong>
                         </header>
                         <div class="Section-columnContent">
                             <div class="NavigateProfile">
                                 <ul class="menu menu_vt">
                                     <li class="menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">Личный
-                                            кабинет</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal cabinet' %}</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:profile' %}">Профиль</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:profile' %}">{% trans 'Profile' %}</a>
                                     </li>
                                     <li class="menu-item_ACTIVE menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">История
-                                            заказов</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:profile-orders' %}">{% trans 'Order history' %}</a>
                                     </li>
                                     <li class="menu-item">
-                                        <a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">История просмотров</a>
+                                        <a class="menu-link" href="{% url 'custom_auth:viewed-list' %}">{% trans 'Browsing history' %}</a>
                                     </li>
                                 </ul>
                             </div>
@@ -59,36 +58,36 @@
                                 <div class="col">
                                     {% if not orders %}
                                         <div class="row-block custom_margin modal_center modal-window elem_center">
-                                            <h2>У вас пустая история заказов</h2>
+                                            <h2>{% trans 'You have an empty order history' %}}</h2>
                                         </div>
                                     {% endif %}
             
                                     {% for order in orders %}
-                                        <div class="row-block col-mt"><a class="Order-title" href="{{ order.get_absolute_url }}">Заказ&#32;<span
+                                        <div class="row-block col-mt"><a class="Order-title" href="{{ order.get_absolute_url }}">{% trans 'order' %}&#32;<span
                                                 class="Order-numberOrder">№{{ order.pk }}</span>&#32;от&#32;<span
                                                 class="Order-dateOrder">{{ order.created_at }}</span></a></div>
                                         <div>
                                             <div class="row-block">
                                                 <div class="Order-info Order-info_delivery text-ml">
-                                                    <div class="Order-infoType">Тип доставки:</div>
+                                                    <div class="Order-infoType">{% trans 'Type of delivery' %}:</div>
                                                     <div class="Order-infoContent">{{ order.delivery_price.get_name_display }}</div>
                                                 </div>
                                                 <div class="Order-info Order-info_pay text-ml">
-                                                    <div class="Order-infoType">Оплата:</div>
+                                                    <div class="Order-infoType">{% trans 'Payment' %}:</div>
                                                     <div class="Order-infoContent">{{ order.get_paid_status_display }}</div>
                                                 </div>
                                                 <div class="Order-info text-ml">
-                                                    <div class="Order-infoType">Стоимость заказа:</div>
+                                                    <div class="Order-infoType">{% trans 'The cost of the order' %}:</div>
                                                     <div class="Order-infoContent"><span
                                                             class="Order-price">{{ order.total_price }}</span></div>
                                                 </div>
                                                 <div class="Order-info text-ml">
-                                                    <div class="Order-infoType">Стоимость доставки:</div>
+                                                    <div class="Order-infoType">{% trans 'The cost of the delivery' %}:</div>
                                                     <div class="Order-infoContent"><span
                                                             class="Order-price">{{ order.delivery_price.price }}</span></div>
                                                 </div>
                                                 <div class="Order-info Order-info_status text-ml">
-                                                    <div class="Order-infoType">Статус:</div>
+                                                    <div class="Order-infoType">{% trans 'Status' %}:</div>
                                                     <div class="Order-infoContent">{{ order.get_status_display }}</div>
                                                 </div>
                                             </div>

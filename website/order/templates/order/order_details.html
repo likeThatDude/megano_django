@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -25,7 +26,7 @@
         <div class="Middle-top">
             <div class="wrap">
                 <div class="Middle-header">
-                    <h1 class="Middle-title">Заказ №{{ order.pk }}
+                    <h1 class="Middle-title">{% trans 'Order' %} №{{ order.pk }}
                     </h1>
                 </div>
             </div>
@@ -41,19 +42,19 @@
                                 <div class="row">
                                     <div class="row-block">
                                         <div class="Order-info Order-info_date">
-                                            <div class="Order-infoType">Дата заказа:
+                                            <div class="Order-infoType">{% trans 'Order date' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.created_at }}
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">ФИО:
+                                            <div class="Order-infoType">{% trans 'BIO' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.profile.first_name }}
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Телефон:
+                                            <div class="Order-infoType">{% trans 'Phone' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.profile.phone }}
                                             </div>
@@ -67,39 +68,39 @@
                                     </div>
                                     <div class="row-block">
                                         <div class="Order-info Order-info_delivery">
-                                            <div class="Order-infoType">Тип доставки:
+                                            <div class="Order-infoType">{% trans 'Type of delivery' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.delivery_method }}
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Город:
+                                            <div class="Order-infoType">{% trans 'City' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.delivery_city }}
                                             </div>
                                         </div>
                                         <div class="Order-info">
-                                            <div class="Order-infoType">Адрес:
+                                            <div class="Order-infoType">{% trans 'Address' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.delivery_address }}
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_pay">
-                                            <div class="Order-infoType">Оплата:
+                                            <div class="Order-infoType">{% trans 'Payment' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.payment_method }}
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_status">
-                                            <div class="Order-infoType">Статус:
+                                            <div class="Order-infoType">{% trans 'Status' %}:
                                             </div>
                                             <div class="Order-infoContent">{{ order.status }}
                                             </div>
                                         </div>
                                         <div class="Order-info Order-info_error">
-                                            <div class="Order-infoType">Оплата не прошла:
+                                            <div class="Order-infoType">{% trans 'Payment failed' %}:
                                             </div>
-                                            <div class="Order-infoContent">Оплата не выполнена
+                                            <div class="Order-infoContent">{% trans 'Payment has not been completed' %}
                                             </div>
                                         </div>
                                     </div>

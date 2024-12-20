@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block links %}
     <!--    <title>Megano</title>-->
@@ -33,7 +34,7 @@
         <main class="Middle">
             <div class="wrapper">
                 <div class="header">
-                    <h3 class="sign-in">Регистрация</h3>
+                    <h3 class="sign-in">{% trans 'Registration' %}</h3>
                 </div>
                 <div class="clear"></div>
                 <form method="post">
@@ -42,54 +43,60 @@
                     <label class="form-label" for="email">Email</label>
                     <input class="form-input" id="email" type="email" name="email">
                     {% for error in register_form.email.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="login">Никнейм</label>
+                    <label class="form-label" for="login">{% trans 'Nickname' %}</label>
                     <input class="form-input" id="login" type="text" name="login">
                     {% for error in register_form.login.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="last_name">Фамилия</label>
+                    <label class="form-label" for="last_name">{% trans 'Surname' %}</label>
                     <input class="form-input" id="last_name" type="text" name="last_name">
                     {% for error in profile_registration_form.last_name.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="first_name">Имя</label>
+                    <label class="form-label" for="first_name">{% trans 'Name' %}</label>
                     <input class="form-input" id="first_name" type="text" name="first_name">
                     {% for error in profile_registration_form.first_name.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="patronymic">Отчество</label>
+                    <label class="form-label" for="patronymic">{% trans 'Patronymic' %}</label>
                     <input class="form-input" id="patronymic" type="text" name="patronymic">
                     {% for error in profile_registration_form.patronymic.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="phone">Номер телефона</label>
+                    <label class="form-label" for="birthday">{% trans 'Your birthday' %}</label>
+                    <input class="form-input" id="birthday" type="date" name="birthday" value="{{ register_form.birthday.value }}">
+                    {% for error in register_form.birthday.errors %}
+                        <div class="highlight-field text-form">{{ error }}</div>
+                    {% endfor %}
+
+                    <label class="form-label" for="phone">{% trans 'Phone number' %}</label>
                     <input class="form-input" id="phone" type="text" name="phone">
                     {% for error in profile_registration_form.phone.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="password1">Пароль</label>
+                    <label class="form-label" for="password1">{% trans 'Password' %}</label>
                     <input class="form-input" id="password1" type="password" name="password1">
                     {% for error in register_form.password1.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
-                    <label class="form-label" for="password2">Подтверждение пароля</label>
+                    <label class="form-label" for="password2">{% trans 'Password confirmation' %}</label>
                     <input class="form-input" id="password2" type="password" name="password2">
                     {% for error in register_form.password2.errors %}
-                        <div class="error-input">{{ error }}</div>
+                        <div class="highlight-field text-form">{{ error }}</div>
                     {% endfor %}
 
                     <input type="submit" value="Зарегистрироваться" />
 
-                    <a class="registr" href="{% url 'custom_auth:login' %}">Вход</a>
+                    <a class="registr" href="{% url 'custom_auth:login' %}">{% trans 'Login' %}</a>
                     <div class="clear"></div>
                 </form>
             </div>

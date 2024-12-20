@@ -15,7 +15,7 @@ class ComparisonAddSerializer(serializers.Serializer):
             product = Product.objects.get(pk=value)
             return product
         except Product.DoesNotExist:
-            raise ValidationError(_(f"Продукта с id {value} нету в базе"))
+            raise ValidationError(_(f"There is no product with id {value} in the database"))
 
 
 class AnswerAddSerializer(serializers.Serializer):
@@ -35,5 +35,5 @@ class AnswerAddSerializer(serializers.Serializer):
         Проверяем значение status.
         """
         if value is not None and not isinstance(value, bool):
-            raise serializers.ValidationError(_("Status должен быть булевым значением или None"))
+            raise serializers.ValidationError(_("Status must be a Boolean value or None"))
         return value

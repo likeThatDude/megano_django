@@ -1,23 +1,24 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-    Импорт
+    {% trans 'Import' %}
 {% endblock %}
 
 
 {% block body %}
 <body>
-    <h1>Импорт продукта</h1>
+    <h1>{% trans 'Importing a product' %}</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required><br><br>
 
-        <label for="files">Выбрать файлы:</label>
+        <label for="files">{% trans 'Select Files' %}:</label>
         <input type="file" id="files" name="files" multiple><br><br>
 
-        <button type="submit">Импорт</button>
+        <button type="submit">{% trans 'Import' %}</button>
     </form>
 </body>
 {% endblock %}

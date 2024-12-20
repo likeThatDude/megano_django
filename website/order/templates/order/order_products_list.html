@@ -1,5 +1,6 @@
 {% load create_correct_delivery_data %}
 {% load static %}
+{% load i18n %}
 {% for order_datum in order_data %}
     <div class="Cart-product">
         <div class="Cart-block Cart-block_row">
@@ -15,7 +16,7 @@
                 <a class="Cart-title" target="_blank" href="{{ order_datum.product.get_absolute_url }}">
                     {{ order_datum.product.name|truncatechars:80 }}
                 </a>
-                <p>Продавец: {{ order_datum.seller.name }}</p>
+                <p>{% trans 'Seller' %}: {{ order_datum.seller.name }}</p>
                 <div class="Cart-desc">{{ order_datum.product.short_description }}
                 </div>
             </div>

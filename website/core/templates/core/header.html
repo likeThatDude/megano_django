@@ -1,6 +1,7 @@
 {% load core_tags %}
 {% load static %}
 {% load catalog_extras %}
+{% load i18n %}
 
 <header class="Header">
     <div class="ControlPanel">
@@ -28,8 +29,20 @@
                 </div>
                 <nav class="row-block">
                     <div class="row ControlPanel-rowSplit">
-                        <div class="row-block"><a class="ControlPanel-title" href="{% url 'custom_auth:login' %}">Вход</a>
-                            <a class="ControlPanel-title" href="{% url 'custom_auth:register' %}">Регистрация</a>
+                        {% if not request.user.is_authenticated %}
+                            <div class="row-block">
+                                <a class="ControlPanel-title" href="{% url 'custom_auth:login' %}">
+                                    {% translate 'Login' %}
+                                </a>
+                            <a class="ControlPanel-title" href="{% url 'custom_auth:register' %}">{% trans 'Registration' %}</a>
+                            </div>
+                        {% else %}
+                            <div class="row-block">
+                                <a class="ControlPanel-title" href="{% url 'custom_auth:personal-cabinet' %}">
+                                    {{ request.user.login }}
+                                </a>
+                            </div>
+                        {% endif %}
                         </div>
                     </div>
                 </nav>
@@ -55,13 +68,13 @@
             <nav class="row-block row-block_right Header-menu">
                 <div class="menuModal" id="navigate">
                     <ul class="menu menu_main">
-                        <li class="menu-item"><a class="menu-link" href="{% url 'core:index' %}">Главная</a>
+                        <li class="menu-item"><a class="menu-link" href="{% url 'core:index' %}">{% translate 'Main' %}</a>
                         </li>
-                        <li class="menu-item"><span class="menu-label menu-label_success">Скидки</span><a
-                                class="menu-link" href="{% url 'catalog:catalog' %}">Каталог</a>
+                        <li class="menu-item"><span class="menu-label menu-label_success">{% trans 'Discounts' %}</span><a
+                                class="menu-link" href="{% url 'catalog:catalog' %}">{% trans 'Catalog' %}</a>
                         </li>
                         <li class="menu-item">
-                            <a class="menu-link" href="{% url 'comparison:comparison_page' %}">Сравнение</a>
+                            <a class="menu-link" href="{% url 'comparison:comparison_page' %}">{% trans 'Comparison' %}</a>
                         </li>
                     </ul>
                 </div>
@@ -76,36 +89,46 @@
                         <div class="dropdown-content">
                             {#                            {% if user_is_auth %}#}
                             {% if user.is_authenticated %}
-                                <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">Личный
-                                    кабинет</a>
-                            {% endif %}
-                            <a class="dropdown-content-a" href="{% static 'account.html' %}">Административный
-                                раздел</a>
+                                <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal
+                                    account' %}</a>
+
+                            <a class="dropdown-content-a" href="{% static 'account.html' %}">{% trans 'Administrative
+                                section' %}
+                                </a>
                             <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
                                   style="display: none;">
                                 {% csrf_token %}
                             </form>
-                            {#                            {% if user_is_auth %}#}
-                            {% if user.is_authenticated %}
+                        {% else %}
+                            <a href="{% url 'custom_auth:login' %}">
+                                <button class="dropbtn"><img class="CartBlock-img"
+                                                             src="{% static 'assets/img/icons/loon-icon.svg' %}"
+                                                             alt="loon-icon.svg"/></button>
+                            </a>
+                            <div class="dropdown-content">
+                                <form id="login-form" method="post" action="{% url 'custom_auth:login' %}"
+                                      style="display: none;">
+                                    {% csrf_token %}
+                                </form>
                                 <a href="#"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Выход
+                                    {% trans 'Logout' %}
                                 </a>
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
                     </div>
                     <a class="CartBlock-block" href="{% url 'cart:detail' %}"><img class="CartBlock-img"
                                                                                    src="{% static 'assets/img/icons/cart.svg' %}"
                                                                                    alt="cart.svg"/><span
                             class="CartBlock-amount">0</span></a>
-                    <div class="CartBlock-block"><span class="CartBlock-cost">0.00</span>
+                    <div class="CartBlock-block"><span class="CartBlock-cost">0</span>
 
 
                     </div>
                 </div>
             </div>
             <div class="row-block Header-trigger"><a class="menuTrigger" href="#navigate">
-                <div class="menuTrigger-content">Показать навигацию
+                <div class="menuTrigger-content">{% trans 'Show navigation' %}
                 </div>
                 <span></span><span></span><span></span>
             </a>
@@ -120,7 +143,7 @@
                         <div class="CategoriesButton-icon"><img src="{% static 'assets/img/icons/allDep.svg' %}"
                                                                 alt="allDep.svg"/>
                         </div>
-                        <span class="CategoriesButton-text">Все категории</span>
+                        <span class="CategoriesButton-text">{% trans 'All categories' %}</span>
                         <div class="CategoriesButton-arrow">
                         </div>
                     </div>
@@ -129,7 +152,7 @@
                             <div class="CategoriesButton-icon"><img
                                     src="{% static 'assets/img/icons/departments/4.svg' %}" alt="4.svg"/>
                             </div>
-                            <span class="CategoriesButton-text">Скидки!</span>
+                            <span class="CategoriesButton-text">{% trans 'Discounts' %}!</span>
                         </a>
                         </div>
 
@@ -150,16 +173,21 @@
                                         <a class="CategoriesButton-arrow" href="#"></a>
                                         <div class="CategoriesButton-submenu">
                                             {% for sub_category in category.sub_categories.all %}
-                                                <div>
-                                                    <a class="CategoriesButton-link"
+                                                <a class="CategoriesButton-link"
                                                        href="{% url 'catalog:catalog' sub_category.id %}">
+                                                            <div class="CategoriesButton-icon">
+                                                                {% if sub_category.icon %}
+                                                                    <img src="{{ sub_category.icon.url }}" alt="{{ sub_category.name }}"/>
+                                                                {% endif %}
                                                         <div class="CategoriesButton-icon">
-                                                        {% if subcategory.icon %}
-                                                            <img src="{{ sub_category.icon.url }}" alt="{{ sub_category.name }}"/>
-                                                        {% endif %}
+                                                            {% if subcategory.icon %}
+                                                                <img src="{{ sub_category.icon.url }}"
+                                                                     alt="{{ sub_category.name }}"/>
+                                                            {% endif %}
                                                         </div>
-                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span></a>
-                                                </div>
+                                                        <span class="CategoriesButton-text">{{ sub_category.name }}</span>
+                                                </a>
+
                                             {% endfor %}
                                         </div>
                                     {% endif %}
@@ -179,7 +207,7 @@
                         <input class="search-input" id="query" name="query" type="text"
                                placeholder="NVIDIA GeForce RTX 3060"/>
                         <button class="search-button" type="submit" name="search" id="search"><img
-                                src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>Поиск
+                                src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% trans 'Search' %}
                         </button>
                     </form>
                 </div>
@@ -199,8 +227,4 @@
             <p></p>
         </div>
     </div>
-    {#        <div class="Slider-navigateWrap">#}
-    {#            <div class="Slider-navigate">#}
-    {#            </div>#}
-    {#        </div>#}
 </header>

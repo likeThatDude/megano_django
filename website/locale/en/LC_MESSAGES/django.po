@@ -1,0 +1,1790 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-18 11:46+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: cart/templates/cart/cart_detail.html:26
+msgid "Cart"
+msgstr ""
+
+#: cart/templates/cart/cart_detail.html:82
+msgid "Delete"
+msgstr ""
+
+#: cart/templates/cart/cart_detail.html:101
+msgid "The cart is empty so far"
+msgstr ""
+
+#: cart/templates/cart/cart_detail.html:102
+msgid "Go back to the selection of products"
+msgstr ""
+
+#: cart/templates/cart/cart_detail.html:112
+msgid "Go to checkout"
+msgstr ""
+
+#: catalog/models.py:29 catalog/models.py:59 catalog/models.py:88
+#: catalog/models.py:166 custom_auth/templates/custom_auth/profile.html:88
+#: custom_auth/templates/custom_auth/register.html:61 discount/models.py:33
+#: discount/models.py:131 order/models.py:67
+msgid "Name"
+msgstr ""
+
+#: catalog/models.py:30
+msgid "Icon"
+msgstr ""
+
+#: catalog/models.py:31 catalog/models.py:106 catalog/models.py:187
+#: discount/models.py:35 discount/models.py:192
+#: discount/templates/discount/discount_detail.html:36
+msgid "Archived status"
+msgstr ""
+
+#: catalog/models.py:38
+msgid "Parent category"
+msgstr ""
+
+#: catalog/models.py:40
+msgid "Сategory tags"
+msgstr ""
+
+#: catalog/models.py:67 catalog/models.py:68 catalog/models.py:116
+#: catalog/templates/catalog/product_detail.html:110
+msgid "Tags"
+msgstr ""
+
+#: catalog/models.py:89 catalog/models.py:167
+#: catalog/templates/catalog/product_detail.html:122
+#: catalog/templates/catalog/product_detail.html:136 discount/forms.py:77
+#: discount/models.py:34 discount/models.py:188
+msgid "Description"
+msgstr ""
+
+#: catalog/models.py:90
+msgid "Short description"
+msgstr ""
+
+#: catalog/models.py:94
+msgid "Product Type"
+msgstr ""
+
+#: catalog/models.py:98 catalog/templates/catalog/product_detail.html:147
+msgid "Manufacturer"
+msgstr ""
+
+#: catalog/models.py:99 catalog/models.py:186 catalog/models.py:330
+#: catalog/models.py:358 catalog/models.py:443 custom_auth/models.py:28
+#: order/models.py:74
+msgid "Created at"
+msgstr ""
+
+#: catalog/models.py:103
+msgid "Category"
+msgstr ""
+
+#: catalog/models.py:107 core/templates/core/main_page.html:377
+msgid "Limited edition"
+msgstr ""
+
+#: catalog/models.py:108 catalog/models.py:446 catalog/models.py:447
+msgid "Viewed"
+msgstr ""
+
+#: catalog/models.py:109
+msgid "Sorting Index"
+msgstr ""
+
+#: catalog/models.py:114
+msgid "Preview"
+msgstr ""
+
+#: catalog/models.py:139 catalog/models.py:324 catalog/models.py:353
+#: catalog/models.py:409 catalog/models.py:440
+#: catalog/templates/catalog/product_detail.html:28 core/models.py:24
+#: order/models.py:111
+msgid "Product"
+msgstr ""
+
+#: catalog/models.py:142
+msgid "Image product"
+msgstr ""
+
+#: catalog/models.py:163 catalog/models.py:317
+#: catalog/templates/catalog/catalog.html:56 order/models.py:110
+#: order/templates/order/order-detail.html:179
+#: order/templates/order/order_products_list.html:19
+#: order/templates/order/payments_block.html:27
+#: payment/templates/payment/payment_success.html:35
+msgid "Seller"
+msgstr ""
+
+#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:125
+msgid "Sellers"
+msgstr ""
+
+#: catalog/models.py:172
+msgid "Image"
+msgstr ""
+
+#: catalog/models.py:174 core/templates/core/footer.html:26
+#: custom_auth/templates/custom_auth/profile.html:107
+#: order/templates/order/order-detail.html:66
+#: order/templates/order/order.html:80 order/templates/order/order.html:188
+#: order/templates/order/order_details.html:57
+#: order/templates/order/payment.html:295
+#: order/templates/order/paymentsomeone.html:298
+msgid "Phone"
+msgstr ""
+
+#: catalog/models.py:175 custom_auth/models.py:85
+#: order/templates/order/order-detail.html:109
+#: order/templates/order/order.html:154 order/templates/order/order.html:213
+#: order/templates/order/order_details.html:83
+msgid "Address"
+msgstr ""
+
+#: catalog/models.py:176 custom_auth/models.py:26
+msgid "Email"
+msgstr ""
+
+#: catalog/models.py:182 discount/models.py:41 discount/models.py:198
+msgid "Products"
+msgstr ""
+
+#: catalog/models.py:184
+msgid "Delivery methods"
+msgstr ""
+
+#: catalog/models.py:185
+msgid "Payment methods"
+msgstr ""
+
+#: catalog/models.py:223
+msgid "Cash"
+msgstr ""
+
+#: catalog/models.py:224
+msgid "By card online"
+msgstr ""
+
+#: catalog/models.py:225
+msgid "By card to the courier"
+msgstr ""
+
+#: catalog/models.py:226
+msgid "By card to the store"
+msgstr ""
+
+#: catalog/models.py:227
+msgid "A random card to the store"
+msgstr ""
+
+#: catalog/models.py:234
+msgid "Payment method"
+msgstr ""
+
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:209
+#: custom_auth/templates/custom_auth/personal_cabinet.html:83
+#: custom_auth/templates/custom_auth/profile_orders.html:76
+#: order/templates/order/order-detail.html:118
+#: order/templates/order/order.html:219
+#: order/templates/order/order_details.html:89
+#: order/templates/order/payment.html:245
+#: order/templates/order/payment.html:250
+#: order/templates/order/paymentsomeone.html:246
+#: order/templates/order/paymentsomeone.html:251
+msgid "Payment"
+msgstr ""
+
+#: catalog/models.py:244
+msgid "Payments"
+msgstr ""
+
+#: catalog/models.py:278
+msgid "To the pick-up point"
+msgstr ""
+
+#: catalog/models.py:279
+msgid "By courier"
+msgstr ""
+
+#: catalog/models.py:280
+msgid "To the post office"
+msgstr ""
+
+#: catalog/models.py:281
+msgid "By the seller's forces"
+msgstr ""
+
+#: catalog/models.py:282
+msgid "The store is a regular one"
+msgstr ""
+
+#: catalog/models.py:283
+msgid "By the express store"
+msgstr ""
+
+#: catalog/models.py:290
+msgid "Delivery method"
+msgstr ""
+
+#: catalog/models.py:299 order/models.py:114
+#: order/templates/order/order-detail.html:205
+msgid "Delivery"
+msgstr ""
+
+#: catalog/models.py:300
+msgid "Deliveries"
+msgstr ""
+
+#: catalog/models.py:327 order/models.py:112
+msgid "Quantity"
+msgstr ""
+
+#: catalog/models.py:328
+msgid "Sold Quantity"
+msgstr ""
+
+#: catalog/models.py:329 catalog/templates/catalog/catalog.html:44
+#: catalog/templates/catalog/catalog.html:128
+#: catalog/templates/catalog/product_detail.html:217 order/models.py:113
+#: order/models.py:157 order/templates/order/order-detail.html:204
+msgid "Price"
+msgstr ""
+
+#: catalog/models.py:356 catalog/models.py:434 comparison/models.py:25
+#: custom_auth/models.py:53 custom_auth/models.py:79 order/models.py:65
+msgid "User"
+msgstr ""
+
+#: catalog/models.py:357
+msgid "Text"
+msgstr ""
+
+#: catalog/models.py:359 order/models.py:75
+msgid "Updated at"
+msgstr ""
+
+#: catalog/models.py:360
+msgid "Updating"
+msgstr ""
+
+#: catalog/models.py:364
+msgid "Review"
+msgstr ""
+
+#: catalog/models.py:365 catalog/templates/catalog/catalog.html:129
+msgid "Reviews"
+msgstr ""
+
+#: catalog/models.py:379 catalog/models.py:403
+msgid "Name specification"
+msgstr ""
+
+#: catalog/models.py:398
+msgid "Value specification"
+msgstr ""
+
+#: catalog/models.py:414
+msgid "Specification"
+msgstr ""
+
+#: catalog/models.py:415 catalog/templates/catalog/catalog.html:84
+msgid "Specifications"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:26 core/templates/core/footer.html:15
+#: core/templates/core/header.html:74 order/templates/order/payment.html:102
+#: order/templates/order/payment.html:283
+#: order/templates/order/paymentsomeone.html:102
+#: order/templates/order/paymentsomeone.html:286
+msgid "Catalog"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:36
+#: catalog/templates/catalog/catalog.html:103
+msgid "Filter"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:53
+msgid "Title"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:67
+msgid "Manufacture"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:80
+msgid "Limited series only"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:111
+msgid "Popular tags"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:124
+msgid "Sort by"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:127
+msgid "Popularity"
+msgstr ""
+
+#: catalog/templates/catalog/catalog.html:130
+msgid "Novelty"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:91
+#: catalog/templates/catalog/product_detail.html:195
+msgid "Buy"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:98
+msgid "Congratulate"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:102
+msgid "The product has been successfully added to the cart"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:128
+#: catalog/templates/catalog/product_detail.html:156
+#: comparison/templates/comparison/comparison.html:74
+msgid "Characteristic"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:158
+#: comparison/templates/comparison/comparison.html:75
+msgid "Value"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:162
+msgid "Device Type"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:201
+msgid "Type delivery"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:246
+msgid "There are no characteristics yet"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:256
+msgid "Add a review"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:265
+msgid "Send review"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:271
+msgid "To view all the reviews and be able to leave them"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:272
+msgid "you must register"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:274
+#: core/templates/core/header.html:35 custom_auth/models.py:25
+#: custom_auth/templates/custom_auth/login.html:37
+#: custom_auth/templates/custom_auth/register.html:99
+#: order/templates/order/order.html:267 order/templates/order/payment.html:75
+#: order/templates/order/paymentsomeone.html:75
+msgid "Login"
+msgstr ""
+
+#: catalog/templates/catalog/product_detail.html:275
+#: order/templates/order/order.html:269
+msgid "Register"
+msgstr ""
+
+#: comparison/models.py:26
+msgid "Comparison product"
+msgstr ""
+
+#: comparison/serializers.py:18
+#, python-brace-format
+msgid "There is no product with id {value} in the database"
+msgstr ""
+
+#: comparison/serializers.py:38
+msgid "Status must be a Boolean value or None"
+msgstr ""
+
+#: comparison/services.py:28 comparison/services.py:143
+#: comparison/services.py:264
+msgid "An error has occurred"
+msgstr ""
+
+#: comparison/services.py:28 comparison/services.py:144
+#: comparison/services.py:265
+msgid "Could not add to the comparison"
+msgstr ""
+
+#: comparison/services.py:130 comparison/services.py:251
+msgid "Conflict"
+msgstr ""
+
+#: comparison/services.py:130 comparison/services.py:251
+msgid "Successfully"
+msgstr ""
+
+#: comparison/services.py:132 comparison/services.py:253
+msgid "The product has already been added to the comparison"
+msgstr ""
+
+#: comparison/services.py:134 comparison/services.py:255
+msgid "The product has been added to the comparison"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:8
+msgid "Page Description"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:12
+msgid "Product Comparison"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:26
+msgid "Remove the same characteristics"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:32
+msgid "The category being compared"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:78
+msgid "General parameters"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:113
+msgid "Not available for sale"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:125
+msgid "Add to cart"
+msgstr ""
+
+#: comparison/templates/comparison/comparison.html:134
+msgid "There are no products to compare"
+msgstr ""
+
+#: core/admin.py:12
+msgid "Inactive old banners"
+msgstr ""
+
+#: core/admin.py:23
+msgid "The old banners have been deactivated."
+msgstr ""
+
+#: core/models.py:26
+msgid "Text banner"
+msgstr ""
+
+#: core/models.py:27
+msgid "Deadline Date"
+msgstr ""
+
+#: core/models.py:28
+msgid "Created_date"
+msgstr ""
+
+#: core/models.py:29 custom_auth/models.py:36 discount/forms.py:96
+#: order/models.py:117
+msgid "Active"
+msgstr ""
+
+#: core/templates/core/footer.html:10
+#: custom_auth/templates/custom_auth/personal_cabinet.html:29
+#: custom_auth/templates/custom_auth/profile.html:31
+#: custom_auth/templates/custom_auth/profile_orders.html:31
+#: custom_auth/templates/custom_auth/settings.html:38
+#: custom_auth/templates/custom_auth/settings_change.html:38
+#: custom_auth/templates/custom_auth/viewed_list.html:31
+#: order/templates/order/payment.html:278
+#: order/templates/order/paymentsomeone.html:281
+msgid "Navigation"
+msgstr ""
+
+#: core/templates/core/footer.html:13 core/templates/core/header.html:71
+#: order/templates/order/payment.html:100
+msgid "Main"
+msgstr ""
+
+#: core/templates/core/footer.html:17 core/templates/core/header.html:77
+#: order/templates/order/payment.html:104
+#: order/templates/order/payment.html:285
+#: order/templates/order/paymentsomeone.html:104
+#: order/templates/order/paymentsomeone.html:288
+msgid "Comparison"
+msgstr ""
+
+#: core/templates/core/footer.html:19 custom_auth/admin.py:14
+#: custom_auth/models.py:102
+#: custom_auth/templates/custom_auth/personal_cabinet.html:37
+#: custom_auth/templates/custom_auth/profile.html:41
+#: custom_auth/templates/custom_auth/profile_orders.html:41
+#: custom_auth/templates/custom_auth/viewed_list.html:41
+#: order/templates/order/payment.html:287
+#: order/templates/order/paymentsomeone.html:290
+msgid "Profile"
+msgstr ""
+
+#: core/templates/core/footer.html:24 order/templates/order/payment.html:293
+#: order/templates/order/paymentsomeone.html:296
+msgid "Contacts"
+msgstr ""
+
+#: core/templates/core/header.html:37
+#: custom_auth/templates/custom_auth/login.html:55
+#: custom_auth/templates/custom_auth/password_reset.html:39
+#: custom_auth/templates/custom_auth/register.html:37
+#: order/templates/order/payment.html:76
+#: order/templates/order/paymentsomeone.html:76
+msgid "Registration"
+msgstr ""
+
+#: core/templates/core/header.html:73 core/templates/core/header.html:155
+#: discount/models.py:221 order/templates/order/payment.html:102
+#: order/templates/order/paymentsomeone.html:102
+msgid "Discounts"
+msgstr ""
+
+#: core/templates/core/header.html:115 order/templates/order/payment.html:117
+#: order/templates/order/paymentsomeone.html:118
+msgid "Logout"
+msgstr ""
+
+#: core/templates/core/header.html:131 order/templates/order/payment.html:128
+#: order/templates/order/paymentsomeone.html:129
+msgid "Show navigation"
+msgstr ""
+
+#: core/templates/core/header.html:146 order/templates/order/payment.html:140
+msgid "All categories"
+msgstr ""
+
+#: core/templates/core/header.html:206 order/templates/order/payment.html:233
+msgid "Search"
+msgstr ""
+
+#: core/templates/core/import.html:6 core/templates/core/import.html:21
+msgid "Import"
+msgstr ""
+
+#: core/templates/core/import.html:12
+msgid "Importing a product"
+msgstr ""
+
+#: core/templates/core/import.html:18
+msgid "Select Files"
+msgstr ""
+
+#: core/templates/core/main_page.html:28 order/templates/order/payment.html:281
+#: order/templates/order/paymentsomeone.html:100
+#: order/templates/order/paymentsomeone.html:284
+msgid "Main page"
+msgstr ""
+
+#: core/templates/core/main_page.html:71
+msgid "LIMITED OFFERS"
+msgstr ""
+
+#: core/templates/core/main_page.html:97
+msgid "days"
+msgstr ""
+
+#: core/templates/core/main_page.html:104
+msgid "hours"
+msgstr ""
+
+#: core/templates/core/main_page.html:111
+msgid "mins"
+msgstr ""
+
+#: core/templates/core/main_page.html:118
+msgid "secs"
+msgstr ""
+
+#: core/templates/core/main_page.html:129
+msgid "Popular products"
+msgstr ""
+
+#: core/templates/core/main_page.html:323
+msgid "Hot offers"
+msgstr ""
+
+#: core/templates/core/main_page.html:344
+msgid "out of stock"
+msgstr ""
+
+#: core/views.py:102
+msgid "Error receiving data for banners"
+msgstr ""
+
+#: core/views.py:104
+#, python-brace-format
+msgid "Unexpected error in receiving banners:{e}"
+msgstr ""
+
+#: custom_auth/admin.py:63
+msgid "Permissions"
+msgstr ""
+
+#: custom_auth/admin.py:75
+msgid "Important dates"
+msgstr ""
+
+#: custom_auth/forms.py:30 custom_auth/models.py:43
+msgid "Birthday"
+msgstr ""
+
+#: custom_auth/forms.py:78
+msgid "Your birthday can't be later than today"
+msgstr ""
+
+#: custom_auth/forms.py:92 custom_auth/templates/custom_auth/profile.html:127
+msgid "Old password"
+msgstr ""
+
+#: custom_auth/forms.py:93 custom_auth/templates/custom_auth/profile.html:133
+msgid "New password"
+msgstr ""
+
+#: custom_auth/forms.py:94
+msgid "New password confirmation"
+msgstr ""
+
+#: custom_auth/forms.py:277 website/settings.py:210
+msgid "Russia"
+msgstr ""
+
+#: custom_auth/forms.py:278 website/settings.py:209
+msgid "English"
+msgstr ""
+
+#: custom_auth/forms.py:286
+msgid "Moscow"
+msgstr ""
+
+#: custom_auth/forms.py:287
+msgid "World Time"
+msgstr ""
+
+#: custom_auth/forms.py:288
+msgid "New-York"
+msgstr ""
+
+#: custom_auth/forms.py:289
+msgid "London"
+msgstr ""
+
+#: custom_auth/forms.py:292 custom_auth/templates/custom_auth/settings.html:64
+msgid "Debugging mode"
+msgstr ""
+
+#: custom_auth/forms.py:295 custom_auth/templates/custom_auth/settings.html:88
+msgid "Session lifetime"
+msgstr ""
+
+#: custom_auth/forms.py:296 custom_auth/templates/custom_auth/settings.html:96
+msgid "Email HOST"
+msgstr ""
+
+#: custom_auth/forms.py:297
+msgid "Using TLS"
+msgstr ""
+
+#: custom_auth/forms.py:298 custom_auth/templates/custom_auth/settings.html:112
+msgid "Email PORT"
+msgstr ""
+
+#: custom_auth/managers.py:19
+msgid "The Email must be set"
+msgstr ""
+
+#: custom_auth/managers.py:37
+msgid "Superuser must have is_staff=True."
+msgstr ""
+
+#: custom_auth/managers.py:39
+msgid "Superuser must have is_superuser=True."
+msgstr ""
+
+#: custom_auth/models.py:31
+msgid "Staff status"
+msgstr ""
+
+#: custom_auth/models.py:54
+msgid "Users"
+msgstr ""
+
+#: custom_auth/models.py:82
+msgid "Firstname"
+msgstr ""
+
+#: custom_auth/models.py:83
+msgid "Lastname"
+msgstr ""
+
+#: custom_auth/models.py:84 custom_auth/templates/custom_auth/profile.html:95
+#: custom_auth/templates/custom_auth/register.html:67
+msgid "Patronymic"
+msgstr ""
+
+#: custom_auth/models.py:94
+msgid "Photo"
+msgstr ""
+
+#: custom_auth/models.py:103
+msgid "Profiles"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/login.html:53
+msgid "Forgot your password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset.html:26
+#: custom_auth/templates/custom_auth/password_reset_confirm.html:37
+#: custom_auth/templates/custom_auth/password_reset_done.html:36
+msgid "Reset password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset.html:27
+msgid ""
+"To restore the password, enter the email address to which the account is "
+"registered"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset.html:36
+msgid "Get the verification code"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_complete.html:27
+msgid "The password has been changed"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_complete.html:28
+msgid ""
+"Congratulations! You have successfully changed your account password. Use it "
+"for"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_complete.html:29
+msgid "log in to your personal account"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_confirm.html:38
+msgid "Create a new password for your account"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_confirm.html:45
+msgid "save password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_done.html:39
+msgid "We have sent you an email with instructions on password recovery"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/password_reset_done.html:40
+msgid "If you haven't received the email, check the Spam folder"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:35
+#: custom_auth/templates/custom_auth/profile.html:38
+#: custom_auth/templates/custom_auth/profile_orders.html:38
+#: custom_auth/templates/custom_auth/viewed_list.html:38
+msgid "Personal cabinet"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:39
+#: custom_auth/templates/custom_auth/personal_cabinet.html:71
+#: custom_auth/templates/custom_auth/profile.html:44
+#: custom_auth/templates/custom_auth/profile_orders.html:44
+#: custom_auth/templates/custom_auth/viewed_list.html:44
+msgid "Order history"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:41
+#: custom_auth/templates/custom_auth/personal_cabinet.html:146
+#: custom_auth/templates/custom_auth/profile.html:47
+#: custom_auth/templates/custom_auth/profile_orders.html:47
+#: custom_auth/templates/custom_auth/viewed_list.html:47
+msgid "Browsing history"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:60
+msgid "Edit a profile"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:70
+#: order/models.py:116 order/templates/order/order-detail.html:25
+#: order/templates/order/order-detail.html:33
+#: order/templates/order/order_details.html:29
+msgid "Order"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:70
+msgid "from"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:77
+#: custom_auth/templates/custom_auth/profile_orders.html:72
+#: order/templates/order/order-detail.html:85
+#: order/templates/order/order.html:201
+#: order/templates/order/order_details.html:71
+msgid "Type of delivery"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:89
+#: custom_auth/templates/custom_auth/profile_orders.html:80
+msgid "The cost of the order"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:95
+#: custom_auth/templates/custom_auth/profile_orders.html:90
+#: order/templates/order/order_details.html:95
+msgid "Status"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:109
+msgid "You don't have any orders"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:118
+msgid "Recent views"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:128
+#: custom_auth/templates/custom_auth/viewed_list.html:73
+msgid "Date of viewing"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:134
+#: custom_auth/templates/custom_auth/viewed_list.html:79
+msgid "Viewing time"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/personal_cabinet.html:154
+#: custom_auth/templates/custom_auth/viewed_list.html:61
+msgid "You don't have any viewed products"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:63
+msgid "Avatar"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:71
+msgid "Upload a photo"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:81
+#: custom_auth/templates/custom_auth/register.html:55
+msgid "Surname"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:125
+msgid "Current password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:135
+msgid "Enter a new password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:141
+#: custom_auth/templates/custom_auth/register.html:91
+msgid "Password confirmation"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:143
+msgid "Enter the new password again"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile.html:150
+#: custom_auth/templates/custom_auth/settings_change.html:130
+msgid "Save"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile_orders.html:61
+msgid "You have an empty order history"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile_orders.html:66
+#: order/templates/order/order.html:25
+msgid "order"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/profile_orders.html:85
+msgid "The cost of the delivery"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/register.html:49
+msgid "Nickname"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/register.html:73
+msgid "Your birthday"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/register.html:79
+msgid "Phone number"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/register.html:85
+msgid "Password"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:45
+#: custom_auth/templates/custom_auth/settings_change.html:45
+msgid "Settings"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:50
+#: custom_auth/templates/custom_auth/settings_change.html:50
+msgid "Caching"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:72
+msgid "Interface language"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:80
+msgid "Time zone"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:91
+msgid "sec"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings.html:124
+msgid "To change"
+msgstr ""
+
+#: custom_auth/templates/custom_auth/settings_change.html:92
+msgid "in seconds"
+msgstr ""
+
+#: custom_auth/utils.py:24
+#, python-format
+msgid "The file %(filename)s larger than 2 MB"
+msgstr ""
+
+#: custom_auth/views.py:373 custom_auth/views.py:378
+msgid "Enabled"
+msgstr ""
+
+#: custom_auth/views.py:373 custom_auth/views.py:378
+msgid "Disabled"
+msgstr ""
+
+#: custom_auth/views.py:447
+msgid "The cache of all services has been successfully reset!"
+msgstr ""
+
+#: custom_auth/views.py:450
+msgid "The cache of the banner service has been successfully reset!"
+msgstr ""
+
+#: custom_auth/views.py:453
+msgid "The category menu cache has been successfully reset!"
+msgstr ""
+
+#: custom_auth/views.py:456
+msgid "The cache of the day's offer service has been successfully reset!"
+msgstr ""
+
+#: custom_auth/views.py:459
+msgid "The cache of the hot offers service has been successfully reset!"
+msgstr ""
+
+#: discount/admin.py:78
+msgid "Conditions and/or applicable deduction"
+msgstr ""
+
+#: discount/admin.py:93
+msgid "Items subject to discount"
+msgstr ""
+
+#: discount/admin.py:103
+msgid "Remove discount"
+msgstr ""
+
+#: discount/forms.py:17
+msgid "The name of the discount, for example, \"Sale 11.11.\""
+msgstr ""
+
+#: discount/forms.py:21
+msgid "Only 100 characters are allowed"
+msgstr ""
+
+#: discount/forms.py:23
+msgid "Name of the discount"
+msgstr ""
+
+#: discount/forms.py:32 discount/forms.py:43
+msgid "Fill in the required field"
+msgstr ""
+
+#: discount/forms.py:34 discount/templates/discount/discount_detail.html:25
+msgid "Type discount"
+msgstr ""
+
+#: discount/forms.py:45
+msgid "Discount method"
+msgstr ""
+
+#: discount/forms.py:52 discount/forms.py:55
+msgid "Maximum quantity"
+msgstr ""
+
+#: discount/forms.py:60 discount/forms.py:62
+msgid "Minimum quantity"
+msgstr ""
+
+#: discount/forms.py:68
+msgid "Enter the discount value"
+msgstr ""
+
+#: discount/forms.py:70
+msgid "Discount value"
+msgstr ""
+
+#: discount/forms.py:75
+msgid "Description of the discount..."
+msgstr ""
+
+#: discount/forms.py:83
+msgid "Discount start date"
+msgstr ""
+
+#: discount/forms.py:89
+msgid "Discount end date"
+msgstr ""
+
+#: discount/forms.py:103 order/models.py:73
+msgid "Archived"
+msgstr ""
+
+#: discount/forms.py:111
+msgid "Select the products to apply the discount to"
+msgstr ""
+
+#: discount/forms.py:119
+msgid "Select the product categories in which to apply the discount"
+msgstr ""
+
+#: discount/forms.py:127
+msgid "Select the product group to which the discount applies"
+msgstr ""
+
+#: discount/forms.py:164
+msgid "The discount expiration date cannot be earlier than the start date."
+msgstr ""
+
+#: discount/models.py:46
+msgid "Product group"
+msgstr ""
+
+#: discount/models.py:47 discount/models.py:214
+msgid "Product groups"
+msgstr ""
+
+#: discount/models.py:100
+msgid "Product discount"
+msgstr ""
+
+#: discount/models.py:101
+msgid "Discount on kits"
+msgstr ""
+
+#: discount/models.py:102
+msgid "Discount on cart"
+msgstr ""
+
+#: discount/models.py:111 discount/models.py:168
+msgid "Discount percentage"
+msgstr ""
+
+#: discount/models.py:112
+msgid "Discount amount"
+msgstr ""
+
+#: discount/models.py:113
+msgid "Fixed cost"
+msgstr ""
+
+#: discount/models.py:124
+msgid "Lowest"
+msgstr ""
+
+#: discount/models.py:125
+msgid "Low"
+msgstr ""
+
+#: discount/models.py:126
+msgid "Middle"
+msgstr ""
+
+#: discount/models.py:127
+msgid "High"
+msgstr ""
+
+#: discount/models.py:128
+msgid "Highest"
+msgstr ""
+
+#: discount/models.py:132
+msgid "Type of discount"
+msgstr ""
+
+#: discount/models.py:133
+msgid "Discount mechanism"
+msgstr ""
+
+#: discount/models.py:137 discount/templates/discount/discount_detail.html:58
+msgid "Discount priority"
+msgstr ""
+
+#: discount/models.py:139
+msgid ""
+"If there are several discounts on the product, then the heaviest (priority) "
+"discount is applied. "
+msgstr ""
+
+#: discount/models.py:145
+msgid "The least amount"
+msgstr ""
+
+#: discount/models.py:146
+msgid ""
+"Set the lower limit of the quantity of goods/s if the 'Discount on cart' "
+"type is selected. "
+msgstr ""
+
+#: discount/models.py:151
+msgid "The largest number"
+msgstr ""
+
+#: discount/models.py:152
+msgid ""
+"Set the upper limit of the quantity of goods/s if the 'Discount on cart' "
+"type is selected. "
+msgstr ""
+
+#: discount/models.py:158 payment/templates/payment/payment_success.html:51
+msgid "Total cost"
+msgstr ""
+
+#: discount/models.py:160
+msgid ""
+"Enter the value of the total cost of the items in the cart, if exceeded, the "
+"discount on the basket will apply. "
+msgstr ""
+
+#: discount/models.py:169
+msgid ""
+"Enter the discount percentage if the 'Discount Percentage' mechanism is "
+"used. "
+msgstr ""
+
+#: discount/models.py:175
+msgid "The discount value in the currency used"
+msgstr ""
+
+#: discount/models.py:177
+msgid ""
+"Enter the discount value in the currency used if the 'Discount Amount' or "
+"'Fixed Cost' mechanism is used."
+msgstr ""
+
+#: discount/models.py:186
+msgid "It is automatically generated on behalf of, but can be changed"
+msgstr ""
+
+#: discount/models.py:189
+msgid "Start Date"
+msgstr ""
+
+#: discount/models.py:190
+msgid "End Date"
+msgstr ""
+
+#: discount/models.py:191
+msgid "Is active?"
+msgstr ""
+
+#: discount/models.py:200
+msgid "Add products if the 'Product Discount' type is selected. "
+msgstr ""
+
+#: discount/models.py:206
+msgid "Categories"
+msgstr ""
+
+#: discount/models.py:208
+msgid "Add categories if the 'Product Discount' type is selected. "
+msgstr ""
+
+#: discount/models.py:216
+msgid "Add groups if the 'Discount on Sets' view is selected. "
+msgstr ""
+
+#: discount/models.py:220
+msgid "Discount"
+msgstr ""
+
+#: discount/templates/discount/active_discounts.html:38
+msgid "Start"
+msgstr ""
+
+#: discount/templates/discount/active_discounts.html:41
+msgid "End"
+msgstr ""
+
+#: discount/templates/discount/active_discounts.html:47
+msgid "There are no active discounts"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:34
+msgid "Name group products"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:35
+msgid "Description group products"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:44
+msgid "Min quantity products in cart"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:45
+msgid "Max quantity products in cart"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:46
+msgid "Total cost products in cart"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:49
+msgid "Discount calculation method"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:51
+msgid "Percent discount"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:53
+msgid "The discount is valid for the amount of"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:55
+msgid "The discount has a fixed price"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:61
+msgid "Back to discounts"
+msgstr ""
+
+#: discount/templates/discount/discount_update.html:31
+msgid "Error in the form"
+msgstr ""
+
+#: discount/templates/discount/discount_update.html:38
+msgid "Update the discount"
+msgstr ""
+
+#: discount/views.py:66
+msgid "product discount"
+msgstr ""
+
+#: discount/views.py:68
+msgid "discount on a set of products"
+msgstr ""
+
+#: discount/views.py:71
+msgid "discount on the shopping cart"
+msgstr ""
+
+#: discount/views.py:76
+msgid "percentage discount"
+msgstr ""
+
+#: discount/views.py:79
+#, python-brace-format
+msgid "the discount is valid from a certain cost {cost_discount}"
+msgstr ""
+
+#: discount/views.py:81
+msgid "fixed discount amount"
+msgstr ""
+
+#: discount/views.py:86
+msgid "the lowest"
+msgstr ""
+
+#: discount/views.py:88
+msgid "low"
+msgstr ""
+
+#: discount/views.py:90
+msgid "middle"
+msgstr ""
+
+#: discount/views.py:92
+msgid "high"
+msgstr ""
+
+#: discount/views.py:94
+msgid "the highest"
+msgstr ""
+
+#: order/forms.py:15
+msgid "The name is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:16
+msgid "The name cannot be longer than 100 characters."
+msgstr ""
+
+#: order/forms.py:23
+msgid "Phone number is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:24
+msgid "The phone number cannot be longer than 15 characters."
+msgstr ""
+
+#: order/forms.py:30
+msgid "Email is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:31
+msgid "Enter the correct email address."
+msgstr ""
+
+#: order/forms.py:38
+msgid "The type of delivery is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:39
+msgid "The delivery type cannot be longer than 15 characters."
+msgstr ""
+
+#: order/forms.py:46
+msgid "The city is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:47
+msgid "The name of the city cannot be longer than 100 characters."
+msgstr ""
+
+#: order/forms.py:54
+msgid "The address is a required field to fill in."
+msgstr ""
+
+#: order/forms.py:55
+msgid "The address cannot be longer than 100 characters."
+msgstr ""
+
+#: order/forms.py:62
+msgid "The comment cannot be longer than 1000 characters."
+msgstr ""
+
+#: order/forms.py:70
+msgid "Delivery method: Invalid data type for delivery"
+msgstr ""
+
+#: order/forms.py:118
+msgid "No information about the delivery method was found"
+msgstr ""
+
+#: order/forms.py:123
+#, python-brace-format
+msgid "Invalid data type for {key}"
+msgstr ""
+
+#: order/forms.py:131
+msgid "No information about the payment method was found"
+msgstr ""
+
+#: order/forms.py:136
+#, python-brace-format
+msgid "Invalid data type for the field {key}"
+msgstr ""
+
+#: order/models.py:47
+msgid "The order is awaiting processing"
+msgstr ""
+
+#: order/models.py:48
+msgid "The order is in progress"
+msgstr ""
+
+#: order/models.py:49
+msgid "The order has been sent"
+msgstr ""
+
+#: order/models.py:50
+msgid "The order has been delivered"
+msgstr ""
+
+#: order/models.py:51
+msgid "The order has been cancelled"
+msgstr ""
+
+#: order/models.py:59
+msgid "The order has been paid for"
+msgstr ""
+
+#: order/models.py:60 payment/templates/payment/payment_success.html:25
+msgid "The order has been partially paid for"
+msgstr ""
+
+#: order/models.py:61
+msgid "The order has not been paid"
+msgstr ""
+
+#: order/models.py:68
+msgid "Delivery city"
+msgstr ""
+
+#: order/models.py:69
+msgid "Delivery address"
+msgstr ""
+
+#: order/models.py:70
+msgid "Recipient phone number"
+msgstr ""
+
+#: order/models.py:71
+msgid "Recipient email"
+msgstr ""
+
+#: order/models.py:76
+msgid "Total price"
+msgstr ""
+
+#: order/models.py:77
+msgid "Comment"
+msgstr ""
+
+#: order/models.py:78 order/models.py:152
+msgid "Delivery price"
+msgstr ""
+
+#: order/models.py:115
+msgid "Payment type"
+msgstr ""
+
+#: order/models.py:118 order/templates/order/order-detail.html:133
+msgid "Payment status"
+msgstr ""
+
+#: order/models.py:119
+msgid "Receipt url"
+msgstr ""
+
+#: order/models.py:144
+msgid "Free delivery"
+msgstr ""
+
+#: order/models.py:145 order/templates/order/order.html:115
+msgid "Standard delivery"
+msgstr ""
+
+#: order/models.py:146 order/templates/order/order.html:122
+msgid "Express delivery"
+msgstr ""
+
+#: order/templates/order/order-detail.html:50
+#: order/templates/order/order_details.html:45
+msgid "Order date"
+msgstr ""
+
+#: order/templates/order/order-detail.html:58
+#: order/templates/order/order.html:74 order/templates/order/order.html:184
+#: order/templates/order/order_details.html:51
+msgid "BIO"
+msgstr ""
+
+#: order/templates/order/order-detail.html:101
+#: order/templates/order/order.html:148 order/templates/order/order.html:207
+#: order/templates/order/order_details.html:77
+msgid "City"
+msgstr ""
+
+#: order/templates/order/order-detail.html:140
+msgid "Order status"
+msgstr ""
+
+#: order/templates/order/order-detail.html:191
+msgid "qty"
+msgstr ""
+
+#: order/templates/order/order-detail.html:198
+#: order/templates/order/order-detail.html:206
+#: order/templates/order/order-detail.html:277
+#: order/templates/order/order-detail.html:304
+#: order/templates/order/order.html:234
+msgid "Total"
+msgstr ""
+
+#: order/templates/order/order-detail.html:215
+#: order/templates/order/order-detail.html:287
+#: order/templates/order/payment.html:266
+#: order/templates/order/paymentsomeone.html:269
+msgid "To pay"
+msgstr ""
+
+#: order/templates/order/order-detail.html:224
+#: order/templates/order/order-detail.html:296
+msgid "Receipt"
+msgstr ""
+
+#: order/templates/order/order-detail.html:306
+msgid "Online payment is not required"
+msgstr ""
+
+#: order/templates/order/order.html:37
+msgid "Filling progress"
+msgstr ""
+
+#: order/templates/order/order.html:44 order/templates/order/order.html:68
+msgid "Step 1. User Parameters"
+msgstr ""
+
+#: order/templates/order/order.html:47 order/templates/order/order.html:99
+msgid "Step 2. Shipping method"
+msgstr ""
+
+#: order/templates/order/order.html:50 order/templates/order/order.html:165
+msgid "Step 3. Payment method"
+msgstr ""
+
+#: order/templates/order/order.html:53 order/templates/order/order.html:175
+msgid "Step 4. Order confirmation"
+msgstr ""
+
+#: order/templates/order/order.html:94 order/templates/order/order.html:160
+#: order/templates/order/order.html:170
+msgid "Next"
+msgstr ""
+
+#: order/templates/order/order.html:108
+msgid "We will take care of the delivery"
+msgstr ""
+
+#: order/templates/order/order.html:131
+msgid "The delivery will be carried out by the seller"
+msgstr ""
+
+#: order/templates/order/order.html:141
+msgid "Fill in the information about the city and the delivery address"
+msgstr ""
+
+#: order/templates/order/order.html:142
+msgid "Delivery will be made to this address,"
+msgstr ""
+
+#: order/templates/order/order.html:143
+msgid "or the nearest pick-up point will be found, "
+msgstr ""
+
+#: order/templates/order/order.html:144
+msgid "depending on your choice."
+msgstr ""
+
+#: order/templates/order/order.html:240
+msgid "Cancel"
+msgstr ""
+
+#: order/templates/order/order.html:244
+msgid "Confirm"
+msgstr ""
+
+#: order/templates/order/order.html:258
+msgid "Dear user, log in to place an order"
+msgstr ""
+
+#: order/templates/order/order.html:259
+msgid "log in to your profile or register,"
+msgstr ""
+
+#: order/templates/order/order.html:263
+msgid "all your products will remain in the order after registration."
+msgstr ""
+
+#: order/templates/order/order_details.html:101
+#: payment/templates/payment/payment_cancel.html:4
+#: payment/templates/payment/payment_cancel.html:16
+msgid "Payment failed"
+msgstr ""
+
+#: order/templates/order/order_details.html:103
+msgid "Payment has not been completed"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:25
+msgid "order create error"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:30
+msgid "Erro"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:30
+msgid "rs"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:30
+msgid "r"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:30
+msgid "when creating an order"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:37
+msgid "Go to the order"
+msgstr ""
+
+#: order/templates/order/order_error_list.html:38
+msgid "To the main page"
+msgstr ""
+
+#: order/templates/order/payment.html:115
+#: order/templates/order/paymentsomeone.html:116
+msgid "Personal account"
+msgstr ""
+
+#: order/templates/order/payment.html:116
+#: order/templates/order/paymentsomeone.html:117
+msgid "Administrative section"
+msgstr ""
+
+#: order/templates/order/payment.html:248
+#: order/templates/order/paymentsomeone.html:249
+msgid "home"
+msgstr ""
+
+#: order/templates/order/payment.html:261
+msgid "Card number"
+msgstr ""
+
+#: order/templates/order/payments_block.html:9
+msgid "Online card"
+msgstr ""
+
+#: order/templates/order/payments_block.html:15
+msgid "Online from a random account of someone else"
+msgstr ""
+
+#: order/templates/order/payments_block.html:21
+msgid "You have chosen the delivery by the seller"
+msgstr ""
+
+#: order/templates/order/payments_block.html:22
+msgid "Select the available payment methods from each seller"
+msgstr ""
+
+#: order/templates/order/payments_block.html:28
+msgid "Available payment methods"
+msgstr ""
+
+#: order/templates/order/paymentsomeone.html:262
+msgid "Account number"
+msgstr ""
+
+#: order/templates/order/paymentsomeone.html:266
+msgid "Generate a random account"
+msgstr ""
+
+#: order/utils.py:246
+#, python-brace-format
+msgid "Database error during query execution: {e}"
+msgstr ""
+
+#: order/utils.py:248
+#, python-brace-format
+msgid "An unexpected error has occurred: {e}"
+msgstr ""
+
+#: order/utils.py:367
+msgid "Error receiving delivery data."
+msgstr ""
+
+#: order/views.py:77 order/views.py:81 order/views.py:104
+msgid "Order creation error"
+msgstr ""
+
+#: order/views.py:204
+msgid "You do not have access to this order."
+msgstr ""
+
+#: payment/templates/payment/payment_cancel.html:17
+msgid "Try to repeat the payment"
+msgstr ""
+
+#: payment/templates/payment/payment_cancel.html:20
+#: payment/templates/payment/payment_success.html:20
+msgid "Order number"
+msgstr ""
+
+#: payment/templates/payment/payment_cancel.html:26
+#: payment/templates/payment/payment_success.html:56
+msgid "To the order page"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:4
+msgid "Successful payment"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:16
+msgid "The payment was successful"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:17
+msgid "Thanks for the purchase"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:23
+msgid "The order has been paid in full"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:29
+msgid "Date"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:32
+msgid "Paid goods"
+msgstr ""
+
+#: payment/templates/payment/payment_success.html:49
+msgid "The cost of delivery"
+msgstr ""
+
+#: payment/views.py:63 payment/views.py:97 payment/views.py:136
+#: payment/views.py:142
+msgid "You do not have access to payment for this order"
+msgstr ""
+
+#: payment/views.py:146
+msgid "Data error when forming the successful payment page"
+msgstr ""

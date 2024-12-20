@@ -1,3 +1,5 @@
+from catalog.models import Viewed
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
@@ -5,18 +7,22 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.views import LogoutView
+from django.core.cache import cache
 from django.db.models import Prefetch
+from django.http import HttpRequest
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
-from catalog.models import Viewed
 from order.models import Order
 from order.models import OrderItem
 
@@ -24,7 +30,9 @@ from .forms import CustomUserChangeForm
 from .forms import CustomUserCreationForm
 from .forms import ProfileChangeForm
 from .forms import ProfileRegistrationForm
+from .forms import SettingsForm
 from .models import Profile
+from .tasks import notify_user_after_register
 
 
 class LogInView(LoginView):
@@ -45,6 +53,12 @@ class LogOutView(LogoutView):
 class RegisterView(CreateView):
     """
     CBV регистрации профиля пользователя
+    Используем 2 формы для создания пользователя и профиля пользователя.
+
+    Формы:
+        CustomUserCreationForm - форма для создания пользователя
+        ProfileRegistrationForm - форма для создания профиля пользователя
+
     """
 
     template_name = "custom_auth/register.html"
@@ -66,7 +80,9 @@ class RegisterView(CreateView):
         """
         Получаем экземпляр формы ProfileRegistrationForm, проверяем две формы на валидность
         Если проверку прошли: то сохраняем основную форму, привязываем пользователя к профилю,
-        аутентифицируем пользователя, логиним
+        аутентифицируем пользователя, логиним.
+        Планируем выполнение задачи через 2 дня после регистрации профиля пользователя.
+
         """
         profile_form = ProfileRegistrationForm(self.request.POST)
 
@@ -83,9 +99,28 @@ class RegisterView(CreateView):
             if user:
                 login(self.request, user=user)
 
+            # Планируем выполнение задачи через 2 дня с момента регистрации пользователя
+            notify_user_after_register.apply_async(
+                args=[user.pk],
+                countdown=2 * 24 * 3600
+            )
             return redirect(self.get_success_url())
 
-        return self.form_invalid(form)
+        return self.form_invalid(form, profile_form)
+
+    def form_invalid(self, form, profile_form=None):
+        """
+        Обработка форм при ошибке, вызванной в процессе валидации
+        В случае появления ошибки на одной из двух форм,
+        пользователь увидит ошибку на форме.
+
+        Атрибуты:
+            form - форма, указанная в form_class
+
+        """
+        return self.render_to_response(
+            self.get_context_data(register_form=form, profile_registration_form=profile_form)
+        )
 
     def get_success_url(self):
         return reverse_lazy("core:index")
@@ -318,3 +353,109 @@ class ViewedListView(LoginRequiredMixin, ListView):
 
         """
         return Viewed.viewed_list(self.request.user)
+
+
+class AdminRequiredMixin(UserPassesTestMixin):
+    """
+    Миксин, предоставляющий доступ к ресурсу только пользователям
+    с правами администратора.
+    """
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class SettingsPageView(AdminRequiredMixin, View):
+    template_name = "custom_auth/settings.html"
+
+    def get(self, request: HttpRequest):
+        context = {
+            "debug": _("Enabled") if settings.DEBUG else _("Disabled"),
+            "language": settings.LANGUAGE_CODE,
+            "timezone": settings.TIME_ZONE,
+            "session_age": settings.SESSION_COOKIE_AGE,
+            "email_host": settings.EMAIL_HOST,
+            "email_tls": _("Enabled") if settings.EMAIL_USE_TLS else _("Disabled"),
+            "email_port": settings.EMAIL_PORT,
+        }
+        return render(request, self.template_name, context=context)
+
+
+class SettingsChangeView(AdminRequiredMixin, View):
+    """
+    View для операций с настройками проекта
+    """
+
+    template_name = "custom_auth/settings_change.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает GET-запрос
+        на получение страницы с настройками проекта
+        """
+
+        form = SettingsForm()
+        context = {"form": form}
+        return render(request, self.template_name, context=context)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает POST-запрос
+        на изменение указанных клиентом настроек проекта
+        """
+
+        form = SettingsForm(request.POST)
+
+        if form.is_valid():
+            settings.DEBUG = form.cleaned_data["debug"]
+            settings.LANGUAGE_CODE = form.cleaned_data["language"]
+            settings.TIME_ZONE = form.cleaned_data["timezone"]
+            settings.SESSION_COOKIE_AGE = form.cleaned_data["session_age"]
+            settings.EMAIL_HOST = form.cleaned_data["email_host"]
+            settings.EMAIL_USE_TLS = form.cleaned_data["email_tls"]
+            settings.EMAIL_PORT = form.cleaned_data["email_port"]
+
+        return redirect(reverse_lazy("custom_auth:settings"))
+
+
+class ResetCashView(AdminRequiredMixin, View):
+    """
+    View для операций сброса кэша как отдельных разделов,
+    так и очистки всего кэша.
+    """
+
+    template_name = "custom_auth/cashing.html"
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает GET-запрос
+        на получение страницы с кнопками сброса кэша
+        """
+        return render(request, self.template_name)
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """
+        Обрабатывает POST-запрос
+        на сброс кэша и возвращает страницу с результатом
+        """
+
+        context = dict()
+        button_names = request.POST.dict()
+
+        if "reset_all" in button_names:
+            cache.clear()
+            context["result"] = _("The cache of all services has been successfully reset!")
+        if "banners" in button_names:
+            cache.delete(settings.BANNERS_KEY)
+            context["result"] = _("The cache of the banner service has been successfully reset!")
+        if "category" in button_names:
+            cache.delete(settings.CATEGORY_KEY)
+            context["result"] = _("The category menu cache has been successfully reset!")
+        if "daily_offer" in button_names:
+            cache.delete(settings.OFFER_KEY)
+            context["result"] = _("The cache of the day's offer service has been successfully reset!")
+        if "hot_offer" in button_names:
+            cache.delete(settings.HOT_OFFER_KEY)
+            context["result"] = _("The cache of the hot offers service has been successfully reset!")
+
+        return render(request, self.template_name, context=context)

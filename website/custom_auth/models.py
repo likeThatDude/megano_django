@@ -37,6 +37,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         help_text="Designates whether this user should be treated as active."
         " Unselect this instead of deleting accounts.",
     )
+    birthday = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name=_("Birthday"),
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["login"]

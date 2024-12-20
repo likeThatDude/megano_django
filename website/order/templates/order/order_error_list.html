@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block description %}
     <meta name="description" content="Ошибка создания заказа">
@@ -21,20 +22,20 @@
 {% endblock %}
 
 {% block title %}
-    {{ user.login }} order create error
+    {{ user.login }} {% trans 'order create error' %}
 {% endblock %}
 
 {% block body %}
     <div class="main_error">
-        <p class="error_header">Ошибк{% if errors|length > 1 %}и{% else %}а{% endif %} при создании заказа:</p>
+        <p class="error_header">{% trans 'Erro' %}{% if errors|length > 1 %}{% trans 'rs' %}{% else %}{% trans 'r' %}{% endif %} {% trans 'when creating an order' %}:</p>
         {% for error in errors %}
             <div class="error_block">
                 <p>{{ error.0 }}) {{ error.1 }}</p>
             </div>
         {% endfor %}
         <div class="non-auth-block-buttons">
-            <a class="non-auth-block-button" href="{% url 'order:order_create' %}">Перейти к заказу</a>
-            <a class="non-auth-block-button" href="{% url 'core:index' %}">На главную</a>
+            <a class="non-auth-block-button" href="{% url 'order:order_create' %}">{% trans 'Go to the order' %}</a>
+            <a class="non-auth-block-button" href="{% url 'core:index' %}">{% trans 'To the main page' %}</a>
         </div>
     </div>
 {% endblock %}
