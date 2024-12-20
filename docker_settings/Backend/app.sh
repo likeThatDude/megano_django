@@ -1,12 +1,16 @@
 #!/bin/bash
 
 if [[ "${1}" == "celery" ]]; then
-  apt update
-  apt install -y postgresql postgresql-contrib
-  celery -A services.celery_src.celery_app worker --beat --loglevel=info
+  echo "Starting Celery worker..."
+  celery -A website worker  --loglevel=info
+elif [[ "${1}" == "celery-beat" ]]; then
+  echo "Starting Celery beat..."
+  celery -A website beat --loglevel=info
 elif [[ "${1}" == "flower" ]]; then
-  celery -A services.celery_src.celery_app flower
+  echo "Starting Flower..."
+  celery -A website.celery.app flower --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB} --basic_auth=${FLOWER_USER}:${FLOWER_PASS}
 elif [[ "${1}" == "app" ]]; then
+  echo "Running Django setup tasks..."
   python manage.py collectstatic --noinput
   python manage.py makemigrations
   python manage.py migrate

@@ -14,13 +14,79 @@ services:
         condition: service_healthy
       pgbouncer:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: always
     networks:
       my_network:
         ipv4_address: 172.18.0.4
     volumes:
+      - static_volume:/app/staticfilesc
+      - media_volume:/app/media
+
+  celery:
+    build:
+      context: .
+      dockerfile: docker_settings/Backend/Dockerfile
+    env_file:
+      - .env
+    container_name: ${CELERY_APP_NAME}
+    command: [ "celery" ]
+    depends_on:
+      megano_db:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+    networks:
+      my_network:
+        ipv4_address: 172.18.0.7
+    volumes:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: docker_settings/Backend/Dockerfile
+    env_file:
+      - .env
+    container_name: ${CELERY_BEAT_APP_NAME}
+    command: [ "celery-beat" ]
+    depends_on:
+      megano_db:
+        condition: service_healthy
+      pgbouncer:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: always
+    networks:
+      my_network:
+        ipv4_address: 172.18.0.8
+    volumes:
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+
+  flower:
+    build:
+      context: .
+      dockerfile: docker_settings/Backend/Dockerfile
+    container_name: ${FLOWER_APP_NAME}
+    command: [ "flower" ]
+    ports:
+      - "5555:5555"
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      my_network:
+        ipv4_address: 172.18.0.9
+    restart: always
 
   megano_db:
     image: postgres:15.7-alpine
@@ -37,7 +103,7 @@ services:
       timeout: 10s
       retries: 30
     volumes:
-      - ./db/:/var/lib/postgresql/data
+#      - ./db/:/var/lib/postgresql/data
       - ./docker_settings/PostgreSQL/:/etc/postgresql/conf
     command:
       - postgres
@@ -92,6 +158,11 @@ services:
       my_network:
         ipv4_address: 172.18.0.6
     restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
       - redis_data:/data
 
@@ -112,6 +183,7 @@ services:
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
+
 
 volumes:
   static_volume:

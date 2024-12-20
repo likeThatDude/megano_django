@@ -60,7 +60,7 @@
                                     <div class="ProductCard-cost">
                                         <div class="ProductCard-price">
                                             {% get_lower_price sellers as lower_price %}
-                                            {{ lower_price|default:"The product is not on sale yet"|trans }}
+                                            {{ lower_price|default:"The product is not on sale yet" }}
                                         </div>
                                     </div>
                                 </div>
@@ -144,10 +144,10 @@
                                 <ul>
                                     {% if product.manufacture %}
                                         <li>
-                                            {% trans 'Manufacturer's country' %}: {{ product.manufacture }}
+                                            {% trans "Manufacturer's country" %}: {{ product.manufacture }}
                                         </li>
                                     {% endif %}
-                                </ul>
+                                </ul>ё
                                 <div class="clearfix">
                                 </div>
                                 <div class="table">
