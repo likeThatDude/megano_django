@@ -2,7 +2,7 @@
 
 if [[ "${1}" == "celery" ]]; then
   echo "Starting Celery worker..."
-  celery -A website worker  --loglevel=info
+  celery -A website worker --loglevel=info
 elif [[ "${1}" == "celery-beat" ]]; then
   echo "Starting Celery beat..."
   celery -A website beat --loglevel=info

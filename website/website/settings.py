@@ -58,7 +58,7 @@ else:
         "127.0.0.1",
         SERVER_DOMAIN,
     ]
-    CSRF_TRUSTED_ORIGINS = [f"http://{SERVER_DOMAIN}"]
+    CSRF_TRUSTED_ORIGINS = [f"{HTTP_PROTOCOL}{SERVER_DOMAIN}"]
 
 
 USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
