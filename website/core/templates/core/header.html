@@ -83,18 +83,15 @@
 
                 <div class="CartBlock">
                     <div class="dropdown">
-                        <button class="dropbtn"><img class="CartBlock-img"
-                                                     src="{% static 'assets/img/icons/loon-icon.svg' %}"
-                                                     alt="loon-icon.svg"/></button>
+                        <button class="dropbtn"><img class="CartBlock-img" src="{% static 'assets/img/icons/loon-icon.svg' %}" alt="loon-icon.svg"/></button>
                         <div class="dropdown-content">
                             {#                            {% if user_is_auth %}#}
-                            {% if user.is_authenticated %}
-                                <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">
-                                    {% trans 'Personal account' %}</a>
-
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">
+                                {% trans 'Personal account' %}</a>
                             <a class="dropdown-content-a" href="{% static 'account.html' %}">
-                                {% trans 'Administrative section' %}
-                                </a>
+                            {% trans 'Administrative section' %}
+                            </a>
                             <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
                                   style="display: none;">
                                 {% csrf_token %}
@@ -116,11 +113,11 @@
                                 </a>
                             </div>
                         {% endif %}
+                        </div>
                     </div>
                     <a class="CartBlock-block" href="{% url 'cart:detail' %}"><img class="CartBlock-img"
                                                                                    src="{% static 'assets/img/icons/cart.svg' %}"
-                                                                                   alt="cart.svg"/><span
-                            class="CartBlock-amount">0</span></a>
+                                                                                   alt="cart.svg"/><span class="CartBlock-amount">0</span></a>
                     <div class="CartBlock-block"><span class="CartBlock-cost">0</span>
 
 
