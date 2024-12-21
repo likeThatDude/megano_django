@@ -89,11 +89,11 @@
                         <div class="dropdown-content">
                             {#                            {% if user_is_auth %}#}
                             {% if user.is_authenticated %}
-                                <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">{% trans 'Personal
-                                    account' %}</a>
+                                <a class="dropdown-content-a" href="{% url 'custom_auth:personal-cabinet' %}">
+                                    {% trans 'Personal account' %}</a>
 
-                            <a class="dropdown-content-a" href="{% static 'account.html' %}">{% trans 'Administrative
-                                section' %}
+                            <a class="dropdown-content-a" href="{% static 'account.html' %}">
+                                {% trans 'Administrative section' %}
                                 </a>
                             <form id="logout-form" method="post" action="{% url 'custom_auth:logout' %}"
                                   style="display: none;">
