@@ -147,7 +147,7 @@ class CatalogListView(ListView):
 
         if "sort_catalog" not in self.request.session:
             self.request.session["sort_catalog"] = generate_sort_param()
-        sorting = json.loads(self.request.session["sort_catalog"])
+        sorting = self.request.session["sort_catalog"]
 
         return {
             "sellers": sellers,
