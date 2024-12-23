@@ -85,7 +85,9 @@
                                     </div>
                                 </div>
                                 <div class="ProductCard-cartElement">
-                                    <a class="btn btn_primary" href="#modal_open">
+                                    <a class="btn btn_primary btn-add-to-cart" href="#modal_open"
+                                    data-product_id="{{ product.pk }}"
+                                    data-price_id="{{ product.prices.first.pk }}">
                                         <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}"
                                              alt="cart_white.svg"/>
                                         <span class="btn-content">{% trans 'Buy' %}</span>
@@ -295,6 +297,7 @@
     <script>let current_user = "{{ user.login }}";</script>
     <script>let current_user_id = "{{ user.pk }}";</script>
     <script>let current_status = {{ user.is_staff|yesno:"true,false" }};</script>
+    <script src="{% static 'assets/js/cart/add_product_cart.js' %}"></script>
     <script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.form.js' %}"></script>
     <script src="{% static 'assets/plg/form/jquery.maskedinput.min.js' %}"></script>

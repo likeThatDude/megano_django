@@ -341,6 +341,11 @@ class ProductDetailView(DetailView):
                     .all()
                     .only("name__name", "value", "product__id"),
                 ),
+                Prefetch(
+                    "prices",
+                    queryset=Price.objects.all().order_by("price").only("pk", "price"),
+                    to_attr="price_id",
+                ),
             )
             .only(
                 "name",
