@@ -6,4 +6,4 @@ stages:
 build-job:
   stage: build
   script:
-    - docker --help
+    - docker compose build
