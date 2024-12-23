@@ -2,7 +2,7 @@
 
 if [[ "${1}" == "celery" ]]; then
   echo "Starting Celery worker..."
-  celery -A website worker  --loglevel=info
+  celery -A website worker --loglevel=info
 elif [[ "${1}" == "celery-beat" ]]; then
   echo "Starting Celery beat..."
   celery -A website beat --loglevel=info
@@ -11,6 +11,7 @@ elif [[ "${1}" == "flower" ]]; then
   celery -A website.celery.app flower --broker=redis://${REDIS_HOST}:${REDIS_PORT}/${REDIS_DB} --basic_auth=${FLOWER_USER}:${FLOWER_PASS}
 elif [[ "${1}" == "app" ]]; then
   echo "Running Django setup tasks..."
+  django-admin compilemessages
   python manage.py collectstatic --noinput
   python manage.py makemigrations
   python manage.py migrate

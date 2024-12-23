@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-18 11:46+0300\n"
+"POT-Creation-Date: 2024-12-21 15:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,13 +66,13 @@ msgid "Сategory tags"
 msgstr "Теги категории"
 
 #: catalog/models.py:67 catalog/models.py:68 catalog/models.py:116
-#: catalog/templates/catalog/product_detail.html:110
+#: catalog/templates/catalog/product_detail.html:111
 msgid "Tags"
 msgstr "Теги"
 
 #: catalog/models.py:89 catalog/models.py:167
-#: catalog/templates/catalog/product_detail.html:122
-#: catalog/templates/catalog/product_detail.html:136 discount/forms.py:77
+#: catalog/templates/catalog/product_detail.html:123
+#: catalog/templates/catalog/product_detail.html:137 discount/forms.py:77
 #: discount/models.py:34 discount/models.py:188
 msgid "Description"
 msgstr "Описание"
@@ -85,7 +85,7 @@ msgstr "Короткое описание"
 msgid "Product Type"
 msgstr "Тип продукта"
 
-#: catalog/models.py:98 catalog/templates/catalog/product_detail.html:147
+#: catalog/models.py:98
 msgid "Manufacturer"
 msgstr "Производитель"
 
@@ -96,12 +96,10 @@ msgid "Created at"
 msgstr "Дата создания"
 
 #: catalog/models.py:103
-#, fuzzy
-#| msgid "Сategory tags"
 msgid "Category"
 msgstr "Категория"
 
-#: catalog/models.py:107 core/templates/core/main_page.html:377
+#: catalog/models.py:107 core/templates/core/main_page.html:227
 msgid "Limited edition"
 msgstr "Ограниченное предложение"
 
@@ -137,7 +135,7 @@ msgstr "Изображение товара"
 msgid "Seller"
 msgstr "Продавец"
 
-#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:125
+#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:126
 msgid "Sellers"
 msgstr "Продавцы"
 
@@ -202,7 +200,7 @@ msgstr "Случайной картой в магазине"
 msgid "Payment method"
 msgstr "Способ оплаты"
 
-#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:209
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:210
 #: custom_auth/templates/custom_auth/personal_cabinet.html:83
 #: custom_auth/templates/custom_auth/profile_orders.html:76
 #: order/templates/order/order-detail.html:118
@@ -266,7 +264,7 @@ msgstr "Проданное количество"
 
 #: catalog/models.py:329 catalog/templates/catalog/catalog.html:44
 #: catalog/templates/catalog/catalog.html:128
-#: catalog/templates/catalog/product_detail.html:217 order/models.py:113
+#: catalog/templates/catalog/product_detail.html:218 order/models.py:113
 #: order/models.py:157 order/templates/order/order-detail.html:204
 msgid "Price"
 msgstr "Цена"
@@ -330,88 +328,90 @@ msgid "Title"
 msgstr "Заголовок"
 
 #: catalog/templates/catalog/catalog.html:67
-#, fuzzy
-#| msgid "Manufacturer"
 msgid "Manufacture"
 msgstr "Производитель"
 
 #: catalog/templates/catalog/catalog.html:80
-#, fuzzy
-#| msgid "Limited edition"
 msgid "Limited series only"
 msgstr "Ограниченное предложение"
 
 #: catalog/templates/catalog/catalog.html:111
-#, fuzzy
-#| msgid "Popular products"
 msgid "Popular tags"
-msgstr "Популярные товары"
+msgstr "Популярные теги"
 
 #: catalog/templates/catalog/catalog.html:124
 msgid "Sort by"
-msgstr ""
+msgstr "Сортировать по"
 
 #: catalog/templates/catalog/catalog.html:127
 msgid "Popularity"
-msgstr "Популярность"
+msgstr "Популярности"
 
 #: catalog/templates/catalog/catalog.html:130
 msgid "Novelty"
-msgstr "Новизна"
+msgstr "Новизне"
 
-#: catalog/templates/catalog/product_detail.html:91
-#: catalog/templates/catalog/product_detail.html:195
+#: catalog/templates/catalog/product_detail.html:64
+msgid "The product is not on sale yet"
+msgstr "Этот продукт еще не поступил в продажу"
+
+#: catalog/templates/catalog/product_detail.html:92
+#: catalog/templates/catalog/product_detail.html:196
 msgid "Buy"
 msgstr "Купить"
 
-#: catalog/templates/catalog/product_detail.html:98
+#: catalog/templates/catalog/product_detail.html:99
 msgid "Congratulate"
 msgstr "Поздравляем"
 
-#: catalog/templates/catalog/product_detail.html:102
+#: catalog/templates/catalog/product_detail.html:103
 msgid "The product has been successfully added to the cart"
 msgstr "Товар был успешно добавлен в корзину"
 
-#: catalog/templates/catalog/product_detail.html:128
-#: catalog/templates/catalog/product_detail.html:156
+#: catalog/templates/catalog/product_detail.html:129
+#: catalog/templates/catalog/product_detail.html:157
 #: comparison/templates/comparison/comparison.html:74
 msgid "Characteristic"
 msgstr "Характеристика"
 
-#: catalog/templates/catalog/product_detail.html:158
+#: catalog/templates/catalog/product_detail.html:148
+msgid "Manufacturer's country"
+msgstr "Страна производителя"
+
+#: catalog/templates/catalog/product_detail.html:159
 #: comparison/templates/comparison/comparison.html:75
 msgid "Value"
 msgstr "Значение"
 
-#: catalog/templates/catalog/product_detail.html:162
+#: catalog/templates/catalog/product_detail.html:163
 msgid "Device Type"
 msgstr "Тип устройства"
 
-#: catalog/templates/catalog/product_detail.html:201
+#: catalog/templates/catalog/product_detail.html:202
 msgid "Type delivery"
 msgstr "Тип доставки"
 
-#: catalog/templates/catalog/product_detail.html:246
+#: catalog/templates/catalog/product_detail.html:247
 msgid "There are no characteristics yet"
 msgstr "Сейчас нет характеристик"
 
-#: catalog/templates/catalog/product_detail.html:256
+#: catalog/templates/catalog/product_detail.html:257
 msgid "Add a review"
 msgstr "Добавить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:265
+#: catalog/templates/catalog/product_detail.html:266
 msgid "Send review"
 msgstr "Отправить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:271
+#: catalog/templates/catalog/product_detail.html:272
 msgid "To view all the reviews and be able to leave them"
 msgstr "Для просмотра всех отзывов и возможности их оставлять"
 
-#: catalog/templates/catalog/product_detail.html:272
+#: catalog/templates/catalog/product_detail.html:273
 msgid "you must register"
 msgstr "вы должны зарегистрироваться"
 
-#: catalog/templates/catalog/product_detail.html:274
+#: catalog/templates/catalog/product_detail.html:275
 #: core/templates/core/header.html:35 custom_auth/models.py:25
 #: custom_auth/templates/custom_auth/login.html:37
 #: custom_auth/templates/custom_auth/register.html:99
@@ -420,7 +420,7 @@ msgstr "вы должны зарегистрироваться"
 msgid "Login"
 msgstr "Войти"
 
-#: catalog/templates/catalog/product_detail.html:275
+#: catalog/templates/catalog/product_detail.html:276
 #: order/templates/order/order.html:269
 msgid "Register"
 msgstr "Зарегистрироваться"
@@ -521,6 +521,10 @@ msgstr "Дата создания"
 msgid "Active"
 msgstr "Активно"
 
+#: core/templates/core/banners.html:24
+msgid "Get Started"
+msgstr "Начать"
+
 #: core/templates/core/footer.html:10
 #: custom_auth/templates/custom_auth/personal_cabinet.html:29
 #: custom_auth/templates/custom_auth/profile.html:31
@@ -577,6 +581,16 @@ msgstr "Регистрация"
 msgid "Discounts"
 msgstr "Скидки"
 
+#: core/templates/core/header.html:93 order/templates/order/payment.html:115
+#: order/templates/order/paymentsomeone.html:116
+msgid "Personal account"
+msgstr "Личный кабинет"
+
+#: core/templates/core/header.html:96 order/templates/order/payment.html:116
+#: order/templates/order/paymentsomeone.html:117
+msgid "Administrative section"
+msgstr "Административный раздел"
+
 #: core/templates/core/header.html:115 order/templates/order/payment.html:117
 #: order/templates/order/paymentsomeone.html:118
 msgid "Logout"
@@ -591,7 +605,7 @@ msgstr "Показать навигацию"
 msgid "All categories"
 msgstr "Все категории"
 
-#: core/templates/core/header.html:206 order/templates/order/payment.html:233
+#: core/templates/core/header.html:210 order/templates/order/payment.html:233
 msgid "Search"
 msgstr "Поиск"
 
@@ -637,19 +651,19 @@ msgstr "сек"
 msgid "Popular products"
 msgstr "Популярные товары"
 
-#: core/templates/core/main_page.html:323
+#: core/templates/core/main_page.html:173
 msgid "Hot offers"
 msgstr "Горячие предложения"
 
-#: core/templates/core/main_page.html:344
+#: core/templates/core/main_page.html:194
 msgid "out of stock"
 msgstr ""
 
-#: core/views.py:102
+#: core/views.py:103
 msgid "Error receiving data for banners"
 msgstr "Ошибка при получении данных для баннеров"
 
-#: core/views.py:104
+#: core/views.py:105
 #, python-brace-format
 msgid "Unexpected error in receiving banners:{e}"
 msgstr "Неожиданная ошибка при получении баннеров:{e}"
@@ -671,16 +685,12 @@ msgid "Your birthday can't be later than today"
 msgstr "Ваш день рождения не может быть позже сегодняшнего дня"
 
 #: custom_auth/forms.py:92 custom_auth/templates/custom_auth/profile.html:127
-#, fuzzy
-#| msgid "save password"
 msgid "Old password"
-msgstr "сохранить пароль"
+msgstr "Старый пароль"
 
 #: custom_auth/forms.py:93 custom_auth/templates/custom_auth/profile.html:133
-#, fuzzy
-#| msgid "save password"
 msgid "New password"
-msgstr "сохранить пароль"
+msgstr "Новый пароль"
 
 #: custom_auth/forms.py:94
 msgid "New password confirmation"
@@ -828,8 +838,6 @@ msgstr "Если вы не получили письмо, проверьте п�
 #: custom_auth/templates/custom_auth/profile.html:38
 #: custom_auth/templates/custom_auth/profile_orders.html:38
 #: custom_auth/templates/custom_auth/viewed_list.html:38
-#, fuzzy
-#| msgid "Personal account"
 msgid "Personal cabinet"
 msgstr "Личный кабинет"
 
@@ -838,10 +846,8 @@ msgstr "Личный кабинет"
 #: custom_auth/templates/custom_auth/profile.html:44
 #: custom_auth/templates/custom_auth/profile_orders.html:44
 #: custom_auth/templates/custom_auth/viewed_list.html:44
-#, fuzzy
-#| msgid "Order status"
 msgid "Order history"
-msgstr "Статус заказа"
+msgstr "История заказов"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:41
 #: custom_auth/templates/custom_auth/personal_cabinet.html:146
@@ -876,10 +882,8 @@ msgstr "Тип доставки"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:89
 #: custom_auth/templates/custom_auth/profile_orders.html:80
-#, fuzzy
-#| msgid "The cost of delivery"
 msgid "The cost of the order"
-msgstr "Стоимость доставки"
+msgstr "Стоимость заказа"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:95
 #: custom_auth/templates/custom_auth/profile_orders.html:90
@@ -888,10 +892,8 @@ msgid "Status"
 msgstr "Статус"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:109
-#, fuzzy
-#| msgid "You have an empty order history"
 msgid "You don't have any orders"
-msgstr "У вас пустая история заказов"
+msgstr "У вас нет никаких приказов"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:118
 msgid "Recent views"
@@ -1072,8 +1074,6 @@ msgid "Type discount"
 msgstr "Тип скидки"
 
 #: discount/forms.py:45
-#, fuzzy
-#| msgid "Discounts"
 msgid "Discount method"
 msgstr "Мехнизм скидки"
 
@@ -1488,20 +1488,16 @@ msgid "The order has been cancelled"
 msgstr "Заказ был отменен"
 
 #: order/models.py:59
-#, fuzzy
-#| msgid "The order has been delivered"
 msgid "The order has been paid for"
-msgstr "Заказ был доставлен"
+msgstr "Заказ был оплачен"
 
 #: order/models.py:60 payment/templates/payment/payment_success.html:25
 msgid "The order has been partially paid for"
 msgstr ""
 
 #: order/models.py:61
-#, fuzzy
-#| msgid "The order has been delivered"
 msgid "The order has not been paid"
-msgstr "Заказ был доставлен"
+msgstr "Заказ не был оплачен"
 
 #: order/models.py:68
 msgid "Delivery city"
@@ -1711,16 +1707,6 @@ msgstr "Перейти к заказу"
 msgid "To the main page"
 msgstr "Перейти на главную страницу"
 
-#: order/templates/order/payment.html:115
-#: order/templates/order/paymentsomeone.html:116
-msgid "Personal account"
-msgstr "Личный кабинет"
-
-#: order/templates/order/payment.html:116
-#: order/templates/order/paymentsomeone.html:117
-msgid "Administrative section"
-msgstr "Административный раздел"
-
 #: order/templates/order/payment.html:248
 #: order/templates/order/paymentsomeone.html:249
 msgid "home"
@@ -1764,16 +1750,13 @@ msgid "Database error during query execution: {e}"
 msgstr "Ошибка базы данных при выполнении запроса: {e}"
 
 #: order/utils.py:248
-#, fuzzy, python-brace-format
-#| msgid "An error has occurred"
+#, python-brace-format
 msgid "An unexpected error has occurred: {e}"
 msgstr "Произошла непредвиденная ошибка: {e}"
 
 #: order/utils.py:367
-#, fuzzy
-#| msgid "Error receiving data for banners"
 msgid "Error receiving delivery data."
-msgstr "Ошибка при получении данных о доставке."
+msgstr "Error receiving delivery data."
 
 #: order/views.py:77 order/views.py:81 order/views.py:104
 msgid "Order creation error"

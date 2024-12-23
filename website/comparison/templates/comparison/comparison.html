@@ -37,12 +37,12 @@
                                             {% if comparison.product.name %}
                                                 <h2 class="ProductCard-title">
                                                     <a href="{{ comparison.product.get_absolute_url }}">
-                                                        {{ comparison.product.name|truncatechars:40 }}</a>
+                                                        {{ comparison.product.name|truncatechars:30 }}</a>
                                                 </h2>
                                             {% else %}
                                                 <h2 class="ProductCard-title">
                                                     <a href="{{ comparison.product.get_absolute_url }}">
-                                                        {{ comparison.name|truncatechars:40 }}</a>
+                                                        {{ comparison.name|truncatechars:30 }}</a>
                                                 </h2>
                                             {% endif %}
                                             <div class="ProductCard-look">
@@ -79,7 +79,7 @@
                                                                     <td></td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td class="comparis">Тип</td>
+                                                                    <td class="comparis">{% trans 'Type' %}</td>
                                                                     {% if comparison.product.product_type %}
                                                                         <td class="comparis">{{ comparison.product.product_type }}</td>
                                                                     {% else %}

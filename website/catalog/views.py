@@ -401,7 +401,7 @@ class ProductDetailView(DetailView):
                     "price",
                     queryset=Price.objects.select_related("product")
                     .filter(Q(product__id=pk))
-                    .only("product__id", "product__name", "seller", "price"),
+                    .only("product__id", "product__name", "seller", "price", "quantity", "seller_id"),
                 ),
                 "delivery_methods",
                 "payment_methods",

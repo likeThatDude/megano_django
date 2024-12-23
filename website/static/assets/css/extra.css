@@ -5308,7 +5308,7 @@ a.Cart-title {
 .dropdown {
     position: relative;
     display: inline-block;
-    padding-right: 30px;
+    padding-right: 10px;
 }
 
 /* Dropdown Content (Hidden by Default) */
