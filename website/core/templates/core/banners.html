@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if banners %}
     <div class="Header-slider">
         <div class="Slider Slider_main">
@@ -21,7 +22,7 @@
                                     <div class="Slider-footer">
                                         <a class="btn btn_primary"
                                            href="{{ banner.product.get_absolute_url }}">
-                                            Get Started
+                                            {% trans 'Get Started' %}
                                         </a>
                                     </div>
                                 </div>
