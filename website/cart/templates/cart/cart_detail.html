@@ -105,7 +105,7 @@
                 </div>
                 <div class="Footer-cart">
                     <div class="Footer-info">
-                        <span class="Footer-quantity-products-cart">{{ total_quantity_products }}</span>
+                        <span class="Footer-quantity-products-cart">{% trans 'Number of items in the cart' %}: {{ total_quantity_products }}</span>
                     </div>
                     <a class="btn btn_place_an_order" href="{% url 'order:order_create' %}">
                         <span class="btn-content">
