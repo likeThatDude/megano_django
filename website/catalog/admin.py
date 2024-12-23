@@ -5,7 +5,7 @@ from django.http import HttpRequest
 
 from website.settings import CATEGORY_KEY
 
-from .models import Category
+from .models import Category, ProductVideo
 from .models import Delivery
 from .models import NameSpecification
 from .models import Payment
@@ -212,3 +212,7 @@ class ViewedAdmin(admin.ModelAdmin):
         "user__login",
         "product__name",
     )
+
+@admin.register(ProductVideo)
+class ProductVideoAdmin(admin.ModelAdmin):
+    list_display = ('pk', 'host', 'video_id')
