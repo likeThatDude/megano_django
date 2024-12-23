@@ -56,9 +56,14 @@ class CreateCheckoutView(LoginRequiredMixin, View):
 
     def get(self, request: HttpRequest, order_id: int) -> HttpResponse:
         order = utils.get_order_from_db(order_id=order_id)
-        if order.user.pk == request.user.pk:
+        if order[0].user.pk == request.user.pk:
             correct_urls = utils.get_current_urls_for_payment_response(request)
-            session = utils.checkout_process(order=order, redirect_urls=correct_urls, user_login=request.user.login)
+            session = utils.checkout_process(
+                order=order[0],
+                redirect_urls=correct_urls,
+                user_login=request.user.login,
+                payments_product=order[1]
+            )
             return redirect(session.url, code=303)
         return HttpResponseForbidden(_("You do not have access to payment for this order"))
 
@@ -91,7 +96,9 @@ class CreateCheckoutCurrentView(LoginRequiredMixin, View):
                 redirect_urls=correct_urls,
                 all_product=False,
                 seller_id=seller_id,
-                total_price=total_price,
+                total_price=total_price[0],
+                user_login=request.user.login,
+                payments_product=total_price[1],
             )
             return redirect(session.url, code=303)
         return HttpResponseForbidden(_("You do not have access to payment for this order"))
@@ -193,7 +200,6 @@ class StripeWebhookAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
         payload = request.body
-        print(payload)
         signature = request.META.get("HTTP_STRIPE_SIGNATURE")
         try:
             event = stripe.Webhook.construct_event(payload, signature, settings.STRIPE_WEBHOOK_SECRET_KEY)
@@ -204,6 +210,7 @@ class StripeWebhookAPIView(APIView):
 
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
+            print(session['metadata'])
             user_login = session["metadata"]["user_login"]
             all_order = session["metadata"]["all_order"]
             all_order = int(all_order)

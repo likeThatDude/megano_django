@@ -1,13 +1,17 @@
+import json
+from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
 
 import stripe
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q, F
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+
+from catalog.models import Price
 from order.models import Order
 from order.models import OrderItem
 from stripe.checkout import Session
@@ -50,12 +54,13 @@ def get_current_urls_for_payment_response(request: HttpRequest) -> tuple[str, st
 
 
 def checkout_process(
-    order: Order,
-    redirect_urls: tuple[str, str],
-    user_login: str,
-    all_product: bool = True,
-    seller_id: None | int = None,
-    total_price: None | Decimal = None,
+        order: Order,
+        redirect_urls: tuple[str, str],
+        user_login: str,
+        all_product: bool = True,
+        seller_id: None | int = None,
+        total_price: None | Decimal = None,
+        payments_product: dict | set = None,
 ) -> Session:
     """
     Создает Stripe Checkout сессию для оплаты заказа.
@@ -97,7 +102,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&total_price={url_total_price}"
-            f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
+                                           f"&date={formatted_date}&delivery_price={order.delivery_price.price}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}",
             metadata={
                 "all_order": 1,
@@ -105,10 +110,11 @@ def checkout_process(
                 "total_price": url_total_price,
                 "date": formatted_date,
                 "url": f"?order_id={order.id}&total_price={url_total_price}&date={date_to_db}"
-                f"&delivery_price={order.delivery_price.price}",
+                       f"&delivery_price={order.delivery_price.price}",
                 "delivery_price": order.delivery_price.price,
                 "products_ids": products_ids,
                 "user_login": user_login,
+                "payment_product": json.dumps(payments_product),
             },
         )
     else:
@@ -128,7 +134,7 @@ def checkout_process(
             ],
             mode="payment",
             success_url=redirect_urls[0] + f"?order_id={order.id}&seller_id={seller_id}"
-            f"&total_price={total_price}&date={formatted_date}",
+                                           f"&total_price={total_price}&date={formatted_date}",
             cancel_url=redirect_urls[1] + f"?order_id={order.id}&seller_id={seller_id}",
             metadata={
                 "all_order": 0,
@@ -139,13 +145,14 @@ def checkout_process(
                 "url": f"?order_id={order.id}&seller_id={seller_id}" f"&total_price={total_price}&date={date_to_db}",
                 "products_ids": products_ids,
                 "user_login": user_login,
+                "payment_product": payments_product,
             },
         )
 
     return session
 
 
-def get_order_from_db(order_id: int, all_product: bool = True) -> Order:
+def get_order_from_db(order_id: int, all_product: bool = True) -> tuple[Order, dict[int, list[int]]] | Order:
     """
     Получает объект заказа из базы данных.
 
@@ -167,12 +174,34 @@ def get_order_from_db(order_id: int, all_product: bool = True) -> Order:
             ),
             pk=order_id,
         )
+    if all_product:
+        current_dict = create_order_dict(order)
+        return order, current_dict
     return order
 
 
-def get_order_total_price(order: Order, seller_id: int) -> Decimal:
+def create_order_dict(order: Order) -> dict[int, list[int]]:
+    """
+    Создает словарь, группирующий ID товаров по ID продавцов из объекта заказа.
+
+    Параметры:
+        - order (Order): Объект заказа, содержащий элементы заказа.
+
+    Возвращает:
+        - dict[int, list[int]]: Словарь, где ключами являются ID продавцов (seller_id),
+          а значениями — списки ID продуктов (product_id), связанных с каждым продавцом.
+    """
+    current_data = defaultdict(list)
+    for i in order.order_items.all():
+        current_data[i.seller_id].append(i.product_id)
+    set_seller_product_count(all_product=current_data)
+    return current_data
+
+
+def get_order_total_price(order: Order, seller_id: int) -> tuple[Decimal, set]:
     """
     Рассчитывает общую стоимость товаров для конкретного продавца.
+    Создаёт set для
 
     Параметры:
         - order (Order): Объект заказа.
@@ -182,10 +211,13 @@ def get_order_total_price(order: Order, seller_id: int) -> Decimal:
         - Decimal: Общая стоимость товаров продавца в заказе.
     """
     total_price = Decimal(0)
+    products_ids = set()
     for item in order.order_items.all():
         if item.seller.pk == seller_id:
             total_price += item.price * item.quantity
-    return total_price
+            products_ids.add(item.product_id)
+    set_seller_product_count(certain=products_ids, seller_id=seller_id)
+    return total_price, products_ids
 
 
 def change_order_payment_status(session: Session) -> None:
@@ -332,3 +364,20 @@ def get_paid_order(order_id: int, user_id: int, seller_id: int | None = None) ->
         return order
 
     return False
+
+
+def set_seller_product_count(
+        certain: set[int] | None = None,
+        all_product: dict[int, list[int]] | None = None,
+        seller_id: int | None = None, ) -> None:
+    if all_product:
+        conditions = Q()
+
+        for seller_id_key, product_ids in all_product.items():
+            conditions |= Q(seller_id=seller_id_key, product_id__in=product_ids)
+
+        prices = Price.objects.select_for_update().filter(conditions)
+        prices.update(quantity=F("quantity") - 1)
+    else:
+        prices = Price.objects.select_for_update().filter(seller_id=seller_id, product_id__in=certain)
+        prices.update(quantity=F("quantity") - 1)

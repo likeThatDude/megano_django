@@ -33,13 +33,14 @@ SERVER_DOMAIN = os.environ.get("SERVER_DOMAIN", "localhost")
 HTTP_PROTOCOL = os.environ.get("HTTP_PROTOCOL", "http")
 
 if DEBUG:
-    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "bc8d-37-214-103-7.ngrok-free.app"]
-    CSRF_TRUSTED_ORIGINS = ["https://bc8d-37-214-103-7.ngrok-free.app"]
+    ALLOWED_HOSTS = ["127.0.0.1", "localhost", "719b-37-214-101-184.ngrok-free.app"]
+    CSRF_TRUSTED_ORIGINS = ["https://719b-37-214-101-184.ngrok-free.app"]
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
 else:
     import sentry_sdk
+
     SENTRY_DSN = os.environ.get("SENTRY_DSN", None)
     sentry_sdk.init(
         dsn=SENTRY_DSN,
@@ -59,7 +60,6 @@ else:
         SERVER_DOMAIN,
     ]
     CSRF_TRUSTED_ORIGINS = [f"{HTTP_PROTOCOL}{SERVER_DOMAIN}"]
-
 
 USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
 
@@ -101,7 +101,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "debug_toolbar",
     "drf_spectacular",
-    "django_celery_results",
+    "django_celery_beat",
     "django_extensions",
     # Django apps
     "custom_auth.apps.CustomAuthConfig",
@@ -316,7 +316,3 @@ CELERY_RESULT_BACKEND = "redis://172.17.0.2:6379/1"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-
-CELERY_BEAT_SCHEDULE = {
-
-}
