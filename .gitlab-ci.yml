@@ -3,7 +3,7 @@ stages:
   - test
   - deploy
 
-test-job:
-  stage: test
+build-job:
+  stage: build
   script:
-    - python pytest -s -v
+    - docker build
