@@ -57,8 +57,7 @@ build-job:
 pytest-job:
   stage: test
   image: python:3.12
-  before-script:
-    - pip install -r requirements.txt
   script:
+    - pip install -r requirements.txt
     - cd website
     - python manage.py tests
