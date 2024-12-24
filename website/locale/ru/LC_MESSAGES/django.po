@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 15:57+0300\n"
+"POT-Creation-Date: 2024-12-23 15:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,10 @@ msgstr "Корзина пока пустая"
 #: cart/templates/cart/cart_detail.html:102
 msgid "Go back to the selection of products"
 msgstr "Обратно к выбору продуктов"
+
+#: cart/templates/cart/cart_detail.html:108
+msgid "Number of items in the cart"
+msgstr "Кол-во товаров в корзине"
 
 #: cart/templates/cart/cart_detail.html:112
 msgid "Go to checkout"
@@ -66,13 +70,13 @@ msgid "Сategory tags"
 msgstr "Теги категории"
 
 #: catalog/models.py:67 catalog/models.py:68 catalog/models.py:116
-#: catalog/templates/catalog/product_detail.html:111
+#: catalog/templates/catalog/product_detail.html:112
 msgid "Tags"
 msgstr "Теги"
 
 #: catalog/models.py:89 catalog/models.py:167
-#: catalog/templates/catalog/product_detail.html:123
-#: catalog/templates/catalog/product_detail.html:137 discount/forms.py:77
+#: catalog/templates/catalog/product_detail.html:124
+#: catalog/templates/catalog/product_detail.html:138 discount/forms.py:77
 #: discount/models.py:34 discount/models.py:188
 msgid "Description"
 msgstr "Описание"
@@ -135,7 +139,7 @@ msgstr "Изображение товара"
 msgid "Seller"
 msgstr "Продавец"
 
-#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:126
+#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:127
 msgid "Sellers"
 msgstr "Продавцы"
 
@@ -200,7 +204,7 @@ msgstr "Случайной картой в магазине"
 msgid "Payment method"
 msgstr "Способ оплаты"
 
-#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:210
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:211
 #: custom_auth/templates/custom_auth/personal_cabinet.html:83
 #: custom_auth/templates/custom_auth/profile_orders.html:76
 #: order/templates/order/order-detail.html:118
@@ -264,7 +268,7 @@ msgstr "Проданное количество"
 
 #: catalog/models.py:329 catalog/templates/catalog/catalog.html:44
 #: catalog/templates/catalog/catalog.html:128
-#: catalog/templates/catalog/product_detail.html:218 order/models.py:113
+#: catalog/templates/catalog/product_detail.html:219 order/models.py:113
 #: order/models.py:157 order/templates/order/order-detail.html:204
 msgid "Price"
 msgstr "Цена"
@@ -351,67 +355,67 @@ msgstr "Популярности"
 msgid "Novelty"
 msgstr "Новизне"
 
-#: catalog/templates/catalog/product_detail.html:64
+#: catalog/templates/catalog/product_detail.html:63
 msgid "The product is not on sale yet"
 msgstr "Этот продукт еще не поступил в продажу"
 
-#: catalog/templates/catalog/product_detail.html:92
-#: catalog/templates/catalog/product_detail.html:196
+#: catalog/templates/catalog/product_detail.html:93
+#: catalog/templates/catalog/product_detail.html:197
 msgid "Buy"
 msgstr "Купить"
 
-#: catalog/templates/catalog/product_detail.html:99
+#: catalog/templates/catalog/product_detail.html:100
 msgid "Congratulate"
 msgstr "Поздравляем"
 
-#: catalog/templates/catalog/product_detail.html:103
+#: catalog/templates/catalog/product_detail.html:104
 msgid "The product has been successfully added to the cart"
 msgstr "Товар был успешно добавлен в корзину"
 
-#: catalog/templates/catalog/product_detail.html:129
-#: catalog/templates/catalog/product_detail.html:157
+#: catalog/templates/catalog/product_detail.html:130
+#: catalog/templates/catalog/product_detail.html:158
 #: comparison/templates/comparison/comparison.html:74
 msgid "Characteristic"
 msgstr "Характеристика"
 
-#: catalog/templates/catalog/product_detail.html:148
+#: catalog/templates/catalog/product_detail.html:149
 msgid "Manufacturer's country"
 msgstr "Страна производителя"
 
-#: catalog/templates/catalog/product_detail.html:159
+#: catalog/templates/catalog/product_detail.html:160
 #: comparison/templates/comparison/comparison.html:75
 msgid "Value"
 msgstr "Значение"
 
-#: catalog/templates/catalog/product_detail.html:163
+#: catalog/templates/catalog/product_detail.html:164
 msgid "Device Type"
 msgstr "Тип устройства"
 
-#: catalog/templates/catalog/product_detail.html:202
+#: catalog/templates/catalog/product_detail.html:203
 msgid "Type delivery"
 msgstr "Тип доставки"
 
-#: catalog/templates/catalog/product_detail.html:247
+#: catalog/templates/catalog/product_detail.html:248
 msgid "There are no characteristics yet"
 msgstr "Сейчас нет характеристик"
 
-#: catalog/templates/catalog/product_detail.html:257
+#: catalog/templates/catalog/product_detail.html:258
 msgid "Add a review"
 msgstr "Добавить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:266
+#: catalog/templates/catalog/product_detail.html:267
 msgid "Send review"
 msgstr "Отправить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:272
+#: catalog/templates/catalog/product_detail.html:273
 msgid "To view all the reviews and be able to leave them"
 msgstr "Для просмотра всех отзывов и возможности их оставлять"
 
-#: catalog/templates/catalog/product_detail.html:273
+#: catalog/templates/catalog/product_detail.html:274
 msgid "you must register"
 msgstr "вы должны зарегистрироваться"
 
-#: catalog/templates/catalog/product_detail.html:275
+#: catalog/templates/catalog/product_detail.html:276
 #: core/templates/core/header.html:35 custom_auth/models.py:25
 #: custom_auth/templates/custom_auth/login.html:37
 #: custom_auth/templates/custom_auth/register.html:99
@@ -420,7 +424,7 @@ msgstr "вы должны зарегистрироваться"
 msgid "Login"
 msgstr "Войти"
 
-#: catalog/templates/catalog/product_detail.html:276
+#: catalog/templates/catalog/product_detail.html:277
 #: order/templates/order/order.html:269
 msgid "Register"
 msgstr "Зарегистрироваться"
@@ -484,15 +488,19 @@ msgstr "Сравниваемая категория"
 msgid "General parameters"
 msgstr "Общие параметры"
 
+#: comparison/templates/comparison/comparison.html:82
+msgid "Type"
+msgstr "Тип"
+
 #: comparison/templates/comparison/comparison.html:113
 msgid "Not available for sale"
 msgstr "Нет в продаже"
 
-#: comparison/templates/comparison/comparison.html:125
+#: comparison/templates/comparison/comparison.html:127
 msgid "Add to cart"
 msgstr "Добавить в корзину"
 
-#: comparison/templates/comparison/comparison.html:134
+#: comparison/templates/comparison/comparison.html:136
 msgid "There are no products to compare"
 msgstr "Нет товаров для сравнения"
 
@@ -575,37 +583,37 @@ msgstr "Контакты"
 msgid "Registration"
 msgstr "Регистрация"
 
-#: core/templates/core/header.html:73 core/templates/core/header.html:155
+#: core/templates/core/header.html:73 core/templates/core/header.html:152
 #: discount/models.py:221 order/templates/order/payment.html:102
 #: order/templates/order/paymentsomeone.html:102
 msgid "Discounts"
 msgstr "Скидки"
 
-#: core/templates/core/header.html:93 order/templates/order/payment.html:115
+#: core/templates/core/header.html:91 order/templates/order/payment.html:115
 #: order/templates/order/paymentsomeone.html:116
 msgid "Personal account"
 msgstr "Личный кабинет"
 
-#: core/templates/core/header.html:96 order/templates/order/payment.html:116
+#: core/templates/core/header.html:93 order/templates/order/payment.html:116
 #: order/templates/order/paymentsomeone.html:117
 msgid "Administrative section"
 msgstr "Административный раздел"
 
-#: core/templates/core/header.html:115 order/templates/order/payment.html:117
+#: core/templates/core/header.html:112 order/templates/order/payment.html:117
 #: order/templates/order/paymentsomeone.html:118
 msgid "Logout"
 msgstr "Выход"
 
-#: core/templates/core/header.html:131 order/templates/order/payment.html:128
+#: core/templates/core/header.html:128 order/templates/order/payment.html:128
 #: order/templates/order/paymentsomeone.html:129
 msgid "Show navigation"
 msgstr "Показать навигацию"
 
-#: core/templates/core/header.html:146 order/templates/order/payment.html:140
+#: core/templates/core/header.html:143 order/templates/order/payment.html:140
 msgid "All categories"
 msgstr "Все категории"
 
-#: core/templates/core/header.html:210 order/templates/order/payment.html:233
+#: core/templates/core/header.html:207 order/templates/order/payment.html:233
 msgid "Search"
 msgstr "Поиск"
 
