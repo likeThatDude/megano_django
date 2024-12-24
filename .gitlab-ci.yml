@@ -7,6 +7,7 @@ rename-env-file:
   stage: build
   script:
     - mv .env.for-ci .env
+    - ls -a
 
 build-job:
   stage: build
