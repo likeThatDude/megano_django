@@ -55,8 +55,9 @@
                             </div>
                             <div class="ProductCard-desc ProductCard-desc-in-cart">
                                 <div class="ProductCard-header">
-                                    <h2 class="ProductCard-title"> {{ info_product.product.name }}
-                                    </h2>
+                                    <a href="{{ info_product.product.get_absolute_url }}">
+                                    <h2 class="ProductCard-title"> {{ info_product.product.name }}</h2>
+                                        </a>
                                     <div class="ProductCard-info">
                                         <div class="Cost-product">
                                             <div class="Cost-product-value">
