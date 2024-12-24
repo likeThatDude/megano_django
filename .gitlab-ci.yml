@@ -60,4 +60,4 @@ pytest-job:
   script:
     - pip install -r requirements.txt
     - cd website
-    - python manage.py tests
+    - python manage.py test
