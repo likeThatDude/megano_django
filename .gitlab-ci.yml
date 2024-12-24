@@ -3,6 +3,11 @@ stages:
   - test
   - deploy
 
+rename-env-file:
+  stage: build
+  script:
+    - mv .env.for-ci .env
+
 build-job:
   stage: build
   variables: 
