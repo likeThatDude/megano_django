@@ -3,6 +3,14 @@ stages:
   - test
   - deploy
 
+isort-black-job:
+  stage: build
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - isort website/
+    - black website/
+
 build-job:
   stage: build
   variables: 
