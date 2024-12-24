@@ -53,3 +53,9 @@ build-job:
   script:
     - mv .env.for-ci .env
     - docker compose build
+
+pytest-job:
+  stage: test
+  script:
+    - cd website
+    - python manage.py tests
