@@ -52,5 +52,4 @@ build-job:
 
   script:
     - mv .env.for-ci .env
-    - docker compose down
-    - docker compose up —build
+    - docker compose build
