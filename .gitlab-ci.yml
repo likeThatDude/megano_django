@@ -57,5 +57,6 @@ build-job:
     DJANGO_SUPERUSER_LOGIN:  "admin"
 
   script:
+    - ls -a
     - docker compose down
     - docker compose up —build
