@@ -3,8 +3,9 @@
     height: 300px; /* высота рамки */
     border-radius: 50%; /* округление рамки для создания круга */
     overflow: hidden; /* обрезка изображения внутри рамки */
-    position: relative;
     background-color: #f0f0f0; /* цвет фона рамки */
+    position: relative;
+    aspect-ratio: 1 / 1;
 }
 
 .Profile-avatar img {
@@ -16,6 +17,31 @@
     left: 0;
 }
 
+.Profile-avatar-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.Profile-avatar-button:hover {
+    background-color: #0056b3;
+}
+
+.Profile-file {
+    display: none;
+}
+
 .error-input {
     color: red
-    }
+}
+
+.Profile-avatar-wrapper {
+    display: inline-block;
+    cursor: pointer;
+}
