@@ -30,15 +30,41 @@
 
 {% block body %}
   <div class="Middle Middle_top">
-    <div class="Section">
-      <div class="wrap">
-        <div class="Product">
-          <div class="ProductCard">
-            <div class="ProductCard-look">
-              <div class="ProductCard-photo">
-                <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
-              </div>
+  <div class="Section">
+    <div class="wrap">
+      <div class="Product">
+        <div class="ProductCard">
+          <div class="ProductCard-look">
+            <div class="ProductCard-photo">
+              <img src="{{ product.preview.url }}" alt="{{ product.preview.name }}">
             </div>
+            {% if product.video %}
+              <div class="product_video">
+              <h3>Смотри видеообзор для данного товара</h3>
+              {% if product.video.host == 'YO' %}
+                <iframe
+                    width="450"
+                    height="250"
+                    src="https://www.youtube.com/embed/{{ product.video.video_id }}"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+                </iframe>
+              {% else %}
+                <iframe
+                    width="450"
+                    height="250"
+                    src="https://rutube.ru/play/embed/{{ product.video.video_id }}"
+                    skinColor=e53935
+                    title="RuTube video player"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media; fullscreen; clipboard-write"
+                    allowfullscreen>
+                </iframe>
+              {% endif %}
+              </div>
+            {% endif %}
             <div class="ProductCard-picts">
               {% with images=product.images.all %}
                 {% if images %}

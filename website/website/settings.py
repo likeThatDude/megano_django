@@ -61,7 +61,7 @@ else:
     ]
     CSRF_TRUSTED_ORIGINS = [f"{HTTP_PROTOCOL}{SERVER_DOMAIN}"]
 
-USE_REDIS = os.environ.get("USE_REDIS", "1") == "1"
+USE_REDIS = os.environ.get("USE_REDIS", "0") == "1"
 
 if USE_REDIS:
     REDIS_HOST = os.environ.get("CONTAINER_REDIS_NAME", None)
@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_celery_beat",
     "django_extensions",
+    "storages",
     # Django apps
     "custom_auth.apps.CustomAuthConfig",
     "cart.apps.CartConfig",
@@ -224,14 +225,37 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+USE_S3 = os.environ.get("USE_S3_STORAGE", "0") == "1"
+if USE_S3:
+    STORAGES = {
+        "default": {
+            "BACKEND": 'website.s3_storage.OptimizationStorage',
+            # "BACKEND": "storages.backends.s3.S3Storage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
+    AWS_ACCESS_KEY_ID = os.environ.get("S3_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.environ.get("S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("S3_STORAGE_BUCKET_NAME")
+    AWS_S3_ENDPOINT_URL = os.environ.get("S3_URL")
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_LOCATION = os.environ.get("S3_PROJECT_FOLDER")
+    AWS_S3_MAX_FILE_SIZE = 15 * 1024 * 1024
+
+else:
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
+
+
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL = "/media/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

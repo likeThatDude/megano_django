@@ -271,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const userId = review.user.pk; // id пользователя
                     const userLogin = review.user.login; // Логин пользователя
                     const reviewText = review.text; // Текст отзыва
+                    const userPhoto = review.user.profile.photo
 
                     const updating = review.updating;
                     const createdAt = new Date(review.created_at); // Преобразуем строку даты в объект Date
@@ -317,8 +318,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
                         ` : ''}
                         <div class="Comment-column Comment-column_pict">
-                            <div class="Comment-avatar">
-                            </div>
+                                    ${userPhoto ? `
+                                        <div class="Comment-avatar" style="background: url('${userPhoto}') center center no-repeat;">
+                                        </div>
+                                    ` : `
+                                        <div class="Comment-avatar"></div>
+                                    `}
                         </div>
                         <div class="Comment-column">
                             <header class="Comment-header">
