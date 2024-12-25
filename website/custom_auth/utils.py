@@ -8,7 +8,7 @@ def profile_photo_directory_path(instance: "Profile", filename: str) -> str:
     Генерация пути для сохранения фото/аватара пользователя
     """
 
-    return "assets/img/profile/profile_{pk}/{filename}".format(
+    return "profile/profile_{pk}/{filename}".format(
         pk=instance.user,
         filename=filename,
     )

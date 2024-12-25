@@ -272,7 +272,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     const userLogin = review.user.login; // Логин пользователя
                     const reviewText = review.text; // Текст отзыва
                     const userPhoto = review.user.profile.photo
-                    console.log('Вот оно:', userPhoto)
 
                     const updating = review.updating;
                     const createdAt = new Date(review.created_at); // Преобразуем строку даты в объект Date

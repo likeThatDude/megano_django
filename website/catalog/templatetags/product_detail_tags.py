@@ -64,7 +64,6 @@ def get_seller_price(data: Seller, product_id: int) -> Decimal:
 
 @register.simple_tag()
 def get_product_count_into_seller(data: QuerySet, seller_id: str, product_id) -> int | str:
-    print(f'{data=}')
     for i in data.price.all():
         if i.product_id == product_id and i.seller_id == seller_id:
             return i.quantity
