@@ -27,7 +27,7 @@ class Category(models.Model):
     """
 
     name = models.CharField(max_length=100, verbose_name=_("Name"))
-    icon = models.FileField(upload_to=category_icon_directory_path, verbose_name=_("Icon"))
+    icon = models.FileField(upload_to=category_icon_directory_path, blank=True, null=True, verbose_name=_("Icon"))
     archived = models.BooleanField(default=False, verbose_name=_("Archived status"))
     parent_category = models.ForeignKey(
         "self",
