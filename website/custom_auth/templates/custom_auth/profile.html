@@ -63,19 +63,16 @@
                                     <label class="form-label" for="photo">{% trans 'Avatar' %}</label>
                                     <div class="Profile-avatar Profile-avatar_noimg">
                                         {% if profile_form.instance.photo %}
-                                            <img src="{{ profile_form.instance.photo.url }}" alt="profile photo"/>
-
-                                        {% else %}
-                                            <label class="Profile-fileLabel" for="photo">
-                                                <img src="{% static 'assets/img/icons/upload.png' %}" alt="#.png" />
-                                                {% trans 'Upload a photo' %}
+                                            <label for="photo" class="Profile-avatar-wrapper">
+                                                <img src="{{ profile_form.instance.photo.url }}" alt="profile photo" />
                                             </label>
-
+                                            <input class="Profile-file" id="photo" name="photo" type="file" data-validate="onlyImgAvatar" style="display: none;">
                                         {% endif %}
-                                        <input class="Profile-file form-input" id="photo" name="photo" type="file"
-                                               data-validate="onlyImgAvatar" />
-
                                     </div>
+                                    {% if not profile_form.instance.photo %}
+                                        <label for="photo" class="Profile-avatar-button">Обновить</label>
+                                        <input class="Profile-file" id="photo" name="photo" type="file" data-validate="onlyImgAvatar" style="display: none;">
+                                    {% endif %}
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="last_name">{% trans 'Surname' %}</label>
