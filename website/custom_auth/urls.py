@@ -31,8 +31,8 @@ urlpatterns = [
         "password_reset/",
         auth_views.PasswordResetView.as_view(
             template_name="custom_auth/password_reset.html",
-            email_template_name="account/password_reset_email.html",
-            success_url=reverse_lazy("account:password_reset_done"),
+            email_template_name="custom_auth/password_reset_email.html",
+            success_url=reverse_lazy("custom_auth:password_reset_done"),
         ),
         name="password_reset",
     ),
