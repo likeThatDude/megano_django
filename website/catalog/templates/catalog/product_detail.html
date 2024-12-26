@@ -179,10 +179,12 @@
                                                         <div class="row-block">
                                                             <div class="Order-title">
                                                                 <div class="seller_info_block">
-                                                                    <div class="seller_image"
-                                                                         style="background-image: url({{ seller.image.url }})">
+                                                                    {% if seller.image %}
+                                                                        <div class="seller_image"
+                                                                            style="background-image: url({{ seller.image.url }})">
 
-                                                                    </div>
+                                                                        </div>
+                                                                    {% endif %}
                                                                     <div class="seller_name">
                                                                         <span>{{ seller.name|truncatechars:25 }}</span>
                                                                     </div>
