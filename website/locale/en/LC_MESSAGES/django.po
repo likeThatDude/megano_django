@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-21 15:57+0300\n"
+"POT-Creation-Date: 2024-12-25 19:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,13 +64,13 @@ msgid "Сategory tags"
 msgstr ""
 
 #: catalog/models.py:67 catalog/models.py:68 catalog/models.py:116
-#: catalog/templates/catalog/product_detail.html:111
+#: catalog/templates/catalog/product_detail.html:110
 msgid "Tags"
 msgstr ""
 
 #: catalog/models.py:89 catalog/models.py:167
-#: catalog/templates/catalog/product_detail.html:123
-#: catalog/templates/catalog/product_detail.html:137 discount/forms.py:77
+#: catalog/templates/catalog/product_detail.html:122
+#: catalog/templates/catalog/product_detail.html:136 discount/forms.py:77
 #: discount/models.py:34 discount/models.py:188
 msgid "Description"
 msgstr ""
@@ -133,7 +133,7 @@ msgstr ""
 msgid "Seller"
 msgstr ""
 
-#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:126
+#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:125
 msgid "Sellers"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgstr ""
 msgid "Payment method"
 msgstr ""
 
-#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:210
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:209
 #: custom_auth/templates/custom_auth/personal_cabinet.html:83
 #: custom_auth/templates/custom_auth/profile_orders.html:76
 #: order/templates/order/order-detail.html:118
@@ -262,7 +262,7 @@ msgstr ""
 
 #: catalog/models.py:329 catalog/templates/catalog/catalog.html:44
 #: catalog/templates/catalog/catalog.html:128
-#: catalog/templates/catalog/product_detail.html:218 order/models.py:113
+#: catalog/templates/catalog/product_detail.html:217 order/models.py:113
 #: order/models.py:157 order/templates/order/order-detail.html:204
 msgid "Price"
 msgstr ""
@@ -349,67 +349,67 @@ msgstr ""
 msgid "Novelty"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:64
+#: catalog/templates/catalog/product_detail.html:63
 msgid "The product is not on sale yet"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:92
-#: catalog/templates/catalog/product_detail.html:196
+#: catalog/templates/catalog/product_detail.html:91
+#: catalog/templates/catalog/product_detail.html:195
 msgid "Buy"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:99
+#: catalog/templates/catalog/product_detail.html:98
 msgid "Congratulate"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:103
+#: catalog/templates/catalog/product_detail.html:102
 msgid "The product has been successfully added to the cart"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:129
-#: catalog/templates/catalog/product_detail.html:157
+#: catalog/templates/catalog/product_detail.html:128
+#: catalog/templates/catalog/product_detail.html:156
 #: comparison/templates/comparison/comparison.html:74
 msgid "Characteristic"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:148
+#: catalog/templates/catalog/product_detail.html:147
 msgid "Manufacturer's country"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:159
+#: catalog/templates/catalog/product_detail.html:158
 #: comparison/templates/comparison/comparison.html:75
 msgid "Value"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:163
+#: catalog/templates/catalog/product_detail.html:162
 msgid "Device Type"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:202
+#: catalog/templates/catalog/product_detail.html:201
 msgid "Type delivery"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:247
+#: catalog/templates/catalog/product_detail.html:246
 msgid "There are no characteristics yet"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:257
+#: catalog/templates/catalog/product_detail.html:256
 msgid "Add a review"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:266
+#: catalog/templates/catalog/product_detail.html:265
 msgid "Send review"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:272
+#: catalog/templates/catalog/product_detail.html:271
 msgid "To view all the reviews and be able to leave them"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:273
+#: catalog/templates/catalog/product_detail.html:272
 msgid "you must register"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:275
+#: catalog/templates/catalog/product_detail.html:274
 #: core/templates/core/header.html:35 custom_auth/models.py:25
 #: custom_auth/templates/custom_auth/login.html:37
 #: custom_auth/templates/custom_auth/register.html:99
@@ -418,7 +418,7 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: catalog/templates/catalog/product_detail.html:276
+#: catalog/templates/catalog/product_detail.html:275
 #: order/templates/order/order.html:269
 msgid "Register"
 msgstr ""
@@ -482,6 +482,10 @@ msgstr ""
 msgid "General parameters"
 msgstr ""
 
+#: comparison/templates/comparison/comparison.html:82
+msgid "Type"
+msgstr ""
+
 #: comparison/templates/comparison/comparison.html:113
 msgid "Not available for sale"
 msgstr ""
@@ -519,7 +523,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: core/templates/core/banners.html:24
+#: core/templates/core/banners.html:25
 msgid "Get Started"
 msgstr ""
 
@@ -573,37 +577,37 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
-#: core/templates/core/header.html:73 core/templates/core/header.html:155
+#: core/templates/core/header.html:73 core/templates/core/header.html:152
 #: discount/models.py:221 order/templates/order/payment.html:102
 #: order/templates/order/paymentsomeone.html:102
 msgid "Discounts"
 msgstr ""
 
-#: core/templates/core/header.html:93 order/templates/order/payment.html:115
+#: core/templates/core/header.html:91 order/templates/order/payment.html:115
 #: order/templates/order/paymentsomeone.html:116
 msgid "Personal account"
 msgstr ""
 
-#: core/templates/core/header.html:96 order/templates/order/payment.html:116
+#: core/templates/core/header.html:93 order/templates/order/payment.html:116
 #: order/templates/order/paymentsomeone.html:117
 msgid "Administrative section"
 msgstr ""
 
-#: core/templates/core/header.html:115 order/templates/order/payment.html:117
+#: core/templates/core/header.html:112 order/templates/order/payment.html:117
 #: order/templates/order/paymentsomeone.html:118
 msgid "Logout"
 msgstr ""
 
-#: core/templates/core/header.html:131 order/templates/order/payment.html:128
+#: core/templates/core/header.html:128 order/templates/order/payment.html:128
 #: order/templates/order/paymentsomeone.html:129
 msgid "Show navigation"
 msgstr ""
 
-#: core/templates/core/header.html:146 order/templates/order/payment.html:140
+#: core/templates/core/header.html:143 order/templates/order/payment.html:140
 msgid "All categories"
 msgstr ""
 
-#: core/templates/core/header.html:210 order/templates/order/payment.html:233
+#: core/templates/core/header.html:207 order/templates/order/payment.html:233
 msgid "Search"
 msgstr ""
 
@@ -623,6 +627,11 @@ msgstr ""
 #: order/templates/order/paymentsomeone.html:100
 #: order/templates/order/paymentsomeone.html:284
 msgid "Main page"
+msgstr ""
+
+#: core/templates/core/main_page.html:51
+#: custom_auth/templates/custom_auth/personal_cabinet.html:70
+msgid "from"
 msgstr ""
 
 #: core/templates/core/main_page.html:71
@@ -861,10 +870,6 @@ msgstr ""
 #: order/templates/order/order-detail.html:33
 #: order/templates/order/order_details.html:29
 msgid "Order"
-msgstr ""
-
-#: custom_auth/templates/custom_auth/personal_cabinet.html:70
-msgid "from"
 msgstr ""
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:77
