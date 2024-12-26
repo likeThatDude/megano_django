@@ -36,7 +36,7 @@
                     <div class="ProductCard ProductCard-inCart" data-product_id="{{ info_product.product.pk }}" data-price_product="{{ info_product.price }}">
                         <div class="ProductCard-look ProductCard-inCart">
                             <div class="ProductCard-photo">
-                                <img src="{{ info_product.product.preview }}" alt="{{ info_product.product.preview.name }}">
+                                <img src="{{ info_product.product.preview.url }}" alt="{{ info_product.product.preview.name }}">
                             </div>
                             <div class="ProductCard-desc">
                                 <div class="Short-description">{{ info_product.product.short_description|truncatechars:50 }}</div>
@@ -55,8 +55,9 @@
                             </div>
                             <div class="ProductCard-desc ProductCard-desc-in-cart">
                                 <div class="ProductCard-header">
-                                    <h2 class="ProductCard-title"> {{ info_product.product.name }}
-                                    </h2>
+                                    <a href="{{ info_product.product.get_absolute_url }}">
+                                    <h2 class="ProductCard-title"> {{ info_product.product.name }}</h2>
+                                        </a>
                                     <div class="ProductCard-info">
                                         <div class="Cost-product">
                                             <div class="Cost-product-value">
@@ -105,7 +106,7 @@
                 </div>
                 <div class="Footer-cart">
                     <div class="Footer-info">
-                        <span class="Footer-quantity-products-cart">{{ total_quantity_products }}</span>
+                        <span class="Footer-quantity-products-cart">{% trans 'Number of items in the cart' %}: {{ total_quantity_products }}</span>
                     </div>
                     <a class="btn btn_place_an_order" href="{% url 'order:order_create' %}">
                         <span class="btn-content">

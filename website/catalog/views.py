@@ -35,13 +35,10 @@ from .models import Seller
 from .models import Specification
 from .models import Tag
 from .models import Viewed
+from .models import Category
 from .serializers import ViewedSerializer
 from .models import ViewedSession
 from .utils import generate_sort_param, sort_convert
-
-
-def catalog_view(request: HttpRequest):
-    return render(request, "catalog/catalog.html")
 
 
 class CatalogListView(ListView):
@@ -126,8 +123,11 @@ class CatalogListView(ListView):
         """
 
         category_id = self.kwargs.get("pk")
-
-        products_with_related = Product.objects.prefetch_related("specifications").filter(category__id=category_id)
+        if category_id:
+            products_with_related = Product.objects.prefetch_related("specifications").filter(category__id=category_id)
+        else:
+            category_id = Category.objects.order_by('?').values('id')[:1].first()['id']
+            products_with_related = Product.objects.prefetch_related("specifications").filter(category__id=category_id)
 
         sellers = Seller.objects.all()
         manufactures = products_with_related.values_list("manufacture", flat=True).distinct()
@@ -147,8 +147,7 @@ class CatalogListView(ListView):
 
         if "sort_catalog" not in self.request.session:
             self.request.session["sort_catalog"] = generate_sort_param()
-        sorting = json.loads(self.request.session["sort_catalog"])
-
+        sorting = self.request.session["sort_catalog"]
         return {
             "sellers": sellers,
             "manufactures": manufactures,
@@ -169,6 +168,8 @@ class CatalogListView(ListView):
                 QuerySet: Набор данных с продуктами для текущей категории.
         """
         category_id = self.kwargs.get("pk")
+        if not category_id:
+            category_id = Category.objects.order_by('?').values('id')[:1].first()['id']
         cache_key = PRODUCTS_KEY.format(category_id=category_id)
         queryset = cache.get(cache_key)
         price_subquery = Price.objects.filter(product=OuterRef("pk")).values("pk")
@@ -340,6 +341,11 @@ class ProductDetailView(DetailView):
                     )
                     .all()
                     .only("name__name", "value", "product__id"),
+                ),
+                Prefetch(
+                    "prices",
+                    queryset=Price.objects.all().order_by("price").only("pk", "price"),
+                    to_attr="price_id",
                 ),
             )
             .only(

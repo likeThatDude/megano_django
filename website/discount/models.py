@@ -182,7 +182,7 @@ class Discount(models.Model):
         unique=True,
         blank=True,
         db_index=True,
-        verbose_name="Slug",
+        verbose_name=_("Slug"),
         help_text=_("It is automatically generated on behalf of, but can be changed"),
     )
     description = models.TextField(null=True, blank=True, verbose_name=_("Description"))

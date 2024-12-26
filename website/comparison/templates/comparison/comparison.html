@@ -117,8 +117,10 @@
                                         </div>
                                         <div class="ProductCard-cart">
 
-                                            <div class="ProductCard-cartElement"><a class="btn btn_primary"
-                                                                                    href="../../../static/cart.html"><img
+                                            <div class="ProductCard-cartElement"><a class="btn btn_primary btn-add-to-cart"
+                                                                                    href="../../../static/cart.html"
+                                                                                    data-product_id="{{ comparison.product.pk }}"
+                                                                                    data-price_id="{{ comparison.product.prices.first.pk }}"><img
                                                     class="btn-icon"
                                                     src="../../../static/assets/img/icons/card/cart_white.svg"
                                                     alt="cart_white.svg"/><span
@@ -142,6 +144,7 @@
 {% block script %}
     <script>const DELETE_PRODUCT = "{% url 'comparison:comparison_delete' %}";</script>
     <script src="{% static 'comparison/js/comparison_product.js' %}"></script>
+    <script src="{% static 'assets/js/cart/add_product_cart.js' %}"></script>
     <script>
         // Получаем элементы чекбокса и кнопки
         const checkBox = document.getElementById('unic_spec');
