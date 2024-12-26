@@ -898,7 +898,7 @@ msgstr "Статус"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:109
 msgid "You don't have any orders"
-msgstr "У вас нет никаких приказов"
+msgstr "У вас нет никаких заказов"
 
 #: custom_auth/templates/custom_auth/personal_cabinet.html:118
 msgid "Recent views"
