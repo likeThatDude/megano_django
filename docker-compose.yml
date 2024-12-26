@@ -21,7 +21,7 @@ services:
       my_network:
         ipv4_address: 172.18.0.4
     volumes:
-      - static_volume:/app/staticfilesc
+      - static_volume:/app/staticfiles
       - media_volume:/app/media
 
 #  celery:
