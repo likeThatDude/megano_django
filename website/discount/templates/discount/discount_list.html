@@ -12,20 +12,31 @@
     <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/basic.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/extra.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/utils.css' %}">
     <script src="{% static 'assets/plg/CountDown/countdown.js' %}"></script>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 {% endblock %}
 
 {% block body %}
-  <div class="wrap-container">
-    <div>
-      {% for discount in discounts %}
-        <div class="Discount-description">
-          <a href="{{ discount.get_absolute_url }}">{{ discount.name }}</a>
-          <span>{{ discount.description }}</span>
+  <div class="Discount-container wrap-container">
+    <h1>Доступные скидки</h1>
+    {% for discount in discounts %}
+      <div class="Discount-block">
+        <div class="Discount-image-container">
+          <img src="{% static 'discount/images/special_discount.jpg' %}">
         </div>
-      {% endfor %}
-    </div>
+        <div>
+          <a href="{{ discount.get_absolute_url }}">
+            <h2>
+              {{ discount.name }}
+            </h2>
+          </a>
+          <span>
+            {{ discount.description|truncatechars:35 }} ...
+          </span>
+        </div>
+      </div>
+    {% endfor %}
   </div>
 
 
