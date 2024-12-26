@@ -34,8 +34,8 @@
 .Account-avatar {
     max-width: 200px;
     max-height: 200px;
-    padding: 20px;
     border: 1px solid #e0e0e0;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 480px) {
@@ -48,7 +48,7 @@
 }
 
 .Account-avatar img {
-    max-width: 100%;
+    max-width: 100px;
     max-height: 100%;
 }
 

@@ -23,7 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
     """
 
     email = forms.EmailField(
-        label="Email",
+        label=_("Email"),
         required=True
     )
     birthday = forms.DateField(
@@ -34,12 +34,12 @@ class CustomUserCreationForm(UserCreationForm):
         required=False,
     )
     password1 = forms.CharField(
-        label="Password",
+        label=_("Password"),
         widget=forms.PasswordInput,
         required=True
     )
     password2 = forms.CharField(
-        label="Password Confirm",
+        label=_("Password Confirm"),
         widget=forms.PasswordInput,
         required=True
     )
@@ -119,7 +119,7 @@ class CustomUserChangeForm(UserChangeForm):
         """
         old_password = self.cleaned_data.get("old_password")
         if not self.instance.check_password(old_password) and old_password:
-            raise forms.ValidationError("Старый пароль не верен")
+            raise forms.ValidationError(_("Старый пароль не верен"))
         return old_password
 
     def clean_new_password1(self):
@@ -150,7 +150,7 @@ class CustomUserChangeForm(UserChangeForm):
         new_password1 = self.cleaned_data.get("new_password1")
         new_password2 = self.cleaned_data.get("new_password2")
         if new_password1 and new_password2 and new_password1 != new_password2:
-            raise forms.ValidationError("Введенные пароли не совпадают")
+            raise forms.ValidationError(_("Введенные пароли не совпадают"))
         return new_password2
 
     def save(self, commit=True):
@@ -211,27 +211,27 @@ class ProfileChangeForm(forms.ModelForm):
             # Удаляем все символы, кроме цифр и отрезаем 7
             phone = "".join(filter(str.isdigit, phone))[1:]
             if len(phone) != 10:
-                raise forms.ValidationError("Номер телефона должен содержать 10 цифр.")
+                raise forms.ValidationError(_("Номер телефона должен содержать 10 цифр."))
         return phone
 
     def clean_first_name(self):
         first_name: str = self.cleaned_data.get("first_name")
         if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
-            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В имени не должно быть ни одной цифры!"))
 
         return first_name
 
     def clean_last_name(self):
         last_name: str = self.cleaned_data.get("last_name")
         if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
-            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В фамилии не должно быть ни одной цифры!"))
 
         return last_name
 
     def clean_patronymic(self):
         patronymic = self.cleaned_data.get("patronymic")
         if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
-            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В отчестве не должно быть ни одной цифры!"))
 
         return patronymic
 
@@ -251,21 +251,21 @@ class ProfileRegistrationForm(ProfileChangeForm):
     def clean_first_name(self):
         first_name: str = self.cleaned_data.get("first_name")
         if first_name and (first_name.isdigit() or not all(char.isalpha() for char in first_name)):
-            raise forms.ValidationError("В имени не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В имени не должно быть ни одной цифры!"))
 
         return first_name
 
     def clean_last_name(self):
         last_name: str = self.cleaned_data.get("last_name")
         if last_name and (last_name.isdigit() or not all(char.isalpha() for char in last_name)):
-            raise forms.ValidationError("В фамилии не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В фамилии не должно быть ни одной цифры!"))
 
         return last_name
 
     def clean_patronymic(self):
         patronymic = self.cleaned_data.get("patronymic")
         if patronymic and (patronymic.isdigit() or not all(char.isalpha() for char in patronymic)):
-            raise forms.ValidationError("В отчестве не должно быть ни одной цифры!")
+            raise forms.ValidationError(_("В отчестве не должно быть ни одной цифры!"))
 
         return patronymic
 
