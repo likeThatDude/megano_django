@@ -52,7 +52,7 @@
     object-position: center;
 }
 
-.Discount-details-block {
+.Discount-details-block h3 h4 {
     display: flex;
     flex-direction: column;
     gap: 2rem;
