@@ -30,15 +30,19 @@
     <ul>
         {% for discount in discounts %}
             <li>
-                <h2>{{ discount.title }}</h2>
+                <h2>
+                    <a href="{% url 'discount:discount-detail' slug=discount.slug %}">
+                        {{ discount.name }}
+                    </a>
+                </h2>
                 <p>{{ discount.description }}</p>
                 {% if discount.start_date or discount.end_date %}
                     <div>
                         {% if discount.start_date %}
-                            <span>{% trans 'Start' %}: {{ discount.start_date|date:"Y-m-d H:i" }}</span>
+                            <span>{% trans 'Start' %}: {{ discount.start_date|date:"Y-m-d" }}</span>
                         {% endif %}
                         {% if discount.end_date %}
-                            <span>{% trans 'End' %}: {{ discount.end_date|date:"Y-m-d H:i" }}</span>
+                            <span>{% trans 'End' %}: {{ discount.end_date|date:"Y-m-d" }}</span>
                         {% endif %}
                     </div>
                 {% endif %}

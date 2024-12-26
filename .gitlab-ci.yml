@@ -1,49 +1,71 @@
-# This file is a template, and might need editing before it works on your project.
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-#
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - deploy
 
-build-job:       # This job runs in the build stage, which runs first.
+isort-black-job:
   stage: build
+  image: python:3.12
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
+    - pip install -r requirements.txt
+    - isort website/
+    - black website/
 
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
-  script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - sleep 60
-    - echo "Code coverage is 90%"
+build-job:
+  stage: build
+  variables: 
+    # Django settings
+    DEBUG: '1' # 0 is Debug: False, 1 is Debug: True
+    SECRET_KEY :  "django-insecure--tj#@x^aa%5f_dfu56dfxmi87@_9md5+8a0bbt70^!c^5m@adz"
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
+    # Stripe payment settings
+    STRIPE_SECRET_KEY :  ''
+    STRIPE_PUBLISHABLE_KEY :  ""
+    STRIPE_WEBHOOK_SECRET_KEY :  ""
+
+    # Email settings
+    EMAIL_USER: "имя почтового ящика"
+    EMAIL_PASSWORD: "код приложения (app password) Можно получить после прохождения 2FA!"
+
+    # Database settings
+    USE_POSTGRES: '0' # 0 is USE_POSTGRES: False, 1 is USE_POSTGRES: True
+    CONTAINER_DATABASE_NAME :  'megano_db'
+    DB_NAME: 'megano'
+    DB_USER: 'megano_admin'
+    DB_PASS: 'qwerty'
+
+    # PgBouncer settings
+    CONTAINER_BOUNCER_NAME: "megano_pgbouncer"
+    POOL_MODE: "transaction"
+    MAX_CLIENT_CONN: "1000"
+    DEFAULT_POOL_SIZE: "20"
+
+    # Redis settings
+    USE_REDIS: "0" # 0 is USE_REDIS: False, 1 is USE_REDIS: True
+    CONTAINER_REDIS_NAME: "megano_redis"
+    REDIS_PORT: "6379"
+    REDIS_DB: "0"
+
+    # Nginx settings
+    CONTAINER_NGINX_NAME: "megano_nginx"
+    NGINX_SERVER_NAME: ""
+
+    # App settings
+    CONTAINER_APP_NAME :  'megano_app'
+    SERVER_DOMAIN: ""
+    DJANGO_SUPERUSER_EMAIL:  "admin@admin.com"
+    DJANGO_SUPERUSER_PASSWORD:  "admin"
+    DJANGO_SUPERUSER_LOGIN:  "admin"
+
   script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - mv .env.for-ci .env
+    - docker compose build
+
+pytest-job:
+  stage: test
+  image: python:3.12
+  script:
+    - pip install -r requirements.txt
+    - cd website
+    - python manage.py test
