@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-26 09:30+0300\n"
+"POT-Creation-Date: 2024-12-26 09:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,10 @@ msgstr "Корзина пока пустая"
 #: cart/templates/cart/cart_detail.html:102
 msgid "Go back to the selection of products"
 msgstr "Обратно к выбору продуктов"
+
+#: cart/templates/cart/cart_detail.html:108
+msgid "Number of items in the cart"
+msgstr "Кол-во товаров в корзине"
 
 #: cart/templates/cart/cart_detail.html:112
 msgid "Go to checkout"
@@ -66,13 +70,13 @@ msgid "Сategory tags"
 msgstr "Теги категории"
 
 #: catalog/models.py:67 catalog/models.py:68 catalog/models.py:116
-#: catalog/templates/catalog/product_detail.html:110
+#: catalog/templates/catalog/product_detail.html:112
 msgid "Tags"
 msgstr "Теги"
 
 #: catalog/models.py:89 catalog/models.py:167
-#: catalog/templates/catalog/product_detail.html:122
-#: catalog/templates/catalog/product_detail.html:136 discount/forms.py:77
+#: catalog/templates/catalog/product_detail.html:124
+#: catalog/templates/catalog/product_detail.html:138 discount/forms.py:77
 #: discount/models.py:34 discount/models.py:188
 msgid "Description"
 msgstr "Описание"
@@ -135,7 +139,7 @@ msgstr "Изображение товара"
 msgid "Seller"
 msgstr "Продавец"
 
-#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:125
+#: catalog/models.py:164 catalog/templates/catalog/product_detail.html:127
 msgid "Sellers"
 msgstr "Продавцы"
 
@@ -200,7 +204,7 @@ msgstr "Случайной картой в магазине"
 msgid "Payment method"
 msgstr "Способ оплаты"
 
-#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:209
+#: catalog/models.py:243 catalog/templates/catalog/product_detail.html:211
 #: custom_auth/templates/custom_auth/personal_cabinet.html:83
 #: custom_auth/templates/custom_auth/profile_orders.html:76
 #: order/templates/order/order-detail.html:118
@@ -264,7 +268,7 @@ msgstr "Проданное количество"
 
 #: catalog/models.py:329 catalog/templates/catalog/catalog.html:44
 #: catalog/templates/catalog/catalog.html:128
-#: catalog/templates/catalog/product_detail.html:217 order/models.py:113
+#: catalog/templates/catalog/product_detail.html:219 order/models.py:113
 #: order/models.py:157 order/templates/order/order-detail.html:204
 msgid "Price"
 msgstr "Цена"
@@ -355,63 +359,63 @@ msgstr "Новизне"
 msgid "The product is not on sale yet"
 msgstr "Этот продукт еще не поступил в продажу"
 
-#: catalog/templates/catalog/product_detail.html:91
-#: catalog/templates/catalog/product_detail.html:195
+#: catalog/templates/catalog/product_detail.html:93
+#: catalog/templates/catalog/product_detail.html:197
 msgid "Buy"
 msgstr "Купить"
 
-#: catalog/templates/catalog/product_detail.html:98
+#: catalog/templates/catalog/product_detail.html:100
 msgid "Congratulate"
 msgstr "Поздравляем"
 
-#: catalog/templates/catalog/product_detail.html:102
+#: catalog/templates/catalog/product_detail.html:104
 msgid "The product has been successfully added to the cart"
 msgstr "Товар был успешно добавлен в корзину"
 
-#: catalog/templates/catalog/product_detail.html:128
-#: catalog/templates/catalog/product_detail.html:156
+#: catalog/templates/catalog/product_detail.html:130
+#: catalog/templates/catalog/product_detail.html:158
 #: comparison/templates/comparison/comparison.html:74
 msgid "Characteristic"
 msgstr "Характеристика"
 
-#: catalog/templates/catalog/product_detail.html:147
+#: catalog/templates/catalog/product_detail.html:149
 msgid "Manufacturer's country"
 msgstr "Страна производителя"
 
-#: catalog/templates/catalog/product_detail.html:158
+#: catalog/templates/catalog/product_detail.html:160
 #: comparison/templates/comparison/comparison.html:75
 msgid "Value"
 msgstr "Значение"
 
-#: catalog/templates/catalog/product_detail.html:162
+#: catalog/templates/catalog/product_detail.html:164
 msgid "Device Type"
 msgstr "Тип устройства"
 
-#: catalog/templates/catalog/product_detail.html:201
+#: catalog/templates/catalog/product_detail.html:203
 msgid "Type delivery"
 msgstr "Тип доставки"
 
-#: catalog/templates/catalog/product_detail.html:246
+#: catalog/templates/catalog/product_detail.html:248
 msgid "There are no characteristics yet"
 msgstr "Сейчас нет характеристик"
 
-#: catalog/templates/catalog/product_detail.html:256
+#: catalog/templates/catalog/product_detail.html:258
 msgid "Add a review"
 msgstr "Добавить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:265
+#: catalog/templates/catalog/product_detail.html:267
 msgid "Send review"
 msgstr "Отправить отзыв"
 
-#: catalog/templates/catalog/product_detail.html:271
+#: catalog/templates/catalog/product_detail.html:273
 msgid "To view all the reviews and be able to leave them"
 msgstr "Для просмотра всех отзывов и возможности их оставлять"
 
-#: catalog/templates/catalog/product_detail.html:272
+#: catalog/templates/catalog/product_detail.html:274
 msgid "you must register"
 msgstr "вы должны зарегистрироваться"
 
-#: catalog/templates/catalog/product_detail.html:274
+#: catalog/templates/catalog/product_detail.html:276
 #: core/templates/core/header.html:35 core/templates/core/header.html:104
 #: custom_auth/models.py:25 custom_auth/templates/custom_auth/login.html:37
 #: custom_auth/templates/custom_auth/register.html:99
@@ -420,7 +424,7 @@ msgstr "вы должны зарегистрироваться"
 msgid "Login"
 msgstr "Войти"
 
-#: catalog/templates/catalog/product_detail.html:275
+#: catalog/templates/catalog/product_detail.html:277
 #: order/templates/order/order.html:269
 msgid "Register"
 msgstr "Зарегистрироваться"
@@ -492,11 +496,11 @@ msgstr "Тип"
 msgid "Not available for sale"
 msgstr "Нет в продаже"
 
-#: comparison/templates/comparison/comparison.html:125
+#: comparison/templates/comparison/comparison.html:127
 msgid "Add to cart"
 msgstr "Добавить в корзину"
 
-#: comparison/templates/comparison/comparison.html:134
+#: comparison/templates/comparison/comparison.html:136
 msgid "There are no products to compare"
 msgstr "Нет товаров для сравнения"
 
