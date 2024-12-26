@@ -24,7 +24,7 @@
     object-position: center;
 }
 
-.Discount-block {
+.Discount-list-block {
     display: flex;
     flex-direction: row;
     gap: 2rem;
