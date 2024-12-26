@@ -1,3 +1,67 @@
+.Discount-container {
+    display: flex;
+    margin: 0 4rem 4rem 6rem;
+    padding: 6rem 6rem;
+    gap: 7rem;
+    flex-direction: column;
+}
+
+.Discount-image-container {
+    width: 120px;
+    height: auto;
+    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+}
+
+.Discount-image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.Discount-list-block {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+}
+
+.Discount-block {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.Discount-image-block {
+    width: 400px;
+    height: auto;
+    overflow: hidden;
+    align-items: center;
+}
+
+.Discount-image-container-details {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.Discount-details-block h3 h4 {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.Discount-details-block span {
+    font-weight: bold;
+}
+
 .Profile-avatar {
     width: 300px; /* ширина рамки */
     height: 300px; /* высота рамки */

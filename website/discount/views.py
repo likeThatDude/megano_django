@@ -19,31 +19,21 @@ from .forms import DiscountCreationForm
 from .models import Discount
 
 
-class DiscountListView(UserPassesTestMixin, ListView):
+class DiscountListView(ListView):
     """
-    Представление для отображения всех скидок:
-    Доступно только аутентифицированному пользователя, у которого есть права админа.
+    Представление для отображения всех скидок
+
     """
 
     model = Discount
     template_name = "discount/discount_list.html"
     context_object_name = "discounts"
 
-    def test_func(self) -> bool:
-        """
-        Метод test_func, чтобы не пропускать запросы
-        не аутентифицированного пользователя без прав администратора
-        """
-        if not self.request.user.is_staff:
-            return False
 
-        return True
-
-
-class DiscountDetailView(UserPassesTestMixin, DetailView):
+class DiscountDetailView(DetailView):
     """
-    Представление для отображения формы деталей скидки:
-    Доступно только аутентифицированному пользователя, у которого есть права админа.
+    Представление для отображения формы деталей скидки
+
     """
 
     model = Discount
@@ -76,7 +66,7 @@ class DiscountDetailView(UserPassesTestMixin, DetailView):
             return _("percentage discount")
         elif self.object.method == "SM":
             cost_discount = self.object.total_cost_l
-            return _("the discount is valid from a certain cost {cost_discount}")
+            return _(f"the discount is valid from a certain cost {cost_discount}")
         elif self.object.method == "FD":
             return _("fixed discount amount")
 
