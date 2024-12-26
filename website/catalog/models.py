@@ -86,7 +86,7 @@ class Product(models.Model):
     """
 
     name = models.CharField(max_length=100, null=False, blank=False, db_index=True, verbose_name=_("Name"))
-    description = models.TextField(null=True, blank=True, db_index=True, verbose_name=_("Description"))
+    description = models.TextField(null=True, blank=True, verbose_name=_("Description"))
     short_description = models.CharField(max_length=80, null=True, blank=True, verbose_name=_("Short description"))
     product_type = models.CharField(
         max_length=100,
