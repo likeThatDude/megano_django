@@ -33,20 +33,30 @@
         <h3>{% trans 'Type discount' %}: {{ description_type }}</h3>
         {% if products %}
           {% for product in products.all %}
-            <h4>{{ product.name }}</h4>
-            {% for price in product.prices.all %}
-                <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
-            {% endfor %}
+            <ul>
+              <li>
+                <h4>{{ product.name }}</h4>
+                {% for price in product.prices.all %}
+                  <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
+                {% endfor %}
+              </li>
+            </ul>
+
           {% endfor %}
         {% elif product_groups %}
           <h3>{% trans 'Name group products' %}: {{ product_groups.name }}</h3>
           <h3>{% trans 'Description group products' %}: {{ product_groups.description }}</h3>
           <h3>{% trans 'Archived status' %}: {{ product_groups.archived }}</h3>
           {% for product in product_groups %}
-            <h4>{{ product.name }}</h4>
-            {% for price in product.prices.all %}
-                <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
-            {% endfor %}
+            <ul>
+              <li>
+                <h4>{{ product.name }}</h4>
+                {% for price in product.prices.all %}
+                  <a href="{{ price.product.get_absolute_url }}">{{ price.price }}</a>
+                {% endfor %}
+              </li>
+            </ul>
+
           {% endfor %}
         {% elif cart_products %}
           {% if cart_products.quantity_l %}
