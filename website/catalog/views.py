@@ -1,10 +1,10 @@
+import json
 from collections import defaultdict
 from itertools import product
 
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import (
-    Min,
     Count,
     Max,
     Sum,
@@ -36,8 +36,8 @@ from .models import Specification
 from .models import Tag
 from .models import Viewed
 from .serializers import ViewedSerializer
-from .utils import generate_sort_param, sort_convert
 from .models import ViewedSession
+from .utils import generate_sort_param, sort_convert
 
 
 def catalog_view(request: HttpRequest):
@@ -109,7 +109,8 @@ class CatalogListView(ListView):
             Возвращает:
                 str: Параметр последней сортировки или None, если сортировка не была установлена.
         """
-        for key, value in session["sort_catalog"].items():
+        sorting = json.loads(session["sort_catalog"])
+        for key, value in sorting.items():
             if value["style"]:
                 return value["param"]
 
@@ -339,6 +340,11 @@ class ProductDetailView(DetailView):
                     )
                     .all()
                     .only("name__name", "value", "product__id"),
+                ),
+                Prefetch(
+                    "prices",
+                    queryset=Price.objects.all().order_by("price").only("pk", "price"),
+                    to_attr="price_id",
                 ),
             )
             .only(
