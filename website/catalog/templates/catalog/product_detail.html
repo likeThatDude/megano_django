@@ -255,9 +255,69 @@
                               <div class="Order-info">
                                 <div class="Order-infoType">{% trans 'Price' %}:
                                 </div>
-                                <div class="Order-infoContent">
-                                  {% get_seller_price seller product.pk as seller_price %}
-                                  <span class="Order-price">{{ seller_price }}$</span>
+                            </div>
+                            <div class="Tabs-block" id="sellers">
+                                <div class="Section-content">
+                                    <div class="Orders">
+                                        {% for seller in sellers %}
+                                            <div class="Order Order_anons">
+                                                <div class="Order-personal">
+                                                    <div class="row">
+                                                        <div class="row-block">
+                                                            <div class="Order-title">
+                                                                <div class="seller_info_block">
+                                                                    {% if seller.image %}
+                                                                        <div class="seller_image"
+                                                                            style="background-image: url({{ seller.image.url }})">
+
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    <div class="seller_name">
+                                                                        <span>{{ seller.name|truncatechars:25 }}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="ProductCard-cartElement"
+                                                                 style="margin-top: 10px;">
+                                                                <a class="btn btn_primary" href="#modal_open">
+                                                                    <img class="btn-icon"
+                                                                         src="{% static 'assets/img/icons/card/cart_white.svg' %}"
+                                                                         alt="cart_white.svg"/>
+                                                                    <span class="btn-content">{% trans 'Buy' %}</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row-block">
+                                                            <div class="Order-info Order-info_delivery">
+                                                                <div class="Order-infoType">{% trans 'Type delivery' %}:
+                                                                </div>
+                                                                <div class="Order-infoContent">
+                                                                    {% get_seller_data_list seller.delivery_methods.all as delivery_list %}
+                                                                    {{ delivery_list }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="Order-info Order-info_pay">
+                                                                <div class="Order-infoType">{% trans 'Payment' %}:
+                                                                </div>
+                                                                <div class="Order-infoContent">
+                                                                    {% get_seller_data_list seller.payment_methods.all as payment_list %}
+                                                                    {{ payment_list }}
+                                                                </div>
+                                                            </div>
+                                                            <div class="Order-info">
+                                                                <div class="Order-infoType">{% trans 'Price' %}:
+                                                                </div>
+                                                                <div class="Order-infoContent">
+                                                                    {% get_seller_price seller product.pk as seller_price %}
+                                                                    <span class="Order-price">{{ seller_price }}$</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                               </div>
                             </div>

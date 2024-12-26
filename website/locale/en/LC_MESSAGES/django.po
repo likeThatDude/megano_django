@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-23 15:09+0300\n"
+"POT-Creation-Date: 2024-12-26 09:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgstr ""
 
 #: catalog/models.py:31 catalog/models.py:106 catalog/models.py:187
 #: discount/models.py:35 discount/models.py:192
-#: discount/templates/discount/discount_detail.html:36
+#: discount/templates/discount/discount_detail.html:40
 msgid "Archived status"
 msgstr ""
 
@@ -414,8 +414,8 @@ msgid "you must register"
 msgstr ""
 
 #: catalog/templates/catalog/product_detail.html:276
-#: core/templates/core/header.html:35 custom_auth/models.py:25
-#: custom_auth/templates/custom_auth/login.html:37
+#: core/templates/core/header.html:35 core/templates/core/header.html:104
+#: custom_auth/models.py:25 custom_auth/templates/custom_auth/login.html:37
 #: custom_auth/templates/custom_auth/register.html:99
 #: order/templates/order/order.html:267 order/templates/order/payment.html:75
 #: order/templates/order/paymentsomeone.html:75
@@ -527,7 +527,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: core/templates/core/banners.html:24
+#: core/templates/core/banners.html:25
 msgid "Get Started"
 msgstr ""
 
@@ -581,37 +581,37 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
-#: core/templates/core/header.html:73 core/templates/core/header.html:152
+#: core/templates/core/header.html:73 core/templates/core/header.html:144
 #: discount/models.py:221 order/templates/order/payment.html:102
 #: order/templates/order/paymentsomeone.html:102
 msgid "Discounts"
 msgstr ""
 
-#: core/templates/core/header.html:91 order/templates/order/payment.html:115
+#: core/templates/core/header.html:90 order/templates/order/payment.html:115
 #: order/templates/order/paymentsomeone.html:116
 msgid "Personal account"
 msgstr ""
 
-#: core/templates/core/header.html:93 order/templates/order/payment.html:116
+#: core/templates/core/header.html:92 order/templates/order/payment.html:116
 #: order/templates/order/paymentsomeone.html:117
 msgid "Administrative section"
 msgstr ""
 
-#: core/templates/core/header.html:112 order/templates/order/payment.html:117
+#: core/templates/core/header.html:98 order/templates/order/payment.html:117
 #: order/templates/order/paymentsomeone.html:118
 msgid "Logout"
 msgstr ""
 
-#: core/templates/core/header.html:128 order/templates/order/payment.html:128
+#: core/templates/core/header.html:120 order/templates/order/payment.html:128
 #: order/templates/order/paymentsomeone.html:129
 msgid "Show navigation"
 msgstr ""
 
-#: core/templates/core/header.html:143 order/templates/order/payment.html:140
+#: core/templates/core/header.html:135 order/templates/order/payment.html:140
 msgid "All categories"
 msgstr ""
 
-#: core/templates/core/header.html:207 order/templates/order/payment.html:233
+#: core/templates/core/header.html:199 order/templates/order/payment.html:233
 msgid "Search"
 msgstr ""
 
@@ -631,6 +631,11 @@ msgstr ""
 #: order/templates/order/paymentsomeone.html:100
 #: order/templates/order/paymentsomeone.html:284
 msgid "Main page"
+msgstr ""
+
+#: core/templates/core/main_page.html:51
+#: custom_auth/templates/custom_auth/personal_cabinet.html:70
+msgid "from"
 msgstr ""
 
 #: core/templates/core/main_page.html:71
@@ -871,10 +876,6 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: custom_auth/templates/custom_auth/personal_cabinet.html:70
-msgid "from"
-msgstr ""
-
 #: custom_auth/templates/custom_auth/personal_cabinet.html:77
 #: custom_auth/templates/custom_auth/profile_orders.html:72
 #: order/templates/order/order-detail.html:85
@@ -1072,7 +1073,7 @@ msgstr ""
 msgid "Fill in the required field"
 msgstr ""
 
-#: discount/forms.py:34 discount/templates/discount/discount_detail.html:25
+#: discount/forms.py:34 discount/templates/discount/discount_detail.html:29
 msgid "Type discount"
 msgstr ""
 
@@ -1188,7 +1189,7 @@ msgstr ""
 msgid "Discount mechanism"
 msgstr ""
 
-#: discount/models.py:137 discount/templates/discount/discount_detail.html:58
+#: discount/models.py:137 discount/templates/discount/discount_detail.html:62
 msgid "Discount priority"
 msgstr ""
 
@@ -1280,55 +1281,59 @@ msgstr ""
 msgid "Discount"
 msgstr ""
 
-#: discount/templates/discount/active_discounts.html:38
+#: discount/templates/discount/active_discounts.html:42
 msgid "Start"
 msgstr ""
 
-#: discount/templates/discount/active_discounts.html:41
+#: discount/templates/discount/active_discounts.html:45
 msgid "End"
 msgstr ""
 
-#: discount/templates/discount/active_discounts.html:47
+#: discount/templates/discount/active_discounts.html:51
 msgid "There are no active discounts"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:34
+#: discount/templates/discount/discount_detail.html:21
+msgid "Detail discount"
+msgstr ""
+
+#: discount/templates/discount/discount_detail.html:38
 msgid "Name group products"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:35
+#: discount/templates/discount/discount_detail.html:39
 msgid "Description group products"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:44
+#: discount/templates/discount/discount_detail.html:48
 msgid "Min quantity products in cart"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:45
+#: discount/templates/discount/discount_detail.html:49
 msgid "Max quantity products in cart"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:46
+#: discount/templates/discount/discount_detail.html:50
 msgid "Total cost products in cart"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:49
+#: discount/templates/discount/discount_detail.html:53
 msgid "Discount calculation method"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:51
+#: discount/templates/discount/discount_detail.html:55
 msgid "Percent discount"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:53
+#: discount/templates/discount/discount_detail.html:57
 msgid "The discount is valid for the amount of"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:55
+#: discount/templates/discount/discount_detail.html:59
 msgid "The discount has a fixed price"
 msgstr ""
 
-#: discount/templates/discount/discount_detail.html:61
+#: discount/templates/discount/discount_detail.html:65
 msgid "Back to discounts"
 msgstr ""
 
@@ -1358,8 +1363,8 @@ msgstr ""
 
 #: discount/views.py:79
 #, python-brace-format
-msgid "the discount is valid from a certain cost {cost_discount}"
-msgstr ""
+msgid "the discount is valid from a certain cost"
+msgstr "скидка доступна от определенной стоимости"
 
 #: discount/views.py:81
 msgid "fixed discount amount"
