@@ -66,7 +66,7 @@ class DiscountDetailView(DetailView):
             return _("percentage discount")
         elif self.object.method == "SM":
             cost_discount = self.object.total_cost_l
-            return _("the discount is valid from a certain cost {cost_discount}")
+            return _(f"the discount is valid from a certain cost {cost_discount}")
         elif self.object.method == "FD":
             return _("fixed discount amount")
 
