@@ -1,5 +1,5 @@
 from catalog.models import Review
-from custom_auth.models import CustomUser
+from custom_auth.models import CustomUser, Profile
 from django.db.models import Q
 from rest_framework import serializers
 
@@ -66,6 +66,11 @@ class ReviewDeleteSerializer(serializers.ModelSerializer):
         fields = ("pk",)
 
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('photo', )
+
 class UserReviewSerializer(serializers.ModelSerializer):
     """
     Сериализатор для пользователя, оставившего отзыв.
@@ -74,12 +79,14 @@ class UserReviewSerializer(serializers.ModelSerializer):
         pk (int): Первичный ключ пользователя.
         login (str): Логин пользователя.
     """
+    profile = UserProfileSerializer(read_only=True)
 
     class Meta:
         model = CustomUser
         fields = (
             "pk",
             "login",
+            "profile",
         )
 
 

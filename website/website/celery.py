@@ -22,5 +22,9 @@ app.conf.beat_schedule = {
     "send_user_happy_birthday": {
         "task": "custom_auth.tasks.send_user_happy_birthday",
         "schedule": crontab(minute="0", hour="0"),
-    }
+    },
+    "check_actual_banners": {
+        "task": "core.tasks.check_actual_banners",
+        "schedule": crontab(minute="10", hour="0"),
+    },
 }

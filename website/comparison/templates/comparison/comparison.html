@@ -37,12 +37,12 @@
                                             {% if comparison.product.name %}
                                                 <h2 class="ProductCard-title">
                                                     <a href="{{ comparison.product.get_absolute_url }}">
-                                                        {{ comparison.product.name|truncatechars:40 }}</a>
+                                                        {{ comparison.product.name|truncatechars:30 }}</a>
                                                 </h2>
                                             {% else %}
                                                 <h2 class="ProductCard-title">
                                                     <a href="{{ comparison.product.get_absolute_url }}">
-                                                        {{ comparison.name|truncatechars:40 }}</a>
+                                                        {{ comparison.name|truncatechars:30 }}</a>
                                                 </h2>
                                             {% endif %}
                                             <div class="ProductCard-look">

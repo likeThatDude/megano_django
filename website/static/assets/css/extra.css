@@ -4804,12 +4804,22 @@ a.Cart-title {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    margin-bottom: 30px;
+
 }
 
 .ProductCard-inCart {
     justify-content: space-between;
     width: 100%;
 
+}
+
+.product_video {
+    margin-left: 50px;
+}
+.product_video > h1 {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .ProductCard-inCart h2 {

@@ -114,6 +114,8 @@ class Product(models.Model):
         verbose_name=_("Preview"),
     )
     tags = ManyToManyField(Tag, related_name="products", verbose_name=_("Tags"), blank=True)
+    video = models.OneToOneField('ProductVideo', verbose_name=_("Video"), on_delete=models.CASCADE, null=True,
+                                 blank=True, related_name="product", default=None)
 
     def get_absolute_url(self):
         return reverse("catalog:product_detail", kwargs={"pk": self.pk})
@@ -124,6 +126,18 @@ class Product(models.Model):
 
     def __str__(self) -> str:
         return f"Product(id={self.pk}, name={self.name[:20]} {'...' if len(self.name) > 20 else ''})"
+
+
+class ProductVideo(models.Model):
+    YOUTUBE = "YO"
+    RUTUBE = "RU"
+
+    PAYMENT_CHOICES = (
+        (YOUTUBE, _("YouTube")),
+        (RUTUBE, _("RuTube")),
+    )
+    host = models.CharField(max_length=2, choices=PAYMENT_CHOICES, verbose_name=_("Host"))
+    video_id = models.CharField(max_length=100, verbose_name=_("Video ID"))
 
 
 class ProductImage(models.Model):
