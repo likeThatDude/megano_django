@@ -29,6 +29,37 @@
     flex-direction: row;
     gap: 2rem;
     align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 16px;
+}
+
+.Discount-block {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.Discount-image-block {
+    width: 400px;
+    height: auto;
+    overflow: hidden;
+    align-items: center;
+}
+
+.Discount-image-container-details {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.Discount-details-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.Discount-details-block span {
+    font-weight: bold;
 }
 
 .Profile-avatar {
