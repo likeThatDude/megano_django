@@ -230,7 +230,7 @@ class ActiveDiscountsView(ListView):
         - Дата окончания скидки должна быть либо не указана, либо больше или равна текущей дате."""
         try:
             return (
-                Discount.objects.filter(active=True)
+                Discount.objects.filter(is_active=True)
                 .filter(Q(start_date__isnull=True) | Q(start_date__lte=timezone.now()))
                 .filter(Q(end_date__isnull=True) | Q(end_date__gte=timezone.now()))
             )
